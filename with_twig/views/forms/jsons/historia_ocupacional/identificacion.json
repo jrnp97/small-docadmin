@@ -1,0 +1,234 @@
+[
+  {
+    "content": [
+      {
+        "type": "datetime",
+        "label": "Fecha de Examen",
+        "name": "date_exam",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Nombre Completo",
+        "name": "nombre",
+        "id": "name",
+        "class": "text",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Identificacion",
+        "name": "identificacion",
+        "id": "identi",
+        "class": "number",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Lugar de Nacimiento",
+        "name": "nacimiento_place",
+        "id": "nac_place",
+        "class": "text",
+        "col_dim": "3"
+      }
+    ]
+  },
+  {
+    "content": [
+      {
+        "type": "datetime",
+        "label": "Fecha de Nacimiento",
+        "name": "nacimiento_date",
+        "col_dim": "3"
+      },
+      {
+        "type": "select",
+        "label": "Sexo",
+        "name": "sexo",
+        "id": "sex",
+        "class": "sexo",
+        "col_dim": "3"
+      },
+      {
+        "type": "select",
+        "label": "Estado Civil",
+        "name": "est_civil",
+        "id": "est_civil",
+        "class": "estado",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Numero de Hijos",
+        "name": "n_hijos",
+        "id": "n_hijos",
+        "class": "number",
+        "col_dim": "3"
+      }
+    ]
+  },
+  {
+    "content": [
+      {
+        "type": "input",
+        "label": "Dirección",
+        "name": "direccion",
+        "id": "direccion",
+        "class": "text",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Telefono",
+        "name": "telefono",
+        "id": "tel",
+        "class": "number",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Profesión",
+        "name": "profesion",
+        "id": "prof",
+        "class": "text",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Oficio",
+        "name": "oficio",
+        "id": "oficio",
+        "class": "text",
+        "col_dim": "3"
+      }
+    ]
+  },
+  {
+    "content":[
+      {
+        "type": "input",
+        "label": "Empresa Contratante",
+        "name": "emp_con",
+        "id": "em_con",
+        "class": "text",
+        "col_dim": "3"
+      },
+      {
+        "type":"input",
+        "label":"Tipo de Cargo",
+        "name":"t_cargo",
+        "id":"t_cargo",
+        "class":"text",
+        "col_dim":"3"
+      },
+      {
+        "type":"checkbox",
+        "label": "Estudiante en entrenamiento",
+        "name": "est_entre",
+        "id": "est_entre",
+        "class":"box",
+        "options":{
+          "name":"est_entrenamiento",
+          "type":"radio",
+          "values":[
+            {
+              "label": "Si",
+              "id":"pro_a_si",
+              "value": "si",
+              "dim":"6"
+            },
+            {
+              "label": "No",
+              "id":"pro_a_no",
+              "value": "no",
+              "dim":"6"
+            }
+          ]
+        },
+        "col_dim":"3"
+      },
+      {
+        "type":"checkbox",
+        "label": "Aprendiz SENA",
+        "name": "apr_s",
+        "id": "apr_s",
+        "class":"box",
+        "options":{
+          "name":"apr_sena",
+          "type":"radio",
+          "values":[
+            {
+              "label": "Si",
+              "id":"apr_sen_si",
+              "value": "si",
+              "dim":"6"
+            },
+            {
+              "label": "No",
+              "id":"apr_sen_no",
+              "value": "no",
+              "dim":"6"
+            }
+          ]
+        },
+        "col_dim":"3"
+      }
+    ]
+  },
+  {
+    "content":[
+      {
+        "type":"input",
+        "label":"Cargo a ejercer",
+        "name": "carg_ejercer",
+        "id": "cr_ejer",
+        "class":"text",
+        "col_dim":"3"
+      },
+      {
+        "type":"input",
+        "label": "No. Patronal",
+        "name": "n_patronal",
+        "id":"n_patro",
+        "class":"number",
+        "col_dim":"3"
+      },
+      {
+        "type": "input",
+        "label": "Clase de Examen",
+        "name":"class_exam",
+        "id":"clas_exm",
+        "class": "text",
+        "col_dim":"3"
+      },
+      {
+        "type":"input",
+        "label":"Estrato",
+        "name": "estrato",
+        "id": "strato",
+        "class":"number",
+        "col_dim":"3"
+      }
+    ]
+  },
+  {
+    "content":[
+      {
+        "type":"input",
+        "label":"Escolaridad",
+        "name": "escolaridad",
+        "id": "esco",
+        "class":"text",
+        "col_dim":"3"
+      },
+      {
+        "type":"select",
+        "label":"Ingreso",
+        "name":"t_ingreso",
+        "id":"t_ingreso",
+        "class":"ingreso",
+        "col_dim":"3"
+      }
+    ]
+  }
+]

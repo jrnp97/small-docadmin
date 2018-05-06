@@ -1,0 +1,196 @@
+[
+  {
+    "content": [
+      {
+        "type": "input",
+        "label": "Trabajo anterior",
+        "name": "trab_ant",
+        "class":"text",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Ocupacion",
+        "name": "ocu_prev",
+        "id": "ocu_prev",
+        "class": "text",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Tiempo",
+        "name": "time_prev",
+        "id": "time_prev",
+        "class": "number",
+        "col_dim": "2"
+      },
+      {
+        "type": "input",
+        "label": "Uso E.P.P (%)",
+        "name": "u_epp",
+        "id": "u_epp",
+        "class": "number",
+        "col_dim": "2"
+      },
+      {
+        "type":"checkbox",
+        "label": "Calificado",
+        "name": "a_califi",
+        "id": "a_califi",
+        "class":"box",
+        "col_dim":"2",
+        "options":{
+          "name":"a_calificado",
+          "type":"radio",
+          "values":[
+            {
+              "label": "Si",
+              "id":"a_calificado_si",
+              "value": "si",
+              "dim":"6"
+            },
+            {
+              "label": "No",
+              "id":"a_calificado_no",
+              "value": "no",
+              "dim":"6"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "content":[
+      {
+        "type": "checkbox",
+        "label": "Riesgos",
+        "name": "rieg_prev",
+        "id": "rieg_prev",
+        "class": "box",
+        "col_dim":"12",
+        "options": {
+          "type": "checkbox",
+          "values": [
+            {
+              "label": "Fisico",
+              "id": "r_fisico",
+              "value": "si",
+              "name": "r_fisico",
+              "dim": "1"
+            },
+            {
+              "label": "Quimico",
+              "name": "r_quimico",
+              "id": "r_quimico",
+              "value": "si",
+              "dim": "1"
+            },
+            {
+              "label": "Mecanico",
+              "name": "r_mec",
+              "id": "r_mec",
+              "value": "si",
+              "dim": "1"
+            },
+            {
+              "label": "Ergonomico",
+              "name": "r_erg",
+              "id": "r_erg",
+              "value": "si",
+              "dim": "1"
+            },
+            {
+              "label": "Electrico",
+              "name": "r_elec",
+              "id": "r_elect",
+              "value": "si",
+              "dim": "1"
+            },
+            {
+              "label": "Biologico",
+              "name": "r_bio",
+              "id": "r_bio",
+              "value": "si",
+              "dim": "1"
+            },
+            {
+              "label": "Psicologico",
+              "name": "r_psicol",
+              "id": "r_psicol",
+              "value": "si",
+              "dim": "1"
+            },
+            {
+              "label": "Locativo",
+              "name": "r_loca",
+              "id": "r_loca",
+              "value": "si",
+              "dim": "1"
+            },
+            {
+              "label": "Seguridad",
+              "id": "r_seg",
+              "value": "si",
+              "name": "r_seg",
+              "dim": "1"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "content":
+            [
+              {
+                "type":"checkbox",
+                "label": "Accidente de trabajo",
+                "name": "a_acc_t",
+                "id": "a_acc_t",
+                "class":"box",
+                "col_dim":"3",
+                "options":{
+                  "name":"a_acc_trab",
+                  "type":"radio",
+                  "values":[
+                    {
+                      "label": "Si",
+                      "id":"a_acc_trab_si",
+                      "value": "si",
+                      "dim":"6"
+                    },
+                    {
+                      "label": "No",
+                      "id":"a_acc_trab_no",
+                      "value": "no",
+                      "dim":"6"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "datetime",
+                "label": "Fecha de Accidente",
+                "name": "date_acc_trab",
+                "col_dim": "3"
+              },
+              {
+                "type": "input",
+                "label": "Tipo Accidente",
+                "name": "t_accidente",
+                "id": "t_accidente",
+                "class": "text",
+                "col_dim": "3"
+              },
+              {
+                "type": "input",
+                "label": "Secuelas Accidente",
+                "name": "s_accidente",
+                "id": "s_accidente",
+                "class": "text",
+                "col_dim": "3"
+              }
+            ]
+  }
+]

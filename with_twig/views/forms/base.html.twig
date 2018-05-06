@@ -204,12 +204,21 @@
     <div class="form-group col-md-{{ col_dim }}">
         <label class="text-center">{{ label|capitalize }}</label>
         <div class="row" style="margin-top: 10px">
-            {% for option in options.values %}
-                <div class="form-check col-md-{{ option.dim }}">
-                    <input type="radio" class="form-check-input" name="{{ options.name }}" id="{{ option.id }}" value="{{ option.value }}"/>
-                    <label for="{{ option.id }}">{{ option.label }}</label>
-                </div>
-            {% endfor %}
+	        {% if options.type == "radio" %}
+                {% for option in options.values %}
+                    <div class="form-check col-md-{{ option.dim }}">
+                            <input type="radio" class="form-check-input" name="{{ options.name }}" id="{{ option.id }}" value="{{ option.value }}"/>
+                        <label for="{{ option.id }}">{{ option.label }}</label>
+                    </div>
+                {% endfor %}
+	        {% elseif options.type == "checkbox"%}
+		        {% for option in options.values %}
+                    <div class="form-check col-md-{{ option.dim }}">
+                        <label for="{{ option.id }}">{{ option.label }}</label>
+                        <input type="checkbox" class="form-check-input" name="{{ option.name }}" id="{{ option.id }}" value="{{ option.value }}"/>
+                    </div>
+		        {% endfor %}
+	        {% endif %}
         </div>
     </div>
     {% elseif class == "line" %}
