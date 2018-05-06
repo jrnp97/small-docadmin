@@ -1,0 +1,18 @@
+
+Campos Audiometria
+
+--- identificacion ---
+"name":"empresa"
+"name": "date"
+"name":"mision"
+"name":"certificado"
+"name":"nombre"
+"name":"apellido"
+"name":"identificacion"
+"name":"sexo"
+--- interpretacion ---
+"name":"inter_od"
+"name":"inter_id"
+
+--- declaraciones ---
+"name":"observaciones"

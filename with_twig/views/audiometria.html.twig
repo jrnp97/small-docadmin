@@ -1,0 +1,10 @@
+{% extends 'forms/base.html.twig' %}
+{% import 'forms/base.html.twig' as form_body %}
+
+{% block title_bar %} Audiometria {% endblock %}
+
+{% block content %}
+    {{ form_body.form_section("1. Información del paciente", "info_id", info_body) }}
+	{{ form_body.form_section("2. Interpretaciones", "inter_id", inter_body) }}
+    {{ form_body.form_section("3. Observaciones/Recomendaciones", "decla_id", decla_body) }}
+{% endblock %}

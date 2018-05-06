@@ -1,0 +1,23 @@
+[
+  {
+    "content":
+    [
+      {
+        "type":"input",
+        "label":"OD",
+        "name":"inter_od",
+        "id":"inter_od",
+        "class":"text",
+        "col_dim":"6"
+      },
+      {
+        "type":"input",
+        "label":"ID",
+        "name":"inter_id",
+        "id":"inter_id",
+        "class":"text",
+        "col_dim":"6"
+      }
+    ]
+  }
+]

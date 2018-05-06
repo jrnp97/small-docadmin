@@ -1,0 +1,80 @@
+[
+  {
+    "content":
+            [
+              {
+                "type":"input",
+                "label":"Empresa",
+                "name":"empresa",
+                "id":"empresa",
+                "class":"text",
+                "col_dim":"6"
+              },
+              {
+                "type": "datetime",
+                "label": "Fecha",
+                "name": "date",
+                "col_dim": "6"
+              }
+            ]
+  },
+  {
+    "content":
+            [
+              {
+                "type":"input",
+                "label":"Misión",
+                "name":"mision",
+                "id":"mision",
+                "class":"text",
+                "col_dim":"6"
+              },
+              {
+                "type":"select",
+                "label":"Certificado Para",
+                "name":"certificado",
+                "id":"certificado",
+                "class":"certificado",
+                "col_dim":"6"
+              }
+            ]
+  },
+  {
+    "content":
+            [
+              {
+                "type":"input",
+                "label":"Nombre",
+                "name":"nombre",
+                "id":"nombre",
+                "class":"text",
+                "col_dim":"3"
+              },
+              {
+                "type":"input",
+                "label":"Apellidos",
+                "name":"apellido",
+                "id":"apellido",
+                "class":"text",
+                "col_dim":"3"
+              },
+              {
+                "type":"input",
+                "label":"Identificación",
+                "name":"identificacion",
+                "id":"identificacion",
+                "class":"number",
+                "col_dim":"3"
+              },
+              {
+                "type":"select",
+                "label":"Sexo",
+                "name":"sexo",
+                "id":"sexo",
+                "class":"sexo",
+                "col_dim":"3"
+              }
+
+            ]
+  }
+]

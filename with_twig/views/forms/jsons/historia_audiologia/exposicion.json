@@ -1,0 +1,243 @@
+[
+  {
+    "content": [
+      {
+        "type": "custom_table",
+        "data": {
+          "titles": [
+            {
+              "name": "Tipo",
+              "dim": "3"
+            },
+            {
+              "name": "Si",
+              "dim": "1"
+            },
+            {
+              "name": "No",
+              "dim": "1"
+            },
+            {
+              "name":"Aveces",
+              "dim":"1"
+            },
+            {
+              "name":"Tiempo de Exposición",
+              "dim":"3"
+            },
+            {
+              "name":"Frecuencia",
+              "dim":"1"
+            },
+            {
+              "name":"Tiempo",
+              "dim":"1"
+            },
+            {
+              "name":"EPA",
+              "dim":"1"
+            }
+          ],
+          "options": [
+            [
+              {
+                "type": "checkbox",
+                "label": "Uso de Audifonos",
+                "class": "line",
+                "options": {
+                  "name": "audifonos",
+                  "values": [
+                    {
+                      "value": "si",
+                      "dim": "1"
+                    },
+                    {
+                      "value": "no",
+                      "dim": "1"
+                    },
+                    {
+                      "value": "aveces",
+                      "dim": "1"
+                    }
+                  ]
+                },
+                "col_dim": "3"
+              },
+              {
+                "type":"input",
+                "name":"audifono_t_expo",
+                "class":"number",
+                "col_dim":"3"
+              },
+              {
+                "type":"input",
+                "name":"audifono_frec",
+                "class":"number",
+                "col_dim":"1"
+              },
+              {
+                "type":"input",
+                "name":"audifono_time",
+                "class":"number",
+                "col_dim":"1"
+              },
+              {
+                "type":"input",
+                "name":"audifono_epa",
+                "class":"number",
+                "col_dim":"1"
+              }
+            ],
+            [
+              {
+                "type": "checkbox",
+                "label": "Uso de Motocicleta",
+                "class": "line",
+                "options": {
+                  "name": "motocicleta",
+                  "values": [
+                    {
+                      "value": "si",
+                      "dim": "1"
+                    },
+                    {
+                      "value": "no",
+                      "dim": "1"
+                    },
+                    {
+                      "value": "aveces",
+                      "dim": "1"
+                    }
+                  ]
+                },
+                "col_dim": "3"
+              },
+              {
+                "type":"input",
+                "name":"motocicleta_t_expo",
+                "class":"number",
+                "col_dim":"3"
+              },
+              {
+                "type":"input",
+                "name":"motocicleta_frec",
+                "class":"number",
+                "col_dim":"1"
+              },
+              {
+                "type":"input",
+                "name":"motocicleta_time",
+                "class":"number",
+                "col_dim":"1"
+              },
+              {
+                "type":"input",
+                "name":"motocicleta_epa",
+                "class":"number",
+                "col_dim":"1"
+              }
+            ],
+            [
+              {
+                "type": "checkbox",
+                "label": "Usa Vehiculo Automotriz",
+                "class": "line",
+                "options": {
+                  "name": "vehiculo",
+                  "values": [
+                    {
+                      "value": "si",
+                      "dim": "1"
+                    },
+                    {
+                      "value": "no",
+                      "dim": "1"
+                    },
+                    {
+                      "value": "aveces",
+                      "dim": "1"
+                    }
+                  ]
+                },
+                "col_dim": "3"
+              },
+              {
+                "type":"input",
+                "name":"vehiculo_t_expo",
+                "class":"number",
+                "col_dim":"3"
+              },
+              {
+                "type":"input",
+                "name":"vehiculo_frec",
+                "class":"number",
+                "col_dim":"1"
+              },
+              {
+                "type":"input",
+                "name":"vehiculo_time",
+                "class":"number",
+                "col_dim":"1"
+              },
+              {
+                "type":"input",
+                "name":"vehiculo_epa",
+                "class":"number",
+                "col_dim":"1"
+              }
+            ],
+            [
+              {
+                "type": "checkbox",
+                "label": "Exposicoón a Maquinaria Pesada",
+                "class": "line",
+                "options": {
+                  "name": "maquinaria",
+                  "values": [
+                    {
+                      "value": "si",
+                      "dim": "1"
+                    },
+                    {
+                      "value": "no",
+                      "dim": "1"
+                    },
+                    {
+                      "value": "aveces",
+                      "dim": "1"
+                    }
+                  ]
+                },
+                "col_dim": "3"
+              },
+              {
+                "type":"input",
+                "name":"maquinaria_t_expo",
+                "class":"number",
+                "col_dim":"3"
+              },
+              {
+                "type":"input",
+                "name":"maquinaria_frec",
+                "class":"number",
+                "col_dim":"1"
+              },
+              {
+                "type":"input",
+                "name":"maquinaria_time",
+                "class":"number",
+                "col_dim":"1"
+              },
+              {
+                "type":"input",
+                "name":"maquinaria_epa",
+                "class":"number",
+                "col_dim":"1"
+              }
+            ]
+          ]
+        }
+      }
+    ]
+  }
+]

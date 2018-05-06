@@ -1,0 +1,170 @@
+
+[
+  {
+    "content": [
+      {
+        "type": "datetime",
+        "label": "Fecha de Examen",
+        "name": "date_exam",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Nombre Completo",
+        "name": "nombre",
+        "id": "name",
+        "class": "text",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Identificacion",
+        "name": "identificacion",
+        "id": "identi",
+        "class": "number",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Lugar de Nacimiento",
+        "name": "nacimiento_place",
+        "id": "nac_place",
+        "class": "text",
+        "col_dim": "3"
+      }
+    ]
+  },
+  {
+    "content": [
+      {
+        "type": "datetime",
+        "label": "Fecha de Nacimiento",
+        "name": "nacimiento_date",
+        "col_dim": "3"
+      },
+      {
+        "type":"input",
+        "label":"Edad",
+        "name":"edad",
+        "id":"old",
+        "class":"number",
+        "col_dim":"3"
+      },
+      {
+        "type": "select",
+        "label": "Sexo",
+        "name": "sexo",
+        "id": "sex",
+        "class": "sexo",
+        "col_dim": "3"
+      },
+      {
+        "type": "select",
+        "label": "Estado Civil",
+        "name": "est_civil",
+        "id": "est_civil",
+        "class": "estado",
+        "col_dim": "3"
+      }
+    ]
+  },
+  {
+    "content": [
+      {
+        "type": "input",
+        "label": "Numero de Hijos",
+        "name": "n_hijos",
+        "id": "n_hijos",
+        "class": "number",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Dirección",
+        "name": "direccion",
+        "id": "direccion",
+        "class": "text",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Telefono",
+        "name": "telefono",
+        "id": "tel",
+        "class": "number",
+        "col_dim": "3"
+      },
+      {
+        "type": "input",
+        "label": "Profesión",
+        "name": "profesion",
+        "id": "prof",
+        "class": "text",
+        "col_dim": "3"
+      }
+    ]
+  },
+  {
+    "content":[
+      {
+        "type": "input",
+        "label": "Cargo al que aspira",
+        "name": "cargo",
+        "id": "carg",
+        "class": "text",
+        "col_dim": "3"
+      },
+      {
+        "type":"input",
+        "label": "Seccion",
+        "name": "seccion",
+        "id": "seccion",
+        "class":"text",
+        "col_dim":"3"
+      },
+      {
+        "type":"input",
+        "label":"Empresa",
+        "name":"empresa",
+        "id":"emp",
+        "class":"text",
+        "col_dim":"3"
+      },
+      {
+        "type":"input",
+        "label":"Estrato",
+        "name":"estrato",
+        "id":"estrato",
+        "class":"text",
+        "col_dim":"3"
+      }
+    ]
+  },
+  {
+    "content":[
+      {
+        "type":"datetime",
+        "label":"Ultimo Examen Visual ",
+        "name": "ult_exam_v",
+        "id": "ult_exam_v",
+        "col_dim":"3"
+      },
+      {
+        "type":"input",
+        "label":"Escolaridad",
+        "name": "escola",
+        "id": "escola",
+        "class":"text",
+        "col_dim":"3"
+      },
+      {
+        "type":"select",
+        "label": "Clase de Examen",
+        "name": "t_exam",
+        "id":"t_exam",
+        "class":"examen",
+        "col_dim":"3"
+      }
+    ]
+  }
+]

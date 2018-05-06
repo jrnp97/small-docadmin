@@ -1,0 +1,13 @@
+[
+  {
+    "content":
+            [
+              {
+                "type":"textarea",
+                "name":"observaciones",
+                "id":"observa",
+                "col_dim":"12"
+              }
+            ]
+  }
+]

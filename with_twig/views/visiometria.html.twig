@@ -1,0 +1,12 @@
+{% extends 'forms/base.html.twig' %}
+{% import 'forms/base.html.twig' as form_body %}
+
+{% block title_bar %} Visiometria {% endblock %}
+
+{% block content %}
+    {{ form_body.form_section("1. Identificacion", "ident_id", ident_body) }}
+    {{ form_body.form_section("2. Sintomas", "sin_id", sin_body) }}
+    {{ form_body.form_section("3. Antecedentes de Enfermedad", "ant_id", ant_body) }}
+	{{ form_body.form_section("3. Antecedentes de Uso", "ant2_id", ant2_body) }}
+    {{ form_body.form_section("4. Valoracion Visual", "val_v_id", val_v_body) }}
+{% endblock %}

@@ -1,0 +1,143 @@
+[
+  {
+    "content":
+    [
+      {
+        "type":"custom_table",
+        "data": {
+          "titles": [
+            {
+              "name": "Agudeza Visual",
+              "dim": "4"
+            },
+            {
+              "name": "Cerca",
+              "dim": "4"
+            },
+            {
+              "name": "Lejos",
+              "dim": "4"
+            }
+          ],
+          "options":
+          [
+            [
+              {
+                "type": "checkbox",
+                "label": "Ojo derecho",
+                "class": "line",
+                "col_dim": "4",
+                "options": {
+                  "name": "a_v_derecho",
+                  "values": [
+                    {
+                      "id": "a_v_d_cerca",
+                      "value": "cerca",
+                      "dim": "4"
+                    },
+                    {
+                      "id": "a_v_d_lejos",
+                      "valur": "lejos",
+                      "dim": "4"
+                    }
+                  ]
+                }
+              }
+            ],
+            [
+              {
+                "type": "checkbox",
+                "label": "Ojo izquierdo",
+                "class": "line",
+                "col_dim": "4",
+                "options": {
+                  "name": "a_v_izquierdo",
+                  "values": [
+                    {
+                      "id": "a_v_i_cerca",
+                      "value": "cerca",
+                      "dim": "4"
+                    },
+                    {
+                      "id": "a_v_i_lejos",
+                      "valur": "lejos",
+                      "dim": "4"
+                    }
+                  ]
+                }
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "type":"custom_table",
+        "data": {
+          "titles": [
+            {
+              "name": "Visión Cronomatica",
+              "dim": "4"
+            },
+            {
+              "name": "Normal",
+              "dim": "4"
+            },
+            {
+              "name": "Anormal",
+              "dim": "4"
+            }
+          ],
+          "options":
+          [
+            [
+              {
+                "type": "checkbox",
+                "label": "Ojo derecho",
+                "class": "line",
+                "col_dim": "4",
+                "options": {
+                  "name": "v_v_derecho",
+                  "values": [
+                    {
+                      "id": "v_v_d_normal",
+                      "value": "normal",
+                      "dim": "4"
+                    },
+                    {
+                      "id": "v_v_d_anormal",
+                      "valur": "anormal",
+                      "dim": "4"
+                    }
+                  ]
+                }
+              }
+            ],
+            [
+              {
+                "type": "checkbox",
+                "label": "Ojo izquierdo",
+                "class": "line",
+                "col_dim": "4",
+                "options": {
+                  "name": "v_v_izquierdo",
+                  "values": [
+                    {
+                      "id": "v_v_i_normal",
+                      "value": "normal",
+                      "dim": "4"
+                    },
+                    {
+                      "id": "v_v_i_anormal",
+                      "valur": "anormal",
+                      "dim": "4"
+                    }
+                  ]
+                }
+              }
+            ]
+          ]
+        }
+      }
+    ]
+  }
+]

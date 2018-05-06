@@ -1,0 +1,32 @@
+[
+  {
+    "content":
+    [
+      {
+        "type":"datetime",
+        "label":"Fecha de Ultimo Examen Auditivo",
+        "name": "date_u_auditivo",
+        "col_dim": "3"
+      }
+    ]
+  },
+  {
+    "content":
+    [
+      {
+        "type":"textarea",
+        "label":"Causa",
+        "name":"causa",
+        "id":"causa",
+        "col_dim":"6"
+      },
+      {
+        "type":"textarea",
+        "label":"Interpretación",
+        "name":"ana_interpre",
+        "id":"ana_inter",
+        "col_dim":"6"
+      }
+    ]
+  }
+]
