@@ -1,0 +1,1088 @@
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+        <!-- change sometimes -->
+        <div class="row">
+            <ol class="breadcrumb">
+                <li><a href="#">
+                    <svg class="glyph stroked home">
+                        <use xlink:href="#stroked-home"></use>
+                    </svg>
+                </a></li>
+                <li class="active">HC</li>
+            </ol>
+        </div><!--/.row-->
+
+        <!-- change sometimes -->
+        <div class="row">
+            <!-- Init form -->
+            <form method="POST">
+                <!-- title -->
+                <h2 class="text-center">Historia Audiologica</h2>
+                <hr class="divider"/>
+                <!-- end title -->
+
+                <!-- seccion de identificacion -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span data-toggle="collapse" href="#identi_id" role="button">
+                            <svg class="glyph stroked chevron-down">
+                                <use xlink:href="#stroked-chevron-down"></use>
+                            </svg>
+                        </span>
+                        1. Identificación
+                    </div>
+                    <div class="collapse" id="identi_id">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <?php include "selects/fecha_exm.html" ?>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="nombre">Nombre Completo</label>
+                                        <input class="form-control form-control-sm" id="nombre" type="text" name="nombre"/>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="ident">Identificación</label>
+                                        <input class="form-control form-control-sm" id="ident" type="text" name="ident"/>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="lugar_naci">Lugar de Nacimiento</label>
+                                        <input class="form-control" id="lugar_naci" type="text" name="lugar_naci"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <?php include "selects/fecha_naci.html" ?>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <?php include "selects/sexo.html" ?>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="edad">Edad</label>
+                                        <input class="form-control" type="number" id="edad" name="edad" />
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <?php include "selects/estado_civil.html"?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <label for="hijos_n">Numero de Hijos</label>
+                                        <input type="number" class="form-control" name="hijos_n" id="hijos_n" />
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="direccion">Dirección</label>
+                                        <input type="text" class="form-control" name="direccion" id="direccion" />
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="tel">Telefono</label>
+                                        <input type="number" class="form-control" name="telefono" id="tel" />
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="profesion">Profesión</label>
+                                        <input type="text" class="form-control" name="profesion" id="profesion" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <label for="cargo">Cargo</label>
+                                        <input type="text" class="form-control" name="cargo" id="cargo" />
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="empresa">Empresa</label>
+                                        <input type="text" class="form-control" name="empresa" id="empresa" />
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label class="text-center">Uso de protección auditiva</label>
+                                        <div class="row" style="margin-top: 10px;">
+                                            <div class="form-check col-md-6">
+                                                <input type="radio" class="form-check-input" name="prot_auditiva" id="prot_auditiva_si" />
+                                                <label for="prot_auditiva_si">Si</label>
+                                            </div>
+                                            <div class="form-check col-md-6">
+                                                <input type="radio" class="form-check-input" name="prot_auditiva" id="prot_auditiva_no" />
+                                                <label for="prot_auditiva_no">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <div id="tipo_prot_auditiva"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group col-md-3">
+                                    <label for="antiguedad">Antiguedad en el empleo</label>
+                                    <input type="number" class="form-control" name="antiguedad" id="antiguedad"/>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <?php include "selects/jornada.html" ?>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label for="t_descanso">Tipo de descanso</label>
+                                    <input type="number" class="form-control" name="t_descando" id="t_descanso"/>
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label for="c_examen">Tipo de descanso</label>
+                                    <input type="number" class="form-control" name="c_examen" id="c_examen"/>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4">
+                                    <?php include "selects/ingreso.html" ?>
+                                </div>
+                                <div class="col-md-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin seccion de identificacion -->
+
+                <!-- seccion Anamnesis -->
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span data-toggle="collapse" href="#anamensis_id" role="button">
+                            <svg class="glyph stroked chevron-down">
+                                <use xlink:href="#stroked-chevron-down"></use>
+                            </svg>
+                        </span>
+                        2. Anamensis
+                    </div>
+                    <div class="collapse" id="anamensis_id">
+                        <div class="panel-body text-center" >
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-4"></div>
+                                    <div class="form-group col-md-4">
+                                        <?php include "selects/fecha_ulti_exm.html" ?>
+                                    </div>
+                                    <div class="col-md-4"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="causa">Causa</label>
+                                        <textarea class="form-control" name="causa" id="causa" style="width: 100%; resize: none;"></textarea>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="interpreta">Interpretación</label>
+                                        <textarea class="form-control" name="interpreta" id="interpreta" style="width: 100%; resize: none;"></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin seccion Anamnesis -->
+
+                <!-- seccion antecedentes familiares/personales -->
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span data-toggle="collapse" href="#antecedentes_id" role="button">
+                            <svg class="glyph stroked chevron-down">
+                                <use xlink:href="#stroked-chevron-down"></use>
+                            </svg>
+                        </span>
+                        3. Antecedentes Familiares/Personales
+                    </div>
+                    <div class="collapse" id="antecedentes_id">
+                        <div class="panel-body">
+                            <!-- titles -->
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <h4>Alteraciones</h4>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h4>Si</h4>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h4>No</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- options -->
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Otalgia</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="otalgia" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="otalgia" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Otaliquia/Otorrea</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="otorrea" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="otorrea" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Infeccion de Oídos</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="inf_oidos" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="inf_oidos" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Cuerpo Extraño en Oido</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="c_extranio" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="c_extranio" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Hipoacusia</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="hipoacusia" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="hipoacusia" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Tumores en SNC o aparato auditivo</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="snc" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="snc" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Sarampion</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="sarampion" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="sarampion" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Paperas</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="paperas" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="paperas" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Sifilis</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="sifilis" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="sifilis" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Rubeola</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="rubeola" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="rubeola" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                            <div class="row text-center">
+                                <div class="col-md-8">
+                                    <p><b>Cirugia en oido</b></p>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check">
+                                        <input type="radio" name="cirugia" value="si" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-check">
+                                        <input type="radio" name="cirugia" value="no" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Tinnitus</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="tinnitus" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="tinnitus" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Mareo</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="mareo" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="mareo" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Vertigo</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="vertigo" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="vertigo" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Enfermedad de Meniere</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="meniere" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="meniere" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Hipertension</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="hipertension" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="hipertension" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Diabetes</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="diabetes" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="diabetes" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Otra/Describa</b></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <textarea class="form-control" name="ant_fam_otro" style="width: 100%; resize: none;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin seccion antecedentes familiares/personales -->
+
+                <!-- seccion otros antecedentes -->
+                <div class="panel">
+
+                    <div class="panel-heading">
+                        <span data-toggle="collapse" href="#o_antecedentes_id" role="button">
+                            <svg class="glyph stroked chevron-down">
+                                <use xlink:href="#stroked-chevron-down"></use>
+                            </svg>
+                        </span>
+                        4. Otros Antecedentes
+                    </div>
+
+                    <div class="collapse" id="o_antecedentes_id">
+
+                        <div class="panel-body">
+
+                            <!-- titles -->
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <h4>Alteraciones</h4>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h4>Si</h4>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <h4>No</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- options -->
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Antineoplasicos</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="antineoplasicos" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="antineoplasicos" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Explosion a Metales Pesados</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="expo_metales" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="expo_metales" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Vibraciones</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="vibraciones" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="vibraciones" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Aminoglucosidos</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="aminoglucosidos" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="aminoglucosidos" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Trauma Acustico</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="acustico" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="acustico" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Servicio Miliar con Arma de Fuego</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="serv_militar" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="serv_militar" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Diureticos de Asa</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="diureticos" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="diureticos" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Exposicion a Mercurio</b></p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="exp_mercurio" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-check">
+                                            <input type="radio" name="exp_mercurio" value="no" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-8">
+                                        <p><b>Otra/Describa</b></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <textarea class="form-control" name="ant_otro_otro" style="width: 100%; resize: none;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- fin seccion otros antecedentes -->
+
+                <!-- seccion exposiciones -->
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span data-toggle="collapse" href="#expo_id" role="button">
+                            <svg class="glyph stroked chevron-down">
+                                <use xlink:href="#stroked-chevron-down"></use>
+                            </svg>
+                        </span>
+                        5. Exposiciones
+                    </div>
+                    <div class="collapse" id="expo_id">
+                        <div class="panel-body">
+
+                            <!-- titles -->
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-3">
+                                        <h4>Tipo</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h4>Si</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h4>No</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h4>Aveces</h4>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h4>Tiempo de exposición</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h4>Frecuencia</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h4>Tiempo</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h4>EPA</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- options -->
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-3">
+                                        <p><b>Uso de Audifonos</b></p>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="audifonos" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                       <div class="form-check">
+                                            <input type="radio" name="audifonos" value="no" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="audifonos" value="aveces" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" name="audio_exp_time" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" class="form-control" name="audio_frecuencia" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" class="form-control" name="audio_time" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" class="form-control" name="audio_epa" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-3">
+                                        <p><b>Uso de Motocicleta</b></p>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="motocicleta" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="motocicleta" value="no" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="motocicleta" value="aveces" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" name="moto_exp_time" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" class="form-control" name="moto_frecuencia" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" class="form-control" name="moto_time" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" class="form-control" name="moto_epa" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-3">
+                                        <p><b>Uso Vehiculo Automotriz</b></p>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="vehiculo" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="vehiculo" value="no" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="vehiculo" value="aveces" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" name="vehi_exp_time" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" class="form-control" name="vehi_frecuencia" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" class="form-control" name="vehi_time" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" class="form-control" name="vehi_epa" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-3">
+                                        <p><b>Exposición maquinaria pesada</b></p>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="maquinaria" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="maquinaria" value="no" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="maquinaria" value="aveces" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control" name="maqui_exp_time" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" class="form-control" name="maqui_frecuencia" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" class="form-control" name="maqui_time" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="number" class="form-control" name="maqui_epa" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- fin seccion exposiciones -->
+
+                <!-- seccion estado actual auditivo -->
+                <div class="panel">
+                    <div class="panel-heading">
+                        <span data-toggle="collapse" href="#actual_id" role="button">
+                            <svg class="glyph stroked chevron-down">
+                                <use xlink:href="#stroked-chevron-down"></use>
+                            </svg>
+                        </span>
+                        5. Estado Actual Auditivo
+                    </div>
+                    <div class="collapse" id="actual_id">
+                        <div class="panel-body">
+
+                            <!-- titles -->
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-6">
+                                        <h4>Pregunta</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h4>Si</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h4>No</h4>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h4>Aveces</h4>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h4>Descripción</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- options -->
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-6">
+                                        <p><b>¿Le molesta el ruido?</b></p>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="ruido" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="ruido" value="no" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="ruido" value="aveces" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <textarea class="form-control" style="width: 100%; resize: none;" name="ruido_desc"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-6">
+                                        <p><b>¿Desea subir el volumen del televisor?</b></p>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="tele" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="tele" value="no" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="tele" value="aveces" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <textarea class="form-control" style="width: 100%; resize: none;" name="tele_desc"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-6">
+                                        <p><b>¿En una conversación le repiten las frases?</b></p>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="conversa" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="conversa" value="no" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="conversa" value="aveces" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <textarea class="form-control" style="width: 100%; resize: none;" name="conversa_desc"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-6">
+                                        <p><b>¿Escucha bien?</b></p>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="escucha" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="escucha" value="no" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="escucha" value="aveces" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <textarea class="form-control" style="width: 100%; resize: none;" name="escucha_desc"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row text-center">
+                                    <div class="col-md-6">
+                                        <p><b>¿Escucha bien cuando hay ruido?</b></p>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="escucha_ruido" value="si" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="escucha_ruido" value="no" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input type="radio" name="escucha_ruido" value="aveces" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <textarea class="form-control" style="width: 100%; resize: none;" name="escucha_ruido_desc"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- fin seccion estado actual auditivo -->
+
+            </form>
+            <!-- end form -->
+        </div>
+</div>
