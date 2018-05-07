@@ -1,0 +1,22 @@
+# -- Checkbox Box mode -- #
+{
+  "type":"checkbox",
+  "data":
+  [
+    {"label":"Accidente de trabajo"},
+    {"label":"Riesgo"}
+  ],
+  "class":"box",
+  "col_dim":["6","6"],
+  "values":
+  [
+    [
+        {"label":"Si", "name":"acc_trab", "value": "si", "dim":"6"},
+        {"label":"No", "name":"pelucha", "value": "no", "dim":"6"}
+    ],
+    [
+        {"label":"Perro", "name":"perris", "value": "perro", "dim":"6"},
+        {"label":"Gato", "name":"catis", "value": "gato", "dim":"6"}
+    ]
+  ]
+}

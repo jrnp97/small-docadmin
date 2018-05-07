@@ -4,6 +4,7 @@
 	{% from 'forms/macros/select_macro.twig' import select %}
 	{% from 'forms/macros/textarea_macro.twig' import textarea %}
 	{% from 'forms/macros/radio_macro.twig' import radio %}
+	{% from 'forms/macros/checkbox_macro.twig' import checkbox %}
 
     <!-- titles -->
     <div class="col-md-12">
@@ -36,7 +37,7 @@
                 {% if content.type == "input" %}
                     {{ input(content.data, content.class, content.mode, content.col_dim) }}
                 {% elseif content.type == "checkbox" %}
-                    <p>checkbox</p>
+                    {{ checkbox(content.data, content.values, content.class, content.col_dim )}}
                 {%  elseif content.type == "textarea" %}
                     {{ textarea(content.data, "line", content.mode, content.col_dim) }}
                 {% elseif content.type == "radio" %}

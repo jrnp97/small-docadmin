@@ -1,14 +1,14 @@
+# -- Box input -- #
 {
     "type":"input",
     "data":
-    [
-      {"name": "m_ruido_desc"},
-      {"name": "television_desc"},
-      {"name":"conversacion_desc"},
-      {"name":"esc_bien_desc"},
-      {"name":"esc_ruido_desc"}
-    ],
-    "class":"number",
-    "mode":"line",
-    "col_dim":["12"]
+            [
+              {"label": "Fecha de Examen", "name": "date_exam"},
+              {"label": "Nombre Completo", "name": "nombre"},
+              {"label": "Identificacion", "name": "identificacion"},
+              {"label": "Lugar de Nacimiento", "name": "nacimiento_place"}
+            ],
+    "mode":"box",
+    "class":["datetime", "text", "number", "text"],
+    "col_dim":["3", "3", "3", "3"]
 }

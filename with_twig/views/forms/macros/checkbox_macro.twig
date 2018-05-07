@@ -1,23 +1,42 @@
-{% macro checkbox(label, name, id, class, options, col_dim) %}
+{% macro checkbox(data, values, class, col_dim) %}
     {% if class == "box" %}
-        {% elseif options.type == "checkbox"%}
-            {% for option in options.values %}
-                <div class="form-check col-md-{{ option.dim }}">
-                    <label for="{{ option.id }}">{{ option.label }}</label>
-                    <input type="checkbox" class="form-check-input" name="{{ option.name }}" id="{{ option.id }}" value="{{ option.value }}"/>
+        {% for element in data %}
+                <div class="form-group col-md-{{ col_dim[loop.index0] }}">
+                    <label for="">{{ element.label }}</label>
+                    <div class="row">
+                        {% for item in values[loop.index0] %}
+                            <div class="form-check col-md-{{ item.dim }}">
+                                <input type="checkbox" class="form-check-input" name="{{ item.name }}" id="{{ item.name }}_{{ loop.index }}" value="{{ item.value }}"/>
+                                <label for="{{ item.name }}_{{ loop.index }}" style="font-size: 8pt">{{ item.label }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            {% endfor %}
-        {% endif %}
+        {% endfor %}
     {% elseif class == "line" %}
 
-    {% endif %}
-{% endmacro %}
+          {% for element in data %}
 
-{% macro datetime(label, name, col_dim) %}
-    <div class="form-group col-md-{{ col_dim }}">
-        <div class='form-group date' id='datetimepicker'>
-            <label for="fecha">{{ label|capitalize }}</label>
-            <input type='text' class="form-control" id='fecha' data-provide="datepicker" name="{{ name }}"/>
-        </div>
-    </div>
+              <div class="row" style="margin-top: 10px">
+
+              {% for label in element.labels %}
+                  <div class="col-md-{{ col_dim[loop.index0] }}">
+                      <p><b>{{ label|capitalize }}</b></p>
+                  </div>
+              {% endfor %}
+              {% set index = loop.index0 %}
+              {% for item in values[index] %}
+                  <div class="col-md-{{ item.dim }}">
+                      <div class="form-check">
+                          <input type="checkbox" class="form-check-input" name="{{ item.name }}" id="{{ item.name }}_{{ loop.index }}" value="{{ item.value }}"/>
+                          <label for="{{ item.name }}_{{ loop.index }}" style="font-size: 8pt">{{ item.label }}</label>
+                      </div>
+                  </div>
+              {% endfor %}
+
+              </div>
+
+          {% endfor %}
+
+    {% endif %}
 {% endmacro %}
