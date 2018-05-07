@@ -1,0 +1,23 @@
+{% macro checkbox(label, name, id, class, options, col_dim) %}
+    {% if class == "box" %}
+        {% elseif options.type == "checkbox"%}
+            {% for option in options.values %}
+                <div class="form-check col-md-{{ option.dim }}">
+                    <label for="{{ option.id }}">{{ option.label }}</label>
+                    <input type="checkbox" class="form-check-input" name="{{ option.name }}" id="{{ option.id }}" value="{{ option.value }}"/>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% elseif class == "line" %}
+
+    {% endif %}
+{% endmacro %}
+
+{% macro datetime(label, name, col_dim) %}
+    <div class="form-group col-md-{{ col_dim }}">
+        <div class='form-group date' id='datetimepicker'>
+            <label for="fecha">{{ label|capitalize }}</label>
+            <input type='text' class="form-control" id='fecha' data-provide="datepicker" name="{{ name }}"/>
+        </div>
+    </div>
+{% endmacro %}

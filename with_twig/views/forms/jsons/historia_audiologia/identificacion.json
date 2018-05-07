@@ -1,69 +1,36 @@
 [
   {
-    "content": [
-      {
-        "type": "datetime",
-        "label": "Fecha de Examen",
-        "name": "date_exam",
-        "col_dim": "3"
-      },
-      {
-        "type": "input",
-        "label": "Nombre Completo",
-        "name": "nombre",
-        "id": "name",
-        "class": "text",
-        "col_dim": "3"
-      },
-      {
-        "type": "input",
-        "label": "Identificacion",
-        "name": "identificacion",
-        "id": "identi",
-        "class": "number",
-        "col_dim": "3"
-      },
-      {
-        "type": "input",
-        "label": "Lugar de Nacimiento",
-        "name": "nacimiento_place",
-        "id": "nac_place",
-        "class": "text",
-        "col_dim": "3"
-      }
-    ]
-  },
-  {
-    "content": [
-      {
-        "type": "datetime",
-        "label": "Fecha de Nacimiento",
-        "name": "nacimiento_date",
-        "col_dim": "3"
-      },
-      {
-        "type": "select",
-        "label": "Sexo",
-        "name": "sexo",
-        "id": "sex",
-        "class": "sexo",
-        "col_dim": "3"
-      },
+    "content":
+    [
       {
         "type":"input",
-        "label":"Edad",
-        "name":"edad",
-        "id":"old",
-        "class":"number",
-        "col_dim":"3"
-      },
+        "data":
+        [
+          {"label": "Fecha de Examen", "name": "date_exam"},
+          {"label":"Nombre Completo", "name":"nombre"},
+          {"label": "Identificacion", "name": "identificacion"},
+          {"label": "Lugar de Nacimiento", "name": "nacimiento_place"}
+        ],
+        "class":["datetime", "text", "text", "text"],
+        "mode":"box",
+        "col_dim":["3", "3", "3", "3"]
+      }
+    ]
+  },
+  {
+    "content": [
       {
-        "type": "select",
-        "label": "Estado Civil",
-        "name": "est_civil",
-        "id": "est_civil",
-        "class": "estado",
-        "col_dim": "3"
+        "type":"input",
+        "data":
+              [
+                {"label": "Fecha de Nacimiento", "name": "nacimiento_date"},
+                {"label": "Sexo", "name": "sexo", "content": "sexo"},
+                {"label":"Edad", "name":"edad"},
+                {"label": "Estado Civil", "name": "est_civil", "content":"estado"}
+              ],
+        "mode":"box",
+        "class":["datetime", "select", "number", "select"],
+        "col_dim":["3", "3", "3", "3"]
       }
     ]
   },
@@ -71,35 +38,16 @@
     "content": [
       {
         "type": "input",
-        "label": "Numero de Hijos",
-        "name": "n_hijos",
-        "id": "n_hijos",
-        "class": "number",
-        "col_dim": "3"
-      },
-      {
-        "type": "input",
-        "label": "Dirección",
-        "name": "direccion",
-        "id": "direccion",
-        "class": "text",
-        "col_dim": "3"
-      },
-      {
-        "type": "input",
-        "label": "Telefono",
-        "name": "telefono",
-        "id": "tel",
-        "class": "number",
-        "col_dim": "3"
-      },
-      {
-        "type": "input",
-        "label": "Profesión",
-          "name": "profesion",
-        "id": "prof",
-        "class": "text",
-        "col_dim": "3"
+        "data":
+                [
+                  {"label": "Numero de Hijos", "name": "n_hijos"},
+                  {"label": "Dirección", "name": "direccion"},
+                  {"label": "Telefono", "name": "telefono"},
+                  {"label": "Profesión", "name": "profesion"}
+                ],
+        "mode": "box",
+        "class": ["number", "datetime", "number", "text"],
+        "col_dim": ["3", "3", "3", "3"]
       }
     ]
   },
@@ -107,100 +55,57 @@
     "content":[
       {
         "type": "input",
-        "label": "Cargo",
-        "name": "cargo",
-        "id": "carg",
-        "class": "text",
-        "col_dim": "3"
+        "data":
+        [
+          {"label": "Cargo", "name": "cargo"},
+          {"label":"Empresa", "name":"empresa"}
+        ],
+        "mode":"box",
+        "class": ["text", "text"],
+        "col_dim": ["3", "3"]
       },
       {
-        "type":"input",
-        "label":"Empresa",
-        "name":"empresa",
-        "id":"emp",
-        "class":"text",
-        "col_dim":"3"
-      },
-      {
-        "type":"checkbox",
-        "label": "Uso de Protección Auditiva",
-        "name": "uso_p_auditiva",
-        "id": "u_p_auditiva",
+        "type":"radio",
+        "data":
+        [
+          {"labels":["Uso de Protección Auditiva"], "name": "uso_p_auditiva"}
+        ],
         "class":"box",
-        "options":{
-          "name":"pro_auditiva",
-          "values":[
-            {
-              "label": "Si",
-              "id":"pro_a_si",
-              "value": "si",
-              "dim":"6"
-            },
-            {
-              "label": "No",
-              "id":"pro_a_no",
-              "value": "no",
-              "dim":"6"
-            }
-          ]
-        },
-        "col_dim":"3"
-      },
-      {
-        "type":"input",
-        "label":"Tipo de Protección Auditiva",
-        "name":"t_proc_auditiva",
-        "id":"t_p_audio",
-        "class":"text",
-        "col_dim":"3"
-      }
-    ]
-  },
-  {
-    "content":[
-      {
-        "type":"input",
-        "label":"Antiguedad en el Cargo",
-        "name": "antiguedad",
-        "id": "ant",
-        "class":"number",
-        "col_dim":"3"
-      },
-      {
-        "type":"select",
-        "label": "Jornada Laboral",
-        "name": "jornada",
-        "id":"jorna",
-        "class":"jornada",
-        "col_dim":"3"
-      },
-      {
-        "type":"input",
-        "label":"Tipo de Descanso",
-        "name": "descanso",
-        "id": "desc_tipo",
-        "class":"text",
-        "col_dim":"3"
+        "col_dim":["3"],
+        "values":
+        [
+          {"label":"Si", "value": "si", "dim":"6"},
+          {"label":"No", "value": "no", "dim":"6"}
+        ]
       },
       {
         "type": "input",
-        "label": "Clase de Examen",
-        "name":"class_exam",
-        "id":"clas_exm",
-        "class": "text",
-        "col_dim":"3"
+        "data":
+        [
+          {"label":"Tipo de Protección Auditiva", "name":"t_proc_auditiva"}
+        ],
+        "mode":"box",
+        "class": ["text"],
+        "col_dim": ["3"]
       }
-    ]
+      ]
   },
   {
     "content":[
       {
-        "type":"select",
-        "label":"Ingreso",
-        "name":"t_ingreso",
-        "id":"t_ingreso",
-        "class":"ingreso",
-        "col_dim":"6"
-      }]
+        "type":"input",
+        "data":
+                [
+                  {"label":"Antiguedad en el Cargo", "name": "antiguedad"},
+                  {"label": "Jornada Laboral", "name": "jornada", "content":"jornada"},
+                  {"label":"Tipo de Descanso", "name": "descanso"},
+                  {"label": "Clase de Examen", "name":"class_exam"},
+                  {"label":"Ingreso", "name":"t_ingreso", "content":"ingreso"}
+                ],
+        "mode":"box",
+        "class":["text", "select", "text", "text", "select"],
+        "col_dim":["3", "2", "2", "2", "3"]
+      }
+    ]
   }
 ]

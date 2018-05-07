@@ -6,235 +6,154 @@
         "data": {
           "titles": [
             {
-              "name": "Tipo",
-              "dim": "3"
+              "dim": "8",
+              "block": [
+                {
+                  "name": "Tipo",
+                  "dim": "3"
+                },
+                {
+                  "name": "Si",
+                  "dim": "3"
+                },
+                {
+                  "name": "No",
+                  "dim": "3"
+                },
+                {
+                  "name": "Aveces",
+                  "dim": "3"
+                }
+              ]
             },
             {
-              "name": "Si",
-              "dim": "1"
+              "dim": "1",
+              "block": [
+                {
+                  "name": "Tiempo de Exposición",
+                  "dim": "12"
+                }
+                ]
             },
             {
-              "name": "No",
-              "dim": "1"
+              "dim": "1",
+              "block": [
+                {
+                  "name": "Frecuencia",
+                  "dim": "12"
+                }
+                ]
             },
             {
-              "name":"Aveces",
-              "dim":"1"
+              "dim": "1",
+              "block": [
+                {
+                  "name": "Tiempo",
+                  "dim": "12"
+                }
+                ]
             },
             {
-              "name":"Tiempo de Exposición",
-              "dim":"3"
-            },
-            {
-              "name":"Frecuencia",
-              "dim":"1"
-            },
-            {
-              "name":"Tiempo",
-              "dim":"1"
-            },
-            {
-              "name":"EPA",
-              "dim":"1"
+              "dim": "1",
+              "block": [
+                {
+                  "name": "EPA",
+                  "dim": "12"
+                }
+                ]
             }
           ],
           "options": [
-            [
+            {
+              "dim":"8",
+              "data":
               {
-                "type": "checkbox",
-                "label": "Uso de Audifonos",
-                "class": "line",
-                "options": {
-                  "name": "audifonos",
-                  "values": [
-                    {
-                      "value": "si",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "no",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "aveces",
-                      "dim": "1"
-                    }
-                  ]
-                },
-                "col_dim": "3"
-              },
-              {
-                "type":"input",
-                "name":"audifono_t_expo",
-                "class":"number",
-                "col_dim":"3"
-              },
-              {
-                "type":"input",
-                "name":"audifono_frec",
-                "class":"number",
-                "col_dim":"1"
-              },
-              {
-                "type":"input",
-                "name":"audifono_time",
-                "class":"number",
-                "col_dim":"1"
-              },
-              {
-                "type":"input",
-                "name":"audifono_epa",
-                "class":"number",
-                "col_dim":"1"
+                "type":"radio",
+                "data":
+                [
+                  {"labels":["Uso de Audifonos"], "name": "uso_audi"},
+                  {"labels":["Uso de Motocicleta"], "name": "uso_moto"},
+                  {"labels":["Usa Vehiculo Automotriz"], "name":"uso_vehi"},
+                  {"labels":["Exposición Maquinaria Pesada"], "name":"exp_maqui_pesada"}
+                ],
+                "class":"line",
+                "col_dim":["3"],
+                "values":
+                [
+                  {"value": "si", "dim":"3"},
+                  {"value": "no", "dim":"3"},
+                  {"value": "aveces", "dim":"3"}
+                ]
               }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Uso de Motocicleta",
-                "class": "line",
-                "options": {
-                  "name": "motocicleta",
-                  "values": [
-                    {
-                      "value": "si",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "no",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "aveces",
-                      "dim": "1"
-                    }
-                  ]
-                },
-                "col_dim": "3"
-              },
+            },
+            {
+              "dim":"1",
+              "data":
               {
                 "type":"input",
-                "name":"motocicleta_t_expo",
+                "data":
+                        [
+                          {"name":"audi_exposicion"},
+                          {"name":"moto_exposicion"},
+                          {"name":"vehi_exposicion"},
+                          {"name":"exp_m_exposicion"}
+                        ],
+                "mode":"line",
                 "class":"number",
-                "col_dim":"3"
-              },
-              {
-                "type":"input",
-                "name":"motocicleta_frec",
-                "class":"number",
-                "col_dim":"1"
-              },
-              {
-                "type":"input",
-                "name":"motocicleta_time",
-                "class":"number",
-                "col_dim":"1"
-              },
-              {
-                "type":"input",
-                "name":"motocicleta_epa",
-                "class":"number",
-                "col_dim":"1"
+                "col_dim":"12"
               }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Usa Vehiculo Automotriz",
-                "class": "line",
-                "options": {
-                  "name": "vehiculo",
-                  "values": [
-                    {
-                      "value": "si",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "no",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "aveces",
-                      "dim": "1"
-                    }
-                  ]
-                },
-                "col_dim": "3"
-              },
+            },
+            {
+              "dim":"1",
+              "data":
               {
                 "type":"input",
-                "name":"vehiculo_t_expo",
+                "data":
+                [
+                  {"name":"audi_frecuencia"},
+                  {"name":"moto_frecuencia"},
+                  {"name":"vehi_frecuencia"},
+                  {"name":"exp_m_frecuencia"}
+                ],
+                "mode":"line",
                 "class":"number",
-                "col_dim":"3"
-              },
-              {
-                "type":"input",
-                "name":"vehiculo_frec",
-                "class":"number",
-                "col_dim":"1"
-              },
-              {
-                "type":"input",
-                "name":"vehiculo_time",
-                "class":"number",
-                "col_dim":"1"
-              },
-              {
-                "type":"input",
-                "name":"vehiculo_epa",
-                "class":"number",
-                "col_dim":"1"
+                "col_dim":"12"
               }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Exposicoón a Maquinaria Pesada",
-                "class": "line",
-                "options": {
-                  "name": "maquinaria",
-                  "values": [
-                    {
-                      "value": "si",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "no",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "aveces",
-                      "dim": "1"
-                    }
-                  ]
-                },
-                "col_dim": "3"
-              },
+            },
+            {
+              "dim":"1",
+              "data":
               {
                 "type":"input",
-                "name":"maquinaria_t_expo",
+                "data":
+                [
+                  {"name":"audi_tiempo"},
+                  {"name":"moto_tiempo"},
+                  {"name":"vehi_tiempo"},
+                  {"name":"exp_m_tiempo"}
+                ],
+                "mode":"line",
                 "class":"number",
-                "col_dim":"3"
-              },
-              {
-                "type":"input",
-                "name":"maquinaria_frec",
-                "class":"number",
-                "col_dim":"1"
-              },
-              {
-                "type":"input",
-                "name":"maquinaria_time",
-                "class":"number",
-                "col_dim":"1"
-              },
-              {
-                "type":"input",
-                "name":"maquinaria_epa",
-                "class":"number",
-                "col_dim":"1"
+                "col_dim":"12"
               }
-            ]
+            },
+            {
+              "dim":"1",
+              "data":
+              {
+                "type":"input",
+                "data":
+                [
+                  {"name":"audi_epa"},
+                  {"name":"moto_epa"},
+                  {"name":"vehi_epa"},
+                  {"name":"exp_m_epa"}
+                ],
+                "mode":"line",
+                "class":"number",
+                "col_dim":"12"
+              }
+            }
           ]
         }
       }

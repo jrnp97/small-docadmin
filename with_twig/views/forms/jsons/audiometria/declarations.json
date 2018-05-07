@@ -4,9 +4,12 @@
             [
               {
                 "type":"textarea",
-                "name":"observaciones",
-                "id":"observa",
-                "col_dim":"12"
+                "data":
+                [
+                  {"name":"observa_desc"}
+                ],
+                "class":"box",
+                "col_dim":["12"]
               }
             ]
   }

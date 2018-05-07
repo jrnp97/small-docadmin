@@ -9,11 +9,11 @@
 require 'vendor/autoload.php';
 
 $loader = new Twig_Loader_Filesystem('views');
-$twig = new Twig_Environment($loader);
+$twig = new Twig_Environment($loader, array('debug' => true));
 
 
 try {
-    echo $twig->render('audiologia.html.twig', array(
+    echo $twig->render('h_audiologia.html.twig', array(
         'title_form' => 'Historia Audiologia',
         'body_ident' => json_decode(file_get_contents("views/forms/jsons/historia_audiologia/identificacion.json")),
         'body_ana' => json_decode(file_get_contents("views/forms/jsons/historia_audiologia/anamnesis.json")),
@@ -22,7 +22,11 @@ try {
         'body_expo' => json_decode(file_get_contents("views/forms/jsons/historia_audiologia/exposicion.json")),
         'body_actual' => json_decode(file_get_contents("views/forms/jsons/historia_audiologia/estado_actual.json"))
     ));
+
 } catch (Twig_Error_Loader $e) {
+    echo $e;
 } catch (Twig_Error_Runtime $e) {
+    echo $e;
 } catch (Twig_Error_Syntax $e) {
+    echo $e;
 }

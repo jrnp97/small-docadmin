@@ -1,0 +1,44 @@
+{% macro textarea(data, class, mode, col_dim) %}
+
+	{% if class == "box" %}
+
+        {% if mode != "hidden" %}
+
+            {% for item in data %}
+                <div class="form-group col-md-{{ col_dim[0] }}">
+                    <label for="causa">{{ item.label|capitalize }}</label>
+                    <textarea class="form-control" name="{{ item.name }}" id="{{ item.name }}_{{ loop.index }}" style="width: 100%; resize: none;"></textarea>
+                </div>
+            {% endfor %}
+
+        {% endif %}
+
+	{% elseif class == "line" %}
+
+        {% for item in data %}
+
+            {% if mode == "hidden" %}
+
+                <div class="row" style="margin-top: 5px;">
+                    <a class="btn btn-primary" data-toggle="collapse" href="#{{ item.name }}" role="button">+</a>
+                    <div class="collapse" id="{{ item.name }}">
+                        <div class="form-group col-md-{{ col_dim[0] }}">
+                            <textarea class="form-control" name="{{ item.name }}" id="{{ item.name }}_{{ loop.index }}" style="width: 100%; resize: none;"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            {% else %}
+
+                <div class="row">
+                    <div class="form-group col-md-{{ col_dim[0] }}">
+                        <textarea class="form-control" name="{{ item.name }}" id="{{ item.name }}_{{ loop.index }}" style="width: 100%; resize: none;"></textarea>
+                    </div>
+                </div>
+
+            {% endif %}
+
+        {% endfor %}
+
+	{% endif %}
+{% endmacro %}

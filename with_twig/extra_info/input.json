@@ -1,0 +1,14 @@
+{
+    "type":"input",
+    "data":
+    [
+      {"name": "m_ruido_desc"},
+      {"name": "television_desc"},
+      {"name":"conversacion_desc"},
+      {"name":"esc_bien_desc"},
+      {"name":"esc_ruido_desc"}
+    ],
+    "class":"number",
+    "mode":"line",
+    "col_dim":["12"]
+}

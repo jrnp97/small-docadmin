@@ -1,429 +1,78 @@
 [
   {
-    "content": [
+    "content":
+    [
       {
         "type": "custom_table",
-        "data": {
-          "titles": [
+        "data":
+        {
+          "titles":
+          [
             {
-              "name": "Alteraciones",
-              "dim": "8"
-            },
-            {
-              "name": "Si",
-              "dim": "2"
-            },
-            {
-              "name": "No",
-              "dim": "2"
+              "dim": "12",
+              "block": [
+                {
+                  "name": "Alteraciones",
+                  "dim": "4"
+                },
+                {
+                  "name": "Personal",
+                  "dim": "4"
+                },
+                {
+                  "name": "Familiar",
+                  "dim": "4"
+                }
+              ]
             }
           ],
-          "options": [
-            [
+          "options":
+          [
+            {
+              "dim":"12",
+              "data":
               {
-                "type": "checkbox",
-                "label": "Otalgia",
-                "class": "line",
-                "options": {
-                  "name": "otalgia",
-                  "values": [
-                    {
-                      "id": "otalgia_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "otalgia_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
+                "type":"radio",
+                "data":
+                [
+                  {"labels":["Otalgia"], "name": "otalgia"},
+                  {"labels":["Otaliquia/Otorrea"], "name": "otorrea"},
+                  {"labels":["Infeccion de Oidos"], "name":"inf_oido"},
+                  {"labels":["Cuerpo Extraño en Oido"], "name":"c_extra_oido"},
+                  {"labels":["Hipoacusia"], "name":"hipoacusia"},
+                  {"labels":["Tumores en SNC o aparato auditivo"], "name":"snc_auditivo"},
+                  {"labels":["Sarampion"], "name":"sarampion"},
+                  {"labels":["Paperas"], "name":"paperas"},
+                  {"labels":["Sifilis"], "name":"sifil"},
+                  {"labels":["Rubeola"], "name":"rubeola"},
+                  {"labels":["Cirugía en oido"], "name":"c_oido"},
+                  {"labels":["Tinnitus"], "name": "tinnitus"},
+                  {"labels":["Mareo"], "name": "mareo"},
+                  {"labels":["Vertigo"], "name": "vertigo"},
+                  {"labels":["Enfermedad de Meniere"], "name": "meniere"},
+                  {"labels":["Hipertension"], "name": "hipertension"},
+                  {"labels":["Diabetes"], "name": "diabetes"}
+                ],
+                "class":"line",
+                "col_dim":["4"],
+                "values":
+                [
+                  {"value": "personal", "dim":"4"},
+                  {"value": "familiar", "dim":"4"}
+                ]
               }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Otalquia/Otorrea",
-                "class": "line",
-                "options": {
-                  "name": "otorrea",
-                  "values": [
-                    {
-                      "id": "otorrea_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "otorrea_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Infección de Oídos",
-                "class": "line",
-                "options": {
-                  "name": "inf_oidos",
-                  "values": [
-                    {
-                      "id": "inf_oidos_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "inf_oidos_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Cuerpo Extraño en Oido",
-                "class": "line",
-                "options": {
-                  "name": "cuerpo_oido",
-                  "values": [
-                    {
-                      "id": "cuerpo_oido_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "cuerpo_oido_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Hipoacusia",
-                "class": "line",
-                "options": {
-                  "name": "hipoacusia",
-                  "values": [
-                    {
-                      "id": "hipoacusia_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "hipoacusia_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Tumores en SNC o aparato auditivo",
-                "class": "line",
-                "options": {
-                  "name": "snc_aparato",
-                  "values": [
-                    {
-                      "id": "snc_aparato_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "snc_aparato_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Sarampion",
-                "class": "line",
-                "options": {
-                  "name": "sarampion",
-                  "values": [
-                    {
-                      "id": "sarampion_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "sarampion_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Paperas",
-                "class": "line",
-                "options": {
-                  "name": "paperas",
-                  "values": [
-                    {
-                      "id": "paperas_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "paperas_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Sifilis",
-                "class": "line",
-                "options": {
-                  "name": "sifilis",
-                  "values": [
-                    {
-                      "id": "sifilis_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "sifilis_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Rubeola",
-                "class": "line",
-                "options": {
-                  "name": "rubeola",
-                  "values": [
-                    {
-                      "id": "rubeola_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "rubeola_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Cirugia en oído",
-                "class": "line",
-                "options": {
-                  "name": "cirugia",
-                  "values": [
-                    {
-                      "id": "cirugia_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "cirugia_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Tinnitus",
-                "class": "line",
-                "options": {
-                  "name": "tinnitus",
-                  "values": [
-                    {
-                      "id": "tinnitus_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "tinnitus_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Mareo",
-                "class": "line",
-                "options": {
-                  "name": "mareo",
-                  "values": [
-                    {
-                      "id": "mareo_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "mareo_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Vertigo",
-                "class": "line",
-                "options": {
-                  "name": "vertigo",
-                  "values": [
-                    {
-                      "id": "vertigo_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "vertigo_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Enfermedad de Meniere",
-                "class": "line",
-                "options": {
-                  "name": "meniere",
-                  "values": [
-                    {
-                      "id": "meniere_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "meniere_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Hipertensión",
-                "class": "line",
-                "options": {
-                  "name": "hipertension",
-                  "values": [
-                    {
-                      "id": "hipertension_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "hipertension_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "Diabletes",
-                "class": "line",
-                "options": {
-                  "name": "diabetes",
-                  "values": [
-                    {
-                      "id": "diabetes_si",
-                      "value": "si",
-                      "dim": "2"
-                    },
-                    {
-                      "id": "diabetes_no",
-                      "value": "no",
-                      "dim": "2"
-                    }
-                  ]
-                },
-                "col_dim": "8"
-              }
-            ],
-            [
-              {
-                "type":"textarea",
-                "label":{
-                  "text":"Otro/Descripción",
-                  "dim":"8"
-                },
-                "name":"fami_otra",
-                "id":"f_otra",
-                "col_dim":"4"
-              }
-            ]
+            }
           ]
         }
+      },
+      {
+        "type":"textarea",
+        "data":
+        [
+          {"label":"Otro/Descripcion", "name":"a_fam_otro"}
+        ],
+        "class":"box",
+        "col_dim":["6"]
       }
     ]
   }

@@ -1,0 +1,50 @@
+{% macro form_section(name, id, body) %}
+
+    {% from 'forms/macros/input_macro.twig' import input %}
+    {% from 'forms/macros/textarea_macro.twig' import textarea %}
+    {% from 'forms/macros/radio_macro.twig' import radio %}
+    {% from 'forms/macros/custom_table_macro.twig' import custom_table %}
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <span data-toggle="collapse" href="#{{ id }}" role="button">
+                <svg class="glyph stroked chevron-down">
+                    <use xlink:href="#stroked-chevron-down"></use>
+                </svg>
+            </span>
+            {{ name }}
+        </div>
+
+        <div class="collapse" id="{{ id }}">
+            <div class="panel-body">
+
+                {% for section in body %}
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            {% for item in section.content %}
+
+                                {% if item.type == "input" %}
+                                    {{ input(item.data, item.class, item.mode, item.col_dim) }}
+                                {%  elseif item.type == "checkbox" %}
+	                                <p>checkbox</p>
+                                {%  elseif item.type == "textarea" %}
+	                                {{ textarea(item.data, item.class, item.mode, item.col_dim) }}
+                                {% elseif item.type == "radio" %}
+                                    {{ radio(item.data, item.values, item.class, item.col_dim) }}
+                                {% elseif item.type == "custom_table" %}
+                                    {{ custom_table(item.data) }}
+                                {% endif %}
+
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+
+    </div>
+{% endmacro %}
