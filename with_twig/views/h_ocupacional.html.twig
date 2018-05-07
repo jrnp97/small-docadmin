@@ -4,14 +4,5 @@
 {% block title_bar %} Historia Ocupacional {% endblock %}
 
 {% block content %}
-
-    {{ form_body.form_section("1. Identificacion", "ide_id", body_ide) }}
-	{{ form_body.form_section("2. Antecedentes Ocupacionales", "a_ocu_id", body_a_ocu) }}
-	{{ form_body.form_section("3. Antecedente Patologicos Personales (P) - Familiares (F)", "a_pat_id", body_a_pat) }}
-	{{ form_body.form_section("4. Habitos", "a_hab_id", body_a_hab) }}
-	{{ form_body.form_section("5. Antecedente Gineco-Obstetricos", "a_gin_id", body_a_gin) }}
-	{{ form_body.form_section("6. Examenes", "ex_id", body_ex) }}
-	{{ form_body.form_section("7. Examen Fisico", "ex_f_id" , body_ex_f) }}
-	{{ form_body.form_section("8. Conclusiones", "con_id", body_con) }}
-
+	{{ form_body.form_section("1. Antecedente Patologicos", "a_pat_id", body_a_pat) }}
 {% endblock %}

@@ -64,7 +64,9 @@
                                 {%  elseif item.type == "checkbox" %}
 	                                {{ forms.checkbox(item.label, item.name, item.id, item.class, item.options, item.col_dim) }}
                                 {%  elseif item.type == "textarea" %}
-	                                {{ forms.textarea(item.label, item.name, item.id, item.col_dim, "box") }}
+	                                {{ forms.textarea(item.data, item.name, item.id, item.col_dim, "box") }}
+                                {% elseif item.type == "radio" %}
+                                    {{ forms.radio(item.data, item.values, item.class, item.col_dim) }}
                                 {% elseif item.type == "custom_table" %}
                                     {{ forms.custom_table(item.data) }}
                                 {% endif %}
@@ -92,19 +94,40 @@
 {% endmacro %}
 
 
-{% macro textarea(label, name, id, col_dim, mode) %}
-	{% if mode == "box" %}
+{% macro textarea(data, class, mode, col_dim) %}
+	{% if class == "box" %}
         <div class="form-group col-md-{{ col_dim }}">
             <label for="causa">{{ label|capitalize }}</label>
             <textarea class="form-control" name="{{ name }}" id="{{ id }}" style="width: 100%; resize: none;"></textarea>
         </div>
-	{% elseif mode == "line" %}
-        <div class="col-md-{{ label.dim }}">
-            <p><b>{{ label.text }}</b></p>
-        </div>
-        <div class="form-group col-md-{{ col_dim }}">
-            <textarea class="form-control" name="{{ name }}" id="{{ id }}" style="width: 100%; resize: none;"></textarea>
-        </div>
+
+	{% elseif class == "line" %}
+        {% for item in data %}
+            {% if mode == "hidden" %}
+                <div class="row" style="margin-top: 5px;">
+                    <a class="btn btn-primary" data-toggle="collapse" href="#{{ item.name }}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        +
+                    </a>
+                    <!--span data-toggle="collapse" href="#{{ item.name }}_{{ loop.index }}" role="button">
+                        <svg class="glyph stroked chevron-down">
+                            <use xlink:href="#stroked-chevron-down"></use>
+                        </svg>
+                    </span>-->
+                    <div class="collapse" id="{{ item.name }}">
+                        <div class="form-group col-md-{{ col_dim[0] }}">
+                            <textarea class="form-control" name="{{ item.name }}" id="{{ item.name }}_{{ loop.index }}" style="width: 100%; resize: none;"></textarea>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="form-group col-md-{{ col_dim[0] }}">
+                        <textarea class="form-control" name="{{ item.name }}" id="{{ item.name }}_{{ loop.index }}" style="width: 100%; resize: none;"></textarea>
+                    </div>
+                </div>
+            {% endif %}
+
+        {% endfor %}
 	{% endif %}
 {% endmacro %}
 
@@ -114,29 +137,39 @@
     <!-- titles -->
     <div class="col-md-12">
         <div class="row text-center">
-        {% for item in data.titles %}
-            <div class="col-md-{{ item.dim }}">
-                <h4>{{ item.name }}</h4>
+        {% for element in data.titles %}
+            <div class="col-md-{{ element.dim }}">
+                <div class="row">
+	                {% for block in element.block %}
+                        <div class="col-md-{{ block.dim }}">
+                            <h4>{{ block.name }}</h4>
+                        </div>
+	                {% endfor %}
+                </div>
             </div>
         {% endfor %}
         </div>
     </div>
     <!-- endtitles -->
+
     <!-- options -->
     <div class="col-md-12" style="margin-top: 10px">
-	    {% for content in data.options %}
         <div class="row text-center">
-                {% for item in content %}
-	                {% if item.type == "input" %}
-		                {{ forms.input(item.label, item.name, item.id, item.class, item.col_dim, "line") }}
-	                {% elseif item.type == "checkbox" %}
-		                {{ forms.checkbox(item.label, item.name, item.id, item.class, item.options, item.col_dim) }}
-	                {%  elseif item.type == "textarea" %}
-		                {{ forms.textarea(item.label, item.name, item.id, item.col_dim, "line") }}
-	                {% endif %}
-                {% endfor %}
-        </div>
+	    {% for element in data.options %}
+            <div class="col-md-{{ element.dim }}">
+                {% set content = element.data %}
+                {% if content.type == "input" %}
+                    {{ forms.input(content.label, content.name, content.id, content.class, content.col_dim, "line") }}
+                {% elseif content.type == "checkbox" %}
+                    {{ forms.checkbox(content.label, content.name, content.id, content.class, content.options, content.col_dim) }}
+                {%  elseif content.type == "textarea" %}
+                    {{ forms.textarea(content.data, "line", content.mode, content.col_dim) }}
+                {% elseif content.type == "radio" %}
+                    {{ forms.radio(content.data, content.values, content.class, content.col_dim) }}
+                {% endif %}
+            </div>
 	    {% endfor %}
+        </div>
     </div>
     <!-- endoptions -->
 {% endmacro %}
@@ -242,4 +275,55 @@
             <input type='text' class="form-control" id='fecha' data-provide="datepicker" name="{{ name }}"/>
         </div>
     </div>
+{% endmacro %}
+
+{% macro p(data, col_dim) %}
+    <div class="col-md-{{ col_dim }}">
+        <p><b>{{ label|capitalize }}</b></p>
+    </div>
+{% endmacro %}
+
+
+
+{% macro radio(data, values, class, col_dim) %}
+
+	{% if class == "box" %}
+
+        {% for item in data %}
+            {% for label in item.labels %}
+                <div class="form-group col-md-{{ col_dim[loop.index0] }}">
+                    <label class="text-center">{{ label|capitalize }}</label>
+                    <div class="row" style="margin-top: 10px">
+                        {% for option in values %}
+                            <div class="form-check col-md-{{ option.dim }}">
+                                <input type="radio" class="form-check-input" name="{{ item.name }}" id="{{ item.name }}_{{ loop.index }}" value="{{ option.value }}"/>
+                                <label for="{{ item.name }}_{{ loop.index }}">{{ option.label }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+	{% elseif class == "line" %}
+
+        {% for item in data %}
+            <div class="row" style="margin-top: 10px">
+            {% for label in item.labels %}
+                <div class="col-md-{{ col_dim[loop.index0] }}">
+                    <p><b>{{ label|capitalize }}</b></p>
+                </div>
+            {% endfor %}
+
+            {% for option in values %}
+                <div class="col-md-{{ option.dim }}">
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="{{ item.name }}" id="{{ item.name }}_1" value="{{ option.value }}"/>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        {% endfor %}
+	{% endif %}
+
 {% endmacro %}

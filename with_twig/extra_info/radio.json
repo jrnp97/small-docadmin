@@ -1,0 +1,47 @@
+# -- Radio Line Version -- #
+{
+  "type":"radio",
+  "data":
+  [
+    {"labels":["01", "Problemas de la piel"], "name": "p_priel"},
+    {"labels":["02", "Epilepsia"], "name": "epilepsia"},
+    {"labels":["03", "Auditivas - Sodera"], "name":"aud_sor"},
+    {"labels":["04", "Nasales"], "name":"nasales"},
+    {"labels":["05",  "Oculares"], "name":"oculares"},
+    {"labels":["06", "Respiratorias - TBC"], "name":"res_tbc"},
+    {"labels":["07", "Cardiacas - Circulatorias"], "name":"car_cir"},
+    {"labels":["08", "Hernias"], "name":"hernias"},
+    {"labels":["09", "Musculo - Esqueleticas"], "name":"mus_eque"},
+    {"labels":["10", "Fracturas - Traumaticos"], "name":"fra_tau"},
+    {"labels":["11", "Hematologicas"], "name":"hematologicas"},
+    {"labels":["12", "Alergicas - Asma"], "name": "aler_asma"},
+    {"labels":["13", "Canceroras"], "name":"canceroras"},
+    {"labels":["14", "Diabeticas"], "name":"diabeticas"},
+    {"labels":["15", "HIV"], "name":"hiv"},
+    {"labels":["16", "Cirugías"], "name":"cirugias"},
+    {"labels":["17", "Intoxicaciones"], "name":"intox"},
+    {"labels":["18", "Otras enfermedades"], "name":"otras_enf"}
+  ],
+  "class":"line",
+  "col_dim":["3", "3"],
+  "values":
+  [
+    {"value": "personal", "dim":"3"},
+    {"value": "familiar", "dim":"3"}
+  ]
+}
+# -- Radio Box Version -- #
+{
+  "type":"radio",
+  "data":
+  [
+    {"labels":["Accidente de trabajo"], "name": "acc_trab"}
+  ],
+  "class":"box",
+  "col_dim":["3"],
+  "values":
+  [
+    {"label":"Si", "value": "si", "dim":"6"},
+    {"label":"No", "value": "no", "dim":"6"}
+  ]
+}

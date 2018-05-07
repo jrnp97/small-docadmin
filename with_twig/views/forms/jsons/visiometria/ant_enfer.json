@@ -3,390 +3,94 @@
     "content":
     [
       {
-        "type":"custom_table",
+        "type": "custom_table",
         "data":
         {
           "titles":
           [
             {
-              "name":"Enfermedad",
-              "dim":"3"
+              "dim": "6",
+              "block": [
+                {
+                  "name": "Enfermedad",
+                  "dim": "4"
+                },
+                {
+                  "name": "Si",
+                  "dim": "4"
+                },
+                {
+                  "name": "No",
+                  "dim": "4"
+                }
+              ]
             },
             {
-              "name":"Si",
-              "dim":"1"
-            },
-            {
-              "name":"No",
-              "dim":"1"
-            },
-            {
-              "name":"Observaciones",
-              "dim":"7"
+              "dim": "6",
+              "block": [
+                {
+                  "name": "Observaciones",
+                  "dim": "12"
+                }
+              ]
             }
           ],
           "options":
           [
-            [
+            {
+              "dim":"6",
+              "data":
               {
-                "type":"checkbox",
-                "label":"Hipertension",
+                "type":"radio",
+                "data":
+                [
+                  {"labels":["Hipertension"], "name": "hiper"},
+                  {"labels":["Diabetes"], "name": "diabetes"},
+                  {"labels":["Colesterol Alto"], "name":"col_alto"},
+                  {"labels":["Glaucoma"], "name":"glaucoma"},
+                  {"labels":["Migraña"], "name":"migrania"},
+                  {"labels":["Catarata"], "name":"catarata"},
+                  {"labels":["Cx ocular"], "name":"cx_ocu"},
+                  {"labels":["Trauma"], "name":"trauma"},
+                  {"labels":["Cuerpo extraño"], "name":"cuer_ext"},
+                  {"labels":["Hipermetropia"], "name":"hip_tropia"},
+                  {"labels":["Miopia"], "name":"miopia"},
+                  {"labels":["Astigmatismo"], "name": "astigma"}
+                ],
                 "class":"line",
-                "col_dim":"3",
-                "options":
-                {
-                  "name":"hipertension",
-                  "values":
-                  [
-                    {
-                      "id":"hipertension_si",
-                      "value":"si",
-                      "dim":"1"
-                    },
-                    {
-                      "id":"hipertension_no",
-                      "valur":"no",
-                      "dim":"1"
-                    }
-                  ]
-                }
-              },
+                "col_dim":["4"],
+                "values":
+                [
+                  {"value": "si", "dim":"4"},
+                  {"value": "no", "dim":"4"}
+                ]
+              }
+            },
+            {
+              "dim":"6",
+              "data":
               {
                 "type":"textarea",
-                "name":"hipertension_desc",
-                "col_dim":"7"
-              }
-            ],
-            [
-              {
-                "type":"checkbox",
-                "label":"diabletes",
+                "data":
+                [
+                  {"name":"hiper_desc"},
+                  {"name":"diabetes_desc"},
+                  {"name":"col_alto_desc"},
+                  {"name":"glaucoma_desc"},
+                  {"name":"migrania_desc"},
+                  {"name":"catarata_desc"},
+                  {"name":"cx_ocu_desc"},
+                  {"name":"trauma_desc"},
+                  {"name":"cuer_ext_desc"},
+                  {"name":"hip_tropia_desc"},
+                  {"name":"miopia_desc"},
+                  {"name": "astigma_desc"}
+                ],
                 "class":"line",
-                "col_dim":"3",
-                "options":
-                {
-                  "name":"diabletes",
-                  "values":
-                  [
-                    {
-                      "id":"diabletes_si",
-                      "value":"si",
-                      "dim":"1"
-                    },
-                    {
-                      "id":"diabletes_no",
-                      "value":"no",
-                      "dim":"1"
-                    }
-                  ]
-                }
-              },
-              {
-                "type":"textarea",
-                "name":"diabletes_desc",
-                "col_dim":"7"
+                "mode":"hidden",
+                "col_dim":["12"]
               }
-            ],
-            [
-              {
-                "type":"checkbox",
-                "label":"Colesterol Alto",
-                "class":"line",
-                "col_dim":"3",
-                "options":
-                {
-                  "name":"col_alto",
-                  "values":
-                  [
-                    {
-                      "id":"col_alto_si",
-                      "value":"si",
-                      "dim":"1"
-                    },
-                    {
-                      "id":"col_alto_no",
-                      "value":"no",
-                      "dim":"1"
-                    }
-                  ]
-                }
-              },
-              {
-                "type":"textarea",
-                "name":"col_alto_desc",
-                "col_dim":"7"
-              }
-            ],
-            [
-              {
-                "type":"checkbox",
-                "label":"Glaucoma",
-                "class":"line",
-                "col_dim":"3",
-                "options":
-                {
-                  "name":"glaucoma",
-                  "values":
-                  [
-                    {
-                      "id":"glaucoma_si",
-                      "value":"si",
-                      "dim":"1"
-                    },
-                    {
-                      "id":"glaucoma_no",
-                      "value":"no",
-                      "dim":"1"
-                    }
-                  ]
-                }
-              },
-              {
-                "type":"textarea",
-                "name":"glaucoma_desc",
-                "col_dim":"7"
-              }
-            ],
-            [
-              {
-                "type":"checkbox",
-                "label":"Migraña",
-                "class":"line",
-                "col_dim":"3",
-                "options":
-                {
-                  "name":"migra",
-                  "values":
-                  [
-                    {
-                      "id":"migra_si",
-                      "value":"si",
-                      "dim":"1"
-                    },
-                    {
-                      "id":"migra_no",
-                      "value":"no",
-                      "dim":"1"
-                    }
-                  ]
-                }
-              },
-              {
-                "type":"textarea",
-                "name":"migra_desc",
-                "col_dim":"7"
-              }
-            ],
-            [
-              {
-                "type":"checkbox",
-                "label":"Catarata",
-                "class":"line",
-                "col_dim":"3",
-                "options":
-                {
-                  "name":"catarata",
-                  "values":
-                  [
-                    {
-                      "id":"foto_si",
-                      "value":"si",
-                      "dim":"1"
-                    },
-                    {
-                      "id":"foto_no",
-                      "value":"no",
-                      "dim":"1"
-                    }
-                  ]
-                }
-              },
-              {
-                "type":"textarea",
-                "name":"catarata_desc",
-                "col_dim":"7"
-              }
-            ],
-            [
-              {
-                "type":"checkbox",
-                "label":"Cx Ocular",
-                "class":"line",
-                "col_dim":"3",
-                "options":
-                {
-                  "name":"c_ocular",
-                  "values":
-                  [
-                    {
-                      "id":"c_ocular_si",
-                      "value":"si",
-                      "dim":"1"
-                    },
-                    {
-                      "id":"c_ocular_no",
-                      "value":"no",
-                      "dim":"1"
-                    }
-                  ]
-                }
-              },
-              {
-                "type":"textarea",
-                "name":"c_ocular_desc",
-                "col_dim":"7"
-              }
-            ],
-            [
-              {
-                "type":"checkbox",
-                "label":"Trauma",
-                "class":"line",
-                "col_dim":"3",
-                "options":
-                {
-                  "name":"trauma",
-                  "values":
-                  [
-                    {
-                      "id":"trauma_si",
-                      "value":"si",
-                      "dim":"1"
-                    },
-                    {
-                      "id":"trauma_no",
-                      "value":"no",
-                      "dim":"1"
-                    }
-                  ]
-                }
-              },
-              {
-                "type":"textarea",
-                "name":"trauma_desc",
-                "col_dim":"7"
-              }
-            ],
-            [
-              {
-                "type":"checkbox",
-                "label":"Cuerpo Extraño",
-                "class":"line",
-                "col_dim":"3",
-                "options":
-                {
-                  "name":"c_extranio",
-                  "values":
-                  [
-                    {
-                      "id":"c_extranio_si",
-                      "value":"si",
-                      "dim":"1"
-                    },
-                    {
-                      "id":"c_extranio_no",
-                      "value":"no",
-                      "dim":"1"
-                    }
-                  ]
-                }
-              },
-              {
-                "type":"textarea",
-                "name":"c_extranio_desc",
-                "col_dim":"7"
-              }
-            ],
-            [
-              {
-                "type":"checkbox",
-                "label":"Hipermetropia",
-                "class":"line",
-                "col_dim":"3",
-                "options":
-                {
-                  "name":"hipermetropia",
-                  "values":
-                  [
-                    {
-                      "id":"hipermetropia_si",
-                      "value":"si",
-                      "dim":"1"
-                    },
-                    {
-                      "id":"hipermetropia_no",
-                      "value":"no",
-                      "dim":"1"
-                    }
-                  ]
-                }
-              },
-              {
-                "type":"textarea",
-                "name":"hipermetropia_desc",
-                "col_dim":"7"
-              }
-            ],
-            [
-              {
-                "type":"checkbox",
-                "label":"Miopia",
-                "class":"line",
-                "col_dim":"3",
-                "options":
-                {
-                  "name":"miopia",
-                  "values":
-                  [
-                    {
-                      "id":"miopia_si",
-                      "value":"si",
-                      "dim":"1"
-                    },
-                    {
-                      "id":"miopia_no",
-                      "value":"no",
-                      "dim":"1"
-                    }
-                  ]
-                }
-              },
-              {
-                "type":"textarea",
-                "name":"miopia_desc",
-                "col_dim":"7"
-              }
-            ],
-            [
-              {
-                "type":"checkbox",
-                "label":"Astigmatismo",
-                "class":"line",
-                "col_dim":"3",
-                "options":
-                {
-                  "name":"astigmatismo",
-                  "values":
-                  [
-                    {
-                      "id":"astigmatismo_si",
-                      "value":"si",
-                      "dim":"1"
-                    },
-                    {
-                      "id":"astigmatismo_no",
-                      "value":"no",
-                      "dim":"1"
-                    }
-                  ]
-                }
-              },
-              {
-                "type":"textarea",
-                "name":"astigmatismo_desc",
-                "col_dim":"7"
-              }
-            ]
+            }
           ]
         }
       }
