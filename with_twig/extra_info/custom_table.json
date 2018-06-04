@@ -1,0 +1,100 @@
+{
+    "type":"custom_table",
+    "data":
+    {
+      "titles":
+              [
+                {
+                  "dim":"8",
+                  "block":
+                          [
+                            {
+                              "name":"Afectacion",
+                              "dim":"3"
+                            },
+                            {
+                              "name":"Columna Cervical",
+                              "dim":"3"
+                            },
+                            {
+                              "name":"Columna Dorsal",
+                              "dim":"3"
+                            },
+                            {
+                              "name":"Columna Lumbar",
+                              "dim":"3"
+                            }
+                          ]
+                },
+                {
+                  "dim":"4",
+                  "block":
+                          [
+                            {
+                              "name":"Observaciones",
+                              "dim":"12"
+                            }
+                          ]
+                }
+              ],
+      "options":
+              [
+                {
+                  "dim":"8",
+                  "data":
+                  {
+                    "type":"checkbox",
+                    "data":
+                            [
+                              {"labels":["Curva"]},
+                              {"labels":["Lordosis"]},
+                              {"labels":["Cifosis"]},
+                              {"labels":["Escoliosis"]}
+                            ],
+                    "class":"line",
+                    "col_dim":["3"],
+                    "values":
+                            [
+                              [
+                                {"label":"Si", "name":"col_vert", "value":"colum_ver_curva", "dim": "3"},
+                                {"label":"Si", "name":"col_dorsal", "value":"colum_dorsal_curva", "dim": "3"},
+                                {"label":"Si", "name":"col_lumbar", "value":"colum_lumbar_curva", "dim": "3"}
+                              ],
+                              [
+                                {"label":"Si", "name":"col_vert", "value":"colum_ver_lordosis", "dim": "3"},
+                                {"label":"Si", "name":"col_dorsal", "value":"colum_dorsal_lordosis", "dim": "3"},
+                                {"label":"Si", "name":"col_lumbar", "value":"colum_lumbar_lordosis", "dim": "3"}
+                              ],
+                              [
+                                {"label":"Si", "name":"col_vert", "value":"colum_ver_cifosis", "dim": "3"},
+                                {"label":"Si", "name":"col_dorsal", "value":"colum_dorsal_cifosis", "dim": "3"},
+                                {"label":"Si", "name":"col_lumbar", "value":"colum_lumbar_cifosis", "dim": "3"}
+                              ],
+                              [
+                                {"label":"Si", "name":"col_vert", "value":"colum_ver_escoliosis", "dim": "3"},
+                                {"label":"Si", "name":"col_dorsal", "value":"colum_dorsal_escoliosis", "dim": "3"},
+                                {"label":"Si", "name":"col_lumbar", "value":"colum_lumbar_escoliosis", "dim": "3"}
+                              ]
+                            ]
+                  }
+                },
+                {
+                  "dim":"4",
+                  "data":
+                  {
+                    "type":"textarea",
+                    "data":
+                    [
+                      {"name":"curva_desc"},
+                      {"name":"lordosis_desc"},
+                      {"name":"cifosis_desc"},
+                      {"name":"escoliosis_desc"}
+                    ],
+                    "class":"line",
+                    "mode":"hidden",
+                    "col_dim":["12"]
+                  }
+                }
+              ]
+    }
+}
