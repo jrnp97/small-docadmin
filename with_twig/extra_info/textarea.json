@@ -1,0 +1,32 @@
+# -- Textarea linea oculta -- #
+{
+    "type":"textarea",
+    "data":
+    [
+      {"name":"ardor_desc"},
+      {"name":"dolor_desc"},
+      {"name":"cefalia_desc"},
+      {"name":"fati visua_desc"},
+      {"name":"lagrimeo_desc"},
+      {"name":"fotofobia_desc"},
+      {"name":"can_leer_desc"},
+      {"name":"prurito_desc"},
+      {"name":"salt_leer_desc"},
+      {"name":"secreciones_desc"},
+      {"name":"mal_lejos_desc"},
+      {"name": "mal_cerca_desc"}
+    ],
+    "class":"line",
+    "mode":"hidden",
+    "col_dim":["12"]
+}
+# -- Textarea box -- #
+{
+  "type":"textarea",
+  "data":
+  [
+    {"name":"observa_desc"}
+  ],
+  "class":"box",
+  "col_dim":["12"]
+}

@@ -1,8 +1,14 @@
 {% extends 'forms/base.html.twig' %}
-{% import 'forms/base.html.twig' as form_body %}
+{% from 'forms/macros/section_macro.twig' import form_section %}
 
 {% block title_bar %} Historia Ocupacional {% endblock %}
 
 {% block content %}
-	{{ form_body.form_section("1. Antecedente Patologicos", "a_pat_id", body_a_pat) }}
+	{{ form_section("1. Identificación", "indent_id", body_ident) }}
+	{{ form_section("2. Antecedente Ocupacionales", "a_ocu_id", body_a_ocu) }}
+	{{ form_section("3. Antecedente Patologicos", "a_pat_id", body_a_pat) }}
+	{{ form_section("4. Habitos", "hab_id", body_hab) }}
+	{{ form_section("5. Antecedentes Gineco-Obstreticos", "a_gine_id", body_a_gin) }}
+	{{ form_section("6. Examen Fisico", "e_fisic_id", body_e_fi) }}
+	{{ form_section("7. Conclusiones", "conclu_id", body_conclu) }}
 {% endblock %}

@@ -1,186 +1,87 @@
 [
   {
-    "content": [
+    "content":
+    [
       {
         "type": "custom_table",
-        "data": {
-          "titles": [
+        "data":
+        {
+          "titles":
+          [
             {
-              "name": "Pregunta",
-              "dim": "4"
+              "dim": "8",
+              "block": [
+                {
+                  "name": "Uso de lentes",
+                  "dim": "3"
+                },
+                {
+                  "name": "Si",
+                  "dim": "3"
+                },
+                {
+                  "name": "No",
+                  "dim": "3"
+                },
+                {
+                  "name":"Aveces",
+                  "dim":"3"
+                }
+              ]
             },
             {
-              "name": "Si",
-              "dim": "1"
-            },
-            {
-              "name": "No",
-              "dim": "1"
-            },
-            {
-              "name":"Aveces",
-              "dim":"1"
-            },
-            {
-              "name":"Observaciones",
-              "dim":"5"
+              "dim": "4",
+              "block": [
+                {
+                  "name": "Observaciones",
+                  "dim": "12"
+                }
+              ]
             }
           ],
-          "options": [
-            [
+          "options":
+          [
+            {
+              "dim":"8",
+              "data":
               {
-                "type": "checkbox",
-                "label": "¿Le molesta el ruido?",
-                "class": "line",
-                "options": {
-                  "name": "ruido",
-                  "values": [
-                    {
-                      "value": "si",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "no",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "aveces",
-                      "dim": "1"
-                    }
-                  ]
-                },
-                "col_dim": "4"
-              },
+                "type":"radio",
+                "data":
+                [
+                  {"labels":["¿Le molesta el ruido?"], "name": "m_ruido"},
+                  {"labels":["¿Debe subir el volumen del televisor?"], "name": "television"},
+                  {"labels":["¿En una conversación le repiten las frases?"], "name":"conversacion"},
+                  {"labels":["¿Escucha bien?"], "name":"esc_bien"},
+                  {"labels":["¿Escucha bien cuando hay ruido?"], "name":"esc_ruido"}
+                ],
+                "class":"line",
+                "col_dim":["3"],
+                "values":
+                [
+                  {"value": "si", "dim":"3"},
+                  {"value": "no", "dim":"3"},
+                  {"value": "aveces", "dim":"3"}
+                ]
+              }
+            },
+            {
+              "dim":"4",
+              "data":
               {
                 "type":"textarea",
-                "name":"ruido_desc",
-                "class":"number",
-                "col_dim":"4"
+                "data":
+                [
+                  {"name": "m_ruido_desc"},
+                  {"name": "television_desc"},
+                  {"name":"conversacion_desc"},
+                  {"name":"esc_bien_desc"},
+                  {"name":"esc_ruido_desc"}
+                ],
+                "class":"line",
+                "mode":"hidden",
+                "col_dim":["12"]
               }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "¿Debe subir el volumen del televisor?",
-                "class": "line",
-                "options": {
-                  "name": "televisor",
-                  "values": [
-                    {
-                      "value": "si",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "no",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "aveces",
-                      "dim": "1"
-                    }
-                  ]
-                },
-                "col_dim": "4"
-              },
-              {
-                "type":"textarea",
-                "name":"televisior_desc",
-                "class":"number",
-                "col_dim":"4"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "¿En una conversación le repiten freses?",
-                "class": "line",
-                "options": {
-                  "name": "conversa",
-                  "values": [
-                    {
-                      "value": "si",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "no",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "aveces",
-                      "dim": "1"
-                    }
-                  ]
-                },
-                "col_dim": "4"
-              },
-              {
-                "type":"textarea",
-                "name":"conversa_desc",
-                "class":"number",
-                "col_dim":"4"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "¿Escucha bien?",
-                "class": "line",
-                "options": {
-                  "name": "escucha",
-                  "values": [
-                    {
-                      "value": "si",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "no",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "aveces",
-                      "dim": "1"
-                    }
-                  ]
-                },
-                "col_dim": "4"
-              },
-              {
-                "type":"textarea",
-                "name":"escucha_desc",
-                "col_dim":"4"
-              }
-            ],
-            [
-              {
-                "type": "checkbox",
-                "label": "¿Escucha bien cuando hay ruido?",
-                "class": "line",
-                "options": {
-                  "name": "esc_ruido",
-                  "values": [
-                    {
-                      "value": "si",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "no",
-                      "dim": "1"
-                    },
-                    {
-                      "value": "aveces",
-                      "dim": "1"
-                    }
-                  ]
-                },
-                "col_dim": "4"
-              },
-              {
-                "type":"textarea",
-                "name":"esc_ruido_desc",
-                "class":"number",
-                "col_dim":"4"
-              }
-            ]
+            }
           ]
         }
       }

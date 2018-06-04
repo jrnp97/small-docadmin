@@ -1,0 +1,43 @@
+{% macro input(data, class, mode, col_dim) %}
+
+	{% from 'forms/macros/select_macro.twig' import select %}
+
+	{% if mode == "box" %}
+
+	    {% for item in data %}
+
+			{% if class[loop.index0] == "datetime" %}
+				<div class="form-group col-md-{{ col_dim[loop.index0] }}">
+					<div class='form-group date' id='datetimepicker'>
+						<label for="fecha">{{ item.label|capitalize }}</label>
+						<input type='text' class="form-control" id='fecha' data-provide="datepicker" name="{{ item.name }}"/>
+					</div>
+				</div>
+			{% elseif class[loop.index0] == "select" %}
+				    {{ select(item.label|capitalize, item.name, "{{ item.name }}_{{ loop.index }}", item.content, col_dim[loop.index0]) }}
+			{% else %}
+				<div class="form-group col-md-{{ col_dim[loop.index0] }}">
+					<label for="{{ item.name }}_{{ loop.index }}">{{ item.label|capitalize }}</label>
+					<input class="form-control" name="{{ item.name }}" type="{{ class[loop.index0] }}" id="{{ item.name }}_{{ loop.index }}"/>
+				</div>
+			{% endif %}
+
+        {% endfor %}
+
+    {% elseif mode == "line" %}
+
+        {% for item in data %}
+
+            <div class="row">
+
+                <div class="form-group col-md-{{ col_dim }}">
+                    <input class="form-control" type="{{ class }}" name="{{ item.name }}" id="{{ item.name }}_{{ loop.index }}" style="padding: 5px;"/>
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+{% endmacro %}
