@@ -1,14 +1,27 @@
 from django.db import models
+from docapp.models.general import ExamType
 
 
 class Audiometry(models.Model):
-    pass
+    create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
+    last_modify = models.DateTimeField(null=True, blank=True)
+
+    exam_type = models.OneToOneField(ExamType, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.exam_type.name
 
 
 class Information(models.Model):
-    pass
+    interpretaciones = models.TextField(null=False, blank=False)
+    recomendaciones = models.TextField(null=True, blank=True)
+
+    audilogy = models.OneToOneField(Audiometry, on_delete=models.CASCADE)
 
 
 class Otoscopia(models.Model):
-    pass
+    otoscopia_izq = models.FileField()
+    otoscopia_der = models.FileField()
+
+    audilogy = models.OneToOneField(Audiometry, on_delete=models.CASCADE)
 
