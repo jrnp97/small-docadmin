@@ -6,12 +6,17 @@ from .general import ExamType, User
 class Audiology(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     last_modify = models.DateTimeField(null=True, blank=True)
-
     exam_type = models.OneToOneField(ExamType, on_delete=models.CASCADE)
     create_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
+        return "Audiology"
+
+    def get_exam_type(self):
         return self.exam_type.name
+
+    def get_person(self):
+        return self.exam_type.person.name
 
 
 class Ananmesis(models.Model):

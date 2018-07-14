@@ -28,9 +28,15 @@ class AntJobAdmin(admin.ModelAdmin):
                )
 
 
+# Make person exam
+class ExamTypeAdmin(admin.ModelAdmin):
+    model = ExamType
+    list_display = ('name', 'person', 'create_date')
+
+
 admin.site.register(Company)
 admin.site.register(Person)
-admin.site.register(ExamType)
+admin.site.register(ExamType, ExamTypeAdmin)
 admin.site.register(AntecedentJobs, AntJobAdmin)
 
 
@@ -62,6 +68,7 @@ class AudiologyAdmin(admin.ModelAdmin):
                OtrosAntStackInline,
                ExpoStackInline,
                EstActualAntStackInline,)
+    list_display = ('get_exam_type', 'get_person', 'create_by', 'last_modify')
 
 
 admin.site.register(Audiology, AudiologyAdmin)
@@ -146,7 +153,7 @@ class AudiometryAdmin(admin.ModelAdmin):
 admin.site.register(Audiometry, AudiometryAdmin)
 
 
-# Occupational form
+# Occupationatl form
 class AntecedentPFInline(admin.StackedInline):
     model = AntPF
 

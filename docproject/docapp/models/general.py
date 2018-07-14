@@ -55,7 +55,7 @@ class Person(models.Model):
     create_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.last_name} {self.name}"
+        return f"{self.name} {self.last_name}"
 
 
 class ExamType(models.Model):
@@ -67,18 +67,12 @@ class ExamType(models.Model):
         ('post-incapacidad', 'Post-Incapacidad')
     )
 
-    name = models.CharField(max_length=20, null=False, blank=False)
-
-    persons = models.ManyToManyField(Person, through='PersonExamType')
+    name = models.CharField(max_length=20, choices=TYPES, null=False, blank=False)
+    person = models.ForeignKey(Person, null=False, blank=False, on_delete=models.CASCADE)
+    create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
 
     def __str__(self):
-        return self.name
-
-
-class PersonExamType(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    exam_type = models.ForeignKey(ExamType, on_delete=models.CASCADE)
-    create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
+        return f"{self.person.name} - {self.name}"
 
 
 class AntecedentJobs(models.Model):

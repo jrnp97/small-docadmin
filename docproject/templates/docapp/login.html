@@ -10,21 +10,16 @@
                     <span style="color: #30a5ff;">DOC</span>Admin - Log in
                 </div>
 				<div class="panel-body" style="border: 1px solid;">
+                    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 					<form role="form" method="POST">
                         {% csrf_token %}
 						<fieldset style="margin-top: 5px">
 							<div class="form-group">
-								<input class="form-control" placeholder="E-mail" name="email" autofocus="" type="email">
+								<input class="form-control" placeholder="Username" name="username" autofocus="" type="text">
 							</div>
 							<div class="form-group">
 								<input class="form-control" placeholder="Password" name="password" value="" type="password">
 							</div>
-
-                            <!--div class="checkbox">
-								<label>
-									<input name="remember" value="Remember Me" type="checkbox">Remember Me
-								</label>
-							</div-->
 
                             <div id="olvide" style="float: right;">
                                 <a href=""><label>Olvide mi contraseña ?</label></a>
@@ -36,8 +31,9 @@
                                 </div>
 
                                 <div style="float: right;">
-                                    <a href="index.html" class="btn btn-primary">Registrar </a>
+                                    <a href="#" class="btn btn-primary">Registrar </a>
                                 </div>
+                                <input type="hidden" name="next" value="{% url 'docapp:dashboard' %}" />
                             </div>
 						</fieldset>
 					</form>

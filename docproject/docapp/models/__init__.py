@@ -1,4 +1,4 @@
-from .general import (Company, Person, PersonExamType, ExamType, AntecedentJobs, Hazards, JobAccidents)
+from .general import (Company, Person, ExamType, AntecedentJobs, Hazards, JobAccidents)
 
 from .audiology import (Audiology, Ananmesis, AntecedentesPF, OtrosAntecedentes, Exposiciones, EstadoActual)
 

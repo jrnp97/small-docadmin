@@ -1,30 +1,20 @@
 from django.shortcuts import render, redirect
-# from django.core.urlresolvers import reverse_lazy
-# from django.contrib.auth.views import LoginView
+from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.views import LoginView
+
 
 # Create your views here.
-
-
-# Simple views
-def index(request):
-    return render(request, 'docapp/index.html')
-
-
 def dashboard(request):
-    context = dict({
-        'routes': ['Inicio'],
-        'page_header': 'Dashboard Proof',
-        'active': 'inicio',
-        'exam_collapse': True,
-    })
-    return render(request, 'docapp/home.html', context)
-
-
-def login(request):
-    if request.method == 'POST':
-        return redirect('docapp:index')
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+        return redirect('admin:login')
     else:
-        return render(request, 'docapp/login.html')
+        context = dict({
+            'routes': ['Inicio'],
+            'page_header': 'Dashboard Proof',
+            'active': 'inicio',
+            'exam_collapse': True,
+        })
+        return render(request, 'docapp/home.html', context)
 
 
 def ingreso(request):
@@ -88,7 +78,9 @@ def audiometria(request):
     return render(request, 'docapp/exams/audiometria.html', context)
 
 
-# class Login(LoginView):
-#     template_name = 'docapp/login.html'
-#     success_url = reverse_lazy('docapp:index')
+class Login(LoginView):
+    template_name = 'docapp/login.html'
+    redirect_authenticated_user = True
 
+
+login = Login.as_view()

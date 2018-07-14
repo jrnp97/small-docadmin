@@ -4,7 +4,6 @@ from docapp import views
 
 app_name = 'docapp'
 urlpatterns =[
-    url(r'^home/$', views.index, name='index'),
     url(r'^login/$', views.login, name='login'),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^dashboard/ingreso/$', views.ingreso, name='ingreso'),
