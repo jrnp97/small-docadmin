@@ -14,6 +14,9 @@ class Visiometry(models.Model):
     def __str__(self):
         return self.exam_type.name
 
+    class Meta:
+        db_table = "exam_visiometria"
+
 
 class Sintomas(models.Model):
     ardor = models.BooleanField(default=False, null=False, blank=False)

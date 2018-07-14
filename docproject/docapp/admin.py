@@ -26,6 +26,7 @@ class AntJobAdmin(admin.ModelAdmin):
     inlines = (HazarStackInline,
                JobAcStackInline,
                )
+    list_display = ('__str__', 'company', 'occupation', )
 
 
 # Make person exam

@@ -17,6 +17,9 @@ class Audiometry(models.Model):
     def __str__(self):
         return self.exam_type.name
 
+    class Meta:
+        db_table = "exam_audiometria"
+
 
 class Information(models.Model):
     interpretaciones = models.TextField(null=False, blank=False)

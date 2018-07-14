@@ -18,6 +18,9 @@ class Occupational(models.Model):
     def __str__(self):
         return self.exam_type.name
 
+    class Meta:
+        db_table = "exam_ocupacional"
+
 
 class AntecedentPF(models.Model):
     skin_problems = models.BooleanField(verbose_name="problemas_en_la_piel", default=False, null=False, blank=False)
@@ -225,7 +228,6 @@ class ExamPhysic(models.Model):
     occupational = models.OneToOneField(Occupational, on_delete=models.CASCADE)
 
     # Column
-
 
 
 class Conclusion(models.Model):

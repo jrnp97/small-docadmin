@@ -18,6 +18,9 @@ class Audiology(models.Model):
     def get_person(self):
         return self.exam_type.person.name
 
+    class Meta:
+        db_table = "exam_audiologia"
+
 
 class Ananmesis(models.Model):
     fecha_ultimo_examen = models.DateField(null=False, blank=False)

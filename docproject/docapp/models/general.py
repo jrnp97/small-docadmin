@@ -83,6 +83,9 @@ class AntecedentJobs(models.Model):
 
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.person.__str__()
+
 
 class JobAccidents(models.Model):
     secuelas = models.TextField(null=False, blank=False)
@@ -93,6 +96,9 @@ class JobAccidents(models.Model):
     description = models.TextField(null=False, blank=False)
 
     work = models.ForeignKey(AntecedentJobs, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.tipo
 
 
 class Hazards(models.Model):
@@ -106,3 +112,16 @@ class Hazards(models.Model):
 
     work = models.OneToOneField(AntecedentJobs, on_delete=models.CASCADE)
 
+    def get_number_hazard(self):
+        hazards = (self.fisico,
+                   self.quimico,
+                   self.mecanico,
+                   self.ergonomico,
+                   self.electrico,
+                   self.psicologico,
+                   self.locativo,
+                   )
+        return str(hazards.count(True))
+
+    def __str__(self):
+        return self.get_number_hazard()
