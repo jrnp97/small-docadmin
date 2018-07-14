@@ -10,8 +10,8 @@ class Company(models.Model):
     name = models.CharField(max_length=300, null=False, blank=False)
     nit = models.PositiveIntegerField(verbose_name='NIT')
     direction = models.CharField(max_length=500, null=False, blank=False)
-    land_line = models.PositiveIntegerField(max_length=7, null=True)
-    cellphone = models.PositiveIntegerField(max_length=10, null=False, blank=False)
+    land_line = models.PositiveIntegerField(null=True)
+    cellphone = models.PositiveIntegerField(null=False, blank=False)
     contact = models.EmailField(null=False, blank=False)
 
     def __str__(self):
@@ -41,12 +41,12 @@ class Person(models.Model):
     civil_state = models.CharField(max_length=20, choices=CIVIL_STATES, null=False, blank=False)
     number_sons = models.PositiveIntegerField()
     direction = models.CharField(max_length=500, null=False, blank=False)
-    land_line = models.PositiveIntegerField(max_length=7, null=True)
-    cellphone = models.PositiveIntegerField(max_length=10, null=False, blank=False)
+    land_line = models.PositiveIntegerField(null=True)
+    cellphone = models.PositiveIntegerField(null=False, blank=False)
     occupation = models.CharField(max_length=500, null=False, blank=False)
     position = models.CharField(max_length=500, null=False, blank=False)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=False)
-    stratus = models.PositiveIntegerField(max_length=1)
+    stratus = models.PositiveIntegerField()
     # scholarship = ""
     training_student = models.BooleanField(default=False)
     sena_learner = models.BooleanField(default=False)
@@ -110,5 +110,5 @@ class Hazards(models.Model):
     psicologico = models.BooleanField(default=False, null=False, blank=False)
     locativo = models.BooleanField(default=False, null=False, blank=False)
 
-    anecedentes = models.OneToOneField(AntecedentJobs, on_delete=models.CASCADE, parent_link=True)
+    work = models.OneToOneField(AntecedentJobs, on_delete=models.CASCADE)
 

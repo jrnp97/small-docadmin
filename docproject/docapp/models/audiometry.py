@@ -1,12 +1,18 @@
+""" Model to save audiometry form """
 from django.db import models
-from docapp.models.general import ExamType
+from .general import ExamType, User
+
+""" Questions
+Attribute mision
+
+"""
 
 
 class Audiometry(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     last_modify = models.DateTimeField(null=True, blank=True)
-
     exam_type = models.OneToOneField(ExamType, on_delete=models.CASCADE)
+    create_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.exam_type.name

@@ -1,5 +1,7 @@
+"""model to save visiometry form"""
+
 from django.db import models
-from docapp.models.general import ExamType
+from .general import ExamType, User
 
 
 class Visiometry(models.Model):
@@ -7,6 +9,7 @@ class Visiometry(models.Model):
     last_modify = models.DateTimeField(null=True, blank=True)
 
     exam_type = models.OneToOneField(ExamType, on_delete=models.CASCADE)
+    create_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.exam_type.name
@@ -28,7 +31,7 @@ class Sintomas(models.Model):
 
     observaciones = models.TextField(null=True, blank=True)
 
-    visiometria = models.OneToOneField(Visiometry, on_delete=models.CASCADE)
+    visio_id = models.OneToOneField(Visiometry, on_delete=models.CASCADE)
 
     # ardor_description = models.TextField(null=True, blank=True)
     # dolor_description = models.TextField(null=True, blank=True)
@@ -79,7 +82,7 @@ class Antecedentes(models.Model):
 
     observaciones = models.TextField(null=True, blank=True)
 
-    visiometria = models.OneToOneField(Visiometry, on_delete=models.CASCADE)
+    visio_id = models.OneToOneField(Visiometry, on_delete=models.CASCADE)
 
 
 class Agudeza(models.Model):
@@ -90,7 +93,7 @@ class Agudeza(models.Model):
     ojo_izquierdo = models.CharField(max_length=10, choices=OPTIONS)
     ojo_derecho = models.CharField(max_length=10, choices=OPTIONS)
 
-    visiometria = models.OneToOneField(Visiometry, on_delete=models.CASCADE)
+    visio_id = models.OneToOneField(Visiometry, on_delete=models.CASCADE)
 
 
 class Cronomatica(models.Model):
@@ -101,5 +104,5 @@ class Cronomatica(models.Model):
     ojo_izquierdo = models.CharField(max_length=10, choices=OPTIONS)
     ojo_derecho = models.CharField(max_length=10, choices=OPTIONS)
 
-    visiometria = models.OneToOneField(Visiometry, on_delete=models.CASCADE)
+    visio_id = models.OneToOneField(Visiometry, on_delete=models.CASCADE)
 

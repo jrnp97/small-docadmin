@@ -1,5 +1,6 @@
+""" model to save audiology form """
 from django.db import models
-from docapp.models.general import ExamType
+from .general import ExamType, User
 
 
 class Audiology(models.Model):
@@ -7,6 +8,7 @@ class Audiology(models.Model):
     last_modify = models.DateTimeField(null=True, blank=True)
 
     exam_type = models.OneToOneField(ExamType, on_delete=models.CASCADE)
+    create_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.exam_type.name
@@ -22,7 +24,7 @@ class Ananmesis(models.Model):
     )
     interpretacion = models.CharField(max_length=10, choices=INTER, null=False, blank=False)
 
-    audilogy = models.OneToOneField(Audiology, on_delete=models.CASCADE)
+    audio_id = models.OneToOneField(Audiology, on_delete=models.CASCADE)
 
 
 class AntecedentesPF(models.Model):
@@ -46,7 +48,7 @@ class AntecedentesPF(models.Model):
 
     otro = models.TextField(null=True, blank=True)
 
-    audilogy = models.OneToOneField(Audiology, on_delete=models.CASCADE)
+    audio_id = models.OneToOneField(Audiology, on_delete=models.CASCADE)
 
 
 class OtrosAntecedentes(models.Model):
@@ -61,7 +63,7 @@ class OtrosAntecedentes(models.Model):
 
     otro = models.TextField(null=True, blank=True)
 
-    audilogy = models.OneToOneField(Audiology, on_delete=models.CASCADE)
+    audio_id = models.OneToOneField(Audiology, on_delete=models.CASCADE)
 
 
 class Exposiciones(models.Model):
@@ -101,7 +103,7 @@ class Exposiciones(models.Model):
     vehiculo_automotriz_epa = models.PositiveIntegerField(null=True, blank=True)
     maquinaria_pesada_epa = models.PositiveIntegerField(null=True, blank=True)
 
-    audilogy = models.OneToOneField(Audiology, on_delete=models.CASCADE)
+    audio_id = models.OneToOneField(Audiology, on_delete=models.CASCADE)
 
 
 class EstadoActual(models.Model):
@@ -145,5 +147,5 @@ class EstadoActual(models.Model):
     escucha_epa = models.PositiveIntegerField(null=True, blank=True)
     escucha_ruido_epa = models.PositiveIntegerField(null=True, blank=True)
 
-    audilogy = models.OneToOneField(Audiology, on_delete=models.CASCADE)
+    audio_id = models.OneToOneField(Audiology, on_delete=models.CASCADE)
 
