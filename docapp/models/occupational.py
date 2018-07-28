@@ -1,6 +1,10 @@
 """ Model to save occupational form"""
+from django.utils import timezone
 from django.db import models
-from .general import ExamType, User
+
+from .general import ExamType
+from accounts.models import DoctorProfile
+
 
 """Questions
 Section Antecedentes Gineco-Or
@@ -10,10 +14,9 @@ Section Columns
 
 class Occupational(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
-    last_modify = models.DateTimeField(null=True, blank=True)
-
-    exam_type = models.OneToOneField(ExamType, on_delete=models.CASCADE)
-    create_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    last_modify = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
+    exam_type = models.OneToOneField(ExamType, null=False, blank=False, on_delete=models.CASCADE)
+    create_by = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.exam_type.name
@@ -23,31 +26,31 @@ class Occupational(models.Model):
 
 
 class AntecedentPF(models.Model):
-    skin_problems = models.BooleanField(verbose_name="problemas_en_la_piel", default=False, null=False, blank=False)
-    epilepsia = models.BooleanField(default=False, null=False, blank=False)
-    deafness = models.BooleanField(verbose_name='sordera', default=False, null=False, blank=False)
-    nasales = models.BooleanField(default=False, null=False, blank=False)
-    oculares = models.BooleanField(default=False, null=False, blank=False)
-    respiratorias = models.BooleanField(verbose_name='respiratorias_TBC', default=False, null=False, blank=False)
-    cardiacas = models.BooleanField(verbose_name='cardiacas_circulatorias', default=False, null=False, blank=False)
-    hernias = models.BooleanField(default=False, null=False, blank=False)
-    esqueleticas = models.BooleanField(verbose_name='musculo_esqueleticas', default=False, null=False, blank=False)
-    traumaticos = models.BooleanField(verbose_name='fracturas_traumaticos', default=False, null=False, blank=False)
-    hematologicas = models.BooleanField(default=False, null=False, blank=False)
-    asma = models.BooleanField(verbose_name='alergicas_asma', default=False, null=False, blank=False)
-    cancerosas = models.BooleanField(default=False, null=False, blank=False)
-    diabeticas = models.BooleanField(default=False, null=False, blank=False)
-    hiv = models.BooleanField(verbose_name='HIV', default=False, null=False, blank=False)
-    cirugias = models.BooleanField(default=False, null=False, blank=False)
-    intoxicaciones = models.BooleanField(default=False, null=False, blank=False)
+    skin_problems = models.BooleanField(verbose_name="problemas_en_la_piel", default=False, null=False, blank=True)
+    epilepsia = models.BooleanField(default=False, null=False, blank=True)
+    deafness = models.BooleanField(verbose_name='sordera', default=False, null=False, blank=True)
+    nasales = models.BooleanField(default=False, null=False, blank=True)
+    oculares = models.BooleanField(default=False, null=False, blank=True)
+    respiratorias = models.BooleanField(verbose_name='respiratorias_TBC', default=False, null=False, blank=True)
+    cardiacas = models.BooleanField(verbose_name='cardiacas_circulatorias', default=False, null=False, blank=True)
+    hernias = models.BooleanField(default=False, null=False, blank=True)
+    esqueleticas = models.BooleanField(verbose_name='musculo_esqueleticas', default=False, null=False, blank=True)
+    traumaticos = models.BooleanField(verbose_name='fracturas_traumaticos', default=False, null=False, blank=True)
+    hematologicas = models.BooleanField(default=False, null=False, blank=True)
+    asma = models.BooleanField(verbose_name='alergicas_asma', default=False, null=False, blank=True)
+    cancerosas = models.BooleanField(default=False, null=False, blank=True)
+    diabeticas = models.BooleanField(default=False, null=False, blank=True)
+    hiv = models.BooleanField(verbose_name='HIV', default=False, null=False, blank=True)
+    cirugias = models.BooleanField(default=False, null=False, blank=True)
+    intoxicaciones = models.BooleanField(default=False, null=False, blank=True)
     otras = models.TextField(verbose_name='otras_enfermedades', null=True, blank=False)
 
-    occupational = models.OneToOneField(Occupational, on_delete=models.CASCADE)
+    occupa_id = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE)
 
 
 class AntecedentGinecoO(models.Model):
     pass
-    occupational = models.OneToOneField(Occupational, on_delete=models.CASCADE)
+    occupa_id = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE)
 
 
 class Habits(models.Model):
@@ -72,78 +75,7 @@ class Habits(models.Model):
     years_cigarette = models.PositiveIntegerField(verbose_name='anios_cigarrillos', null=True, blank=True)
 
     free_time_actions = models.CharField(max_length=300, verbose_name='tiempo_libre', null=False, blank=False)
-    occupational = models.OneToOneField(Occupational, on_delete=models.CASCADE)
-
-
-class Exams(models.Model):
-    RESULTS = (
-        ('n', 'No aplica'),
-        ('a', 'Aplica'),
-    )
-
-    vdrl_date = models.DateField(null=False, blank=False)
-    vdrl_lab = models.CharField(max_length=100, null=False, blank=False)
-    vdrl_result = models.CharField(max_length=1, choices=RESULTS, default='n', null=False, blank=False)
-
-    serologia_date = models.DateField(null=False, blank=False)
-    serologia_lab = models.CharField(max_length=100, null=False, blank=False)
-    serologia_result = models.CharField(max_length=1, choices=RESULTS, default='n', null=False, blank=False)
-
-    hemograma_date = models.DateField(null=False, blank=False)
-    hemograma_lab = models.CharField(max_length=100, null=False, blank=False)
-    hemograma_result = models.CharField(max_length=1, choices=RESULTS, default='n', null=False, blank=False)
-
-    uroanalisis_date = models.DateField(null=False, blank=False)
-    uroanalisis_lab = models.CharField(max_length=100, null=False, blank=False)
-    uroanalisis_result = models.CharField(max_length=1, choices=RESULTS, default='n', null=False, blank=False)
-
-    colesterol_total_date = models.DateField(null=False, blank=False)
-    colesterol_total_lab = models.CharField(max_length=100, null=False, blank=False)
-    colesterol_total_result = models.CharField(max_length=1, choices=RESULTS, default='n', null=False, blank=False)
-
-    colesterol_hdi_date = models.DateField(null=False, blank=False)
-    colesterol_hdi_lab = models.CharField(max_length=100, null=False, blank=False)
-    colesterol_hdi_result = models.CharField(max_length=1, choices=RESULTS, default='n', null=False, blank=False)
-
-    trigliceridos_date = models.DateField(null=False, blank=False)
-    trigliceridos_lab = models.CharField(max_length=100, null=False, blank=False)
-    trigliceridos_result = models.CharField(max_length=1, choices=RESULTS, default='n', null=False, blank=False)
-
-    colesterol_ldi_date = models.DateField(null=False, blank=False)
-    colesterol_ldi_lab = models.CharField(max_length=100, null=False, blank=False)
-    colesterol_ldi_result = models.CharField(max_length=1, choices=RESULTS, default='n', null=False, blank=False)
-
-    KOH_unias_date = models.DateField(null=False, blank=False)
-    KOH_unias_lab = models.CharField(max_length=100, null=False, blank=False)
-    KOH_unias_result = models.CharField(max_length=1, choices=RESULTS, default='n', null=False, blank=False)
-
-    frotis_garganta_date = models.DateField(null=False, blank=False)
-    frotis_garganta_lab = models.CharField(max_length=100, null=False, blank=False)
-    frotis_garganta_result = models.CharField(max_length=1, choices=RESULTS, default='n', null=False, blank=False)
-
-    coprologico_date = models.DateField(null=False, blank=False)
-    coprologico_lab = models.CharField(max_length=100, null=False, blank=False)
-    coprologico_result = models.CharField(max_length=1, choices=RESULTS, default='n', null=False, blank=False)
-
-    RH = (
-        ('+', 'Positivo'),
-        ('-', 'Negativo')
-    )
-
-    BLOOD_TYPE = (
-        ('a+', 'A+'),
-        ('a-', 'A-'),
-        ('b+', 'B+'),
-        ('b-', 'B-'),
-        ('ab+', 'AB+'),
-        ('ab-', 'AB-'),
-        ('o+', 'O+'),
-        ('o-', 'O-')
-    )
-    rh_information = models.CharField(verbose_name='RH', max_length=1, choices=RH, null=False, blank=False)
-    blood_type = models.CharField(verbose_name='tipo_sangre', max_length=5, choices=BLOOD_TYPE, null=False, blank=False)
-
-    occupational = models.OneToOneField(Occupational, on_delete=models.CASCADE)
+    occupa_id = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE)
 
 
 class ExamPhysic(models.Model):
@@ -151,81 +83,81 @@ class ExamPhysic(models.Model):
 
     # OrganSystem
     # # General
-    genera_look = models.BooleanField(default=False, null=False, blank=False)
-    nutrition_state = models.BooleanField(default=False, null=False, blank=False)
-    color_texture = models.BooleanField(default=False, null=False, blank=False)
-    appearance = models.BooleanField(default=False, null=False, blank=False)
-    injuries_skin = models.BooleanField(default=False, null=False, blank=False)
-    irritant_tolerance = models.BooleanField(default=False, null=False, blank=False)
-    nails = models.BooleanField(default=False, null=False, blank=False)
+    genera_look = models.BooleanField(default=False, null=False, blank=True)
+    nutrition_state = models.BooleanField(default=False, null=False, blank=True)
+    color_texture = models.BooleanField(default=False, null=False, blank=True)
+    appearance = models.BooleanField(default=False, null=False, blank=True)
+    injuries_skin = models.BooleanField(default=False, null=False, blank=True)
+    irritant_tolerance = models.BooleanField(default=False, null=False, blank=True)
+    nails = models.BooleanField(default=False, null=False, blank=True)
 
     # # Senses Organs
 
     # # # Eyes
-    pupilas = models.BooleanField(verbose_name='conjuntivitis_pupilas_corneas', default=False, null=False, blank=False)
-    deep_vision = models.BooleanField(verbose_name='vision_profunda', default=False, null=False, blank=False)
-    cron_vision = models.BooleanField(verbose_name='vision_cronomatica', default=False, null=False, blank=False)
-    per_vision = models.BooleanField(verbose_name='vision_periferica', default=False, null=False, blank=False)
-    forias = models.BooleanField(default=False, null=False, blank=False)
+    pupilas = models.BooleanField(verbose_name='conjuntivitis_pupilas_corneas', default=False, null=False, blank=True)
+    deep_vision = models.BooleanField(verbose_name='vision_profunda', default=False, null=False, blank=True)
+    cron_vision = models.BooleanField(verbose_name='vision_cronomatica', default=False, null=False, blank=True)
+    per_vision = models.BooleanField(verbose_name='vision_periferica', default=False, null=False, blank=True)
+    forias = models.BooleanField(default=False, null=False, blank=True)
 
     # # # Ears
-    pabellones = models.BooleanField(default=False, null=False, blank=False)
-    otoscopia = models.BooleanField(default=False, null=False, blank=False)
+    pabellones = models.BooleanField(default=False, null=False, blank=True)
+    otoscopia = models.BooleanField(default=False, null=False, blank=True)
 
     # # # Nose
-    tabique_cornetes = models.BooleanField(default=False, null=False, blank=False)
-    senos_paranasales = models.BooleanField(default=False, null=False, blank=False)
+    tabique_cornetes = models.BooleanField(default=False, null=False, blank=True)
+    senos_paranasales = models.BooleanField(default=False, null=False, blank=True)
 
     # # # Mouth
-    labios_lengua = models.BooleanField(default=False, null=False, blank=False)
-    faringe = models.BooleanField(default=False, null=False, blank=False)
-    amigdalas = models.BooleanField(default=False, null=False, blank=False)
-    dentadura = models.BooleanField(default=False, null=False, blank=False)
+    labios_lengua = models.BooleanField(default=False, null=False, blank=True)
+    faringe = models.BooleanField(default=False, null=False, blank=True)
+    amigdalas = models.BooleanField(default=False, null=False, blank=True)
+    dentadura = models.BooleanField(default=False, null=False, blank=True)
 
     # # Neck
     inspect_neck_moves = models.BooleanField(verbose_name='inspecion_cuello_movimientos',
-                                             default=False, null=False, blank=False)
-    palpacion_cuello_tiroudes = models.BooleanField(default=False, null=False, blank=False)
+                                             default=False, null=False, blank=True)
+    palpacion_cuello_tiroudes = models.BooleanField(default=False, null=False, blank=True)
 
     # # Torax y pulmones
-    inspeccion_torax_senos = models.BooleanField(default=False, null=False, blank=False)
-    palpacion = models.BooleanField(default=False, null=False, blank=False)
-    auscultacion = models.BooleanField(default=False, null=False, blank=False)
+    inspeccion_torax_senos = models.BooleanField(default=False, null=False, blank=True)
+    palpacion = models.BooleanField(default=False, null=False, blank=True)
+    auscultacion = models.BooleanField(default=False, null=False, blank=True)
 
     # # Corazon
-    ritmo = models.BooleanField(default=False, null=False, blank=False)
-    ruidos_cardiacos = models.BooleanField(default=False, null=False, blank=False)
-    circulacion_periferica = models.BooleanField(default=False, null=False, blank=False)
+    ritmo = models.BooleanField(default=False, null=False, blank=True)
+    ruidos_cardiacos = models.BooleanField(default=False, null=False, blank=True)
+    circulacion_periferica = models.BooleanField(default=False, null=False, blank=True)
 
     # # Abdomen
-    inspeccion = models.BooleanField(default=False, null=False, blank=False)
-    palpacion_organos = models.BooleanField(default=False, null=False, blank=False)
-    anillos_inguinales_hernias = models.BooleanField(default=False, null=False, blank=False)
+    inspeccion = models.BooleanField(default=False, null=False, blank=True)
+    palpacion_organos = models.BooleanField(default=False, null=False, blank=True)
+    anillos_inguinales_hernias = models.BooleanField(default=False, null=False, blank=True)
 
     # # Genito-Unitario
-    riniones = models.BooleanField(default=False, null=False, blank=False)
-    genitales_externos = models.BooleanField(default=False, null=False, blank=False)
+    riniones = models.BooleanField(default=False, null=False, blank=True)
+    genitales_externos = models.BooleanField(default=False, null=False, blank=True)
 
     # # Columna
-    curvaturas = models.BooleanField(default=False, null=False, blank=False)
-    mobilidad = models.BooleanField(default=False, null=False, blank=False)
-    tono_musculos_paravertebrales = models.BooleanField(default=False, null=False, blank=False)
+    curvaturas = models.BooleanField(default=False, null=False, blank=True)
+    mobilidad = models.BooleanField(default=False, null=False, blank=True)
+    tono_musculos_paravertebrales = models.BooleanField(default=False, null=False, blank=True)
 
     # # Extremidades
-    miembros_superiores = models.BooleanField(default=False, null=False, blank=False)
-    miembros_inferiores = models.BooleanField(default=False, null=False, blank=False)
-    musculos = models.BooleanField(default=False, null=False, blank=False)
-    mobilidad_dedos_manos = models.BooleanField(default=False, null=False, blank=False)
-    articulaciones = models.BooleanField(default=False, null=False, blank=False)
+    miembros_superiores = models.BooleanField(default=False, null=False, blank=True)
+    miembros_inferiores = models.BooleanField(default=False, null=False, blank=True)
+    musculos = models.BooleanField(default=False, null=False, blank=True)
+    mobilidad_dedos_manos = models.BooleanField(default=False, null=False, blank=True)
+    articulaciones = models.BooleanField(default=False, null=False, blank=True)
 
     # # Neurologico
-    esfera_mental = models.BooleanField(default=False, null=False, blank=False)
-    sensibilidad_superficial_profunda = models.BooleanField(default=False, null=False, blank=False)
-    reflejos = models.BooleanField(default=False, null=False, blank=False)
+    esfera_mental = models.BooleanField(default=False, null=False, blank=True)
+    sensibilidad_superficial_profunda = models.BooleanField(default=False, null=False, blank=True)
+    reflejos = models.BooleanField(default=False, null=False, blank=True)
 
     otros = models.TextField(null=True, blank=True)
 
-    occupational = models.OneToOneField(Occupational, on_delete=models.CASCADE)
+    occupa_id = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE)
 
     # Column
 
@@ -242,4 +174,4 @@ class Conclusion(models.Model):
 
     recomendaciones = models.TextField(null=False, blank=False)
 
-    occupational = models.OneToOneField(Occupational, on_delete=models.CASCADE)
+    occupa_id = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE)

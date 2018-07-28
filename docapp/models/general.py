@@ -1,6 +1,8 @@
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
 
+from accounts.models import ReceptionProfile
 User = get_user_model()
 
 # Create your models here.
@@ -13,6 +15,9 @@ class Company(models.Model):
     land_line = models.PositiveIntegerField(null=True)
     cellphone = models.PositiveIntegerField(null=False, blank=False)
     contact = models.EmailField(null=False, blank=False)
+
+    last_modify = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
+    create_by = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -52,7 +57,8 @@ class Person(models.Model):
     sena_learner = models.BooleanField(default=False)
     number_patronal = models.PositiveIntegerField(null=False, blank=False)
 
-    create_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    last_modify = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
+    create_by = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name} {self.last_name}"
@@ -71,6 +77,8 @@ class ExamType(models.Model):
     person = models.ForeignKey(Person, null=False, blank=False, on_delete=models.CASCADE)
     create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
 
+    create_by = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
+
     def __str__(self):
         return f"{self.person.name} - {self.name}"
 
@@ -82,6 +90,9 @@ class AntecedentJobs(models.Model):
     uso_epp = models.BooleanField(default=False, null=False, blank=False)
 
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
+
+    last_modify = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
+    create_by = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.person.__str__()
@@ -96,6 +107,8 @@ class JobAccidents(models.Model):
     description = models.TextField(null=False, blank=False)
 
     work = models.ForeignKey(AntecedentJobs, on_delete=models.CASCADE)
+
+    create_by = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.tipo

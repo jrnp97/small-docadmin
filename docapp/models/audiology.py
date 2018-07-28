@@ -1,13 +1,15 @@
 """ model to save audiology form """
 from django.db import models
-from .general import ExamType, User
+from django.utils import timezone
 
+from .general import ExamType
+from accounts.models import DoctorProfile
 
 class Audiology(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
-    last_modify = models.DateTimeField(null=True, blank=True)
+    last_modify = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     exam_type = models.OneToOneField(ExamType, on_delete=models.CASCADE)
-    create_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    create_by = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.CASCADE)
 
     def __str__(self):
         return "Audiology"
@@ -19,7 +21,7 @@ class Audiology(models.Model):
         return self.exam_type.person.name
 
     class Meta:
-        db_table = "exam_audiologia"
+        db_table = "exam_audiology"
 
 
 class Ananmesis(models.Model):
@@ -32,46 +34,42 @@ class Ananmesis(models.Model):
     )
     interpretacion = models.CharField(max_length=10, choices=INTER, null=False, blank=False)
 
-    audio_id = models.OneToOneField(Audiology, on_delete=models.CASCADE)
+    audio_id = models.OneToOneField(Audiology, null=False, blank=False, on_delete=models.CASCADE)
 
 
 class AntecedentesPF(models.Model):
-    otalgia = models.BooleanField(default=False)
-    otaliquia_otorrea = models.BooleanField(default=False)
-    infeccion_oidos = models.BooleanField(default=False)
-    cuerpo_extranio_oido = models.BooleanField(default=False)
-    hipoacusia = models.BooleanField(default=False)
-    tumores_snc = models.BooleanField(default=False)
-    sarampion = models.BooleanField(default=False)
-    paperas = models.BooleanField(default=False)
-    sifilis = models.BooleanField(default=False)
-    rubeola = models.BooleanField(default=False)
-    cirugia_oido = models.BooleanField(default=False)
-    tinnitus = models.BooleanField(default=False)
-    mareo = models.BooleanField(default=False)
-    vertigo = models.BooleanField(default=False)
-    enfermedad_meniere = models.BooleanField(default=False)
-    hipertension = models.BooleanField(default=False)
-    diabetes = models.BooleanField(default=False)
+    # Familiares
+    otalgia = models.BooleanField(default=False, null=False, blank=True)
+    otaliquia_otorrea = models.BooleanField(default=False, null=False, blank=True)
+    infeccion_oidos = models.BooleanField(default=False, null=False, blank=True)
+    cuerpo_extranio_oido = models.BooleanField(default=False, null=False, blank=True)
+    hipoacusia = models.BooleanField(default=False, null=False, blank=True)
+    tumores_snc = models.BooleanField(default=False, null=False, blank=True)
+    sarampion = models.BooleanField(default=False, null=False, blank=True)
+    paperas = models.BooleanField(default=False, null=False, blank=True)
+    sifilis = models.BooleanField(default=False, null=False, blank=True)
+    rubeola = models.BooleanField(default=False, null=False, blank=True)
+    cirugia_oido = models.BooleanField(default=False, null=False, blank=True)
+    tinnitus = models.BooleanField(default=False, null=False, blank=True)
+    mareo = models.BooleanField(default=False, null=False, blank=True)
+    vertigo = models.BooleanField(default=False, null=False, blank=True)
+    enfermedad_meniere = models.BooleanField(default=False, null=False, blank=True)
+    hipertension = models.BooleanField(default=False, null=False, blank=True)
+    diabetes = models.BooleanField(default=False, null=False, blank=True)
+    otro_familiar = models.TextField(null=True, blank=True)
 
+    # Otros antecedentes
+    antineoplasicos = models.BooleanField(default=False, null=False, blank=True)
+    metales_pesados = models.BooleanField(default=False, null=False, blank=True)
+    vibraciones = models.BooleanField(default=False, null=False, blank=True)
+    aminoglucosidos = models.BooleanField(default=False, null=False, blank=True)
+    trauma_acustico = models.BooleanField(default=False, null=False, blank=True)
+    servicio_militar_arma = models.BooleanField(default=False, null=False, blank=True)
+    diureticos_asa = models.BooleanField(default=False, null=False, blank=True)
+    exposicion_mercurio = models.BooleanField(default=False, null=False, blank=True)
     otro = models.TextField(null=True, blank=True)
 
-    audio_id = models.OneToOneField(Audiology, on_delete=models.CASCADE)
-
-
-class OtrosAntecedentes(models.Model):
-    antineoplasicos = models.BooleanField(default=False)
-    metales_pesados = models.BooleanField(default=False)
-    vibraciones = models.BooleanField(default=False)
-    aminoglucosidos = models.BooleanField(default=False)
-    trauma_acustico = models.BooleanField(default=False)
-    servicio_militar_arma = models.BooleanField(default=False)
-    diureticos_asa = models.BooleanField(default=False)
-    exposicion_mercurio = models.BooleanField(default=False)
-
-    otro = models.TextField(null=True, blank=True)
-
-    audio_id = models.OneToOneField(Audiology, on_delete=models.CASCADE)
+    audio_id = models.OneToOneField(Audiology, null=False, blank=False, on_delete=models.CASCADE)
 
 
 class Exposiciones(models.Model):
@@ -111,7 +109,7 @@ class Exposiciones(models.Model):
     vehiculo_automotriz_epa = models.PositiveIntegerField(null=True, blank=True)
     maquinaria_pesada_epa = models.PositiveIntegerField(null=True, blank=True)
 
-    audio_id = models.OneToOneField(Audiology, on_delete=models.CASCADE)
+    audio_id = models.OneToOneField(Audiology, null=False, blank=False, on_delete=models.CASCADE)
 
 
 class EstadoActual(models.Model):
@@ -155,5 +153,5 @@ class EstadoActual(models.Model):
     escucha_epa = models.PositiveIntegerField(null=True, blank=True)
     escucha_ruido_epa = models.PositiveIntegerField(null=True, blank=True)
 
-    audio_id = models.OneToOneField(Audiology, on_delete=models.CASCADE)
+    audio_id = models.OneToOneField(Audiology, null=False, blank=False, on_delete=models.CASCADE)
 

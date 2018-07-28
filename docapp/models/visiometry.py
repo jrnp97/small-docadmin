@@ -1,15 +1,16 @@
 """model to save visiometry form"""
-
+from django.utils import timezone
 from django.db import models
-from .general import ExamType, User
+
+from .general import ExamType
+from accounts.models import DoctorProfile
 
 
 class Visiometry(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
-    last_modify = models.DateTimeField(null=True, blank=True)
-
-    exam_type = models.OneToOneField(ExamType, on_delete=models.CASCADE)
-    create_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    last_modify = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
+    exam_type = models.OneToOneField(ExamType, null=False, blank=False, on_delete=models.CASCADE)
+    create_by = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.exam_type.name
@@ -19,22 +20,22 @@ class Visiometry(models.Model):
 
 
 class Sintomas(models.Model):
-    ardor = models.BooleanField(default=False, null=False, blank=False)
-    dolor = models.BooleanField(default=False, null=False, blank=False)
-    cefalea = models.BooleanField(default=False, null=False, blank=False)
-    fatiga_visual = models.BooleanField(default=False, null=False, blank=False)
-    lagrimeo = models.BooleanField(default=False, null=False, blank=False)
-    fotofobia = models.BooleanField(default=False, null=False, blank=False)
-    cansansio_lectura = models.BooleanField(default=False, null=False, blank=False)
-    prurito = models.BooleanField(default=False, null=False, blank=False)
-    lectura_salto_lineas = models.BooleanField(default=False, null=False, blank=False)
-    secreciones = models.BooleanField(default=False, null=False, blank=False)
-    mala_vision_lejos = models.BooleanField(default=False, null=False, blank=False)
-    mala_vision_cerca = models.BooleanField(default=False, null=False, blank=False)
+    ardor = models.BooleanField(default=False, null=False, blank=True)
+    dolor = models.BooleanField(default=False, null=False, blank=True)
+    cefalea = models.BooleanField(default=False, null=False, blank=True)
+    fatiga_visual = models.BooleanField(default=False, null=False, blank=True)
+    lagrimeo = models.BooleanField(default=False, null=False, blank=True)
+    fotofobia = models.BooleanField(default=False, null=False, blank=True)
+    cansansio_lectura = models.BooleanField(default=False, null=False, blank=True)
+    prurito = models.BooleanField(default=False, null=False, blank=True)
+    lectura_salto_lineas = models.BooleanField(default=False, null=False, blank=True)
+    secreciones = models.BooleanField(default=False, null=False, blank=True)
+    mala_vision_lejos = models.BooleanField(default=False, null=False, blank=True)
+    mala_vision_cerca = models.BooleanField(default=False, null=False, blank=True)
 
     observaciones = models.TextField(null=True, blank=True)
 
-    visio_id = models.OneToOneField(Visiometry, on_delete=models.CASCADE)
+    visio_id = models.OneToOneField(Visiometry, null=False, blank=False, on_delete=models.CASCADE)
 
     # ardor_description = models.TextField(null=True, blank=True)
     # dolor_description = models.TextField(null=True, blank=True)
@@ -52,40 +53,41 @@ class Sintomas(models.Model):
 
 class Antecedentes(models.Model):
     # Enfermedad
-    hipertension = models.BooleanField(default=False, null=False, blank=False)
-    diabetes = models.BooleanField(default=False, null=False, blank=False)
-    colesterol_alto = models.BooleanField(default=False, null=False, blank=False)
-    glaucoma = models.BooleanField(default=False, null=False, blank=False)
-    migrania = models.BooleanField(default=False, null=False, blank=False)
-    catarata = models.BooleanField(default=False, null=False, blank=False)
-    cx_ocular = models.BooleanField(default=False, null=False, blank=False)
-    trauma = models.BooleanField(default=False, null=False, blank=False)
-    cuerpo_extranio = models.BooleanField(default=False, null=False, blank=False)
-    hipermetropia = models.BooleanField(default=False, null=False, blank=False)
-    miopia = models.BooleanField(default=False, null=False, blank=False)
-    astigmatismo = models.BooleanField(default=False, null=False, blank=False)
+    hipertension = models.BooleanField(default=False, null=False, blank=True)
+    diabetes = models.BooleanField(default=False, null=False, blank=True)
+    colesterol_alto = models.BooleanField(default=False, null=False, blank=True)
+    glaucoma = models.BooleanField(default=False, null=False, blank=True)
+    migrania = models.BooleanField(default=False, null=False, blank=True)
+    catarata = models.BooleanField(default=False, null=False, blank=True)
+    cx_ocular = models.BooleanField(default=False, null=False, blank=True)
+    trauma = models.BooleanField(default=False, null=False, blank=True)
+    cuerpo_extranio = models.BooleanField(default=False, null=False, blank=True)
+    hipermetropia = models.BooleanField(default=False, null=False, blank=True)
+    miopia = models.BooleanField(default=False, null=False, blank=True)
+    astigmatismo = models.BooleanField(default=False, null=False, blank=True)
 
     # Uso de lentes
-    cerca = models.BooleanField(default=False, null=False, blank=False)
-    lejos = models.BooleanField(default=False, null=False, blank=False)
-    bifocales = models.BooleanField(default=False, null=False, blank=False)
-    progresivos = models.BooleanField(default=False, null=False, blank=False)
-    contacto = models.BooleanField(default=False, null=False, blank=False)
-    oscuros = models.BooleanField(default=False, null=False, blank=False)
-    filtro = models.BooleanField(default=False, null=False, blank=False)
+    cerca = models.BooleanField(default=False, null=False, blank=True)
+    lejos = models.BooleanField(default=False, null=False, blank=True)
+    bifocales = models.BooleanField(default=False, null=False, blank=True)
+    progresivos = models.BooleanField(default=False, null=False, blank=True)
+    contacto = models.BooleanField(default=False, null=False, blank=True)
+    oscuros = models.BooleanField(default=False, null=False, blank=True)
+    filtro = models.BooleanField(default=False, null=False, blank=True)
 
     # Examen Externo
-    hiperemia = models.BooleanField(default=False, null=False, blank=False)
-    pterigion = models.BooleanField(default=False, null=False, blank=False)
-    descamacion_parpados = models.BooleanField(default=False, null=False, blank=False)
-    secrecion = models.BooleanField(default=False, null=False, blank=False)
-    pigmentacion = models.BooleanField(default=False, null=False, blank=False)
-    estrabismo = models.BooleanField(default=False, null=False, blank=False)
-    otros_examenes = models.TextField()
+    hiperemia = models.BooleanField(default=False, null=False, blank=True)
+    pterigion = models.BooleanField(default=False, null=False, blank=True)
+    descamacion_parpados = models.BooleanField(default=False, null=False, blank=True)
+    secrecion = models.BooleanField(default=False, null=False, blank=True)
+    pigmentacion = models.BooleanField(default=False, null=False, blank=True)
+    estrabismo = models.BooleanField(default=False, null=False, blank=True)
+
+    otros_examenes = models.TextField(null=True, blank=True)
 
     observaciones = models.TextField(null=True, blank=True)
 
-    visio_id = models.OneToOneField(Visiometry, on_delete=models.CASCADE)
+    visio_id = models.OneToOneField(Visiometry, null=False, blank=False, on_delete=models.CASCADE)
 
 
 class Agudeza(models.Model):
@@ -96,7 +98,7 @@ class Agudeza(models.Model):
     ojo_izquierdo = models.CharField(max_length=10, choices=OPTIONS)
     ojo_derecho = models.CharField(max_length=10, choices=OPTIONS)
 
-    visio_id = models.OneToOneField(Visiometry, on_delete=models.CASCADE)
+    visio_id = models.OneToOneField(Visiometry, null=False, blank=False, on_delete=models.CASCADE)
 
 
 class Cronomatica(models.Model):
@@ -107,5 +109,5 @@ class Cronomatica(models.Model):
     ojo_izquierdo = models.CharField(max_length=10, choices=OPTIONS)
     ojo_derecho = models.CharField(max_length=10, choices=OPTIONS)
 
-    visio_id = models.OneToOneField(Visiometry, on_delete=models.CASCADE)
+    visio_id = models.OneToOneField(Visiometry, null=False, blank=False, on_delete=models.CASCADE)
 

@@ -3,10 +3,10 @@ from django.contrib import admin
 # Register your models here.
 
 from docapp.models import (Company, Person, ExamType, AntecedentJobs, Hazards, JobAccidents,
-                           Audiology, Ananmesis, AntecedentesPF, OtrosAntecedentes, Exposiciones, EstadoActual,
+                           Audiology, Ananmesis, AntecedentesPF, Exposiciones, EstadoActual,
                            Visiometry, Sintomas, Antecedentes, Agudeza, Cronomatica,
                            Audiometry, Otoscopia, Information,
-                           Occupational, AntecedentPF as AntPF, AntecedentGinecoO, Habits, Exams, ExamPhysic, Conclusion
+                           Occupational, AntecedentPF as AntPF, AntecedentGinecoO, Habits, ExamPhysic, Conclusion
                            )
 
 # General information
@@ -50,10 +50,6 @@ class AntPFStackInline(admin.StackedInline):
     model = AntecedentesPF
 
 
-class OtrosAntStackInline(admin.StackedInline):
-    model = OtrosAntecedentes
-
-
 class ExpoStackInline(admin.StackedInline):
     model = Exposiciones
 
@@ -66,7 +62,6 @@ class AudiologyAdmin(admin.ModelAdmin):
     model = Audiology
     inlines = (AnanmesisStackInline,
                AntPFStackInline,
-               OtrosAntStackInline,
                ExpoStackInline,
                EstActualAntStackInline,)
     list_display = ('get_exam_type', 'get_person', 'create_by', 'last_modify')
@@ -167,10 +162,6 @@ class HabitInline(admin.StackedInline):
     model = Habits
 
 
-class ExamsInline(admin.StackedInline):
-    model = Exams
-
-
 class ExamPhyInline(admin.StackedInline):
     model = ExamPhysic
 
@@ -184,7 +175,6 @@ class OccupationalAdmin(admin.ModelAdmin):
     inlines = (AntecedentPFInline,
                AntGinInline,
                HabitInline,
-               ExamsInline,
                ExamPhyInline,
                ConclusionInline,
                )
