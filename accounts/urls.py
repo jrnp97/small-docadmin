@@ -21,5 +21,7 @@ urlpatterns = [
     url(r'^doctor/(?P<user_id>[0-9]+)/$', views.show_doctor, name='show_doctor'),
     url(r'^receptionist/(?P<user_id>[0-9]+)/$', views.show_rec, name='show_rec'),
     url(r'^laboratory/(?P<user_id>[0-9]+)/$', views.show_lab, name='show_lab'),
-    url(r'^profile/(?P<user_id>[0-9]+)/$', views.show_profile, name='show_profile')
+    url(r'^profile/(?P<user_id>[0-9]+)/$', views.show_profile, name='show_profile'),
+
+    url(r'^users/$', views.user_list, name='user_list')
 ]

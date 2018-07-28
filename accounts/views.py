@@ -1,5 +1,5 @@
 from django.forms import model_to_dict
-from django.views.generic import FormView, UpdateView, DeleteView, DetailView
+from django.views.generic import FormView, UpdateView, DeleteView, DetailView, ListView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
@@ -222,7 +222,6 @@ class DeleteProfile(LoginRequiredMixin, DeleteView):
             raise SuspiciousOperation(message="Invalid request")
 
 
-
 delete_profile = DeleteProfile.as_view()
 
 
@@ -270,3 +269,18 @@ class DetailProfile(LoginRequiredMixin, DetailView):
 
 
 show_profile = DetailProfile.as_view()
+
+
+class UserList(LoginRequiredMixin, ListView):
+    context_object_name = 'user_list'
+    model = User
+    template_name = 'accounts/list_user.html'
+    queryset = User.objects.filter(is_superuser=False)
+
+    def get_queryset(self):
+        user = self.request.user
+        self.queryset = self.queryset.exclude(id=user.id)
+        return super(UserList, self).get_queryset()
+
+
+user_list = UserList.as_view()
