@@ -5,11 +5,16 @@ from django.utils import timezone
 from .general import ExamType
 from accounts.models import DoctorProfile
 
+
 class Audiology(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     last_modify = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     exam_type = models.OneToOneField(ExamType, on_delete=models.CASCADE)
-    create_by = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.CASCADE)
+    create_by = models.ForeignKey(DoctorProfile,
+                                  null=False,
+                                  blank=False,
+                                  on_delete=models.CASCADE,
+                                  related_name='audiology_forms')
 
     def __str__(self):
         return "Audiology"

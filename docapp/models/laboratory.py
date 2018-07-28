@@ -10,7 +10,11 @@ class Laboratory(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     last_modify = models.DateTimeField(auto_now=True, default=timezone.now, null=False, blank=False, editable=False)
     exam_type = models.OneToOneField(ExamType, on_delete=models.CASCADE)
-    create_by = models.ForeignKey(LaboratoryProfile, null=False, blank=False, on_delete=models.CASCADE)
+    create_by = models.ForeignKey(LaboratoryProfile,
+                                  null=False,
+                                  blank=False,
+                                  on_delete=models.CASCADE,
+                                  related_name='laboratory_forms')
 
     def __str__(self):
         return "Laboratory"

@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse_lazy
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@login_required()
 def dashboard(request):
-    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+    if request.user.is_staff and request.user.is_superuser:
         return redirect('admin:login')
     else:
         context = dict({
@@ -76,11 +76,3 @@ def audiometria(request):
         'exam_collapse': False,
     })
     return render(request, 'docapp/exams/audiometria.html', context)
-
-
-class Login(LoginView):
-    template_name = 'docapp/login.html'
-    redirect_authenticated_user = True
-
-
-login = Login.as_view()
