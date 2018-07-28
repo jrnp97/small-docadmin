@@ -1,13 +1,16 @@
-{% extends 'base/dashboard.html' %}
-{% load static %}
-{% block title %} Home | DocApp {% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Dashboard </title>
+</head>
+<body>
+<h1>Hi {% if request.user.get_full_name == '' %} {{ request.user.username }} {% else %}
+    {{ request.user.get_full_name }} {% endif %}</h1>
+<hr>
+<h2>Accioned disponibles</h2>
+{% if request.user.is_superuser %}
+    
+{% endif %}
+</body>
 
-{% block main %}
-
-    {{ block.super }}
-
-    {% block content_body %}
-        <h2>Home</h2>
-    {% endblock %}
-
-{% endblock %}
+</html>

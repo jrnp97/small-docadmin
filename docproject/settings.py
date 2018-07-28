@@ -129,4 +129,6 @@ STATICFILES_DIRS = [
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
+LOGIN_URL = reverse_lazy('accounts:login')
 LOGIN_REDIRECT_URL = reverse_lazy('docapp:dashboard')
+LOGOUT_REDIRECT_URL = reverse_lazy('accounts:login')

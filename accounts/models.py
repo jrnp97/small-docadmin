@@ -31,7 +31,6 @@ class User(AbstractUser):
             except ObjectDoesNotExist:
                 raise SuspiciousOperation(message="User object corrupt.", code='invalid')
             else:
-                exist_user = True
                 # Check if profile change
                 if user.profile_type != self.profile_type:
                     profile_edit = True
@@ -72,6 +71,12 @@ class DoctorProfile(models.Model):
     class Meta:
         db_table = 'doctor_profile'
 
+    def delete(self, using=None, keep_parents=False):
+        # Instead delete record disable user
+        self.user.is_active = False
+        self.user.save()
+        return 1, dict({'message': 'delete successfully'})
+
 
 class ReceptionProfile(models.Model):
     user = models.OneToOneField(User,
@@ -84,6 +89,12 @@ class ReceptionProfile(models.Model):
     class Meta:
         db_table = 'reception_profile'
 
+    def delete(self, using=None, keep_parents=False):
+        # Instead delete record disable user
+        self.user.is_active = False
+        self.user.save()
+        return 1, dict({'message': 'delete successfully'})
+
 
 class LaboratoryProfile(models.Model):
     user = models.OneToOneField(User,
@@ -95,3 +106,9 @@ class LaboratoryProfile(models.Model):
 
     class Meta:
         db_table = 'laboratory_profile'
+
+    def delete(self, using=None, keep_parents=False):
+        # Instead delete record disable user
+        self.user.is_active = False
+        self.user.save()
+        return 1, dict({'message': 'delete successfully'})
