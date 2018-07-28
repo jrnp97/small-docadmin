@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load crispy_forms_tags %}
+    <meta charset="UTF-8">
+    <title>Registro | Doctor</title>
+</head>
+<body>
+
+<hr>
+{% if messages %}
+    <ul>
+    {% for message in messages %}
+        <li>{{ message|escape }}</li>
+    {% endfor %}
+    </ul>
+    <hr>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <hr>
+    <button type="submit">Registrar</button>
+</form>
+</body>
+</html>

@@ -19,5 +19,6 @@ from django.contrib import admin
 urlpatterns = [
     url('^grappelli/', include('grappelli.urls')),  # grappelli URLS
     url(r'^admin/', admin.site.urls),
-    url(r'', include('docapp.urls'))
+    url(r'', include('docapp.urls', namespace='docapp')),
+    url(r'', include('accounts.urls', namespace='accounts')),
 ]

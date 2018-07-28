@@ -1,9 +1,11 @@
 from django.contrib import admin
-from accounts.models import User, DoctorProfile, ReceptionProfile, LaboratoryProfile
+from accounts.models import User
+from accounts.forms import DoctorForm
 # Register your models here.
 
 
-admin.site.register(User)
-admin.site.register(DoctorProfile)
-admin.site.register(ReceptionProfile)
-admin.site.register(LaboratoryProfile)
+class DoctorAdmin(admin.ModelAdmin):
+    form = DoctorForm
+
+
+admin.site.register(User, DoctorAdmin)
