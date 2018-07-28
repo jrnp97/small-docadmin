@@ -4,9 +4,10 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import SuspiciousOperation, ImproperlyConfigured
 
 from accounts.forms import (DoctorCreateForm, RecCreateForm, LabCreateForm,
-                            DoctorUpdateForm, RecUpdateForm, LabUpdateForm)
+                            DoctorUpdateForm, RecUpdateForm, LabUpdateForm, BaseUserUpdateForm)
 from accounts.models import User, DoctorProfile, ReceptionProfile, LaboratoryProfile
 
 
@@ -21,6 +22,7 @@ login = Login.as_view()
 logout = LogoutView.as_view()
 
 
+# Register Views
 class RegisterDoctor(LoginRequiredMixin, FormView):
     """ View to register Doctor profile """
     form_class = DoctorCreateForm
@@ -69,6 +71,7 @@ class RegisterLab(LoginRequiredMixin, FormView):
 register_lab = RegisterLab.as_view()
 
 
+# Update Views
 class UpdateDoctor(LoginRequiredMixin, UpdateView):
     """ View to update doctor profile """
     pk_url_kwarg = 'user_id'
@@ -126,6 +129,49 @@ class UpdateLab(LoginRequiredMixin, UpdateView):
 update_lab = UpdateLab.as_view()
 
 
+class UpdateProfile(LoginRequiredMixin, UpdateView):
+    """ View to update admin profile """
+    pk_url_kwarg = 'user_id'
+    model = User
+    template_name = 'accounts/session/update_profile.html'
+    form_class = None
+    success_url = reverse_lazy('docapp:dashboard')
+
+    def form_valid(self, form):
+        messages.success(request=self.request, message="Laboratory Profile Update Successfully")
+        return super(UpdateProfile, self).form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        if request.user.id == int(kwargs.get('user_id')):
+            return super(UpdateProfile, self).get(request, *args, **kwargs)
+        else:
+            raise SuspiciousOperation(message="Invalid request")
+
+    def get_form_class(self):
+        """ Overwriting function to set correct form class depend of profile_type """
+        user = self.get_object()
+        # Check user integrity
+        if user.is_superuser and user.profile_type is not None:
+            raise ImproperlyConfigured(
+                "User information is bad confured"
+            )
+
+        if user.is_superuser:
+            self.form_class = BaseUserUpdateForm
+        elif user.profile_type == 'doctor':
+            self.form_class = DoctorUpdateForm
+        elif user.profile_type == 'receptionist':
+            self.form_class = RecUpdateForm
+        elif user.profile_type == 'laboratory':
+            self.form_class = LabUpdateForm
+
+        return super(UpdateProfile, self).get_form_class()
+
+
+update_profile = UpdateProfile.as_view()
+
+
+# Delete Views
 class DeleteDoctor(LoginRequiredMixin, DeleteView):
     """ View to 'delete' doctor profile """
     pk_url_kwarg = 'user_id'
@@ -162,6 +208,25 @@ class DeleteLab(LoginRequiredMixin, DeleteView):
 delete_lab = DeleteLab.as_view()
 
 
+class DeleteProfile(LoginRequiredMixin, DeleteView):
+    pk_url_kwarg = 'user_id'
+    context_object_name = 'instance'
+    model = User
+    template_name = 'accounts/session/delete_profile.html'
+    success_url = reverse_lazy('accounts:login')
+
+    def get(self, request, *args, **kwargs):
+        if request.user.id == int(kwargs.get('user_id')):
+            return super(DeleteProfile, self).get(request, *args, **kwargs)
+        else:
+            raise SuspiciousOperation(message="Invalid request")
+
+
+
+delete_profile = DeleteProfile.as_view()
+
+
+# Detail views
 class DetailDoctor(LoginRequiredMixin, DetailView):
     pk_url_kwarg = 'user_id'
     context_object_name = 'instance'
@@ -191,3 +256,17 @@ class DetailLab(LoginRequiredMixin, DetailView):
 
 show_lab = DetailLab.as_view()
 
+
+class DetailProfile(LoginRequiredMixin, DetailView):
+    pk_url_kwarg = 'user_id'
+    model = User
+    template_name = 'accounts/session/show_profile.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.id == int(kwargs.get('user_id')):
+            return super(DetailProfile, self).get(request, *args, **kwargs)
+        else:
+            raise SuspiciousOperation(message="Invalid Request")
+
+
+show_profile = DetailProfile.as_view()

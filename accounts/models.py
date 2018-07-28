@@ -16,7 +16,7 @@ class User(AbstractUser):
         (RECP, 'Receptionist'),
         (LAB, 'Laboratory')
     )
-    profile_type = models.CharField(max_length=20, choices=PROFILE_TYPE, null=False, blank=False)
+    profile_type = models.CharField(max_length=20, choices=PROFILE_TYPE, null=True, blank=True)
 
     class Meta(AbstractUser.Meta):
         db_table = 'auth_user'

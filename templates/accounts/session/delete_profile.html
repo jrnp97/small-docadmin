@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Profile</title>
+</head>
+<body>
+<form method="POST">
+    {% csrf_token %}
+    <h1>¿ Realmente desea borrar su perfil ?</h1>
+    <hr>
+    <button type="submit">Si</button>
+    <a href="{% url 'docapp:dashboard' %}" role="button">No</a>
+</form>
+</body>
+</html>

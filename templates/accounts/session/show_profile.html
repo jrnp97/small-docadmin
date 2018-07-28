@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+
+<h1>{{ request.get_full_name }}</h1>
+<hr>
+<h2>Basic information</h2>
+<p><b>First Name:</b> {{ request.user.first_name }}</p>
+<p><b>Last Name:</b> {{ request.user.last_name }}</p>
+<p><b>Email:</b> {{ request.user.email }}</p>
+<p><b>Active:</b> {{ request.user.is_active }}</p>
+<p><b>Last Login:</b> {{ request.user.last_login }}</p>
+<p><b>Role:</b> {{ request.user.profile_type }}</p>
+{% if request.user.profile_type == 'doctor' %}
+    <hr>
+    <h2>Doctor status</h2>
+    <ul>
+        <li><b>General:</b> {{ request.doctor_profile.general }}</li>
+        <li><b>Visiometry:</b> {{ request.doctor_profile.visiometry }}</li>
+        <li><b>Audiometry:</b> {{ request.doctor_profile.audiometry }}</li>
+        <li><b>Audiology:</b> {{ request.doctor_profile.audiology }}</li>
+    </ul>
+{% endif %}
+<hr>
+<h2>Acciones</h2>
+    <a role="button" href="{% url 'accounts:update_profile' user_id=request.user.id %}">Edit profile</a>
+    <a role="button" href="{% url 'accounts:delete_profile' user_id=request.user.id %}">Delete Profile</a>
+<hr>
+<a href="{% url 'docapp:dashboard' %}" role="button">Inicio</a>
+</body>
+</html>

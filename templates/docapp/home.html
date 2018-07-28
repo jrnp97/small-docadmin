@@ -7,10 +7,35 @@
 <h1>Hi {% if request.user.get_full_name == '' %} {{ request.user.username }} {% else %}
     {{ request.user.get_full_name }} {% endif %}</h1>
 <hr>
-<h2>Accioned disponibles</h2>
-{% if request.user.is_superuser %}
-    
-{% endif %}
+    <a href="{% url 'accounts:show_profile' user_id=request.user.id %}">Ver Perfil</a>
+<hr>
+<h2>Acciones disponibles</h2>
+<ul>
+    {% if request.user.is_superuser %}
+        <!-- Profile actions -->
+        <li><a href="#">Gestionar Recepcionistas</a></li>
+        <li><a href="#">Gestionar Personal de laboratorio</a></li>
+        <li><a href="#">Gestionar Doctores</a></li>
+        <!-- Receptionist Tasks -->
+        <li><a href="#">Gestionar personal</a></li>
+        <li><a href="#">Gestionar empresas</a></li>
+        <li><a href="#">Gestionar procesos a personal</a></li>
+        <!-- Doctor task -->
+        <li><a href="#">Gestionar procesos a personal</a></li>
+        <!-- Laboratory task -->
+        <li><a href="#">Ingresar resultados</a></li>
+    {% elif request.user.profile_type == 'receptionist' %}
+        <li><a href="#">Gestionar personal</a></li>
+        <li><a href="#">Gestionar empresas</a></li>
+        <li><a href="#">Gestionar procesos a personal</a></li>
+    {% elif request.user.profile_type == 'doctor' %}
+        <li><a href="#">Gestionar procesos a personal</a></li>
+    {% elif request.user.profile_type == 'laboratory' %}
+        <li><a href="#">Ingresar resultados</a></li>
+    {% endif %}
+</ul>
+<hr>
+<a href="{% url 'accounts:logout' %}" role="button">Cerrar Sesión</a>
 </body>
 
 </html>

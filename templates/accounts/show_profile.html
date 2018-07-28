@@ -5,7 +5,6 @@
     <title>Profile Detail</title>
 </head>
 <body>
-
 <h1>{{ instance.user.get_full_name }}</h1>
 <hr>
 <h2>Basic information</h2>
@@ -37,8 +36,6 @@
     <a role="button" href="{% url 'accounts:update_rec' user_id=instance.user.id %}">Edit profile</a>
     <a role="button" href="{% url 'accounts:delete_rec' user_id=instance.user.id %}">Delete Profile</a>
 {% endif %}
-
 <hr>
-
 </body>
 </html>

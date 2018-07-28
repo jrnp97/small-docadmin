@@ -8,7 +8,7 @@ from accounts.models import DoctorProfile, LaboratoryProfile, ReceptionProfile
 User = get_user_model()
 
 
-# Base Creation Form
+# Base Creation Form using to admin profile
 class BaseUserForm(forms.ModelForm):
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirme Contraseña', widget=forms.PasswordInput)
@@ -29,6 +29,28 @@ class BaseUserForm(forms.ModelForm):
         instance = super(BaseUserForm, self).save(commit=False)
         # Set clean password to user to save
         instance.password = self.cleaned_data.get('password2')
+        if commit:
+            instance.save()
+        return instance
+
+
+class BaseUserUpdateForm(forms.ModelForm):
+    password = forms.CharField(label='password', required=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'password',)
+
+    def clean_password(self):
+        # Regardless of what the user provides, return the initial value.
+        # This is done here, rather than on the field, because the
+        # field does not have access to the initial value
+        # https://docs.djangoproject.com/en/1.11/topics/auth/customizing/#a-full-example
+        return self.initial["password"]
+
+    def save(self, commit=True):
+        instance = super(BaseUserUpdateForm, self).save(commit=False)
+        instance.password = self.cleaned_data.get('password')  # Set password without edit
         if commit:
             instance.save()
         return instance
@@ -114,33 +136,17 @@ class LabCreateForm(BaseUserForm):
 
 
 # Profile update forms
-class DoctorUpdateForm(BaseUserForm):
+class DoctorUpdateForm(BaseUserUpdateForm):
     """ Form to update doctor profile """
     general = forms.BooleanField(initial=False, label='General', widget=forms.CheckboxInput, required=False)
     visiometry = forms.BooleanField(initial=False, label='Visiometro', widget=forms.CheckboxInput, required=False)
     audiometry = forms.BooleanField(initial=False, label='Audiometro', widget=forms.CheckboxInput, required=False)
     audiology = forms.BooleanField(initial=False, label='Audiologo', widget=forms.CheckboxInput, required=False)
 
-    password1 = None
-    password2 = None
-    password = forms.CharField(label='password', required=False)
-
-    class Meta(BaseUserForm.Meta):
-        # Add password field
-        fields = BaseUserForm.Meta.fields + ('password',)
-
-    def clean_password(self):
-        # Regardless of what the user provides, return the initial value.
-        # This is done here, rather than on the field, because the
-        # field does not have access to the initial value
-        # https://docs.djangoproject.com/en/1.11/topics/auth/customizing/#a-full-example
-        return self.initial["password"]
-
     def save(self, commit=True):
         instance = super(DoctorUpdateForm, self).save(commit=False)
         # Set doctor profile
         instance.profile_type = 'doctor'
-        instance.password = self.cleaned_data.get('password')  # Set password without edit
         # Make doctorprofile information
         extra_content = {'general': self.cleaned_data.get('general'),
                          'visiometry': self.cleaned_data.get('visiometry'),
@@ -164,27 +170,12 @@ class DoctorUpdateForm(BaseUserForm):
         return instance
 
 
-class RecUpdateForm(BaseUserForm):
-    password1 = None
-    password2 = None
-    password = forms.CharField(label='password', required=False)
-
-    class Meta(BaseUserForm.Meta):
-        # Add password field
-        fields = BaseUserForm.Meta.fields + ('password',)
-
-    def clean_password(self):
-        # Regardless of what the user provides, return the initial value.
-        # This is done here, rather than on the field, because the
-        # field does not have access to the initial value
-        # https://docs.djangoproject.com/en/1.11/topics/auth/customizing/#a-full-example
-        return self.initial["password"]
+class RecUpdateForm(BaseUserUpdateForm):
 
     def save(self, commit=True):
         instance = super(RecUpdateForm, self).save(commit=False)
         # Set receptionist profile
         instance.profile_type = 'receptionist'
-        instance.password = self.cleaned_data.get('password')  # Set password without edit
         if commit:
             # Save user
             instance.save()
@@ -200,27 +191,12 @@ class RecUpdateForm(BaseUserForm):
         return instance
 
 
-class LabUpdateForm(BaseUserForm):
-    password1 = None
-    password2 = None
-    password = forms.CharField(label='password', required=False)
-
-    class Meta(BaseUserForm.Meta):
-        # Add password field
-        fields = BaseUserForm.Meta.fields + ('password',)
-
-    def clean_password(self):
-        # Regardless of what the user provides, return the initial value.
-        # This is done here, rather than on the field, because the
-        # field does not have access to the initial value
-        # https://docs.djangoproject.com/en/1.11/topics/auth/customizing/#a-full-example
-        return self.initial["password"]
+class LabUpdateForm(BaseUserUpdateForm):
 
     def save(self, commit=True):
         instance = super(LabUpdateForm, self).save(commit=False)
         # Set receptionist profile
         instance.profile_type = 'laboratory'
-        instance.password = self.cleaned_data.get('password')  # Set password without edit
         if commit:
             # Save user
             instance.save()
