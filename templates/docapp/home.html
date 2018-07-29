@@ -16,8 +16,8 @@
         <li><a href="{% url 'accounts:user_list' %}">Gestionar Usuarios</a></li>
 
         <!-- Receptionist Tasks -->
+        <li><a href="{% url 'docapp:company_list' %}">Gestionar Empresas</a></li>
         <li><a href="#">Gestionar Pacientes (Personal)</a></li>
-        <li><a href="#">Gestionar Empresas</a></li>
         <li><a href="#">Iniciar Proceso a Pacientes (Personal)</a></li>
 
         <!-- Doctor task -->
@@ -27,9 +27,8 @@
         <li><a href="#">Observar Resultados de laboratorios</a></li>
 
     {% elif request.user.profile_type == 'receptionist' %}
-
+        <li><a href="{% url 'docapp:company_list' %}">Gestionar Empresas</a></li>
         <li><a href="#">Gestionar Pacientes (Personal)</a></li>
-        <li><a href="#">Gestionar Empresas</a></li>
         <li><a href="#">Iniciar Proceso a Pacientes (Personal)</a></li>
 
     {% elif request.user.profile_type == 'doctor' %}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Empresa</title>
+</head>
+<body>
+<h1>{{ company.name }}</h1>
+<hr>
+<p>NIT: {{ company.nit }}</p>
+<p>Direccion: {{ company.direction }}</p>
+<p>Telefono: {{ company.land_line }}</p>
+<p>Celular: {{ company.cellphone }}</p>
+<p>Email de contacto: {{ company.contact }}</p>
+<hr>
+<h2>Acciones</h2>
+<a href="{% url 'docapp:update_company' company_id=company.id %}">Editar</a>
+<a href="#">Editar</a>
+<hr>
+{% if request.META.HTTP_REFERER %}
+    <a href="{{ request.META.HTTP_REFERER }}">Cancelar</a>
+{% else %}
+    <a href="{% url 'docapp:company_list' %}">Cancelar</a>
+{% endif %}
+
+</body>
+</html>

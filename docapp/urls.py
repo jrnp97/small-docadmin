@@ -3,12 +3,10 @@ from docapp import views
 
 urlpatterns = [
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
-    url(r'^dashboard/ingreso/$', views.ingreso, name='ingreso'),
-    url(r'^dashboard/medicos/$', views.doctors, name='medicos'),
-    url(r'^dashboard/examenes/general', views.general, name='medicina_general'),
-    url(r'^dashboard/examenes/lab', views.laboratorio, name='laboratorio'),
-    url(r'^dashboard/examenes/audiometria', views.audiometria, name='audiometria'),
-    url(r'^dashboard/examenes/visiometria', views.visiometria, name='visiometria'),
+    url(r'^company/$', views.company_list, name='company_list'),
+    url(r'^company/(?P<company_id>[0-9]+)/$', views.detail_company, name='detail_company'),
+    url(r'^register/company/$', views.register_company, name='register_company'),
+    url(r'^update/company/(?P<company_id>[0-9]+)/$', views.update_company, name='update_company')
 ]
 
 # url(r'^login/$', views.Login.as_view(), name='login')

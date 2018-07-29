@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load crispy_forms_tags %}
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+<h1>{{ title }}</h1>
+<hr>
+{% if messages %}
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+    <hr>
+{% endif %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <hr>
+    <button type="submit"> Guardar</button>
+    <a href="{% url 'docapp:dashboard' %}">Cancelar</a>
+</form>
+
+</body>
+</html>

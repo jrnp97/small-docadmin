@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Empresas</title>
+</head>
+<body>
+<h1>Empresas registradas</h1>
+<hr>
+<h2>Acciones adicionales</h2>
+<a href="{% url 'docapp:register_company' %}">Registrar nueva empresa</a>
+<hr>
+<ul>
+    {% if company_list %}
+        {% for company in company_list %}
+            <li>
+                {{ company }}
+                <a href="{% url 'docapp:detail_company' company_id=company.id %}">Ver</a>
+                <a href="#">Editar</a>
+                <a href="#">Eliminar</a>
+                <a href="#">Ver empleados</a>
+                <a href="#">Registrar empleado</a>
+            </li>
+        {% endfor %}
+    {% else %}
+        <h2>No se han registrado empresas</h2>
+    {% endif %}
+</ul>
+<hr>
+<a href="{% url 'docapp:dashboard' %}">Inicio</a>
+</body>
+</html>
