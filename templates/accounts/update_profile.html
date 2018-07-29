@@ -10,6 +10,11 @@
     {% csrf_token %}
     {{ form|crispy }}
     <button type="submit" value="update">Update</button>
+    {% if request.META.HTTP_REFERER %}
+        <a href="{{ request.META.HTTP_REFERER }}">Cancelar</a>
+    {% else %}
+        <a href="{% url 'accounts:user_list' %}">Cancelar</a>
+    {% endif %}
 </form>
 </body>
 </html>

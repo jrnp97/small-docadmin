@@ -10,9 +10,9 @@
 <hr>
 <h2>Acciones Generales</h2>
 <ul>
-    <li><a href="#" role="button">Crear Nuevo Doctor</a></li>
-    <li><a href="#" role="button">Crear Nuevo Recepcionista</a></li>
-    <li><a href="#" role="button">Crear Nuevo Personal de Laboratorio</a></li>
+    <li><a href="{% url 'accounts:register_doctor' %}" role="button">Crear Nuevo Doctor</a></li>
+    <li><a href="{% url 'accounts:register_rec' %}" role="button">Crear Nuevo Recepcionista</a></li>
+    <li><a href="{% url 'accounts:register_lab' %}" role="button">Crear Nuevo Personal de Laboratorio</a></li>
 </ul>
 
 <hr>
@@ -35,6 +35,10 @@
     {% endfor %}
 </ul>
 <hr>
-<a href="{% url 'docapp:dashboard' %}">Regresar</a>
+{% if request.META.HTTP_REFERER %}
+    <a href="{{ request.META.HTTP_REFERER }}">Cancelar</a>
+{% else %}
+    <a href="{% url 'docapp:dashboard' %}">Cancelar</a>
+{% endif %}
 </body>
 </html>

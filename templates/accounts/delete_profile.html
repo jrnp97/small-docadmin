@@ -7,11 +7,14 @@
 <body>
 <form method="POST">
     {% csrf_token %}
-    <h1>¿Realmente desea borrar {% if request.user.id == instance.user.id %} su perfil {% else %} el perfil
-        de {{ instance.user.get_full_name }} {% endif %}?</h1>
+    <h1>¿Realmente desea borrar el perfil de {{ instance.user.get_full_name }}?</h1>
     <hr>
     <button type="submit">Si</button>
-    <a href="{% url 'docapp:dashboard' %}" role="button">No</a>
+    {% if request.META.HTTP_REFERER %}
+        <a href="{{ request.META.HTTP_REFERER }}">Cancelar</a>
+    {% else %}
+        <a href="{% url 'accounts:user_list' user_id=instance.user.id %}">Cancelar</a>
+    {% endif %}
 </form>
 </body>
 </html>

@@ -1,9 +1,10 @@
+from django.shortcuts import redirect
 from django.forms import model_to_dict
 from django.views.generic import FormView, UpdateView, DeleteView, DetailView, ListView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import SuspiciousOperation, ImproperlyConfigured
 
 from accounts.forms import (DoctorCreateForm, RecCreateForm, LabCreateForm,
@@ -22,8 +23,19 @@ login = Login.as_view()
 logout = LogoutView.as_view()
 
 
+# Check permissions user
+class CheckSuperUser(UserPassesTestMixin):
+    def handle_no_permission(self):
+        """ Redirecto to user dashboard if no't satisfy Test"""
+        return redirect('docapp:dashboard')
+
+    def test_func(self):
+        """ Check if user is superuser """
+        return self.request.user.is_superuser
+
+
 # Register Views
-class RegisterDoctor(LoginRequiredMixin, FormView):
+class RegisterDoctor(LoginRequiredMixin, CheckSuperUser, FormView):
     """ View to register Doctor profile """
     form_class = DoctorCreateForm
     template_name = 'accounts/register_profile.html'
@@ -39,7 +51,7 @@ class RegisterDoctor(LoginRequiredMixin, FormView):
 register_doctor = RegisterDoctor.as_view()
 
 
-class RegisterRec(LoginRequiredMixin, FormView):
+class RegisterRec(LoginRequiredMixin, CheckSuperUser, FormView):
     """ View to register Receptionist profile """
     form_class = RecCreateForm
     template_name = 'accounts/register_profile.html'
@@ -55,7 +67,7 @@ class RegisterRec(LoginRequiredMixin, FormView):
 register_rec = RegisterRec.as_view()
 
 
-class RegisterLab(LoginRequiredMixin, FormView):
+class RegisterLab(LoginRequiredMixin, CheckSuperUser, FormView):
     """ View to register laboratory profile """
     form_class = LabCreateForm
     template_name = 'accounts/register_profile.html'
@@ -72,7 +84,7 @@ register_lab = RegisterLab.as_view()
 
 
 # Update Views
-class UpdateDoctor(LoginRequiredMixin, UpdateView):
+class UpdateDoctor(LoginRequiredMixin, CheckSuperUser, UpdateView):
     """ View to update doctor profile """
     pk_url_kwarg = 'user_id'
     model = User
@@ -97,7 +109,7 @@ class UpdateDoctor(LoginRequiredMixin, UpdateView):
 update_doctor = UpdateDoctor.as_view()
 
 
-class UpdateRec(LoginRequiredMixin, UpdateView):
+class UpdateRec(LoginRequiredMixin, CheckSuperUser, UpdateView):
     """ View to update receptionist profile """
     pk_url_kwarg = 'user_id'
     model = User
@@ -113,7 +125,7 @@ class UpdateRec(LoginRequiredMixin, UpdateView):
 update_rec = UpdateRec.as_view()
 
 
-class UpdateLab(LoginRequiredMixin, UpdateView):
+class UpdateLab(LoginRequiredMixin, CheckSuperUser, UpdateView):
     """ View to update laboratory profile """
     pk_url_kwarg = 'user_id'
     model = User
@@ -172,7 +184,7 @@ update_profile = UpdateProfile.as_view()
 
 
 # Delete Views
-class DeleteDoctor(LoginRequiredMixin, DeleteView):
+class DeleteDoctor(LoginRequiredMixin, CheckSuperUser, DeleteView):
     """ View to 'delete' doctor profile """
     pk_url_kwarg = 'user_id'
     context_object_name = 'instance'
@@ -184,7 +196,7 @@ class DeleteDoctor(LoginRequiredMixin, DeleteView):
 delete_doctor = DeleteDoctor.as_view()
 
 
-class DeleteRec(LoginRequiredMixin, DeleteView):
+class DeleteRec(LoginRequiredMixin, CheckSuperUser, DeleteView):
     """ View to 'delete' receptionist profile """
     pk_url_kwarg = 'user_id'
     context_object_name = 'instance'
@@ -196,7 +208,7 @@ class DeleteRec(LoginRequiredMixin, DeleteView):
 delete_rec = DeleteRec.as_view()
 
 
-class DeleteLab(LoginRequiredMixin, DeleteView):
+class DeleteLab(LoginRequiredMixin, CheckSuperUser, DeleteView):
     """ View to 'delete' laboratory profile """
     pk_url_kwarg = 'user_id'
     context_object_name = 'instance'
@@ -226,7 +238,7 @@ delete_profile = DeleteProfile.as_view()
 
 
 # Detail views
-class DetailDoctor(LoginRequiredMixin, DetailView):
+class DetailDoctor(LoginRequiredMixin, CheckSuperUser, DetailView):
     pk_url_kwarg = 'user_id'
     context_object_name = 'instance'
     model = DoctorProfile
@@ -236,7 +248,7 @@ class DetailDoctor(LoginRequiredMixin, DetailView):
 show_doctor = DetailDoctor.as_view()
 
 
-class DetailRec(LoginRequiredMixin, DetailView):
+class DetailRec(LoginRequiredMixin, CheckSuperUser, DetailView):
     pk_url_kwarg = 'user_id'
     context_object_name = 'instance'
     model = ReceptionProfile
@@ -246,7 +258,7 @@ class DetailRec(LoginRequiredMixin, DetailView):
 show_rec = DetailRec.as_view()
 
 
-class DetailLab(LoginRequiredMixin, DetailView):
+class DetailLab(LoginRequiredMixin, CheckSuperUser, DetailView):
     pk_url_kwarg = 'user_id'
     context_object_name = 'instance'
     model = LaboratoryProfile
