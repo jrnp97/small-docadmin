@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load crispy_forms_tags %}
+    <meta charset="UTF-8">
+    <title>Antecedentes</title>
+</head>
+<body>
+<h1>Antecedentes de {{ person }}</h1>
+<hr>
+{% if antecedent_list %}
+    <ul>
+        {% for antecedent in antecedent_list %}
+            <li>
+                {{ antecedent }}
+                <a href="#">Ver</a>
+                <a href="#">Editar</a>
+                <a href="#">Eliminar</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+</body>
+</html>

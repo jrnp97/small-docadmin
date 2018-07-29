@@ -3,11 +3,11 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from accounts.models import ReceptionProfile
+
 User = get_user_model()
 
+
 # Create your models here.
-
-
 class Company(models.Model):
     name = models.CharField(max_length=300, null=False, blank=False)
     nit = models.PositiveIntegerField(verbose_name='NIT')
@@ -61,7 +61,24 @@ class Person(models.Model):
     create_by = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
 
     def __str__(self):
+        return self.get_full_name()
+
+    def get_full_name(self):
         return f"{self.name} {self.last_name}"
+
+    def get_antecedents(self):
+        antecedents = self.antecedents.all()
+        if len(antecedents) > 0:
+            return antecedents
+        else:
+            return None
+
+    def get_exams(self):
+        exams = self.exams.all()
+        if len(exams) > 0:
+            return exams
+        else:
+            return None
 
 
 class ExamType(models.Model):
@@ -74,13 +91,19 @@ class ExamType(models.Model):
     )
 
     name = models.CharField(max_length=20, choices=TYPES, null=False, blank=False)
-    person = models.ForeignKey(Person, null=False, blank=False, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, null=False, blank=False, on_delete=models.CASCADE, related_name='exams')
     create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
-
+    STATES = (
+        ('pendiente', 'Pendiente'),
+        ('iniciado', 'Iniciado'),
+        ('problemas', 'Problema'),
+        ('finalizado', 'Finalizado'),
+    )
+    state = models.CharField(max_length=20, choices=STATES, null=False, blank=False)
     create_by = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.person.name} - {self.name}"
+        return self.name
 
 
 class AntecedentJobs(models.Model):
@@ -89,32 +112,20 @@ class AntecedentJobs(models.Model):
     time = models.PositiveIntegerField(null=False, blank=False)
     uso_epp = models.BooleanField(default=False, null=False, blank=False)
 
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='antecedents')
 
     last_modify = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     create_by = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.person.__str__()
-
-
-class JobAccidents(models.Model):
-    secuelas = models.TextField(null=False, blank=False)
-    tipo = models.CharField(max_length=200, null=False, blank=False)
-    atentido = models.BooleanField(default=False, null=False, blank=False)
-    calificado = models.BooleanField(default=False, null=False, blank=False)
-    fecha = models.DateField(null=False, blank=False)
-    description = models.TextField(null=False, blank=False)
-
-    work = models.ForeignKey(AntecedentJobs, on_delete=models.CASCADE)
-
-    create_by = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.tipo
+        return self.person.get_full_name
 
 
 class Hazards(models.Model):
+    work = models.OneToOneField(AntecedentJobs,
+                                on_delete=models.CASCADE,
+                                primary_key=True,
+                                related_name='hazards')
     fisico = models.BooleanField(default=False, null=False, blank=False)
     quimico = models.BooleanField(default=False, null=False, blank=False)
     mecanico = models.BooleanField(default=False, null=False, blank=False)
@@ -123,7 +134,8 @@ class Hazards(models.Model):
     psicologico = models.BooleanField(default=False, null=False, blank=False)
     locativo = models.BooleanField(default=False, null=False, blank=False)
 
-    work = models.OneToOneField(AntecedentJobs, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.get_number_hazard()
 
     def get_number_hazard(self):
         hazards = (self.fisico,
@@ -136,5 +148,18 @@ class Hazards(models.Model):
                    )
         return str(hazards.count(True))
 
+
+class JobAccidents(models.Model):
+    secuelas = models.TextField(null=False, blank=False)
+    tipo = models.CharField(max_length=200, null=False, blank=False)
+    atendido = models.BooleanField(default=False, null=False, blank=False)
+    calificado = models.BooleanField(default=False, null=False, blank=False)
+    fecha = models.DateField(null=False, blank=False)
+    description = models.TextField(null=False, blank=False)
+
+    work = models.ForeignKey(AntecedentJobs, on_delete=models.CASCADE)
+
+    create_by = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
+
     def __str__(self):
-        return self.get_number_hazard()
+        return self.tipo

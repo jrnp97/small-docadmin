@@ -16,8 +16,7 @@
             <li>
                 {{ company }}
                 <a href="{% url 'docapp:detail_company' company_id=company.id %}">Ver</a>
-                <a href="#">Editar</a>
-                <a href="#">Eliminar</a>
+                <a href="{% url 'docapp:update_company' company_id=company.id %}">Editar</a>
                 <a href="#">Ver empleados</a>
                 <a href="#">Registrar empleado</a>
             </li>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personas</title>
+</head>
+<body>
+<h1>Pacientes Registrados</h1>
+<hr>
+<h2>Acciones adicionales</h2>
+<a href="{% url 'docapp:register_person' %}">Registrar nuevo paciente</a>
+<hr>
+<ul>
+    {% if person_list %}
+        {% for person in person_list %}
+            <li>
+                {{ person }} - {{ person.company }}
+                <a href="{% url 'docapp:detail_person' person_id=person.id %}">Ver</a>
+                <a href="{% url 'docapp:update_person' person_id=person.id %}">Editar</a>
+                <a href="#">Añadir antecedentes</a>
+            </li>
+        {% endfor %}
+    {% else %}
+        <h2>No se han registrado pacientes</h2>
+    {% endif %}
+</ul>
+<hr>
+<a href="{% url 'docapp:dashboard' %}">Inicio</a>
+</body>
+</html>

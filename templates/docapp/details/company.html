@@ -15,12 +15,11 @@
 <hr>
 <h2>Acciones</h2>
 <a href="{% url 'docapp:update_company' company_id=company.id %}">Editar</a>
-<a href="#">Editar</a>
 <hr>
 {% if request.META.HTTP_REFERER %}
-    <a href="{{ request.META.HTTP_REFERER }}">Cancelar</a>
+    <a href="{{ request.META.HTTP_REFERER }}">Lista de empresas</a>
 {% else %}
-    <a href="{% url 'docapp:company_list' %}">Cancelar</a>
+    <a href="{% url 'docapp:company_list' %}">Lista de empresas</a>
 {% endif %}
 
 </body>
