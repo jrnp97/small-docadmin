@@ -12,10 +12,9 @@
     <ul>
         {% for antecedent in antecedent_list %}
             <li>
-                {{ antecedent }}
-                <a href="#">Ver</a>
+                {{ antecedent }} - {{ antecedent.person.get_full_name }}
+                <a href="{% url 'docapp:detail_antecedent' antecedent_id=antecedent.id %}">Ver</a>
                 <a href="#">Editar</a>
-                <a href="#">Eliminar</a>
             </li>
         {% endfor %}
     </ul>

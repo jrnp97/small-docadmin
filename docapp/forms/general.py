@@ -30,9 +30,9 @@ class PersonForm(forms.ModelForm):
         model = Person
         fields = ('name', 'last_name', 'identification', 'born_place', 'born_date',
                   'sex', 'civil_state', 'number_sons', 'direction', 'land_line',
-                  'cellphone', 'occupation', 'position', 'company', 'stratus',
-                  'training_student', 'sena_learner', 'number_patronal',)
-        exclude = ('create_by', )
+                  'cellphone', 'occupation', 'position', 'stratus', 'training_student',
+                  'sena_learner', 'number_patronal',)
+        exclude = ('create_by', 'company', )
 
     def save(self, commit=True):
         instance = super(PersonForm, self).save(commit=False)

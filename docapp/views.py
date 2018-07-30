@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.views.generic import FormView, ListView, UpdateView, DetailView
 from django.core.urlresolvers import reverse_lazy
@@ -50,6 +50,77 @@ def dashboard(request):
         return render(request, 'docapp/home.html', context)
 
 
+class ListFilterView(ListView, SingleObjectMixin):
+    """ Custom ListView to filter element only by pk_kwarg """
+    model_to_filter = None
+    context_object_2_name = None
+
+    def get_object(self, queryset=None):
+        """ Overwrite get_objet to only look with pk on Company model"""
+        queryset = self.model_to_filter._default_manager.all()
+        # Try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        if pk is not None:
+            queryset = queryset.filter(pk=pk)
+
+        # If none of those are defined, it's an error.
+        if pk is None:
+            raise AttributeError("Generic detail view %s must be called with "
+                                 "either an object pk or a slug."
+                                 % self.__class__.__name__)
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except queryset.model.DoesNotExist:
+            raise Http404(f"No {queryset.model._meta.verbose_name}s found matching the query")
+
+        return obj
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        """ Get context data from MultiObjectMixin and ContentMixin to replace SingleObjectMixin method """
+        # Add custom SingleObject
+        if self.context_object_2_name is not None:
+            kwargs[self.context_object_2_name] = self.get_object()
+        else:
+            kwargs['simple_object'] = self.get_object()
+        # MultipleObjectMixin
+        """Get the context for this view."""
+        queryset = object_list if object_list is not None else self.object_list
+        page_size = self.get_paginate_by(queryset)
+        context_object_name = self.get_context_object_name(queryset)
+        if page_size:
+            paginator, page, queryset, is_paginated = self.paginate_queryset(queryset, page_size)
+            context = {
+                'paginator': paginator,
+                'page_obj': page,
+                'is_paginated': is_paginated,
+                'object_list': queryset
+            }
+        else:
+            context = {
+                'paginator': None,
+                'page_obj': None,
+                'is_paginated': False,
+                'object_list': queryset
+            }
+        if context_object_name is not None:
+            context[context_object_name] = queryset
+
+        context.update(kwargs)
+        # ContentMixin section
+        if 'view' not in kwargs:
+            kwargs['view'] = self
+
+        return kwargs
+
+
+
+class FormViewPutExtra(FormView, SingleObjectMixin):
+    model_to_filter = None
+
+
+
 # List Views
 class CompanyList(CheckReceptionist, LoginRequiredMixin, ListView):
     context_object_name = 'company_list'
@@ -69,20 +140,36 @@ class PersonList(CheckReceptionist, LoginRequiredMixin, ListView):
 person_list = PersonList.as_view()
 
 
-class AntecedentList(CheckReceptionist, LoginRequiredMixin, ListView, SingleObjectMixin):
+class PersonListFilter(CheckReceptionist, LoginRequiredMixin, ListFilterView):
+    pk_url_kwarg = 'company_id'
+    context_object_name = 'person_list'
+    model = Person
+    model_to_filter = Company
+    context_object_2_name = 'company'
+    template_name = 'docapp/lists/person_list_company.html'
+
+    def get_queryset(self):
+        company = self.get_object()
+        self.queryset = Person.objects.filter(company=company)
+        return super(PersonListFilter, self).get_queryset()
+
+
+filter_person_list = PersonListFilter.as_view()
+
+
+
+class AntecedentList(CheckReceptionist, LoginRequiredMixin, ListFilterView):
     pk_url_kwarg = 'person_id'
     context_object_name = 'antecedent_list'
     model = AntecedentJobs
+    model_to_filter = Person
+    context_object_2_name = 'person'
     template_name = 'docapp/lists/antecedent_list.html'
 
     def get_queryset(self):
         person = self.get_object()
         self.queryset = AntecedentJobs.objects.filter(person=person)
         return super(AntecedentList, self).get_queryset()
-
-    def get_context_data(self, **kwargs):
-        kwargs['person'] = self.get_object()
-        return super(AntecedentList, self).get_context_data(**kwargs)
 
 
 person_antecedent_list = AntecedentList.as_view()
@@ -110,12 +197,15 @@ class RegisterCompany(CheckReceptionist, LoginRequiredMixin, FormView):
 register_company = RegisterCompany.as_view()
 
 
-class RegisterPerson(CheckReceptionist, LoginRequiredMixin, FormView):
+class RegisterPerson(CheckReceptionist, LoginRequiredMixin, FormView, SingleObjectMixin):
+    pk_url_kwarg = 'company_id'
     form_class = PersonForm
     template_name = 'docapp/register/register_simple_form.html'
     success_url = reverse_lazy('docapp:register_person')
 
     def form_valid(self, form):
+        company = self.get_object()
+        form.company = company
         form.create_by = self.request.user.reception_profile
         instance = form.save()
         if instance:
@@ -133,8 +223,31 @@ register_person = RegisterPerson.as_view()
 class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, FormView, SingleObjectMixin):
     pk_url_kwarg = 'person_id'
     form_class = AntecedentForm
-    template_name = 'docapp/register/register_formsets.html'
+    template_name = 'docapp/register/register_antecedent_formsets.html'
     success_url = reverse_lazy('docapp:register_antecedent')
+
+
+    def get_object(self, queryset=None):
+        queryset = self.model._default_manager.all()
+        # Next, try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        if pk is not None:
+            queryset = queryset.filter(pk=pk)
+
+
+        # If none of those are defined, it's an error.
+        if pk is None:
+            raise AttributeError("Generic detail view %s must be called with "
+                                 "either an object pk or a slug."
+                                 % self.__class__.__name__)
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except queryset.model.DoesNotExist:
+            raise Http404(f"No {queryset.model._meta.verbose_name}s found matching the query")
+
+        return obj
 
     def get_context_data(self, **kwargs):
         """ Overwriting get_context_data method to add formsets """
@@ -154,10 +267,24 @@ class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, FormView, Single
 
     def post(self, request, *args, **kwargs):
         """ Overwrite post method to manage formsets """
-        antecedent_work = super(RegisterAntecedent, self).post(request, *args, **kwargs)
-        """ Managing formsets """
-        # Hazard formset
+        # Validate formsets
         hazard_formset = hazards_formset(self.request.POST)
+        accident_formset = accidents_formset(self.request.POST)
+
+        if not hazard_formset.is_valid():
+            messages.error(self.request, message="Error, Riesgos mal ingresados.")
+
+        if not accident_formset.is_valid():
+            messages.error(self.request, message="Error, Accidentes mal ingresados")
+
+        if  not hazard_formset.is_valid() or not accident_formset.is_valid():
+            return self.form_invalid(form=self.get_form())
+
+
+        antecedent_work = super(RegisterAntecedent, self).post(request, *args, **kwargs)
+
+        """ Managing formsets """
+        # Get Hazard formset
         hazards = []
         for hazard in hazard_formset:
             data = {
@@ -179,7 +306,6 @@ class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, FormView, Single
             messages.error(self.request, message="Error to save riesgos")
 
         # Accident formset
-        accident_formset = accidents_formset(self.request.POST)
         accidents = []
         for accident in accident_formset:
             data = {
@@ -201,6 +327,10 @@ class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, FormView, Single
             messages.error(self.request, message='Error to save accidents')
 
         return antecedent_work
+
+
+
+register_antecedent = RegisterAntecedent.as_view()
 
 
 # Update Views
@@ -233,8 +363,6 @@ class UpdatePerson(CheckReceptionist, LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('docapp:register_person')
 
     def form_valid(self, form):
-        # Add Create_by
-        form.create_by = self.request.user.reception_profile
         instance = form.save()
         if instance:
             messages.success(self.request, message="Persona actualizada existosamente")
@@ -242,6 +370,14 @@ class UpdatePerson(CheckReceptionist, LoginRequiredMixin, UpdateView):
 
 
 update_person = UpdatePerson.as_view()
+
+
+
+class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, UpdateView):
+    pass
+
+
+update_antecedent = UpdateAntecedent.as_view()
 
 
 # Detail Views
@@ -263,3 +399,15 @@ class DetailPerson(CheckReceptionist, LoginRequiredMixin, DetailView):
 
 
 detail_person = DetailPerson.as_view()
+
+
+
+class DetailAntecedent(CheckReceptionist, LoginRequiredMixin, DetailView):
+    pk_url_kwarg = 'antecedent_id'
+    model = AntecedentJobs
+    context_object_name = 'antecedent'
+    template_name = 'docapp/details/antecedent.html'
+
+
+detail_antecedent = DetailAntecedent.as_view()
+
