@@ -5,7 +5,7 @@
     <title>Personas</title>
 </head>
 <body>
-<h1>Pacientes Registrados</h1>
+<h1>Empleados Registrados</h1>
 <hr>
 <h2>Acciones adicionales</h2>
 <a href="{% url 'docapp:company_list' %}">Registrar nuevo paciente</a>
@@ -17,7 +17,8 @@
                 {{ person }} - {{ person.company }}
                 <a href="{% url 'docapp:detail_person' person_id=person.id %}">Ver</a>
                 <a href="{% url 'docapp:update_person' person_id=person.id %}">Editar</a>
-                <a href="#">Añadir antecedentes</a>
+                <a href="{% url 'docapp:person_antecedent_list' person_id=person.id %}">Ver antecedentes</a>
+                <a href="{% url 'docapp:register_antecedent' person_id=person.id %}">Añadir antecedentes</a>
             </li>
         {% endfor %}
     {% else %}

@@ -1,1 +1,1 @@
-from .general import CompanyForm, PersonForm, AntecedentForm, accidents_formset, hazards_formset
+from .general import CompanyForm, PersonForm, AntecedentForm, hazards_inlineformset, accidents_formset

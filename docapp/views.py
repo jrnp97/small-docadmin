@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.detail import SingleObjectMixin
 from django.db import IntegrityError, transaction
 
-from docapp.forms import CompanyForm, PersonForm, AntecedentForm, hazards_formset, accidents_formset
+from docapp.forms import CompanyForm, PersonForm, AntecedentForm, hazards_inlineformset, accidents_formset
 from docapp.models import Company, Person, AntecedentJobs, Hazards, JobAccidents
 
 
@@ -54,6 +54,7 @@ class ListFilterView(ListView, SingleObjectMixin):
     """ Custom ListView to filter element only by pk_kwarg """
     model_to_filter = None
     context_object_2_name = None
+    extra_context = None
 
     def get_object(self, queryset=None):
         """ Overwrite get_objet to only look with pk on Company model"""
@@ -108,17 +109,56 @@ class ListFilterView(ListView, SingleObjectMixin):
             context[context_object_name] = queryset
 
         context.update(kwargs)
+        kwargs.update(context)  # Update kwargs with context information
         # ContentMixin section
         if 'view' not in kwargs:
             kwargs['view'] = self
-
+        if self.extra_context:
+            kwargs.update(self.extra_context)
         return kwargs
-
 
 
 class FormViewPutExtra(FormView, SingleObjectMixin):
     model_to_filter = None
+    context_object_2_name = 'parent_object'
+    extra_context = None
 
+    def get_object(self, queryset=None):
+        """ Overwrite get_objet to get model_to_filter instance instead model instance """
+        # get_objet to only look with pk on model_to_filter """
+        queryset = self.model_to_filter._default_manager.all()
+        # Try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        if pk is not None:
+            queryset = queryset.filter(pk=pk)
+
+        # If none of those are defined, it's an error.
+        if pk is None:
+            raise AttributeError("Generic detail view %s must be called with "
+                                 "either an object pk or a slug."
+                                 % self.__class__.__name__)
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except queryset.model.DoesNotExist:
+            raise Http404(f"No {queryset.model._meta.verbose_name}s found matching the query")
+
+        return obj
+
+    def get_context_data(self, **kwargs):
+        """ Combine method from FormMixin and ContextMixin to manage correctly model """
+        if self.context_object_2_name is not None:
+            kwargs[self.context_object_2_name] = self.get_object()
+
+        if 'form' not in kwargs:
+            kwargs['form'] = self.get_form()
+        if 'view' not in kwargs:
+            kwargs['view'] = self
+        if self.extra_context:
+            kwargs.update(self.extra_context)
+
+        return kwargs
 
 
 # List Views
@@ -155,7 +195,6 @@ class PersonListFilter(CheckReceptionist, LoginRequiredMixin, ListFilterView):
 
 
 filter_person_list = PersonListFilter.as_view()
-
 
 
 class AntecedentList(CheckReceptionist, LoginRequiredMixin, ListFilterView):
@@ -197,11 +236,14 @@ class RegisterCompany(CheckReceptionist, LoginRequiredMixin, FormView):
 register_company = RegisterCompany.as_view()
 
 
-class RegisterPerson(CheckReceptionist, LoginRequiredMixin, FormView, SingleObjectMixin):
+class RegisterPerson(CheckReceptionist, LoginRequiredMixin, FormViewPutExtra):
     pk_url_kwarg = 'company_id'
     form_class = PersonForm
+    model = Person
     template_name = 'docapp/register/register_simple_form.html'
-    success_url = reverse_lazy('docapp:register_person')
+    success_url = reverse_lazy('docapp:person_list')
+    model_to_filter = Company
+    extra_context = {'title': 'Registro empleado de la empresa '}
 
     def form_valid(self, form):
         company = self.get_object()
@@ -212,63 +254,35 @@ class RegisterPerson(CheckReceptionist, LoginRequiredMixin, FormView, SingleObje
             messages.success(self.request, message="Persona registrada exitosamente")
         return super(RegisterPerson, self).form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        kwargs['detail'] = 'Personas'
-        return super(RegisterPerson, self).get_context_data(**kwargs)
-
 
 register_person = RegisterPerson.as_view()
 
 
-class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, FormView, SingleObjectMixin):
+class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, FormViewPutExtra):
     pk_url_kwarg = 'person_id'
     form_class = AntecedentForm
+    model = AntecedentJobs
     template_name = 'docapp/register/register_antecedent_formsets.html'
-    success_url = reverse_lazy('docapp:register_antecedent')
+    success_url = reverse_lazy('docapp:person_list')
+    model_to_filter = Person
+    context_object_2_name = 'person'
+    extra_context = {'accident_formset': accidents_formset,
+                     'hazard_section': hazards_inlineformset}
 
-
-    def get_object(self, queryset=None):
-        queryset = self.model._default_manager.all()
-        # Next, try looking up by primary key.
-        pk = self.kwargs.get(self.pk_url_kwarg)
-        if pk is not None:
-            queryset = queryset.filter(pk=pk)
-
-
-        # If none of those are defined, it's an error.
-        if pk is None:
-            raise AttributeError("Generic detail view %s must be called with "
-                                 "either an object pk or a slug."
-                                 % self.__class__.__name__)
-
-        try:
-            # Get the single item from the filtered queryset
-            obj = queryset.get()
-        except queryset.model.DoesNotExist:
-            raise Http404(f"No {queryset.model._meta.verbose_name}s found matching the query")
-
-        return obj
-
-    def get_context_data(self, **kwargs):
-        """ Overwriting get_context_data method to add formsets """
-        kwargs['person'] = self.get_object()
-        kwargs['accident_formset'] = accidents_formset
-        kwargs['hazard_formset'] = hazards_formset
-        return super(RegisterAntecedent, self).get_context_data(**kwargs)
-
-    def form_valid(self, form):
+    def _custom_save(self, form):
+        person = self.get_object()
         form.create_by = self.request.user.reception_profile
-        form.person = self.request.person
+        form.person = person
         instance = form.save()
         if instance:
-            person_name = self.request.person.get_full_name
+            person_name = person.get_full_name()
             messages.success(self.request, message=f"Antecedente de {person_name} register exitosamente")
         return instance
 
     def post(self, request, *args, **kwargs):
         """ Overwrite post method to manage formsets """
         # Validate formsets
-        hazard_formset = hazards_formset(self.request.POST)
+        hazard_formset = hazards_inlineformset(self.request.POST)
         accident_formset = accidents_formset(self.request.POST)
 
         if not hazard_formset.is_valid():
@@ -277,57 +291,68 @@ class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, FormView, Single
         if not accident_formset.is_valid():
             messages.error(self.request, message="Error, Accidentes mal ingresados")
 
-        if  not hazard_formset.is_valid() or not accident_formset.is_valid():
+        if not hazard_formset.is_valid() or not accident_formset.is_valid():
+            # Update formsets information (append errors and data)
+            self.extra_context = {'accident_formset': accidents_formset,
+                             'hazard_section': hazards_inlineformset}
+
             return self.form_invalid(form=self.get_form())
 
+        antecedent_work = self._custom_save(form=self.get_form())
+        if antecedent_work:
+            response = super(RegisterAntecedent, self).post(request, *args, **kwargs)
 
-        antecedent_work = super(RegisterAntecedent, self).post(request, *args, **kwargs)
+            """ Managing formsets """
+            # Get Hazard formset
+            hazards = []
+            for hazard in hazard_formset:
+                data = {
+                    'fisico': hazard.cleaned_data.get('fisico'),
+                    'quimico': hazard.cleaned_data.get('quimico'),
+                    'mecanico': hazard.cleaned_data.get('mecanico'),
+                    'ergonomico': hazard.cleaned_data.get('ergonomico'),
+                    'electrico': hazard.cleaned_data.get('electrico'),
+                    'psicologico': hazard.cleaned_data.get('psicologico'),
+                    'work': antecedent_work,
+                    'locativo': hazard.cleaned_data.get('locativo')
+                }
+                hazards.append(Hazards(**data))
 
-        """ Managing formsets """
-        # Get Hazard formset
-        hazards = []
-        for hazard in hazard_formset:
-            data = {
-                'fisico': hazard.cleaned_data.get('fisico'),
-                'quimico': hazard.cleaned_data.get('quimico'),
-                'mecanico': hazard.cleaned_data.get('mecanico'),
-                'ergonomico': hazard.cleaned_data.get('ergonomico'),
-                'electrico': hazard.cleaned_data.get('electrico'),
-                'psicologico': hazard.cleaned_data.get('psicologico'),
-                'locativo': hazard.cleaned_data.get('locativo')
-            }
-            hazards.append(Hazards(**data))
+            try:
+                with transaction.atomic():
+                    Hazards.objects.filter(work=antecedent_work).delete()
+                    Hazards.objects.bulk_create(hazards)
+            except IntegrityError:
+                messages.error(self.request, message="Error to save riesgos")
 
-        try:
-            with transaction.atomic():
-                Hazards.objects.filter(work=antecedent_work).delete()
-                Hazards.objects.bulk_create(hazards)
-        except IntegrityError:
-            messages.error(self.request, message="Error to save riesgos")
+            # Accident formset
+            accidents = []
+            for accident in accident_formset:
+                data = {
+                    'secuelas': accident.cleaned_data.get('secuelas'),
+                    'tipo': accident.cleaned_data.get('tipo'),
+                    'atendido': accident.cleaned_data.get('atendido'),
+                    'calificado': accident.cleaned_data.get('calificado'),
+                    'fecha': accident.cleaned_data.get('fecha'),
+                    'description': accident.cleaned_data.get('description'),
+                    'work': antecedent_work,
+                    'create_by': self.request.user.reception_profile
+                }
+                accidents.append(JobAccidents(**data))
 
-        # Accident formset
-        accidents = []
-        for accident in accident_formset:
-            data = {
-                'secuelas': accident.cleaned_data.get('secuelas'),
-                'tipo': accident.cleaned_data.get('tipo'),
-                'atendido': accident.cleaned_data.get('atendido'),
-                'calificado': accident.cleaned_data.get('calificado'),
-                'fecha': accident.cleaned_data.get('fecha'),
-                'description': accident.cleaned_data.get('description'),
-                'create_by': self.request.user.reception_profile
-            }
-            accidents.append(JobAccidents(**data))
+            try:
+                with transaction.atomic():
+                    JobAccidents.objects.filter(work=antecedent_work).delete()
+                    JobAccidents.objects.bulk_create(accidents)
+            except IntegrityError:
+                messages.error(self.request, message='Error to save accidents')
 
-        try:
-            with transaction.atomic():
-                JobAccidents.objects.filter(work=antecedent_work).delete()
-                JobAccidents.objects.bulk_create(accidents)
-        except IntegrityError:
-            messages.error(self.request, message='Error to save accidents')
-
-        return antecedent_work
-
+            return response
+        else:
+            # Update formsets information (append errors and data)
+            self.extra_context = {'accident_formset': accidents_formset,
+                                  'hazard_section': hazards_inlineformset}
+            return self.form_invalid(form=self.get_form())
 
 
 register_antecedent = RegisterAntecedent.as_view()
@@ -372,9 +397,109 @@ class UpdatePerson(CheckReceptionist, LoginRequiredMixin, UpdateView):
 update_person = UpdatePerson.as_view()
 
 
-
 class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, UpdateView):
-    pass
+    pk_url_kwarg = 'antecedent_id'
+    context_object_name = 'antecedent'
+    model = AntecedentJobs
+    form_class = AntecedentForm
+    template_name = 'docapp/register/register_antecedent_formsets.html'
+
+    def get_context_data(self, **kwargs):
+        """ Overwrite get_context_data method to append formset necessary"""
+        antecedent = self.get_object()
+        hazard_initial_data = [Hazards.objects.get(work=antecedent).as_dict()]
+        accident_data = JobAccidents.objects.filter(work=antecedent)
+        accident_initial_data = []
+        for accident in accident_data:
+            accident_initial_data.append(accident.as_dict())
+        extra_context = {'hazard_section': hazards_inlineformset(initial=hazard_initial_data),
+                         'accident_formset': accidents_formset(initial=accident_initial_data)}
+        kwargs.update(extra_context)
+        return super(UpdateAntecedent, self).get_context_data(**kwargs)
+
+    def _custom_save(self, form):
+        antecedent = self.get_object()
+        instance = form.save()
+        if instance:
+            person_name = antecedent.person.get_full_name()
+            messages.success(self.request, message=f"Antecedente de {person_name} actualizado exitosamente")
+        return instance
+
+    def post(self, request, *args, **kwargs):
+        """ Overwrite post method to manage formsets """
+        # Validate formsets
+        hazard_formset = hazards_inlineformset(self.request.POST)
+        accident_formset = accidents_formset(self.request.POST)
+
+        if not hazard_formset.is_valid():
+            messages.error(self.request, message="Error, Riesgos mal ingresados.")
+
+        if not accident_formset.is_valid():
+            messages.error(self.request, message="Error, Accidentes mal ingresados")
+
+        if not hazard_formset.is_valid() or not accident_formset.is_valid():
+            # Update formsets information (append errors and data)
+            self.extra_context = {'accident_formset': accidents_formset,
+                             'hazard_section': hazards_inlineformset}
+
+            return self.form_invalid(form=self.get_form())
+
+        antecedent_work = self._custom_save(form=self.get_form())
+        if antecedent_work:
+            response = super(UpdateAntecedent, self).post(request, *args, **kwargs)
+
+            """ Managing formsets """
+            # Get Hazard formset
+            hazards = []
+            for hazard in hazard_formset:
+                data = {
+                    'fisico': hazard.cleaned_data.get('fisico'),
+                    'quimico': hazard.cleaned_data.get('quimico'),
+                    'mecanico': hazard.cleaned_data.get('mecanico'),
+                    'ergonomico': hazard.cleaned_data.get('ergonomico'),
+                    'electrico': hazard.cleaned_data.get('electrico'),
+                    'psicologico': hazard.cleaned_data.get('psicologico'),
+                    'work': antecedent_work,
+                    'locativo': hazard.cleaned_data.get('locativo')
+                }
+                hazards.append(Hazards(**data))
+
+            try:
+                with transaction.atomic():
+                    Hazards.objects.filter(work=antecedent_work).delete()
+                    Hazards.objects.bulk_create(hazards)
+            except IntegrityError:
+                messages.error(self.request, message="Error to save riesgos")
+
+            # Accident formset
+            accidents = []
+            for accident in accident_formset:
+                data = {
+                    'secuelas': accident.cleaned_data.get('secuelas'),
+                    'tipo': accident.cleaned_data.get('tipo'),
+                    'atendido': accident.cleaned_data.get('atendido'),
+                    'calificado': accident.cleaned_data.get('calificado'),
+                    'fecha': accident.cleaned_data.get('fecha'),
+                    'description': accident.cleaned_data.get('description'),
+                    'work': antecedent_work,
+                    'create_by': self.request.user.reception_profile
+                }
+                accidents.append(JobAccidents(**data))
+
+            try:
+                with transaction.atomic():
+                    JobAccidents.objects.filter(work=antecedent_work).delete()
+                    JobAccidents.objects.bulk_create(accidents)
+            except IntegrityError:
+                messages.error(self.request, message='Error to save accidents')
+
+            return response
+        else:
+            # Update formsets information (append errors and data)
+            self.extra_context = {'accident_formset': accidents_formset,
+                                  'hazard_section': hazards_inlineformset}
+            return self.form_invalid(form=self.get_form())
+
 
 
 update_antecedent = UpdateAntecedent.as_view()
@@ -401,7 +526,6 @@ class DetailPerson(CheckReceptionist, LoginRequiredMixin, DetailView):
 detail_person = DetailPerson.as_view()
 
 
-
 class DetailAntecedent(CheckReceptionist, LoginRequiredMixin, DetailView):
     pk_url_kwarg = 'antecedent_id'
     model = AntecedentJobs
@@ -410,4 +534,3 @@ class DetailAntecedent(CheckReceptionist, LoginRequiredMixin, DetailView):
 
 
 detail_antecedent = DetailAntecedent.as_view()
-

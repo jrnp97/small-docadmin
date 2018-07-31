@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     {% load static %}
+    {% load crispy_forms_tags %}
     <meta charset="UTF-8">
     <title>Registro</title>
 </head>
@@ -16,25 +17,40 @@
 {% endif %}
 <form method="POST">
     {% csrf_token %}
-    {{ antecedent_form|crispy }}
+    {{ form|crispy }}
     <hr>
     <h2> Riesgos </h2>
-    {{ hazard_formset.management_form }}
-    <div class="hazard_formset">
-        {{ hazard_formset }}
-    </div>
-    {% if hazard_formset.non_form_errors %}
-        {% for error in hazard_formset.non_form_errors %}
+    <!-- Riesgos Section -->
+    {{ hazard_section.management_form }}
+
+    {% for hazard in hazard_section %}
+        <div class="hazard_section">
+            {{ hazard|crispy }}
+        </div>
+    {% endfor %}
+
+    {% if hazard_section.non_form_errors %}
+        <hr>
+        {% for error in accident_formset.non_form_errors %}
             {{ error|escape }}
         {% endfor %}
     {% endif %}
-
+    <hr>
+    <!-- End Riesgo Section -->
     <h2>Accidentes</h2>
-    {{ accident_formset.management_form }}
+
+
     <div class="accident_formset">
-        {{ accident_formset }}
+        {% for accident_form in accident_formset.forms %}
+            {{ accident_form|crispy }}
+            <hr>
+        {% endfor %}
     </div>
+
+    {{ accident_formset.management_form }}
+
     {% if accident_formset.non_form_errors %}
+        <hr>
         {% for error in accident_formset.non_form_errors %}
             {{ error|escape }}
         {% endfor %}
@@ -45,14 +61,15 @@
     <a href="{% url 'docapp:dashboard' %}">Inicio</a>
 </form>
 
-    <script type="application/javascript" src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>
-    <script type="application/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
-    <script type="text/javascript">
-        $('.accident_formset').formset({
-            addText: 'Add Antecedent',
-            deleteText: 'Remove Antecedent'
-        });
-        $('.datepicker').datepicker();
-    </script>
+<script type="application/javascript" src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
+<script type="text/javascript">
+    $('.accident_formset').formset({
+        addText: 'Añadir Accidente',
+        deleteText: 'Eliminar Accidente',
+        prefix: '{{ accident_formset.prefix }}',
+        formCssClass: 'dynamic-formset2'
+    });
+</script>
 </body>
 </html>

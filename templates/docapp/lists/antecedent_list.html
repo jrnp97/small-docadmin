@@ -18,6 +18,14 @@
             </li>
         {% endfor %}
     </ul>
+{% else %}
+    <h2>No registra antecedentes </h2>
+{% endif %}
+<hr>
+{% if request.META.HTTP_REFERER %}
+    <a href="{{ request.META.HTTP_REFERER }}">Lista de empleados</a>
+{% else %}
+    <a href="{% url 'docapp:person_list' %}">Lista de empleados</a>
 {% endif %}
 </body>
 </html>

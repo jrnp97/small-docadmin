@@ -2,9 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Registro Antecedente</title>
+    <title>Antecedente</title>
 </head>
 <body>
-
+<h1>Antecedentes de {{ antecedent.person }}</h1>
+<hr>
+<p>Empresa donde laboro: {{ antecedent.company }}</p>
+<p>Cargo que tuvo: {{ antecedent.occupation }}</p>
+<p>Tiempo de duracion: {{ antecedent.time }}</p>
+<p>Uso EPP: {{ antecedent.uso_epp }}</p>
+<p>Numero de riesgos: {{ antecedent.hazards.get_number_hazard }}</p>
+<p>Riesgos: {{ antecedent.hazards.as_dict }} </p>
+<p>Registrado por: {{ antecedent.create_by.user.username }}</p>
+<p>Ultima vez modificado: {{ antecedent.last_modify }}</p>
+<hr>
+<h2>Accidentes</h2>
+<hr>
+{% if antecedent.accidents.all %}
+    {% for accident in antecedent.accidents.all %}
+        <h3>Accidente #{{ forloop.counter }}</h3>
+        <hr>
+        <p>Tipo de accidente: {{ accident.tipo }}</p>
+        <p>Cuenta con secuelas: {{ accident.secuelas }}</p>
+        <p>Fecha: {{ accident.fecha }}</p>
+        <p>Fue atendido: {{ accident.atendido }}</p>
+        <p>Calificado: {{ accident.calificado }}</p>
+        <p>Descripcion: {{ accident.description }}</p>
+        <p>Registrado por: {{ accident.create_by }}</p>
+    {% endfor %}
+{% else %}
+    <h3>No registra Accidentes</h3>
+{% endif %}
+<hr>
+<h3>Acciones</h3>
+<a href="{% url 'docapp:update_antecedent' antecedent_id=antecedent.id %}">Editar</a>
+<hr>
+{% if request.META.HTTP_REFERER %}
+    <a href="{{ request.META.HTTP_REFERER }}">Lista de empresas</a>
+{% else %}
+    <a href="{% url 'docapp:company_list' %}">Lista de empresas</a>
+{% endif %}
 </body>
 </html>
