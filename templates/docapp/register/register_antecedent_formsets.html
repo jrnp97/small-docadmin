@@ -7,7 +7,7 @@
     <title>Registro</title>
 </head>
 <body>
-<h1>Registrando antecedente a {{ person.get_full_name }}</h1>
+<h1>Registrando antecedente a {{ antecedent.person.get_full_name }}</h1>
 <hr>
 {% if messages %}
     {% for message in messages %}
@@ -23,7 +23,7 @@
     <!-- Riesgos Section -->
     {{ hazard_section.management_form }}
 
-    {% for hazard in hazard_section %}
+    {% for hazard in hazard_section.forms %}
         <div class="hazard_section">
             {{ hazard|crispy }}
         </div>
@@ -41,7 +41,11 @@
 
 
     <div class="accident_formset">
-        {% for accident_form in accident_formset.forms %}
+        {% for accident_form in accident_formset %}
+            {{ accident_form.id }}
+            {% if accident_form.instance.pk %}
+                {{ accident_form.DELETE }}
+            {% endif %}
             {{ accident_form|crispy }}
             <hr>
         {% endfor %}
@@ -65,8 +69,6 @@
 <script type="application/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
 <script type="text/javascript">
     $('.accident_formset').formset({
-        addText: 'Añadir Accidente',
-        deleteText: 'Eliminar Accidente',
         prefix: '{{ accident_formset.prefix }}',
         formCssClass: 'dynamic-formset2'
     });

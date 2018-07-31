@@ -429,6 +429,8 @@ class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, AntecedentPostMana
         accident_initial_data = []
         for accident in accident_data:
             accident_initial_data.append(accident.as_dict())
+        print(accident_initial_data)
+        print(len(accident_initial_data))
         extra_context = {'hazard_section': hazards_inlineformset(initial=hazard_initial_data),
                          'accident_formset': accidents_formset(initial=accident_initial_data)}
         kwargs.update(extra_context)

@@ -108,6 +108,4 @@ class AccidentsForm(forms.ModelForm):
         exclude = ('create_by',)
 
 
-accidents_formset = forms.inlineformset_factory(parent_model=AntecedentJobs,
-                                                model=JobAccidents,
-                                                form=AccidentsForm)
+accidents_formset = forms.modelformset_factory(model=JobAccidents, form=AccidentsForm, can_delete=True)
