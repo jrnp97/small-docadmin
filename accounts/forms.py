@@ -105,7 +105,6 @@ class RecCreateForm(BaseUserForm):
             # Save receptionist profile now
             try:
                 ReceptionProfile.objects.create(user=instance)
-                LaboratoryProfile.objects.create(user=instance)
             except IntegrityError:
                 # Delete user
                 instance.delete()
@@ -181,8 +180,9 @@ class RecUpdateForm(BaseUserUpdateForm):
             instance.save()
             # Save receptionist profile now
             try:
-                ReceptionProfile.objects.create(user=instance)
-                LaboratoryProfile.objects.create(user=instance)
+                extra_content = {'user': instance}
+                receptionist = ReceptionProfile(**extra_content)
+                receptionist.save()
             except IntegrityError:
                 # Delete user
                 instance.delete()
@@ -202,7 +202,9 @@ class LabUpdateForm(BaseUserUpdateForm):
             instance.save()
             # Save receptionist profile now
             try:
-                LaboratoryProfile.objects.create(user=instance)
+                extra_content = {'user': instance}
+                laboratory = LaboratoryProfile(**extra_content)
+                laboratory.save()
             except IntegrityError:
                 # Delete user
                 instance.delete()
