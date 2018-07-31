@@ -1,0 +1,142 @@
+{% load static %}
+<!-- Left side column. contains the sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="image pull-left">
+                <img src="{% static 'assets/dist/img/avatar5.png' %}" class="img-circle" alt="User Image">
+            </div>
+            <div class="info">
+                <h4>Bienvenido</h4>
+                <p>{% if request.user.get_full_name == '' %}
+                    {{ request.user.username }}
+                {% else %}
+                    {{ request.user.get_full_name }}
+                {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <!-- sidebar menu -->
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="{% url 'docapp:dashboard' %}"><i class="fa fa-hospital-o"></i><span>Dashboard</span>
+                </a>
+            </li>
+            {% if request.user.is_superuser %}
+                <!-- Personal options -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-user-md"></i><span>Personal</span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-user-md"></i><span>Registro</span>
+                                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li><a href="{% url 'accounts:register_rec' %}">Recepcionista</a></li>
+                                <li><a href="{% url 'accounts:register_doctor' %}">Doctor</a></li>
+                                <li><a href="{% url 'accounts:register_lab' %}">Laboratorio</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="{% url 'docapp:person_list' %}">Lista de personal</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+            {% if request.user.profile_type == 'receptionist' or request.user.is_superuser %}
+                <!-- Enterprise options -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-user-md"></i><span>Empresas</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="forms_basic.html">Registrar Empresa</a></li>
+                        <li><a href="table.html">Lista de Empresas</a></li>
+
+                    </ul>
+                </li>
+                <!-- Employees options -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-user-md"></i><span>Empleados</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{% url 'docapp:person_list' %}">Lista de Empleados</a></li>
+                    </ul>
+                </li>
+                <!-- Examenes -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-user-md"></i><span>Examenes</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="forms_basic.html">Iniciar examen</a></li>
+                        <li><a href="table.html">Examenes en Proceso</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+            {% if request.user.profile_type == 'laboratory' %}
+                <!-- Laboratorio -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-user-md"></i><span>Laboratorio</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="forms_basic.html">Ver resultados</a></li>
+                        <li><a href="table.html">Guardar resultados</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+
+            {% if request.user.profile_type == 'doctor' %}
+                <!-- Registrar examenes -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-user-md"></i><span>Registro Examenes</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="table.html">Visiometria</a></li>
+                        <li><a href="table.html">Audiologia</a></li>
+                        <li><a href="table.html">Audiometria</a></li>
+                        <li><a href="table.html">Ocupacional</a></li>
+                    </ul>
+                </li>
+
+                <!-- Reportes -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-user-md"></i><span>Reporte</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="forms_basic.html">Generar Reporte</a></li>
+                        <li><a href="table.html">Ver Reportes</a></li>
+                    </ul>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</aside>
+

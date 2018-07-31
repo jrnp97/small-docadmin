@@ -437,7 +437,6 @@ class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, AntecedentPostMana
         return super(UpdateAntecedent, self).get_context_data(**kwargs)
 
 
-
 update_antecedent = UpdateAntecedent.as_view()
 
 
@@ -470,3 +469,7 @@ class DetailAntecedent(CheckReceptionist, LoginRequiredMixin, DetailView):
 
 
 detail_antecedent = DetailAntecedent.as_view()
+
+
+def template_proof(request):
+    return render(request, 'template_example.html')

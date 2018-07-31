@@ -20,7 +20,8 @@ urlpatterns = [
     url(r'^antecedent/(?P<person_id>[0-9])/$', views.person_antecedent_list, name='person_antecedent_list'),
     url(r'^antecedent/detail/(?P<antecedent_id>[0-9]+)/$', views.detail_antecedent, name='detail_antecedent'),
     url(r'^register/antecedent/(?P<person_id>[0-9]+)/$', views.register_antecedent, name='register_antecedent'),
-    url(r'^update/antecedent/(?P<antecedent_id>[0-9]+)/$', views.update_antecedent, name='update_antecedent')
+    url(r'^update/antecedent/(?P<antecedent_id>[0-9]+)/$', views.update_antecedent, name='update_antecedent'),
 
+    url(r'^proof/$', views.template_proof, name='template_proof')
 
 ]
