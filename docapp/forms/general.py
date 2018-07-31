@@ -110,5 +110,4 @@ class AccidentsForm(forms.ModelForm):
 
 accidents_formset = forms.inlineformset_factory(parent_model=AntecedentJobs,
                                                 model=JobAccidents,
-                                                form=AccidentsForm,
-                                                extra=1)
+                                                form=AccidentsForm)
