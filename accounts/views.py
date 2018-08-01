@@ -7,8 +7,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import SuspiciousOperation, ImproperlyConfigured
 
-from accounts.forms import (DoctorCreateForm, RecCreateForm, LabCreateForm,
-                            DoctorUpdateForm, RecUpdateForm, LabUpdateForm, BaseUserUpdateForm)
+from accounts.forms import (BaseUserForm, BaseUserUpdateForm)
 from accounts.models import User, DoctorProfile, ReceptionProfile, LaboratoryProfile
 
 
@@ -26,7 +25,7 @@ logout = LogoutView.as_view()
 # Check permissions user
 class CheckSuperUser(UserPassesTestMixin):
     def handle_no_permission(self):
-        """ Redirecto to user dashboard if no't satisfy Test"""
+        """ Redirect to user dashboard if no't satisfy Test"""
         return redirect('docapp:dashboard')
 
     def test_func(self):
@@ -34,111 +33,72 @@ class CheckSuperUser(UserPassesTestMixin):
         return self.request.user.is_superuser
 
 
-# Register Views
-class RegisterDoctor(LoginRequiredMixin, CheckSuperUser, FormView):
-    """ View to register Doctor profile """
-    form_class = DoctorCreateForm
+class RegisterPersonal(LoginRequiredMixin, CheckSuperUser, FormView):
+    form_class = BaseUserForm
     template_name = 'accounts/register_profile.html'
-    success_url = reverse_lazy('accounts:register_doctor')
+    success_url = reverse_lazy('accounts:register_personal')
 
     def form_valid(self, form):
         instance = form.save()
         if instance:
             messages.success(request=self.request, message="User created successfully")
-        return super(RegisterDoctor, self).form_valid(form)
+        return super(RegisterPersonal, self).form_valid(form)
 
 
-register_doctor = RegisterDoctor.as_view()
+register_personal = RegisterPersonal.as_view()
 
 
-class RegisterRec(LoginRequiredMixin, CheckSuperUser, FormView):
-    """ View to register Receptionist profile """
-    form_class = RecCreateForm
-    template_name = 'accounts/register_profile.html'
-    success_url = reverse_lazy('accounts:register_rec')
-
-    def form_valid(self, form):
-        instance = form.save()
-        if instance:
-            messages.success(request=self.request, message="User created successfully")
-        return super(RegisterRec, self).form_valid(form)
-
-
-register_rec = RegisterRec.as_view()
-
-
-class RegisterLab(LoginRequiredMixin, CheckSuperUser, FormView):
-    """ View to register laboratory profile """
-    form_class = LabCreateForm
-    template_name = 'accounts/register_profile.html'
-    success_url = reverse_lazy('accounts:register_lab')
-
-    def form_valid(self, form):
-        instance = form.save()
-        if instance:
-            messages.success(request=self.request, message="User created successfully")
-        return super(RegisterLab, self).form_valid(form)
-
-
-register_lab = RegisterLab.as_view()
-
-
-# Update Views
-class UpdateDoctor(LoginRequiredMixin, CheckSuperUser, UpdateView):
+class UpdatePersonal(LoginRequiredMixin, CheckSuperUser, UpdateView):
     """ View to update doctor profile """
     pk_url_kwarg = 'user_id'
     model = User
     template_name = 'accounts/register_profile.html'
-    form_class = DoctorUpdateForm
-    success_url = reverse_lazy('accounts:register_doctor')
-
-    def get_initial(self):
-        """ Overwriting method that return form data so add doctor profile information """
-        user = self.get_object()
-        doctor_info = DoctorProfile.objects.get(user=user)
-        initial_extra = model_to_dict(doctor_info)
-        # Delete user unneeded info
-        initial_extra.pop('user', None)
-        return initial_extra.copy()
+    form_class = BaseUserUpdateForm
+    success_url = reverse_lazy('accounts:register_personal')
 
     def form_valid(self, form):
         messages.success(request=self.request, message="Doctor profile update successfully")
-        return super(UpdateDoctor, self).form_valid(form)
+        return super(UpdatePersonal, self).form_valid(form)
 
 
-update_doctor = UpdateDoctor.as_view()
+update_personal = UpdatePersonal.as_view()
 
 
-class UpdateRec(LoginRequiredMixin, CheckSuperUser, UpdateView):
-    """ View to update receptionist profile """
+class DeletePersonal(LoginRequiredMixin, CheckSuperUser, DeleteView):
+    """ View to 'delete' doctor profile """
+    pk_url_kwarg = 'user_id'
+    context_object_name = 'instance'
+    model = User
+    template_name = 'accounts/delete_profile.html'
+    success_url = reverse_lazy('accounts:login')
+
+
+delete_personal = DeletePersonal.as_view()
+
+
+class DetailPersonal(LoginRequiredMixin, CheckSuperUser, DetailView):
+    pk_url_kwarg = 'user_id'
+    context_object_name = 'instance'
+    model = DoctorProfile
+    template_name = 'accounts/show_profile.html'
+
+
+detail_personal = DetailPersonal.as_view()
+
+
+class DetailProfile(LoginRequiredMixin, DetailView):
     pk_url_kwarg = 'user_id'
     model = User
-    template_name = 'accounts/register_profile.html'
-    form_class = RecUpdateForm
-    success_url = reverse_lazy('accounts:register_rec')
+    template_name = 'accounts/session/show_profile.html'
 
-    def form_valid(self, form):
-        messages.success(request=self.request, message="Receptionist profile update successfully")
-        return super(UpdateRec, self).form_valid(form)
-
-
-update_rec = UpdateRec.as_view()
+    def get(self, request, *args, **kwargs):
+        if request.user.id == int(kwargs.get('user_id')):
+            return super(DetailProfile, self).get(request, *args, **kwargs)
+        else:
+            raise SuspiciousOperation(message="Invalid Request")
 
 
-class UpdateLab(LoginRequiredMixin, CheckSuperUser, UpdateView):
-    """ View to update laboratory profile """
-    pk_url_kwarg = 'user_id'
-    model = User
-    template_name = 'accounts/register_profile.html'
-    form_class = LabUpdateForm
-    success_url = reverse_lazy('accounts:register_lab')
-
-    def form_valid(self, form):
-        messages.success(request=self.request, message="Laboratory Profile Update Successfully")
-        return super(UpdateLab, self).form_valid(form)
-
-
-update_lab = UpdateLab.as_view()
+show_profile = DetailProfile.as_view()
 
 
 class UpdateProfile(LoginRequiredMixin, UpdateView):
@@ -165,59 +125,13 @@ class UpdateProfile(LoginRequiredMixin, UpdateView):
         # Check user integrity
         if user.is_superuser and user.profile_type is not None:
             raise ImproperlyConfigured(
-                "User information is bad confured"
+                "User information is bad configure"
             )
-
-        if user.is_superuser:
-            self.form_class = BaseUserUpdateForm
-        elif user.profile_type == 'doctor':
-            self.form_class = DoctorUpdateForm
-        elif user.profile_type == 'receptionist':
-            self.form_class = RecUpdateForm
-        elif user.profile_type == 'laboratory':
-            self.form_class = LabUpdateForm
-
+        self.form_class = BaseUserUpdateForm
         return super(UpdateProfile, self).get_form_class()
 
 
 update_profile = UpdateProfile.as_view()
-
-
-# Delete Views
-class DeleteDoctor(LoginRequiredMixin, CheckSuperUser, DeleteView):
-    """ View to 'delete' doctor profile """
-    pk_url_kwarg = 'user_id'
-    context_object_name = 'instance'
-    model = DoctorProfile
-    template_name = 'accounts/delete_profile.html'
-    success_url = reverse_lazy('accounts:login')
-
-
-delete_doctor = DeleteDoctor.as_view()
-
-
-class DeleteRec(LoginRequiredMixin, CheckSuperUser, DeleteView):
-    """ View to 'delete' receptionist profile """
-    pk_url_kwarg = 'user_id'
-    context_object_name = 'instance'
-    model = ReceptionProfile
-    template_name = 'accounts/delete_profile.html'
-    success_url = reverse_lazy('accounts:login')
-
-
-delete_rec = DeleteRec.as_view()
-
-
-class DeleteLab(LoginRequiredMixin, CheckSuperUser, DeleteView):
-    """ View to 'delete' laboratory profile """
-    pk_url_kwarg = 'user_id'
-    context_object_name = 'instance'
-    model = LaboratoryProfile
-    template_name = 'accounts/delete_profile.html'
-    success_url = reverse_lazy('accounts:login')
-
-
-delete_lab = DeleteLab.as_view()
 
 
 class DeleteProfile(LoginRequiredMixin, DeleteView):
@@ -237,52 +151,6 @@ class DeleteProfile(LoginRequiredMixin, DeleteView):
 delete_profile = DeleteProfile.as_view()
 
 
-# Detail views
-class DetailDoctor(LoginRequiredMixin, CheckSuperUser, DetailView):
-    pk_url_kwarg = 'user_id'
-    context_object_name = 'instance'
-    model = DoctorProfile
-    template_name = 'accounts/show_profile.html'
-
-
-show_doctor = DetailDoctor.as_view()
-
-
-class DetailRec(LoginRequiredMixin, CheckSuperUser, DetailView):
-    pk_url_kwarg = 'user_id'
-    context_object_name = 'instance'
-    model = ReceptionProfile
-    template_name = 'accounts/show_profile.html'
-
-
-show_rec = DetailRec.as_view()
-
-
-class DetailLab(LoginRequiredMixin, CheckSuperUser, DetailView):
-    pk_url_kwarg = 'user_id'
-    context_object_name = 'instance'
-    model = LaboratoryProfile
-    template_name = 'accounts/show_profile.html'
-
-
-show_lab = DetailLab.as_view()
-
-
-class DetailProfile(LoginRequiredMixin, DetailView):
-    pk_url_kwarg = 'user_id'
-    model = User
-    template_name = 'accounts/session/show_profile.html'
-
-    def get(self, request, *args, **kwargs):
-        if request.user.id == int(kwargs.get('user_id')):
-            return super(DetailProfile, self).get(request, *args, **kwargs)
-        else:
-            raise SuspiciousOperation(message="Invalid Request")
-
-
-show_profile = DetailProfile.as_view()
-
-
 class UserList(LoginRequiredMixin, ListView):
     context_object_name = 'user_list'
     model = User
@@ -296,3 +164,153 @@ class UserList(LoginRequiredMixin, ListView):
 
 
 user_list = UserList.as_view()
+
+
+# Register Views
+# class RegisterDoctor(LoginRequiredMixin, CheckSuperUser, FormView):
+#     """ View to register Doctor profile """
+#     form_class = DoctorCreateForm
+#     template_name = 'accounts/register_profile.html'
+#     success_url = reverse_lazy('accounts:register_doctor')
+#
+#     def form_valid(self, form):
+#         instance = form.save()
+#         if instance:
+#             messages.success(request=self.request, message="User created successfully")
+#         return super(RegisterDoctor, self).form_valid(form)
+# register_doctor = RegisterDoctor.as_view()
+
+
+# class RegisterRec(LoginRequiredMixin, CheckSuperUser, FormView):
+#     """ View to register Receptionist profile """
+#     form_class = RecCreateForm
+#     template_name = 'accounts/register_profile.html'
+#     success_url = reverse_lazy('accounts:register_rec')
+#
+#     def form_valid(self, form):
+#         instance = form.save()
+#         if instance:
+#             messages.success(request=self.request, message="User created successfully")
+#         return super(RegisterRec, self).form_valid(form)
+# register_rec = RegisterRec.as_view()
+
+
+# class RegisterLab(LoginRequiredMixin, CheckSuperUser, FormView):
+#     """ View to register laboratory profile """
+#     form_class = LabCreateForm
+#     template_name = 'accounts/register_profile.html'
+#     success_url = reverse_lazy('accounts:register_lab')
+#
+#     def form_valid(self, form):
+#         instance = form.save()
+#         if instance:
+#             messages.success(request=self.request, message="User created successfully")
+#         return super(RegisterLab, self).form_valid(form)
+# register_lab = RegisterLab.as_view()
+
+
+# Update Views
+# class UpdateDoctor(LoginRequiredMixin, CheckSuperUser, UpdateView):
+#     """ View to update doctor profile """
+#     pk_url_kwarg = 'user_id'
+#     model = User
+#     template_name = 'accounts/register_profile.html'
+#     form_class = DoctorUpdateForm
+#     success_url = reverse_lazy('accounts:register_doctor')
+#
+#     def get_initial(self):
+#         """ Overwriting method that return form data so add doctor profile information """
+#         user = self.get_object()
+#         doctor_info = DoctorProfile.objects.get(user=user)
+#         initial_extra = model_to_dict(doctor_info)
+#         # Delete user unneeded info
+#         initial_extra.pop('user', None)
+#         return initial_extra.copy()
+#
+#     def form_valid(self, form):
+#         messages.success(request=self.request, message="Doctor profile update successfully")
+#         return super(UpdateDoctor, self).form_valid(form)
+# update_doctor = UpdateDoctor.as_view()
+
+# class UpdateRec(LoginRequiredMixin, CheckSuperUser, UpdateView):
+#     """ View to update receptionist profile """
+#     pk_url_kwarg = 'user_id'
+#     model = User
+#     template_name = 'accounts/register_profile.html'
+#     form_class = RecUpdateForm
+#     success_url = reverse_lazy('accounts:register_rec')
+#
+#     def form_valid(self, form):
+#         messages.success(request=self.request, message="Receptionist profile update successfully")
+#         return super(UpdateRec, self).form_valid(form)
+# update_rec = UpdateRec.as_view()
+
+
+# class UpdateLab(LoginRequiredMixin, CheckSuperUser, UpdateView):
+#     """ View to update laboratory profile """
+#     pk_url_kwarg = 'user_id'
+#     model = User
+#     template_name = 'accounts/register_profile.html'
+#     form_class = LabUpdateForm
+#     success_url = reverse_lazy('accounts:register_lab')
+#
+#     def form_valid(self, form):
+#         messages.success(request=self.request, message="Laboratory Profile Update Successfully")
+#         return super(UpdateLab, self).form_valid(form)
+# update_lab = UpdateLab.as_view()
+
+
+# Delete Views
+# class DeleteDoctor(LoginRequiredMixin, CheckSuperUser, DeleteView):
+#     """ View to 'delete' doctor profile """
+#     pk_url_kwarg = 'user_id'
+#     context_object_name = 'instance'
+#     model = DoctorProfile
+#     template_name = 'accounts/delete_profile.html'
+#     success_url = reverse_lazy('accounts:login')
+# delete_doctor = DeleteDoctor.as_view()
+
+
+# class DeleteRec(LoginRequiredMixin, CheckSuperUser, DeleteView):
+#     """ View to 'delete' receptionist profile """
+#     pk_url_kwarg = 'user_id'
+#     context_object_name = 'instance'
+#     model = ReceptionProfile
+#     template_name = 'accounts/delete_profile.html'
+#     success_url = reverse_lazy('accounts:login')
+# delete_rec = DeleteRec.as_view()
+
+
+# class DeleteLab(LoginRequiredMixin, CheckSuperUser, DeleteView):
+#     """ View to 'delete' laboratory profile """
+#     pk_url_kwarg = 'user_id'
+#     context_object_name = 'instance'
+#     model = LaboratoryProfile
+#     template_name = 'accounts/delete_profile.html'
+#     success_url = reverse_lazy('accounts:login')
+# delete_lab = DeleteLab.as_view()
+
+
+# Detail views
+# class DetailDoctor(LoginRequiredMixin, CheckSuperUser, DetailView):
+#     pk_url_kwarg = 'user_id'
+#     context_object_name = 'instance'
+#     model = DoctorProfile
+#     template_name = 'accounts/show_profile.html'
+# show_doctor = DetailDoctor.as_view()
+
+
+# class DetailRec(LoginRequiredMixin, CheckSuperUser, DetailView):
+#     pk_url_kwarg = 'user_id'
+#     context_object_name = 'instance'
+#     model = ReceptionProfile
+#     template_name = 'accounts/show_profile.html'
+# show_rec = DetailRec.as_view()
+
+
+# class DetailLab(LoginRequiredMixin, CheckSuperUser, DetailView):
+#     pk_url_kwarg = 'user_id'
+#     context_object_name = 'instance'
+#     model = LaboratoryProfile
+#     template_name = 'accounts/show_profile.html'
+# show_lab = DetailLab.as_view()

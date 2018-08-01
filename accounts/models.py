@@ -53,6 +53,14 @@ class User(AbstractUser):
 
         super(User, self).save(*args, **kwargs)
 
+    def delete(self, using=None, keep_parents=False, **kwargs):
+        destroy = kwargs.pop('destroy', False)
+        if not destroy:
+            self.is_active = False
+            self.user.save()
+            return 1, dict({'message': 'delete successfully'})
+        else:
+            return super(User, self).delete(using=using, keep_parents=keep_parents)
 
 # Define user roles
 class DoctorProfile(models.Model):
@@ -71,12 +79,6 @@ class DoctorProfile(models.Model):
     class Meta:
         db_table = 'doctor_profile'
 
-    def delete(self, using=None, keep_parents=False):
-        # Instead delete record disable user
-        self.user.is_active = False
-        self.user.save()
-        return 1, dict({'message': 'delete successfully'})
-
 
 class ReceptionProfile(models.Model):
     user = models.OneToOneField(User,
@@ -89,12 +91,6 @@ class ReceptionProfile(models.Model):
     class Meta:
         db_table = 'reception_profile'
 
-    def delete(self, using=None, keep_parents=False):
-        # Instead delete record disable user
-        self.user.is_active = False
-        self.user.save()
-        return 1, dict({'message': 'delete successfully'})
-
 
 class LaboratoryProfile(models.Model):
     user = models.OneToOneField(User,
@@ -106,9 +102,3 @@ class LaboratoryProfile(models.Model):
 
     class Meta:
         db_table = 'laboratory_profile'
-
-    def delete(self, using=None, keep_parents=False):
-        # Instead delete record disable user
-        self.user.is_active = False
-        self.user.save()
-        return 1, dict({'message': 'delete successfully'})

@@ -33,18 +33,8 @@
                         <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-user-md"></i><span>Registro</span>
-                                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="{% url 'accounts:register_rec' %}">Recepcionista</a></li>
-                                <li><a href="{% url 'accounts:register_doctor' %}">Doctor</a></li>
-                                <li><a href="{% url 'accounts:register_lab' %}">Laboratorio</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="{% url 'docapp:person_list' %}">Lista de personal</a></li>
+                        <li><a href="{% url 'accounts:register_personal' %}">Registro</a></li>
+                        <li><a href="{% url 'accounts:user_list' %}">Lista</a></li>
                     </ul>
                 </li>
             {% endif %}

@@ -15,7 +15,7 @@ class BaseUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name',)
+        fields = ('username', 'email', 'first_name', 'last_name', 'profile_type')
 
     def clean_password2(self):
         # Check if both password match
@@ -31,6 +31,24 @@ class BaseUserForm(forms.ModelForm):
         instance.password = self.cleaned_data.get('password2')
         if commit:
             instance.save()
+            # Save profile now
+            try:
+                if instance.profile_type == 'receptionist':
+                    info = {'user': instance}
+                    reception = ReceptionProfile(**info)
+                    reception.save()
+                elif instance.profile_type == 'laboratory':
+                    info = {'user': instance}
+                    laboratory = LaboratoryProfile(**info)
+                    laboratory.save()
+                elif instance.profile_type == 'doctor':
+                    info = {'user': instance}
+                    doctor = DoctorProfile(**info)
+                    # Save doctor
+                    doctor.save()
+            except IntegrityError:
+                instance.delete(destroy=True)
+                raise forms.ValidationError(message="Unable to save profile, check information", code='invalid')
         return instance
 
 
@@ -56,9 +74,10 @@ class BaseUserUpdateForm(forms.ModelForm):
         return instance
 
 
+"""
 # Profile creation forms
 class DoctorCreateForm(BaseUserForm):
-    """ Form to register doctor """
+    # Form to register doctor 
     general = forms.BooleanField(initial=False, label='General', widget=forms.CheckboxInput, required=False)
     visiometry = forms.BooleanField(initial=False, label='Visiometro', widget=forms.CheckboxInput, required=False)
     audiometry = forms.BooleanField(initial=False, label='Audiometro', widget=forms.CheckboxInput, required=False)
@@ -93,7 +112,7 @@ class DoctorCreateForm(BaseUserForm):
 
 
 class RecCreateForm(BaseUserForm):
-    """ Form to register Receptionist profile"""
+    # Form to register Receptionist profile
 
     def save(self, commit=True):
         instance = super(RecCreateForm, self).save(commit=False)
@@ -114,7 +133,7 @@ class RecCreateForm(BaseUserForm):
 
 
 class LabCreateForm(BaseUserForm):
-    """ Form to register Laboratory profile"""
+    # Form to register Laboratory profile
 
     def save(self, commit=True):
         instance = super(LabCreateForm, self).save(commit=False)
@@ -136,7 +155,7 @@ class LabCreateForm(BaseUserForm):
 
 # Profile update forms
 class DoctorUpdateForm(BaseUserUpdateForm):
-    """ Form to update doctor profile """
+    # Form to update doctor profile
     general = forms.BooleanField(initial=False, label='General', widget=forms.CheckboxInput, required=False)
     visiometry = forms.BooleanField(initial=False, label='Visiometro', widget=forms.CheckboxInput, required=False)
     audiometry = forms.BooleanField(initial=False, label='Audiometro', widget=forms.CheckboxInput, required=False)
@@ -211,3 +230,4 @@ class LabUpdateForm(BaseUserUpdateForm):
                 raise forms.ValidationError(message="Unable to save receptionist profile, check information",
                                             code='invalid')
         return instance
+"""
