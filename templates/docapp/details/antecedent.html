@@ -28,7 +28,7 @@
         <p>Fue atendido: {{ accident.atendido }}</p>
         <p>Calificado: {{ accident.calificado }}</p>
         <p>Descripcion: {{ accident.description }}</p>
-        <p>Registrado por: {{ accident.create_by }}</p>
+        <p>Registrado por: {{ accident.create_by.user }}</p>
     {% endfor %}
 {% else %}
     <h3>No registra Accidentes</h3>

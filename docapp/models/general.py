@@ -182,5 +182,5 @@ class JobAccidents(models.Model):
             'atendido': self.atendido,
             'calificado': self.calificado,
             'fecha': self.fecha,
-            'description': self.description
+            'description': self.description,
         }

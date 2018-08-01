@@ -14,7 +14,7 @@
             <li>
                 {{ antecedent }} - {{ antecedent.person.get_full_name }}
                 <a href="{% url 'docapp:detail_antecedent' antecedent_id=antecedent.id %}">Ver</a>
-                <a href="#">Editar</a>
+                <a href="{% url 'docapp:update_antecedent' antecedent_id=antecedent.id %}">Editar</a>
             </li>
         {% endfor %}
     </ul>
@@ -22,10 +22,6 @@
     <h2>No registra antecedentes </h2>
 {% endif %}
 <hr>
-{% if request.META.HTTP_REFERER %}
-    <a href="{{ request.META.HTTP_REFERER }}">Lista de empleados</a>
-{% else %}
-    <a href="{% url 'docapp:person_list' %}">Lista de empleados</a>
-{% endif %}
+<a href="{% url 'docapp:person_list' %}">Lista de empleados</a>
 </body>
 </html>

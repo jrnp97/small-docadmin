@@ -22,12 +22,7 @@
     {{ form|crispy }}
     <hr>
     <button type="submit">Registrar</button>
-
-    {% if request.META.HTTP_REFERER %}
-        <a href="{{ request.META.HTTP_REFERER }}">Cancelar</a>
-    {% else %}
-        <a href="{% url 'accounts:user_list' %}">Cancelar</a>
-    {% endif %}
+    <a href="{% url 'accounts:user_list' %}">Lista de usuarios</a>
 </form>
 </body>
 </html>
