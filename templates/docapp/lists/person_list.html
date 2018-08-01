@@ -134,14 +134,3 @@
     </div>
 
 {% endblock %}
-
-{% block scripts %}
-    {{ block.super }}
-    <script type="text/javascript">
-        $('selector').lobiPanel({
-        reload: false,
-        close: false,
-        editTitle: false
-    });
-    </script>
-{% endblock %}
