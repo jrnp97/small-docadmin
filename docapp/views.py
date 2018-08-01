@@ -419,6 +419,8 @@ class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, UpdateView):
 
     def _custom_save(self, form):
         antecedent = self.get_object()
+        form.create_by = self.request.user.reception_profile
+        form.person = antecedent.person
         instance = form.save()
         if instance:
             person_name = antecedent.person.get_full_name()
