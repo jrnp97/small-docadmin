@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+"""
 # Register your models here.
 
 from docapp.models import (Company, Person, ExamType, AntecedentJobs, Hazards, JobAccidents,
@@ -145,3 +146,4 @@ class OccupationalAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Occupational, OccupationalAdmin)
+"""

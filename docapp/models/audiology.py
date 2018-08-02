@@ -17,13 +17,7 @@ class Audiology(models.Model):
                                   related_name='audiology_forms')
 
     def __str__(self):
-        return "Audiology"
-
-    def get_exam_type(self):
-        return self.exam_type.name
-
-    def get_person(self):
-        return self.exam_type.person.name
+        return self.last_modify
 
     class Meta:
         db_table = "exam_audiology"
@@ -39,10 +33,11 @@ class Ananmesis(models.Model):
     )
     interpretacion = models.CharField(max_length=10, choices=INTER, null=False, blank=False)
 
-    audio_id = models.OneToOneField(Audiology, null=False, blank=False, on_delete=models.CASCADE)
+    audiology = models.OneToOneField(Audiology, null=False, blank=False,
+                                     on_delete=models.CASCADE, related_name='ananmesis')
 
 
-class AntecedentesPF(models.Model):
+class Ant_familiares(models.Model):
     # Familiares
     otalgia = models.BooleanField(default=False, null=False, blank=True)
     otaliquia_otorrea = models.BooleanField(default=False, null=False, blank=True)
@@ -63,6 +58,11 @@ class AntecedentesPF(models.Model):
     diabetes = models.BooleanField(default=False, null=False, blank=True)
     otro_familiar = models.TextField(null=True, blank=True)
 
+    audiology = models.OneToOneField(Audiology, null=False, blank=False,
+                                     on_delete=models.CASCADE, related_name='ant_familiares')
+
+
+class Ant_otros(models.Model):
     # Otros antecedentes
     antineoplasicos = models.BooleanField(default=False, null=False, blank=True)
     metales_pesados = models.BooleanField(default=False, null=False, blank=True)
@@ -74,7 +74,8 @@ class AntecedentesPF(models.Model):
     exposicion_mercurio = models.BooleanField(default=False, null=False, blank=True)
     otro = models.TextField(null=True, blank=True)
 
-    audio_id = models.OneToOneField(Audiology, null=False, blank=False, on_delete=models.CASCADE)
+    audiology = models.OneToOneField(Audiology, null=False, blank=False,
+                                     on_delete=models.CASCADE, related_name='ant_otros')
 
 
 class Exposiciones(models.Model):
@@ -86,35 +87,31 @@ class Exposiciones(models.Model):
     )
     # Uso
     audifonos = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
-    motocicleta = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
-    vehiculo_automotriz = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
-    maquinaria_pesada = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
-
-    # Tiempo exposicion
     audifonos_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
-    motocicleta_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
-    vehiculo_automotriz_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
-    maquinaria_pesada_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
-
-    # Frecuencia
     audifonos_frecuencia = models.PositiveIntegerField(null=True, blank=True)
-    motocicleta_frecuencia = models.PositiveIntegerField(null=True, blank=True)
-    vehiculo_automotriz_frecuencia = models.PositiveIntegerField(null=True, blank=True)
-    maquinaria_pesada_frecuencia = models.PositiveIntegerField(null=True, blank=True)
-
-    # Tiempo de uso
     audifonos_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
-    motocicleta_tiempo_uso= models.PositiveIntegerField(null=True, blank=True)
-    vehiculo_automotriz_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
-    maquinaria_pesada_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
-
-    # EPA
     audifonos_epa = models.PositiveIntegerField(null=True, blank=True)
+
+    motocicleta = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
+    motocicleta_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    motocicleta_frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    motocicleta_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
     motocicleta_epa = models.PositiveIntegerField(null=True, blank=True)
+
+    vehiculo_automotriz = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
+    vehiculo_automotriz_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    vehiculo_automotriz_frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    vehiculo_automotriz_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
     vehiculo_automotriz_epa = models.PositiveIntegerField(null=True, blank=True)
+
+    maquinaria_pesada = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
+    maquinaria_pesada_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    maquinaria_pesada_frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    maquinaria_pesada_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
     maquinaria_pesada_epa = models.PositiveIntegerField(null=True, blank=True)
 
-    audio_id = models.OneToOneField(Audiology, null=False, blank=False, on_delete=models.CASCADE)
+    audiology = models.OneToOneField(Audiology, null=False, blank=False,
+                                     on_delete=models.CASCADE, related_name='exposiciones')
 
 
 class EstadoActual(models.Model):
@@ -125,38 +122,35 @@ class EstadoActual(models.Model):
     )
     # Uso
     ruido_molestia = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
-    volumen_tv = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
-    frases_repetidas = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
-    escucha = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
-    escucha_ruido = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
-
-    # Tiempo exposicion
     ruido_molestia_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
-    volumen_tv_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
-    frases_repetidas_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
-    escucha_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
-    escucha_ruido_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
-
-    # Frecuencia
-    aruido_molestia_frecuencia = models.PositiveIntegerField(null=True, blank=True)
-    volumen_tv_frecuencia = models.PositiveIntegerField(null=True, blank=True)
-    frases_repetidas_frecuencia = models.PositiveIntegerField(null=True, blank=True)
-    escucha_frecuencia = models.PositiveIntegerField(null=True, blank=True)
-    escucha_ruido_frecuencia = models.PositiveIntegerField(null=True, blank=True)
-
-    # Tiempo de uso
+    ruido_molestia_frecuencia = models.PositiveIntegerField(null=True, blank=True)
     ruido_molestia_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
-    volumen_tv_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
-    frases_repetidas_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
-    escucha_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
-    escucha_ruido_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
-
-    # EPA
     ruido_molestia_epa = models.PositiveIntegerField(null=True, blank=True)
-    volumen_tv_epa = models.PositiveIntegerField(null=True, blank=True)
-    frases_repetidas_epa = models.PositiveIntegerField(null=True, blank=True)
-    escucha_epa = models.PositiveIntegerField(null=True, blank=True)
-    escucha_ruido_epa = models.PositiveIntegerField(null=True, blank=True)
 
-    audio_id = models.OneToOneField(Audiology, null=False, blank=False, on_delete=models.CASCADE)
+    volumen_tv = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
+    volumen_tv_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    volumen_tv_frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    volumen_tv_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
+    volumen_tv_epa = models.PositiveIntegerField(null=True, blank=True)
+
+    frases_repetidas = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
+    frases_repetidas_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    frases_repetidas_frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    frases_repetidas_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
+    frases_repetidas_epa = models.PositiveIntegerField(null=True, blank=True)
+
+    escucha = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
+    escucha_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    escucha_frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    escucha_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
+    escucha_epa = models.PositiveIntegerField(null=True, blank=True)
+
+    escucha_ruido = models.CharField(max_length=10, choices=OPTIONS, null=False, blank=False)
+    escucha_ruido_tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    escucha_ruido_frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    escucha_ruido_tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
+    escucha_ruido_epa = models.PositiveIntegerField(null=True, blank=True)
+    # EPA
+    audiology = models.OneToOneField(Audiology, null=False, blank=False,
+                                     on_delete=models.CASCADE, related_name='estado_actual')
 

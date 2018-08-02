@@ -7,9 +7,7 @@ from django.core.exceptions import SuspiciousOperation
 from django.forms.models import BaseInlineFormSet
 
 from docapp.models import Hazards, JobAccidents
-from docapp.forms import (hazards_inlineformset, accidents_formset,
-                          sintomas_section, ant_enfermedad_section, ant_extra_exams, ant_uso_lentes_section,
-                          agudeza_section, cronomatica_section)
+from docapp.forms import (hazards_inlineformset, accidents_formset, )
 
 
 class ListFilterView(ListView, SingleObjectMixin):
@@ -207,20 +205,24 @@ class AntecedentPostManager(object):
 class FormsetPostManager(object):
     def post(self, request, *args, **kwargs):
         """ Overwrite post method to manage formset """
-        forms_sets = {key: formset_class(self.request.POST) for key, formset_class in self.extra_context.items() if
-                      issubclass(formset_class, BaseInlineFormSet)}
+        form_sets = {}
+        for key, value in self.extra_context.items():
+            print(f"{key} = {value}")
+            if issubclass(value.__class__, BaseInlineFormSet):
+                form_sets.update({key: value(self.request.POST)})
 
         temp = []
-        for key, formset in forms_sets.items():
+        for key, formset in form_sets.items():
             val = not formset.is_valid()
-            if val:
-                messages.error(self.request, message=f"Error, Guardando {key} data mal ingresada")
-            temp.append(val)
+        if val:
+            messages.error(self.request, message=f"Error, Guardando {key} data mal ingresada")
+        temp.append(val)
 
         if any(temp):
             # Update formsets information (append errors and data)
-            self.extra_context = forms_sets.copy()
-            return self.form_invalid(form=self.get_form())
+            self.extra_context = form_sets.copy()
+        return self.form_invalid(form=self.get_form())
+
 
         object_parent = None
         if hasattr(self, '_custom_save'):
@@ -228,7 +230,7 @@ class FormsetPostManager(object):
             object_parent = self._custom_save(form=self.get_form())
             if not object_parent:
                 # Update formsets information (append errors and data)
-                self.extra_context = forms_sets.copy()
+                self.extra_context = form_sets.copy()
                 return self.form_invalid(form=self.get_form())
 
         response = super(FormsetPostManager, self).post(request, *args, **kwargs)
@@ -237,7 +239,7 @@ class FormsetPostManager(object):
             object_parent = self.object  # Is update process
 
         """ Managing formsets """
-        for formset in forms_sets.values():
+        for formset in form_sets.values():
             temp = []
             for form in formset:
                 data = form.cleaned_data.copy()

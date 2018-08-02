@@ -26,5 +26,7 @@ urlpatterns = [
     url(r'^register/exam/(?P<person_id>[0-9]+)/$', views.register_exam, name='register_exam'),
     url(r'^exams/$', views.exam_list, name='exam_list'),
 
-    url(r'^register/(?P<exam_id>[0-9]+)/visiometry/$', views.register_visiometry, name='register_visiometry')
+    # Registro de examanes
+    url(r'^register/(?P<exam_id>[0-9]+)/visiometry/$', views.register_visiometry, name='register_visiometry'),
+    url(r'^register/(?P<exam_id>[0-9]+)/audiology/$', views.register_audiology, name='register_audiology')
 ]

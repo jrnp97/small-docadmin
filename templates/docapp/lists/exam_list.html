@@ -14,10 +14,12 @@
                     <li>Tipo Examen: {{ exam.name }}</li>
                     <li>Estado: {{ exam.state }}</li>
                     <li>Progreso: {{ exam.get_process }}%</li>
-                    <li><a href="{% url 'docapp:register_visiometry' exam_id=exam.id %}">Visiometria</a></li>
-                    <li><a href="table.html">Audiologia</a></li>
-                    <li><a href="table.html">Audiometria</a></li>
-                    <li><a href="table.html">Ocupacional</a></li>
+                    {% if request.user.doctor_profile %}
+                        <li><a href="{% url 'docapp:register_visiometry' exam_id=exam.id %}">Visiometria</a></li>
+                        <li><a href="{% url 'docapp:register_audiology' exam_id=exam.id %}">Audiologia</a></li>
+                        <li><a href="table.html">Audiometria</a></li>
+                        <li><a href="table.html">Ocupacional</a></li>
+                    {% endif %}
                 </ul>
             </li>
             <hr>
