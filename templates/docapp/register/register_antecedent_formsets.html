@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% load crispy_forms_tags %}
+    <meta charset="UTF-8">
+    <title>Registro</title>
+</head>
+<body>
+<h1>Registrando antecedente a {{ antecedent.person.get_full_name }}</h1>
+<hr>
+{% if messages %}
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+    <hr>
+{% endif %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <hr>
+    <h2> Riesgos </h2>
+    <!-- Riesgos Section -->
+    {{ hazard_section.management_form }}
+
+    {% for hazard in hazard_section.forms %}
+        <div class="hazard_section">
+            {{ hazard|crispy }}
+        </div>
+    {% endfor %}
+
+    {% if hazard_section.non_form_errors %}
+        <hr>
+        {% for error in accident_formset.non_form_errors %}
+            {{ error|escape }}
+        {% endfor %}
+    {% endif %}
+    <hr>
+    <!-- End Riesgo Section -->
+    <h2>Accidentes</h2>
+
+
+    <div class="accident_formset">
+        {% for accident_form in accident_formset %}
+            {{ accident_form.id }}
+            {% if accident_form.instance.pk %}
+                {{ accident_form.DELETE }}
+            {% endif %}
+            {{ accident_form|crispy }}
+            <hr>
+        {% endfor %}
+    </div>
+
+    {{ accident_formset.management_form }}
+
+    {% if accident_formset.non_form_errors %}
+        <hr>
+        {% for error in accident_formset.non_form_errors %}
+            {{ error|escape }}
+        {% endfor %}
+    {% endif %}
+
+    <hr>
+    <button type="submit"> Guardar</button>
+    <a href="{% url 'docapp:dashboard' %}">Inicio</a>
+</form>
+
+<script type="application/javascript" src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>
+<script type="application/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
+<script type="text/javascript">
+    $('.accident_formset').formset({
+        prefix: '{{ accident_formset.prefix }}',
+        formCssClass: 'dynamic-formset2'
+    });
+</script>
+</body>
+</html>

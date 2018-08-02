@@ -1,0 +1,127 @@
+{% extends 'base/base_dashboard.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Registro | Personal {% endblock %}
+
+
+{% block content_header %}
+    <div class="header-icon">
+        <i class="pe-7s-note2"></i>
+    </div>
+    <div class="header-title">
+        <h1>Registro Personal</h1>
+        <small>Ingrese informacion correspondiente</small>
+        <ol class="breadcrumb hidden-xs">
+            <li><a href="{% url 'docapp:dashboard' %}"><i class="pe-7s-home"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </div>
+{% endblock %}
+
+{% block content_main %}
+    <div class="row">
+        <div class="col-sm-12 lobipanel-parent-sortable ui-sortable" data-lobipanel-child-inner-id="QZiPB2LHrb">
+
+            <div class="panel panel-bd lobidisable lobidrag lobipanel lobipanel-sortable" data-inner-id="QZiPB2LHrb"
+                 data-index="0">
+
+                <div class="panel-heading ui-sortable-handle">
+                    <div class="panel-title">
+                        <h4>Formulario Personal</h4>
+                        {% if messages %}
+                            <div class="row">
+                                <div class="panel-header">
+                                    <ul>
+                                        {% for message in messages %}
+                                            <li>{{ message|escape }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            <hr>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <form class="col-sm-12" method="POST">
+                        {% csrf_token %}
+
+                        <div class="col-sm-6 form-group">
+                            <label>Nombre de usuario</label>
+                            <input type="text" class="form-control" name="{{ form.username.name }}"
+                                   placeholder="Enter firstname" 
+                                   {% if form.username.value %}
+                                   value="{{ form.username.value }}"
+                                   {% endif %} 
+                                   required="">
+                        </div>
+
+                        <div class="col-sm-6 form-group">
+                            <label>Nombres</label>
+                            <input type="text" class="form-control" name="{{ form.first_name.name }}"
+                                   placeholder="Enter firstname" 
+                                   {% if form.first_name.value %}
+                                   value="{{ form.first_name.value }}"
+                                   {% endif %} 
+                                   required="">
+                        </div>
+
+                        <div class="col-sm-6 form-group">
+                            <label>Apellidos</label>
+                            <input type="text" class="form-control" name="{{ form.last_name.name }}"
+                                   placeholder="Enter firstname" 
+                                   {% if form.last_name.value %}
+                                   value="{{ form.last_name.value }}"
+                                   {% endif %} 
+                                   required="">
+                        </div>
+
+                        <div class="col-sm-6 form-group">
+                            <label>Correo Electronico</label>
+                            <input type="email" class="form-control" name="{{ form.email.name }}"
+                                   placeholder="Enter firstname" 
+                                   {% if form.email.value %}
+                                   value="{{ form.email.value }}"
+                                   {% endif %} 
+                                   required="">
+                        </div>
+
+                        {% if form.password1 and form.password2 %}
+                        <div class="col-sm-6 form-group">
+                            <label>Contraseña</label>
+                            <input type="password" class="form-control" name="{{ form.password1.name }}"
+                                   placeholder="Enter firstname" required="">
+                        </div>
+
+                        <div class="col-sm-6 form-group">
+                            <label>Confirme Contraseña</label>
+                            <input type="password" class="form-control" name="{{ form.password2.name }}"
+                                   placeholder="Enter firstname" required="">
+                        </div>
+                        {% endif %}
+
+                        {% if form.profile_type %}
+                        <div class="col-sm-6 form-group">
+                            <label>Tipo Personal</label>
+                            <select class="form-control" id="exampleSelect1" name="{{ form.profile_type.name }}" size="1">
+                                {% for option in form.profile_type.field.choices %}
+                                    <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+
+                        <div class="col-sm-12 reset-button">
+                            <hr>
+                            <!--a href="#" class="btn btn-warning">Reset</a-->
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

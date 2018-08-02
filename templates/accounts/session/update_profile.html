@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load crispy_forms_tags %}
+    <meta charset="UTF-8">
+    <title>Update Profile</title>
+</head>
+<body>
+
+<hr>
+{% if messages %}
+    <ul>
+        {% for message in messages %}
+            <li>{{ message|escape }}</li>
+        {% endfor %}
+    </ul>
+    <hr>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <hr>
+    <button type="submit">Registrar</button>
+    {% if request.META.HTTP_REFERER %}
+        <a href="{{ request.META.HTTP_REFERER }}">Cancelar</a>
+    {% else %}
+        <a href="{% url 'accounts:show_profile' user_id=request.user.id %}">Cancelar</a>
+    {% endif %}
+</form>
+</body>
+</html>

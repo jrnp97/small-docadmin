@@ -1,0 +1,148 @@
+<<<<<<< HEAD
+{% extends 'base/base_dashboard.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Lista | Usuarios {% endblock %}
+
+
+{% block content_header %}
+    <div class="header-icon">
+        <i class="pe-7s-note2"></i>
+    </div>
+    <div class="header-title">
+        <h1>Lista Usuarios</h1>
+        <small>Lista de usuarios registrados</small>
+        <ol class="breadcrumb hidden-xs">
+            <li><a href="{% url 'docapp:dashboard' %}"><i class="pe-7s-home"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </div>
+{% endblock %}
+
+{% block content_main %}
+
+
+    <div class="row">
+        <div class="col-sm-12 lobipanel-parent-sortable ui-sortable" data-lobipanel-child-inner-id="QZiPB2LHrb">
+
+            <div class="panel panel-bd lobidrag lobipanel lobipanel-sortable" data-inner-id="QZiPB2LHrb"
+                 data-index="0">
+
+                <div class="panel-heading ui-sortable-handle">
+                    <div class="btn-group">
+                        <a class="btn btn-success" href="{% url 'accounts:register_personal' %}"> <i
+                                class="fa fa-plus"></i>Añadir usuario</a>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="panel-header">
+
+                            <div class="col-sm-6">
+                                <!--div class="dataTables_length" id="example_length">
+                                    <label>Mostrar <select name="example_length">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select> registros por pagina </label>
+                                </div-->
+                            </div>
+
+
+
+                            <div class="col-sm-6">
+                                <div class="dataTables_length">
+                                    <div class="input-group custom-search-form">
+                                        <input class="form-control" placeholder="search.." type="search">
+                                        <span class="input-group-btn">
+                                                      <button class="btn btn-primary" type="button">
+                                                          <span class="glyphicon glyphicon-search"></span>
+                                                      </button>
+                                                  </span>
+                                    </div><!-- /input-group -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if user_list %}
+
+                        <div class="table-responsive text-center">
+                            <table class="table table-bordered table-hover">
+                                <thead class="success">
+                                <tr>
+                                    <th>Nombre de usuario</th>
+                                    <th>Nombres</th>
+                                    <th>Apellidos</th>
+                                    <th>Correo Electronico</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Actualizacion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for user in user_list %}
+                                    <tr>
+                                        <td>{{ user.username }}</td>
+                                        <td>{{ user.first_name }}</td>
+                                        <td>{{ user.last_name }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.profile_type }}</td>
+                                        <td>
+                                            {% if user.is_active %}
+                                                <span class="label-success label label-default">Active</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'accounts:detail_personal' user_id=user.id %}">
+                                                Detalle</a>
+                                            <a href="{% url 'accounts:update_personal' user_id=user.id %}">
+                                                <button class="btn btn-info btn-xs" data-toggle="tooltip"
+                                                        data-placement="left" title="" data-original-title="Update">
+                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+
+                                                </button>
+                                            </a>
+
+
+                                            <a href="{% url 'accounts:delete_personal' user_id=user.id %}">
+                                                <button class="btn btn-danger btn-xs" data-toggle="tooltip"
+                                                        data-placement="right" title="" data-original-title="Delete">
+                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+
+                                                </button>
+                                            </a>
+                                        </td>
+
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="page-nation text-right">
+                            <ul class="pagination pagination-large">
+                                <li class="disabled"><span>«</span></li>
+                                <li class="active"><span>1</span></li>
+                                <li><a href="#">2</a></li>
+                                <li class="disabled"><span>...</span></li>
+                                <li>
+                                </li>
+                                <li><a rel="next" href="#">Next</a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <h2>No se han registrado usuarios</h2>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

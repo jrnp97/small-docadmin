@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Examenes</title>
+</head>
+<body>
+{% if exam_list %}
+    <ul>
+        {% for exam in exam_list %}
+            <li>
+                <ul>
+                    <li>Persona: {{ exam.person }}</li>
+                    <li>Tipo Examen: {{ exam.name }}</li>
+                    <li>Estado: {{ exam.state }}</li>
+                    <li>Progreso: {{ exam.get_process }}%</li>
+                    <li><a href="{% url 'docapp:register_visiometry' exam_id=exam.id %}">Visiometria</a></li>
+                    <li><a href="table.html">Audiologia</a></li>
+                    <li><a href="table.html">Audiometria</a></li>
+                    <li><a href="table.html">Ocupacional</a></li>
+                </ul>
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+{% else %}
+    <h1>No se han registrado examenes</h1>
+{% endif %}
+</body>
+</html>

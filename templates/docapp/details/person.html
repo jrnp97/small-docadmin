@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Pacientes</title>
+</head>
+<body>
+<h1>{{ person.get_full_name }}</h1>
+<hr>
+<p>Identificacion: {{ person.identification }}</p>
+<p>Lugar de naciemiento: {{ person.born_place }}</p>
+<p>Fecha de nacimiento: {{ person.born_date }}</p>
+<p>Sexo: {{ person.sex }}</p>
+<p>Estado Civil: {{ person.civil_state }}</p>
+<p>Numero de hijos: {{ person.number_sons }}</p>
+<p>Direccion: {{ person.direction }}</p>
+<p>Estrato: {{ person.stratus }}</p>
+<p>Telefono: {{ person.land_line }}</p>
+<p>Celular: {{ person.cellphone }}</p>
+<p>Ocupación: {{ person.occupation }}</p>
+<p>Cargo: {{ person.position }}</p>
+<p>Empresa donde labora: {{ person.company }}</p>
+<p>Estudiante en entramiento: {{ person.training_student }}</p>
+<p>Aprendiz Sena: {{ person.sena_learner }}</p>
+
+<p>Registrado en el sistema por: {{ person.create_by.user.username }}</p>
+<p>Ultimo vez actualizado: {{ person.last_modify }}</p>
+<hr>
+<h2>Antecedentes</h2>
+{% if person.get_antecedents %}
+    <ul>
+        {% for antecedent in person.get_antecedents %}
+            <li>
+                {{ antecedent }}
+                <a href="#">Ver detalles</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p><b>No registra</b></p>
+{% endif %}
+<hr>
+<h2>Examenes Realizados</h2>
+{% if person.get_exams %}
+    <ul>
+        {% for exam in person.get_exams %}
+            <li>
+                <p>Tipo: {{ exam.name }}</p>
+                <p>Realizado: {{ exam.create_date }}</p>
+                <p><a href="#">Ver detalles</a></p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No registra</p>
+{% endif %}
+<hr>
+<h3>Acciones</h3>
+<a href="{% url 'docapp:update_person' person_id=person.id %}">Editar</a>
+<a href="#">Añadir antecedentes</a>
+<hr>
+{% if request.META.HTTP_REFERER %}
+    <a href="{{ request.META.HTTP_REFERER }}">Lista de personas</a>
+{% else %}
+    <a href="{% url 'docapp:person_list' %}">Lista de personas</a>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile Detail</title>
+</head>
+<body>
+<h1>{{ instance.user.get_full_name }}</h1>
+<hr>
+<h2>Basic information</h2>
+<p><b>First Name:</b> {{ instance.user.first_name }}</p>
+<p><b>Last Name:</b> {{ instance.user.last_name }}</p>
+<p><b>Email:</b> {{ instance.user.email }}</p>
+<p><b>Active:</b> {{ instance.user.is_active }}</p>
+<p><b>Last Login:</b> {{ instance.user.last_login }}</p>
+<p><b>Role:</b> {{ instance.user.profile_type }}</p>
+{% if instance.user.profile_type == 'doctor' %}
+    <hr>
+    <h2>Doctor status</h2>
+    <ul>
+        <li><b>General:</b> {{ instance.general }}</li>
+        <li><b>Visiometry:</b> {{ instance.visiometry }}</li>
+        <li><b>Audiometry:</b> {{ instance.audiometry }}</li>
+        <li><b>Audiology:</b> {{ instance.audiology }}</li>
+    </ul>
+    <hr>
+    <h2>Acciones</h2>
+    <a role="button" href="{% url 'accounts:update_personal' user_id=instance.user.id %}">Edit profile</a>
+    <a role="button" href="{% url 'accounts:delete_personal' user_id=instance.user.id %}">Delete Profile</a>
+
+    <a href="{% url 'accounts:user_list' %}">Cancelar</a>
+<hr>
+</body>
+</html>

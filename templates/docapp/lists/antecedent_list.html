@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load crispy_forms_tags %}
+    <meta charset="UTF-8">
+    <title>Antecedentes</title>
+</head>
+<body>
+<h1>Antecedentes de {{ person }}</h1>
+<hr>
+{% if antecedent_list %}
+    <ul>
+        {% for antecedent in antecedent_list %}
+            <li>
+                {{ antecedent }} - {{ antecedent.person.get_full_name }}
+                <a href="{% url 'docapp:detail_antecedent' antecedent_id=antecedent.id %}">Ver</a>
+                <a href="{% url 'docapp:update_antecedent' antecedent_id=antecedent.id %}">Editar</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <h2>No registra antecedentes </h2>
+{% endif %}
+<hr>
+<a href="{% url 'docapp:person_list' %}">Lista de empleados</a>
+</body>
+</html>
