@@ -1,10 +1,13 @@
-from django.shortcuts import Http404
+from django.shortcuts import Http404, redirect
 from django.views.generic import ListView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib import messages
 from django.db import transaction, IntegrityError
-from django.core.exceptions import SuspiciousOperation
+from django.core.exceptions import SuspiciousOperation, ObjectDoesNotExist
 from django.forms.models import BaseInlineFormSet
+from django.core.urlresolvers import reverse_lazy
+
+from docapp.models import ExamType
 
 
 class ListFilterView(ListView, SingleObjectMixin):
@@ -126,7 +129,8 @@ class FormsetPostManager(object):
         for key, value in self.extra_context.items():
             print(f"{key} = {value}")
             if issubclass(value.__class__ if value.__class__ != type else value, BaseInlineFormSet):
-                form_sets.update({key: value(self.request.POST)})
+                form_sets.update({key: value(self.request.POST, self.request.FILES)})
+                # TODO Make a constraint to only put request.FILES to formset must have
 
         temp = []
         for key, formset in form_sets.items():
@@ -178,3 +182,85 @@ class FormsetPostManager(object):
                 raise SuspiciousOperation(message='Error Informacion Erronea')
 
         return response
+
+
+# Register exams
+class BaseRegisterExamBehavior:
+    pk_url_kwarg = 'exam_id'
+    model_to_filter = ExamType
+    context_object_2_name = 'exam'
+    success_url = reverse_lazy('docapp:exam_list')
+
+    def _custom_save(self, form):
+        exam_type = self.get_object()
+        form.create_by = self.request.user.doctor_profile
+        form.exam_type = exam_type
+        instance = form.save()
+        if instance:
+            messages.success(self.request, message=f"Examen de {self.extra_context.get('exam_name')}"
+                                                   f" del proceso #{exam_type.id} "
+                                                   f"registrado exitosamente")
+        return instance
+
+    def get(self, request, *args, **kwargs):
+        exam_id = kwargs.get('exam_id')
+        try:
+            exam = ExamType.objects.get(pk=exam_id)
+        except ObjectDoesNotExist:
+            pass
+        else:
+            child_name = self.extra_context.get('parent_object_key')
+            if hasattr(exam, child_name):
+                messages.info(request,
+                              message=f"Los resultados de {self.extra_context.get('exam_name')} estan registrados"
+                                      f", actualice si desea")
+                child_exam = getattr(exam, child_name)
+                return redirect('docapp:update_%s' % child_name, pk=child_exam.id)
+
+        return super(BaseRegisterExamBehavior, self).get(request, *args, **kwargs)
+
+
+# Update exams
+class BaseExamUpdateBehavior:
+    success_url = reverse_lazy('docapp:person_list')
+    extra_content = None
+
+    def form_valid(self, form):
+        """ Overwrite form_valid to add missing information"""
+        object_saved = self.get_object()
+        form.create_by = self.request.user.reception_profile
+        form.exam_type = object_saved.exam_type
+        return super(BaseExamUpdateBehavior, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        """ Overwrite to initialize form information putting initial data """
+        actual_object = self.get_object()
+        form_sets = {}
+        for key, value in self.extra_context.items():
+            """ Validating if value is a InlineFormSet and don't have initial data """
+            to_check = value.__class__ if value.__class__ != type else value
+            if issubclass(to_check, BaseInlineFormSet) and value is to_check:
+                form_sets.update({key: value})
+
+        if len(form_sets) > 0:
+            # Get initial data
+            alias = self.extra_context.get('parent_object_key')
+            initial_data = []
+            for formset in form_sets.values():
+                try:
+                    data = formset.model.objects.get(**{alias: actual_object})
+                except ObjectDoesNotExist:
+                    initial_data.append([])
+                else:
+                    dict_data = vars(data)
+                    # Delete unneeded info
+                    dict_data.pop('_state', None)
+                    dict_data.pop('id', None)
+                    initial_data.append([dict_data])
+            # put data on extra_content
+            for key, initial in zip(form_sets.keys(), initial_data):
+                formset_factory = self.extra_context[key]
+                self.extra_context[key] = formset_factory(initial=initial)
+
+        kwargs.update(self.extra_context)  # Update kwargs
+        return super(BaseExamUpdateBehavior, self).get_context_data(**kwargs)

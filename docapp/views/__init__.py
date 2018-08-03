@@ -3,4 +3,5 @@ from .receptionist import (dashboard, register_person, update_person, detail_per
                            register_antecedent, update_antecedent, detail_antecedent, person_antecedent_list,
                            register_exam, exam_list)
 
-from .doctor import register_visiometry, register_audiology
+from .doctor import (register_visiometry, register_audiology, register_audiometry, update_visiometry, update_audiology,
+                     update_audiometry)

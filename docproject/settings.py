@@ -132,3 +132,6 @@ AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = reverse_lazy('accounts:login')
 LOGIN_REDIRECT_URL = reverse_lazy('docapp:dashboard')
 LOGOUT_REDIRECT_URL = reverse_lazy('accounts:login')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

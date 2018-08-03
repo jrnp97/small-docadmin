@@ -3,4 +3,5 @@ from .visiometria import (VisioForm, sintomas_section, ant_enfermedad_section, a
                           ant_extra_exams, agudeza_section, cronomatica_section)
 from .audiology import (AudioForm, ananmesis_section, ant_familiar_section, ant_otro_section, exposicion_section,
                         estado_actual_section)
+from .audiometry import (AudiometriaForm, otoscopia_section, information_section)
 
