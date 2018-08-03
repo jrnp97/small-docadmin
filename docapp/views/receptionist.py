@@ -8,7 +8,7 @@ from docapp.forms import CompanyForm, PersonForm, AntecedentForm, hazards_inline
 from docapp.models import Company, Person, AntecedentJobs, Hazards, JobAccidents, ExamType
 
 from .chekers import CheckReceptionist, CheckRecpOrDoctor
-from .customs import ListFilterView, FormViewPutExtra, AntecedentPostManager
+from .customs import ListFilterView, FormViewPutExtra, FormsetPostManager
 
 
 # Create your views here.
@@ -112,7 +112,7 @@ class RegisterPerson(CheckReceptionist, LoginRequiredMixin, FormViewPutExtra):
     def form_valid(self, form):
         company = self.get_object()
         form.company = company
-        form.create_by = selvision_parentf.request.user.reception_profile
+        form.create_by = self.request.user.reception_profile
         instance = form.save()
         if instance:
             messages.success(self.request, message="Persona registrada exitosamente")
@@ -122,7 +122,7 @@ class RegisterPerson(CheckReceptionist, LoginRequiredMixin, FormViewPutExtra):
 register_person = RegisterPerson.as_view()
 
 
-class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, AntecedentPostManager, FormViewPutExtra):
+class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManager, FormViewPutExtra):
     pk_url_kwarg = 'person_id'
     form_class = AntecedentForm
     model = AntecedentJobs
@@ -130,7 +130,8 @@ class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, AntecedentPostMa
     success_url = reverse_lazy('docapp:person_list')
     model_to_filter = Person
     context_object_2_name = 'person'
-    extra_context = {'accident_formset': accidents_formset,
+    extra_context = {'parent_object_key': 'work',
+                     'accident_formset': accidents_formset,
                      'hazard_section': hazards_inlineformset}
 
     def _custom_save(self, form):
@@ -189,13 +190,16 @@ class UpdatePerson(CheckReceptionist, LoginRequiredMixin, UpdateView):
 update_person = UpdatePerson.as_view()
 
 
-class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, AntecedentPostManager, UpdateView):
+class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManager, UpdateView):
     pk_url_kwarg = 'antecedent_id'
     context_object_name = 'antecedent'
     model = AntecedentJobs
     form_class = AntecedentForm
     template_name = 'docapp/register/register_antecedent_formsets.html'
     success_url = reverse_lazy('docapp:person_list')
+    extra_context = {'parent_object_key': 'work',
+                     'accident_formset': accidents_formset,
+                     'hazard_section': hazards_inlineformset}
 
     def form_valid(self, form):
         """ Overwrite form_valid to add missing information"""
@@ -214,9 +218,10 @@ class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, AntecedentPostMana
             accident_initial_data.append(accident.as_dict())
         print(accident_initial_data)
         print(len(accident_initial_data))
-        extra_context = {'hazard_section': hazards_inlineformset(initial=hazard_initial_data),
+        self.extra_context = {'parent_object_key': 'work',
+                         'hazard_section': hazards_inlineformset(initial=hazard_initial_data),
                          'accident_formset': accidents_formset(initial=accident_initial_data)}
-        kwargs.update(extra_context)
+        kwargs.update(self.extra_context)
         return super(UpdateAntecedent, self).get_context_data(**kwargs)
 
 

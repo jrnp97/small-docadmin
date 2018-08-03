@@ -6,9 +6,6 @@ from django.db import transaction, IntegrityError
 from django.core.exceptions import SuspiciousOperation
 from django.forms.models import BaseInlineFormSet
 
-from docapp.models import Hazards, JobAccidents
-from docapp.forms import (hazards_inlineformset, accidents_formset, )
-
 
 class ListFilterView(ListView, SingleObjectMixin):
     """ Custom ListView to filter element only by pk_kwarg """
@@ -121,117 +118,37 @@ class FormViewPutExtra(FormView, SingleObjectMixin):
         return kwargs
 
 
-class AntecedentPostManager(object):
-    def post(self, request, *args, **kwargs):
-        """ Overwrite post method to manage formsets """
-        # Validate formsets
-        hazard_formset = hazards_inlineformset(self.request.POST)
-        accident_formset = accidents_formset(self.request.POST)
-
-        if not hazard_formset.is_valid():
-            messages.error(self.request, message="Error, Riesgos mal ingresados.")
-
-        if not accident_formset.is_valid():
-            messages.error(self.request, message="Error, Accidentes mal ingresados")
-
-        if not hazard_formset.is_valid() or not accident_formset.is_valid():
-            # Update formsets information (append errors and data)
-            self.extra_context = {'accident_formset': accidents_formset,
-                                  'hazard_section': hazards_inlineformset}
-
-            return self.form_invalid(form=self.get_form())
-
-        antecedent_work = None
-        if hasattr(self, '_custom_save'):
-            """ Used only on Register Case """
-            antecedent_work = self._custom_save(form=self.get_form())
-            if not antecedent_work:
-                # Update formsets information (append errors and data)
-                self.extra_context = {'accident_formset': accidents_formset,
-                                      'hazard_section': hazards_inlineformset}
-                return self.form_invalid(form=self.get_form())
-
-        response = super(AntecedentPostManager, self).post(request, *args, **kwargs)
-        if antecedent_work is None:
-            antecedent_work = self.object  # Is update process
-        """ Managing formsets """
-        # Get Hazard formset
-        hazards = []
-        for hazard in hazard_formset:
-            data = {
-                'fisico': hazard.cleaned_data.get('fisico'),
-                'quimico': hazard.cleaned_data.get('quimico'),
-                'mecanico': hazard.cleaned_data.get('mecanico'),
-                'ergonomico': hazard.cleaned_data.get('ergonomico'),
-                'electrico': hazard.cleaned_data.get('electrico'),
-                'psicologico': hazard.cleaned_data.get('psicologico'),
-                'work': antecedent_work,
-                'locativo': hazard.cleaned_data.get('locativo')
-            }
-            hazards.append(Hazards(**data))
-
-        try:
-            with transaction.atomic():
-                Hazards.objects.filter(work=antecedent_work).delete()
-                Hazards.objects.bulk_create(hazards)
-        except IntegrityError:
-            messages.error(self.request, message="Error to save riesgos")
-
-        # Accident formset
-        accidents = []
-        for accident in accident_formset:
-            data = {
-                'secuelas': accident.cleaned_data.get('secuelas'),
-                'tipo': accident.cleaned_data.get('tipo'),
-                'atendido': accident.cleaned_data.get('atendido'),
-                'calificado': accident.cleaned_data.get('calificado'),
-                'fecha': accident.cleaned_data.get('fecha'),
-                'description': accident.cleaned_data.get('description'),
-                'work': antecedent_work,
-                'create_by': self.request.user.reception_profile
-            }
-            accidents.append(JobAccidents(**data))
-
-        try:
-            with transaction.atomic():
-                JobAccidents.objects.filter(work=antecedent_work).delete()
-                JobAccidents.objects.bulk_create(accidents)
-        except IntegrityError:
-            messages.error(self.request, message='Error to save accidents')
-
-        return response
-
-
 class FormsetPostManager(object):
     def post(self, request, *args, **kwargs):
         """ Overwrite post method to manage formset """
+        parent_form = self.get_form()
         form_sets = {}
         for key, value in self.extra_context.items():
             print(f"{key} = {value}")
-            if issubclass(value.__class__, BaseInlineFormSet):
+            if issubclass(value.__class__ if value.__class__ != type else value, BaseInlineFormSet):
                 form_sets.update({key: value(self.request.POST)})
 
         temp = []
         for key, formset in form_sets.items():
             val = not formset.is_valid()
-        if val:
-            messages.error(self.request, message=f"Error, Guardando {key} data mal ingresada")
-        temp.append(val)
+            if val:
+                messages.error(self.request, message=f"Error, Guardando {key} data mal ingresada")
+            temp.append(val)
 
         if any(temp):
             # Update formsets information (append errors and data)
             self.extra_context = form_sets.copy()
-        return self.form_invalid(form=self.get_form())
-
+            return self.form_invalid(form=parent_form)
+            # TODO Check if form_invalid method work with self.object when is None
 
         object_parent = None
         if hasattr(self, '_custom_save'):
             """ Used only on Register Case """
-            object_parent = self._custom_save(form=self.get_form())
+            object_parent = self._custom_save(form=parent_form)
             if not object_parent:
                 # Update formsets information (append errors and data)
                 self.extra_context = form_sets.copy()
-                return self.form_invalid(form=self.get_form())
+                return self.form_invalid(form=parent_form)
 
         response = super(FormsetPostManager, self).post(request, *args, **kwargs)
 
@@ -239,18 +156,24 @@ class FormsetPostManager(object):
             object_parent = self.object  # Is update process
 
         """ Managing formsets """
+        parent_name = self.extra_context.pop('parent_object_key', None)
         for formset in form_sets.values():
             temp = []
             for form in formset:
-                data = form.cleaned_data.copy()
-                data.update({'vision': object_parent})
-                temp.append(formset.model(**data))
+                if len(form.cleaned_data) > 0:
+                    form.cleaned_data.pop('DELETE', None)  # Clean formset data
+                    data = form.cleaned_data.copy()
+                    data.update({parent_name: object_parent})
+                    if hasattr(formset.model, 'create_by'):
+                        # Extract related name from relationship
+                        alias = formset.model.create_by.field.related_model.user.field.cached_col.alias
+                        data.update({'create_by': getattr(self.request.user, alias)})
+                    temp.append(formset.model(**data))
             try:
                 with transaction.atomic():
-                    formset.model.objects.filter(**{kwargs.pop('parent_object_key', None): object_parent}).delete()
+                    formset.model.objects.filter(**{parent_name: object_parent}).delete()
                     formset.model.objects.bulk_create(temp)
             except IntegrityError:
-                object_parent.delete()
                 messages.error(self.request, message="Error guardando informacion, revise")
                 raise SuspiciousOperation(message='Error Informacion Erronea')
 

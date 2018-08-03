@@ -11,7 +11,7 @@ class AudioForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super(AudioForm, self).save(commit=False)
         instance.exam_type = self.exam_type
-        instance.create_by = self.request.user.doctor_profile
+        instance.create_by = self.create_by
         if commit:
             instance.save()
         return instance
