@@ -5,3 +5,7 @@ from .audiology import (AudioForm, ananmesis_section, ant_familiar_section, ant_
                         estado_actual_section)
 from .audiometry import (AudiometriaForm, otoscopia_section, information_section)
 
+from .occupational import (OcupaForm, ant_familiares_section, habitos_section, fisico_general_form,
+                           organos_sentidos_section, conclusion_section)
+
+from .laboratory import LabForm, blood_section, exams_section

@@ -12,4 +12,7 @@ from .visiometry import (Visiometry,
                          Agudeza,
                          Cronomatica)
 
-from .occupational import (Occupational, AntecedentPF, AntecedentGinecoO, Habits, ExamPhysic, Conclusion)
+from .occupational import (Occupational, Ant_familiares, AntecedentGinecoO, Habits, FisicoGeneral, OrganosSentidos,
+                           Conclusion)
+
+from .laboratory import (Laboratory, BloodExam, Exams)

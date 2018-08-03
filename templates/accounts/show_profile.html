@@ -14,15 +14,7 @@
 <p><b>Active:</b> {{ instance.user.is_active }}</p>
 <p><b>Last Login:</b> {{ instance.user.last_login }}</p>
 <p><b>Role:</b> {{ instance.user.profile_type }}</p>
-{% if instance.user.profile_type == 'doctor' %}
-    <hr>
-    <h2>Doctor status</h2>
-    <ul>
-        <li><b>General:</b> {{ instance.general }}</li>
-        <li><b>Visiometry:</b> {{ instance.visiometry }}</li>
-        <li><b>Audiometry:</b> {{ instance.audiometry }}</li>
-        <li><b>Audiology:</b> {{ instance.audiology }}</li>
-    </ul>
+
     <hr>
     <h2>Acciones</h2>
     <a role="button" href="{% url 'accounts:update_personal' user_id=instance.user.id %}">Edit profile</a>

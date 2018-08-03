@@ -1,12 +1,15 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import UpdateView
 
-from docapp.models import Visiometry, Audiology, Audiometry
+from docapp.models import Visiometry, Audiology, Audiometry, Occupational, Laboratory
 from docapp.forms import (VisioForm, sintomas_section, ant_enfermedad_section, ant_uso_lentes_section, ant_extra_exams,
                           agudeza_section, cronomatica_section,
                           AudioForm, ananmesis_section, ant_familiar_section, ant_otro_section, exposicion_section,
                           estado_actual_section,
-                          AudiometriaForm, otoscopia_section, information_section)
+                          AudiometriaForm, otoscopia_section, information_section,
+                          OcupaForm, ant_familiares_section, habitos_section, fisico_general_form,
+                          organos_sentidos_section, conclusion_section,
+                          LabForm, blood_section, exams_section)
 
 from .chekers import CheckDoctor
 from .customs import FormViewPutExtra, FormsetPostManager, BaseRegisterExamBehavior, BaseExamUpdateBehavior
@@ -34,7 +37,7 @@ register_visiometry = RegisterVisiometry.as_view()
 
 
 class RegisterAudiology(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
-                         FormViewPutExtra):
+                        FormViewPutExtra):
     model = Audiology
     form_class = AudioForm
     extra_context = {'exam_name': 'audiologia',
@@ -65,6 +68,40 @@ class RegisterAudiometry(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavi
 
 
 register_audiometry = RegisterAudiometry.as_view()
+
+
+class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
+                           FormViewPutExtra):
+    model = Occupational
+    form_class = OcupaForm
+    extra_context = {'exam_name': 'ocupacional',
+                     'parent_object_key': 'occupational',
+                     'ant_familiares_section': ant_familiares_section,
+                     'habitos_section': habitos_section,
+                     'fisico_general_form': fisico_general_form,
+                     'organos_sentidos_section': organos_sentidos_section,
+                     'conclusion_section': conclusion_section
+                     }
+    template_name = 'docapp/register/occupational_formsets.html'
+
+
+register_occupational = RegisterOccupational.as_view()
+
+
+class RegisterLaboratory(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
+                         FormViewPutExtra):
+    model = Laboratory
+    form_class = LabForm
+    extra_context = {'exam_name': 'laboratorio',
+                     'parent_object_key': 'laboratory',
+                     'blood_section': blood_section,
+                     'habitos_section': habitos_section,
+                     'exams_section': exams_section,
+                     }
+    template_name = 'docapp/register/laboratory_formsets.html'
+
+
+register_laboratory = RegisterOccupational.as_view()
 
 
 # Update views
@@ -116,3 +153,35 @@ class UpdateAudiometry(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, 
 
 
 update_audiometry = UpdateAudiometry.as_view()
+
+
+class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, FormsetPostManager, UpdateView):
+    model = Occupational
+    form_class = OcupaForm
+    extra_context = {'exam_name': 'ocupacional',
+                     'parent_object_key': 'occupational',
+                     'ant_familiares_section': ant_familiares_section,
+                     'habitos_section': habitos_section,
+                     'fisico_general_form': fisico_general_form,
+                     'organos_sentidos_section': organos_sentidos_section,
+                     'conclusion_section': conclusion_section
+                     }
+    template_name = 'docapp/register/occupational_formsets.html'
+
+
+update_occupational = UpdateOccupational.as_view()
+
+
+class UpdateLaboratory(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, FormsetPostManager, UpdateView):
+    model = Laboratory
+    form_class = LabForm
+    extra_context = {'exam_name': 'laboratorio',
+                     'parent_object_key': 'laboratory',
+                     'blood_section': blood_section,
+                     'habitos_section': habitos_section,
+                     'exams_section': exams_section,
+                     }
+    template_name = 'docapp/register/laboratory_formsets.html'
+
+
+update_laboratory = UpdateLaboratory.as_view()

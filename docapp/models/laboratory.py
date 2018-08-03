@@ -9,7 +9,11 @@ from accounts.models import LaboratoryProfile
 class Laboratory(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     last_modify = models.DateTimeField(auto_now=True, default=timezone.now, null=False, blank=False, editable=False)
-    exam_type = models.OneToOneField(ExamType, on_delete=models.CASCADE)
+    exam_type = models.OneToOneField(ExamType,
+                                     null=False,
+                                     blank=False,
+                                     on_delete=models.CASCADE,
+                                     related_name='laboratory')
     create_by = models.ForeignKey(LaboratoryProfile,
                                   null=False,
                                   blank=False,
@@ -49,7 +53,11 @@ class BloodExam(models.Model):
     blood_type = models.CharField(verbose_name='tipo_sangre', max_length=5, choices=BLOOD_TYPE, null=False,
                                   blank=False)
 
-    lab_id = models.OneToOneField(Laboratory, null=False, blank=False, on_delete=models.CASCADE)
+    laboratory = models.OneToOneField(Laboratory,
+                                      null=False,
+                                      blank=False,
+                                      on_delete=models.CASCADE,
+                                      related_name='examen_sangre')
 
 
 class Exams(models.Model):
@@ -104,4 +112,8 @@ class Exams(models.Model):
         coprologico_lab = models.CharField(max_length=100, null=False, blank=False)
         coprologico_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=False, blank=False)
 
-        lab_id = models.OneToOneField(Laboratory, null=False, blank=False, on_delete=models.CASCADE)
+        laboratory = models.OneToOneField(Laboratory,
+                                          null=False,
+                                          blank=False,
+                                          on_delete=models.CASCADE,
+                                          related_name='examanes_laboratorios')
