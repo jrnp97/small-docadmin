@@ -8,7 +8,7 @@ from accounts.models import LaboratoryProfile
 
 class Laboratory(models.Model):
     create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
-    last_modify = models.DateTimeField(auto_now=True, default=timezone.now, null=False, blank=False, editable=False)
+    last_modify = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     exam_type = models.OneToOneField(ExamType,
                                      null=False,
                                      blank=False,

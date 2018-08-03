@@ -32,7 +32,7 @@ class Occupational(models.Model):
         db_table = "exam_ocupacional"
 
 
-class Ant_familiares(models.Model):
+class Ant_Person_familiares(models.Model):
     skin_problems = models.BooleanField(verbose_name="problemas_en_la_piel", default=False, null=False, blank=True)
     epilepsia = models.BooleanField(default=False, null=False, blank=True)
     deafness = models.BooleanField(verbose_name='sordera', default=False, null=False, blank=True)

@@ -18,8 +18,11 @@
                         <li><a href="{% url 'docapp:register_visiometry' exam_id=exam.id %}">Visiometria</a></li>
                         <li><a href="{% url 'docapp:register_audiology' exam_id=exam.id %}">Audiologia</a></li>
                         <li><a href="{% url 'docapp:register_audiometry' exam_id=exam.id %}">Audiometria</a></li>
-                        <li><a href="table.html">Ocupacional</a></li>
+                        <li><a href="{% url 'docapp:register_occupational' exam_id=exam.id %}">Ocupacional</a></li>
                     {% endif %}
+                {% if request.user.laboratory_profile %}
+                    <li><a href="{% url 'docapp:register_laboratory' exam_id=exam.id %}">Registrar Datos</a></li>
+                {% endif %}
                 </ul>
             </li>
             <hr>

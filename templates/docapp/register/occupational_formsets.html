@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load crispy_forms_tags %}
+    <meta charset="UTF-8">
+    <title>Registro Resumen Ocupacional</title>
+</head>
+<body>
+<h1>Resumen Ocupacional del proceso #{{ exam.id }}</h1>
+<hr>
+{% if messages %}
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+    <hr>
+{% endif %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <hr>
+    <h2>Antecedentes Familiares</h2>
+
+    {{ ant_familiares_section.management_form }}
+    {% for form in ant_familiares_section.forms %}
+        <div class="ant_familiares_section">
+            {{ form|crispy }}
+        </div>
+    {% endfor %}
+
+    {% if ant_familiares_section.non_form_errors %}
+        <hr>
+        {% for error in ant_familiares_section.non_form_errors %}
+            {{ error|escape }}
+        {% endfor %}
+    {% endif %}
+
+    <h2>Habitos</h2>
+    {{ habitos_section.management_form }}
+    {% for form in habitos_section.forms %}
+        <div class="habitos_section">
+            {{ form|crispy }}
+        </div>
+    {% endfor %}
+
+    {% if habitos_section.non_form_errors %}
+        {% for error in habitos_section.non_form_errors %}
+            {{ error|crispy }}
+        {% endfor %}
+    {% endif %}
+
+    <h2>Fisico General</h2>
+    {{ fisico_general_form.management_form }}
+    {% for form in fisico_general_form.forms %}
+        <div class="fisico_general_form">
+            {{ form|crispy }}
+        </div>
+    {% endfor %}
+    {% if fisico_general_form.non_form_errors %}
+        {% for error in fisico_general_form.non_form_errors %}
+            {{ error|escape }}
+        {% endfor %}
+    {% endif %}
+
+    <h2>Organo de los sentidos</h2>
+    {{ organos_sentidos_section.management_form }}
+    {% for form in organos_sentidos_section.forms %}
+        <div class="organos_sentidos_section">
+            {{ form|crispy }}
+        </div>
+    {% endfor %}
+    {% if organos_sentidos_section.non_form_errors %}
+        {% for error in organos_sentidos_section.non_form_errors %}
+            {{ error|escape }}
+        {% endfor %}
+    {% endif %}
+
+
+    <h2>Conclusion</h2>
+    {{ conclusion_section.management_form }}
+    {% for form in conclusion_section.forms %}
+        <div class="conclusion_section">
+            {{ form|crispy }}
+        </div>
+    {% endfor %}
+    {% if conclusion_section.non_form_errors %}
+        {% for error in conclusion_section.non_form_errors %}
+            {{ error|escape }}
+        {% endfor %}
+    {% endif %}
+
+    <hr>
+    <button type="submit">Guardar</button>
+    <a href="{% url 'docapp:dashboard' %}">Inicio</a>
+</form>
+</body>
+</html>

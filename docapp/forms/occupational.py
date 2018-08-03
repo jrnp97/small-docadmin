@@ -1,6 +1,6 @@
 from django import forms
 
-from docapp.models.occupational import (Occupational, Ant_familiares, AntecedentGinecoO, Habits, FisicoGeneral,
+from docapp.models.occupational import (Occupational, Ant_Person_familiares, AntecedentGinecoO, Habits, FisicoGeneral,
                                         OrganosSentidos,
                                         Conclusion)
 
@@ -21,12 +21,12 @@ class OcupaForm(forms.ModelForm):
 
 class AntFamForm(forms.ModelForm):
     class Meta:
-        model = Ant_familiares
+        model = Ant_Person_familiares
         fields = '__all__'
 
 
-ant_familiares_section = forms.inlineformset_factory(parent_model=Occupational, model=Ant_familiares, form=AntFamForm,
-                                                     extra=1, max_num=1, can_delete=False)
+ant_familiares_section = forms.inlineformset_factory(parent_model=Occupational, model=Ant_Person_familiares,
+                                                     form=AntFamForm, extra=1, max_num=1, can_delete=False)
 
 
 class HabiForm(forms.ModelForm):
@@ -68,7 +68,7 @@ class OSentidosForm(forms.ModelForm):
         fields = '__all__'
 
 
-organos_sentidos_section = forms.inlineformset_factory(parent_model=Occupational, model=OSentidosForm,
+organos_sentidos_section = forms.inlineformset_factory(parent_model=Occupational, model=OrganosSentidos,
                                                        form=OSentidosForm, extra=1, max_num=1, can_delete=False)
 
 

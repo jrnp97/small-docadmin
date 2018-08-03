@@ -7,13 +7,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from docapp.forms import CompanyForm, PersonForm, AntecedentForm, hazards_inlineformset, accidents_formset, ExamForm
 from docapp.models import Company, Person, AntecedentJobs, Hazards, JobAccidents, ExamType
 
-from .chekers import CheckReceptionist, CheckRecpOrDoctor
+from .chekers import CheckReceptionist, CheckUser
 from .customs import ListFilterView, FormViewPutExtra, FormsetPostManager
 
 
 # Create your views here.
 class Dashboard(LoginRequiredMixin, TemplateView):
-    template_name = 'docapp/home.html'
+    template_name = 'docapp/dashboard.html'
 
     def get(self, request, *args, **kwargs):
         if request.user.is_staff and request.user.is_superuser:
@@ -282,7 +282,7 @@ class RegisterExam(CheckReceptionist, LoginRequiredMixin, FormViewPutExtra):
 register_exam = RegisterExam.as_view()
 
 
-class ExamList(LoginRequiredMixin, CheckRecpOrDoctor, ListView):
+class ExamList(LoginRequiredMixin, CheckUser, ListView):
     model = ExamType
     context_object_name = 'exam_list'
     template_name = 'docapp/lists/exam_list.html'
