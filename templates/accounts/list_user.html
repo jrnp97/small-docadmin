@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% extends 'base/base_dashboard.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
@@ -21,57 +20,63 @@
 {% endblock %}
 
 {% block content_main %}
-
-
     <div class="row">
-        <div class="col-sm-12 lobipanel-parent-sortable ui-sortable" data-lobipanel-child-inner-id="QZiPB2LHrb">
-
-            <div class="panel panel-bd lobidrag lobipanel lobipanel-sortable" data-inner-id="QZiPB2LHrb"
-                 data-index="0">
-
-                <div class="panel-heading ui-sortable-handle">
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidisable">
+                <div class="panel-heading">
                     <div class="btn-group">
-                        <a class="btn btn-success" href="{% url 'accounts:register_personal' %}"> <i
-                                class="fa fa-plus"></i>Añadir usuario</a>
+                        <a class="btn btn-success" href="{% url 'accounts:register_personal' %}"> <i class="fa fa-plus"></i>
+                            Personal
+                        </a>
                     </div>
                 </div>
-
                 <div class="panel-body">
+                    <!-- header -->
                     <div class="row">
                         <div class="panel-header">
-
-                            <div class="col-sm-6">
-                                <!--div class="dataTables_length" id="example_length">
-                                    <label>Mostrar <select name="example_length">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select> registros por pagina </label>
-                                </div-->
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="dataTables_length">
+                                    <label>Mostrar
+                                        <select name="example_length">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select> Personal por pagina</label>
+                                </div>
                             </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="dataTables_length">
+                                    <a class="btn btn-default buttons-copy btn-sm" tabindex="0">
+                                        <span>Copy</span></a>
+                                    <a class="btn btn-default buttons-csv buttons-html5 btn-sm"
+                                       tabindex="0"><span>CSV</span></a>
+                                    <a class="btn btn-default buttons-excel buttons-html5 btn-sm" tabindex="0"><span>Excel</span></a>
+                                    <a class="btn btn-default buttons-pdf buttons-html5 btn-sm"
+                                       tabindex="0"><span>PDF</span></a>
+                                    <a class="btn btn-default buttons-print btn-sm" tabindex="0"><span>Print</span></a>
 
-
-
-                            <div class="col-sm-6">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
                                 <div class="dataTables_length">
                                     <div class="input-group custom-search-form">
-                                        <input class="form-control" placeholder="search.." type="search">
+                                        <input type="search" class="form-control" placeholder="search..">
                                         <span class="input-group-btn">
-                                                      <button class="btn btn-primary" type="button">
-                                                          <span class="glyphicon glyphicon-search"></span>
-                                                      </button>
-                                                  </span>
-                                    </div><!-- /input-group -->
+                                                                  <button class="btn btn-primary" type="button">
+                                                                      <span class="glyphicon glyphicon-search"></span>
+                                                                  </button>
+                                                              </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
-
+                    <!-- content -->
                     {% if user_list %}
-
-                        <div class="table-responsive text-center">
-                            <table class="table table-bordered table-hover">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover text-center">
                                 <thead class="success">
                                 <tr>
                                     <th>Nombre de usuario</th>
@@ -80,7 +85,7 @@
                                     <th>Correo Electronico</th>
                                     <th>Rol</th>
                                     <th>Estado</th>
-                                    <th>Actualizacion</th>
+                                    <th>Opciones</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -94,24 +99,31 @@
                                         <td>{{ user.profile_type }}</td>
                                         <td>
                                             {% if user.is_active %}
-                                                <span class="label-success label label-default">Active</span>
+                                                <span class="label-success label label-default">Activo</span>
+                                            {% else %}
+                                                <span class="label-danger label label-default">Desactivado</span>
                                             {% endif %}
                                         </td>
                                         <td>
+                                            <!-- Detail Link -->
                                             <a href="{% url 'accounts:detail_personal' user_id=user.id %}">
-                                                Detalle</a>
+                                                <button class="btn btn-primary btn-xs" data-toggle="tooltip"
+                                                        data-placement="left" title="" data-original-title="Ver">
+                                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                                </button>
+                                            </a>
+                                            <!-- Update Link -->
                                             <a href="{% url 'accounts:update_personal' user_id=user.id %}">
-                                                <button class="btn btn-info btn-xs" data-toggle="tooltip"
-                                                        data-placement="left" title="" data-original-title="Update">
+                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                                        data-placement="left" title="" data-original-title="Editar">
                                                     <i class="fa fa-pencil" aria-hidden="true"></i>
 
                                                 </button>
                                             </a>
-
-
+                                            <!-- Delete Link -->
                                             <a href="{% url 'accounts:delete_personal' user_id=user.id %}">
                                                 <button class="btn btn-danger btn-xs" data-toggle="tooltip"
-                                                        data-placement="right" title="" data-original-title="Delete">
+                                                        data-placement="right" title="" data-original-title="Borrar">
                                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
 
                                                 </button>
@@ -143,6 +155,5 @@
         </div>
     </div>
 
-
-
 {% endblock %}
+

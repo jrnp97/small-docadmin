@@ -21,28 +21,16 @@
 
 {% block content_main %}
     <div class="row">
-        <div class="col-sm-12 lobipanel-parent-sortable ui-sortable" data-lobipanel-child-inner-id="QZiPB2LHrb">
-
-            <div class="panel panel-bd lobidisable lobidrag lobipanel lobipanel-sortable" data-inner-id="QZiPB2LHrb"
-                 data-index="0">
-
-                <div class="panel-heading ui-sortable-handle">
-                    <div class="panel-title">
-                        <h4>Formulario Personal</h4>
-                        {% if messages %}
-                            <div class="row">
-                                <div class="panel-header">
-                                    <ul>
-                                        {% for message in messages %}
-                                            <li>{{ message|escape }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-                            <hr>
-                        {% endif %}
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidrag">
+                <div class="panel-heading">
+                    <div class="btn-group">
+                        <a class="btn btn-primary" href="{% url 'accounts:user_list' %}"> <i class="fa fa-list"></i>
+                            Lista Personal</a>
                     </div>
                 </div>
+
 
                 <div class="panel-body">
                     <form class="col-sm-12" method="POST">
@@ -51,66 +39,67 @@
                         <div class="col-sm-6 form-group">
                             <label>Nombre de usuario</label>
                             <input type="text" class="form-control" name="{{ form.username.name }}"
-                                   placeholder="Enter firstname" 
-                                   {% if form.username.value %}
+                                   placeholder="Enter firstname"
+                                    {% if form.username.value %}
                                    value="{{ form.username.value }}"
-                                   {% endif %} 
+                                    {% endif %}
                                    required="">
                         </div>
 
                         <div class="col-sm-6 form-group">
                             <label>Nombres</label>
                             <input type="text" class="form-control" name="{{ form.first_name.name }}"
-                                   placeholder="Enter firstname" 
-                                   {% if form.first_name.value %}
+                                   placeholder="Enter firstname"
+                                    {% if form.first_name.value %}
                                    value="{{ form.first_name.value }}"
-                                   {% endif %} 
+                                    {% endif %}
                                    required="">
                         </div>
 
                         <div class="col-sm-6 form-group">
                             <label>Apellidos</label>
                             <input type="text" class="form-control" name="{{ form.last_name.name }}"
-                                   placeholder="Enter firstname" 
-                                   {% if form.last_name.value %}
+                                   placeholder="Enter firstname"
+                                    {% if form.last_name.value %}
                                    value="{{ form.last_name.value }}"
-                                   {% endif %} 
+                                    {% endif %}
                                    required="">
                         </div>
 
                         <div class="col-sm-6 form-group">
                             <label>Correo Electronico</label>
                             <input type="email" class="form-control" name="{{ form.email.name }}"
-                                   placeholder="Enter firstname" 
-                                   {% if form.email.value %}
+                                   placeholder="Enter firstname"
+                                    {% if form.email.value %}
                                    value="{{ form.email.value }}"
-                                   {% endif %} 
+                                    {% endif %}
                                    required="">
                         </div>
 
                         {% if form.password1 and form.password2 %}
-                        <div class="col-sm-6 form-group">
-                            <label>Contraseña</label>
-                            <input type="password" class="form-control" name="{{ form.password1.name }}"
-                                   placeholder="Enter firstname" required="">
-                        </div>
+                            <div class="col-sm-6 form-group">
+                                <label>Contraseña</label>
+                                <input type="password" class="form-control" name="{{ form.password1.name }}"
+                                       placeholder="Enter firstname" required="">
+                            </div>
 
-                        <div class="col-sm-6 form-group">
-                            <label>Confirme Contraseña</label>
-                            <input type="password" class="form-control" name="{{ form.password2.name }}"
-                                   placeholder="Enter firstname" required="">
-                        </div>
+                            <div class="col-sm-6 form-group">
+                                <label>Confirme Contraseña</label>
+                                <input type="password" class="form-control" name="{{ form.password2.name }}"
+                                       placeholder="Enter firstname" required="">
+                            </div>
                         {% endif %}
 
                         {% if form.profile_type %}
-                        <div class="col-sm-6 form-group">
-                            <label>Tipo Personal</label>
-                            <select class="form-control" id="exampleSelect1" name="{{ form.profile_type.name }}" size="1">
-                                {% for option in form.profile_type.field.choices %}
-                                    <option value="{{ option.0 }}">{{ option.1 }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                            <div class="col-sm-6 form-group">
+                                <label>Tipo Personal</label>
+                                <select class="form-control" id="exampleSelect1"
+                                        name="{{ form.profile_type.name }}" size="1">
+                                    {% for option in form.profile_type.field.choices %}
+                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         {% endif %}
 
                         <div class="col-sm-12 reset-button">

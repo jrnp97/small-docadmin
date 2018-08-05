@@ -18,9 +18,7 @@ $(document).ready(function () {
     //lobipanel
     $('.lobidrag').lobiPanel({
         sortable: true,
-        editTitle: {
-            icon: 'ti-pencil'
-        },
+        editTitle: false,
         unpin: {
             icon: 'ti-move'
         },

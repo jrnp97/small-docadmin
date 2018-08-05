@@ -27,53 +27,62 @@
 {% endblock %}
 
 {% block content_main %}
-
     <div class="row">
-        <div class="col-sm-12 lobipanel-parent-sortable ui-sortable" data-lobipanel-child-inner-id="QZiPB2LHrb">
-
-            <div class="panel panel-bd lobidisable lobidrag lobipanel lobipanel-sortable" data-inner-id="QZiPB2LHrb"
-                 data-index="0">
-
-                <div class="panel-heading ui-sortable-handle">
-                    <div class="panel-title">
-                        <h4>Todos los empleados</h4>
+        <div class="col-sm-12">
+            <div class="panel panel-bd lobidisable">
+                <div class="panel-heading">
+                    <div class="btn-group">
+                        <a class="btn btn-success" href="{% url 'docapp:company_list' %}"> <i class="fa fa-plus"></i>
+                            Empleado
+                        </a>
                     </div>
                 </div>
-
                 <div class="panel-body">
                     <div class="row">
                         <div class="panel-header">
-                            <div class="col-sm-6">
-                                <div class="dataTables_length" id="example_length">
-                                    <label>Mostrar <select name="example_length">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select> registros por pagina </label>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="dataTables_length">
+                                    <label>Mostrar
+                                        <select name="example_length">
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                        </select> Empleados por pagina</label>
                                 </div>
                             </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <div class="dataTables_length">
+                                    <a class="btn btn-default buttons-copy btn-sm" tabindex="0">
+                                        <span>Copy</span></a>
+                                    <a class="btn btn-default buttons-csv buttons-html5 btn-sm"
+                                       tabindex="0"><span>CSV</span></a>
+                                    <a class="btn btn-default buttons-excel buttons-html5 btn-sm" tabindex="0"><span>Excel</span></a>
+                                    <a class="btn btn-default buttons-pdf buttons-html5 btn-sm"
+                                       tabindex="0"><span>PDF</span></a>
+                                    <a class="btn btn-default buttons-print btn-sm" tabindex="0"><span>Print</span></a>
 
-                            <div class="col-sm-6">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
                                 <div class="dataTables_length">
                                     <div class="input-group custom-search-form">
-                                        <input class="form-control" placeholder="search.." type="search">
+                                        <input type="search" class="form-control" placeholder="search..">
                                         <span class="input-group-btn">
-                                                      <button class="btn btn-primary" type="button">
-                                                          <span class="glyphicon glyphicon-search"></span>
-                                                      </button>
-                                                  </span>
-                                    </div><!-- /input-group -->
+                                                                  <button class="btn btn-primary" type="button">
+                                                                      <span class="glyphicon glyphicon-search"></span>
+                                                                  </button>
+                                                              </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
-
                     {% if person_list %}
-
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">
-                                <thead class="success">
+                                <thead>
                                 <tr>
                                     <th>Identificacion</th>
                                     <th>Nombre</th>
@@ -88,7 +97,6 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 {% for person in person_list %}
                                     <tr>
                                         <td>{{ person.identification }}</td>
@@ -112,7 +120,6 @@
                                         </td>
                                     </tr>
                                 {% endfor %}
-
                                 </tbody>
                             </table>
                         </div>
@@ -123,16 +130,14 @@
                                 <li><a href="#">2</a></li>
                                 <li class="disabled"><span>...</span></li>
                                 <li>
-                                </li>
                                 <li><a rel="next" href="#">Next</a></li>
                             </ul>
                         </div>
                     {% else %}
-                        <h2>No se han registrado pacientes</h2>
+                        <h2> No se encuentran empleados registrados</h2>
                     {% endif %}
                 </div>
             </div>
         </div>
     </div>
-
 {% endblock %}
