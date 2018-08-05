@@ -3,6 +3,7 @@ from django.views.generic import FormView, ListView, UpdateView, DetailView, Tem
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
 
 from docapp.forms import CompanyForm, PersonForm, AntecedentForm, hazards_inlineformset, accidents_formset, ExamForm
 from docapp.models import Company, Person, AntecedentJobs, Hazards, JobAccidents, ExamType
@@ -81,7 +82,7 @@ person_antecedent_list = AntecedentList.as_view()
 # Register Views
 class RegisterCompany(CheckReceptionist, LoginRequiredMixin, FormView):
     form_class = CompanyForm
-    template_name = 'docapp/register/register_simple_form.html'
+    template_name = 'docapp/register/company.html'
     success_url = reverse_lazy('docapp:register_company')
 
     def form_valid(self, form):
@@ -104,10 +105,9 @@ class RegisterPerson(CheckReceptionist, LoginRequiredMixin, FormViewPutExtra):
     pk_url_kwarg = 'company_id'
     form_class = PersonForm
     model = Person
-    template_name = 'docapp/register/register_simple_form.html'
+    template_name = 'docapp/register/employ.html'
     success_url = reverse_lazy('docapp:person_list')
     model_to_filter = Company
-    extra_context = {'title': 'Registro empleado de la empresa '}
 
     def form_valid(self, form):
         company = self.get_object()
@@ -154,7 +154,7 @@ class UpdateCompany(CheckReceptionist, LoginRequiredMixin, UpdateView):
     context_object_name = 'company'
     model = Company
     form_class = CompanyForm
-    template_name = 'docapp/register/register_simple_form.html'
+    template_name = 'docapp/register/company.html'
     success_url = reverse_lazy('docapp:company_list')
 
     def form_valid(self, form):
@@ -211,7 +211,10 @@ class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManager
     def get_context_data(self, **kwargs):
         """ Overwrite get_context_data method to append formset necessary"""
         antecedent = self.get_object()
-        hazard_initial_data = [Hazards.objects.get(work=antecedent).as_dict()]
+        try:
+            hazard_initial_data = [Hazards.objects.get(work=antecedent).as_dict()]
+        except ObjectDoesNotExist:
+            hazard_initial_data = []
         accident_data = JobAccidents.objects.filter(work=antecedent)
         accident_initial_data = []
         for accident in accident_data:
@@ -219,8 +222,8 @@ class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManager
         print(accident_initial_data)
         print(len(accident_initial_data))
         self.extra_context = {'parent_object_key': 'work',
-                         'hazard_section': hazards_inlineformset(initial=hazard_initial_data),
-                         'accident_formset': accidents_formset(initial=accident_initial_data)}
+                              'hazard_section': hazards_inlineformset(initial=hazard_initial_data),
+                              'accident_formset': accidents_formset(initial=accident_initial_data)}
         kwargs.update(self.extra_context)
         return super(UpdateAntecedent, self).get_context_data(**kwargs)
 
@@ -289,4 +292,3 @@ class ExamList(LoginRequiredMixin, CheckUser, ListView):
 
 
 exam_list = ExamList.as_view()
-

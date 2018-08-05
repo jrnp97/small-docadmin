@@ -81,7 +81,7 @@
                     </div>
                     {% if person_list %}
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover">
+                            <table class="table table-bordered table-hover text-center">
                                 <thead>
                                 <tr>
                                     <th>Identificacion</th>
@@ -93,7 +93,7 @@
                                     <th>Empresa</th>
                                     <th>Examinacion</th>
                                     <th>Antecedentes</th>
-                                    <th>Actualizacion</th>
+                                    <th>Opciones</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -107,16 +107,52 @@
                                         <td>{{ person.sex }}</td>
                                         <td>{{ person.company }}</td>
                                         <td>
-                                            <a href="{% url 'docapp:register_exam' person_id=person.id %}">Iniciar
-                                                Examinacion</a>
+                                            <a href="{% url 'docapp:register_exam' person_id=person.id %}">
+                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                                        data-placement="left" title="" data-original-title="Iniciar">
+                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                </button>
+                                            </a>
                                         </td>
                                         <td>
-                                            <a href="{% url 'docapp:register_antecedent' person_id=person.id %}">Registar</a>
-                                            <a href="{% url 'docapp:person_antecedent_list' person_id=person.id %}">Listar</a>
+                                            <!-- Register Link -->
+                                            <a href="{% url 'docapp:register_antecedent' person_id=person.id %}">
+                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                                        data-placement="left" title="" data-original-title="Registrar">
+                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                </button>
+                                            </a>
+                                            <!-- List Link -->
+                                            <a href="{% url 'docapp:person_antecedent_list' person_id=person.id %}">
+                                                <button class="btn btn-primary btn-xs" data-toggle="tooltip"
+                                                        data-placement="left" title="" data-original-title="Ver lista">
+                                                    <i class="fa fa-list-alt" aria-hidden="true"></i>
+                                                </button>
+                                            </a>
                                         </td>
                                         <td>
-                                            <a href="{% url 'docapp:update_person' person_id=person.id %}">Editar</a>
-                                            <a href="{% url 'docapp:detail_person' person_id=person.id %}">Detalle</a>
+                                            <!-- Detail Link -->
+                                            <a href="{% url 'docapp:update_person' person_id=person.id %}">
+                                                <button class="btn btn-primary btn-xs" data-toggle="tooltip"
+                                                        data-placement="left" title="" data-original-title="Ver">
+                                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                                </button>
+                                            </a>
+                                            <!-- Update Link -->
+                                            <a href="{% url 'docapp:detail_person' person_id=person.id %}">
+                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                                        data-placement="left" title="" data-original-title="Editar">
+                                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                                </button>
+                                            </a>
+                                            <!-- Delete Link
+                                            <a href="#">
+                                                <button class="btn btn-danger btn-xs" data-toggle="tooltip"
+                                                        data-placement="right" title="" data-original-title="Borrar">
+                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+
+                                                </button>
+                                            </a>-->
                                         </td>
                                     </tr>
                                 {% endfor %}
