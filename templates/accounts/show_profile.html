@@ -1,26 +1,110 @@
-<!DOCTYPE html>
+{% extends 'base/base_dashboard.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %} {{ user.username }} {% endblock %}
+
+{% block content_header %}
+    <div class="header-icon">
+        <i class="pe-7s-id"></i>
+    </div>
+    <div class="header-title">
+        <h1>{{ user.username }}</h1>
+        <small>Informacion General</small>
+        <ol class="breadcrumb hidden-xs">
+            <li><a href="{% url 'docapp:dashboard' %}"><i class="pe-7s-home"></i> Home</a></li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </div>
+{% endblock %}
+
+{% block content_main %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-bd">
+
+                <div class="twt-feed bg-primary">
+
+                    <div class="fa fa-twitter wtt-mark"></div>
+                    <a href="#">
+                        <img alt="" src="{% static 'assets/dist/img/avatar3.png' %}">
+                    </a>
+                    <section id="user_info">
+                        <h1>
+                            <b>{{ user.get_full_name }}</b>
+                            {% if user.is_active %}
+                                <span class="label-success label label-default">Activo</span>
+                            {% else %}
+                                <span class="label-danger label label-default">Desactivado</span>
+                            {% endif %}
+                        </h1>
+                        <p>{{ user.profile_type }} - {{ user.email }}</p>
+                    </section>
+                    <section class="pull-right">
+                        <!-- Update Link -->
+                        <a href="{% url 'accounts:update_personal' user_id=user.id %}">
+                            <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                    data-placement="left" title="" data-original-title="Editar">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+
+                            </button>
+                        </a>
+                        <!-- Delete Link -->
+                        <a href="{% url 'accounts:delete_personal' user_id=user.id %}">
+                            <button class="btn btn-danger btn-xs" data-toggle="tooltip"
+                                    data-placement="right" title="" data-original-title="Borrar">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+
+                            </button>
+                        </a>
+                    </section>
+                </div>
+
+
+                <!--<div class="twt-category">
+                    <ul>
+                        <li class="active tweets-color"><h5>627</h5> Tweets</li>
+                        <li class="following-color"><h5>528</h5> Following</li>
+                        <li class="followers-color"><h5>2015</h5> Followers</li>
+                    </ul>
+                </div>
+
+                <div class="twt-write col-sm-12">
+                    <textarea placeholder="Write your Tweet and Enter" rows="1"
+                              class="form-control t-text-area"></textarea>
+                </div>-->
+
+                <footer class="twt-footer">
+                    Ultima Vez Activo<span class="pull-right">{{ user.last_login }}</span>
+                </footer>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Profile Detail</title>
 </head>
 <body>
-<h1>{{ instance.user.get_full_name }}</h1>
+<h1>{{ user.get_full_name }}</h1>
 <hr>
 <h2>Basic information</h2>
-<p><b>First Name:</b> {{ instance.user.first_name }}</p>
-<p><b>Last Name:</b> {{ instance.user.last_name }}</p>
-<p><b>Email:</b> {{ instance.user.email }}</p>
-<p><b>Active:</b> {{ instance.user.is_active }}</p>
-<p><b>Last Login:</b> {{ instance.user.last_login }}</p>
-<p><b>Role:</b> {{ instance.user.profile_type }}</p>
+<p><b>First Name:</b> {{ user.first_name }}</p>
+<p><b>Last Name:</b> {{ user.last_name }}</p>
+<p><b>Email:</b> {{ user.email }}</p>
+<p><b>Active:</b> {{ user.is_active }}</p>
+<p><b>Last Login:</b> {{ user.last_login }}</p>
+<p><b>Role:</b> {{ user.profile_type }}</p>
 
     <hr>
     <h2>Acciones</h2>
-    <a role="button" href="{% url 'accounts:update_personal' user_id=instance.user.id %}">Edit profile</a>
-    <a role="button" href="{% url 'accounts:delete_personal' user_id=instance.user.id %}">Delete Profile</a>
+    <a role="button" href="">Edit profile</a>
+    <a role="button" href="{% url 'accounts:delete_personal' user_id=user.id %}">Delete Profile</a>
 
     <a href="{% url 'accounts:user_list' %}">Cancelar</a>
 <hr>
 </body>
-</html>
+</html>-->

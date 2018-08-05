@@ -23,7 +23,7 @@
     <div class="row">
         <!-- Form controls -->
         <div class="col-sm-12">
-            <div class="panel panel-bd lobidrag">
+            <div class="panel panel-bd">
                 <div class="panel-heading">
                     <div class="btn-group">
                         <a class="btn btn-primary" href="{% url 'accounts:user_list' %}"> <i class="fa fa-list"></i>
@@ -31,74 +31,219 @@
                     </div>
                 </div>
 
-
                 <div class="panel-body">
                     <form class="col-sm-12" method="POST">
                         {% csrf_token %}
-
+                        <!-- Username input -->
                         <div class="col-sm-6 form-group">
-                            <label>Nombre de usuario</label>
-                            <input type="text" class="form-control" name="{{ form.username.name }}"
-                                   placeholder="Enter firstname"
-                                    {% if form.username.value %}
-                                   value="{{ form.username.value }}"
-                                    {% endif %}
-                                   required="">
+
+                            <label {% if form.username.errors %}  class="label label-danger" {% else %}
+                                                                  class="label label-primary" {% endif %}
+                                                                  for="{{ form.username.name }}">Nombre de
+                                usuario</label>
+
+                            <input type="text"
+                                    {% if form.username.errors %} class="form-control label-danger-outline" {% else %}
+                                   class="form-control" {% endif %}
+                                   name="{{ form.username.name }}"
+                                   id="{{ form.username.name }}" placeholder="Ingrese nombre de usuario"
+                                    {% if form.username.value %}  value="{{ form.username.value }}" {% endif %}
+                                   required=""/>
+
+                            {% if form.username.errors %}
+                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                            aria-hidden="true">×</span></button>
+                                    {% for error in form.username.errors %}
+                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
+                                        {{ error|escape }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
-
+                        <!-- Nombres input -->
                         <div class="col-sm-6 form-group">
-                            <label>Nombres</label>
-                            <input type="text" class="form-control" name="{{ form.first_name.name }}"
-                                   placeholder="Enter firstname"
-                                    {% if form.first_name.value %}
-                                   value="{{ form.first_name.value }}"
-                                    {% endif %}
+                            <label {% if form.firts_name.errors %}  class="label label-danger" {% else %}
+                                                                    class="label label-primary" {% endif %}
+                                                                    for="{{ form.firts_name.name }}">Nombres</label>
+                            <input type="text"
+                                    {% if form.firts_name.errors %}
+                                   class="form-control label-danger-outline" {% else %}
+                                   class="form-control" {% endif %}
+                                   name="{{ form.first_name.name }}"
+                                   id="{{ form.firts_name.name }}"
+                                   placeholder="Ingrese Nombres"
+                                    {% if form.first_name.value %} value="{{ form.first_name.value }}" {% endif %}
                                    required="">
+
+                            {% if form.first_name.errors %}
+                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                            aria-hidden="true">×</span></button>
+                                    {% for error in form.first_name.errors %}
+                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
+                                        {{ error|escape }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
-
+                        <!-- Apellidos input -->
                         <div class="col-sm-6 form-group">
-                            <label>Apellidos</label>
-                            <input type="text" class="form-control" name="{{ form.last_name.name }}"
+                            <label {% if form.last_name.errors %}  class="label label-danger" {% else %}
+                                                                   class="label label-primary" {% endif %}
+                                                                   for="{{ form.last_name.name }}">Apellidos</label>
+                            <input type="text"
+                                    {% if form.last_name.errors %}  class="form-control label-danger-outline" {% else %}
+                                   class="form-control" {% endif %}
+                                   name="{{ form.last_name.name }}"
+                                   id="{{ form.last_name.name }}"
                                    placeholder="Enter firstname"
-                                    {% if form.last_name.value %}
-                                   value="{{ form.last_name.value }}"
-                                    {% endif %}
+                                    {% if form.last_name.value %} value="{{ form.last_name.value }}" {% endif %}
                                    required="">
+                            {% if form.last_name.errors %}
+                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                            aria-hidden="true">×</span></button>
+                                    {% for error in form.last_name.errors %}
+                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
+                                        {{ error|escape }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
-
+                        <!-- Email input -->
                         <div class="col-sm-6 form-group">
-                            <label>Correo Electronico</label>
-                            <input type="email" class="form-control" name="{{ form.email.name }}"
+                            <label {% if form.email.errors %}  class="label label-danger" {% else %}
+                                                               class="label label-primary" {% endif %}
+                                                               for="{{ form.email.name }}">Correo Electronico</label>
+                            <input type="email"
+                                    {% if form.email.errors %}  class="form-control label-danger-outline" {% else %}
+                                   class="form-control" {% endif %}
+                                   name="{{ form.email.name }}"
+                                   id="{{ form.email.name }}"
                                    placeholder="Enter firstname"
-                                    {% if form.email.value %}
-                                   value="{{ form.email.value }}"
-                                    {% endif %}
+                                    {% if form.email.value %}  value="{{ form.email.value }}" {% endif %}
                                    required="">
+
+                            {% if form.email.errors %}
+                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                            aria-hidden="true">×</span></button>
+                                    {% for error in form.email.errors %}
+                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
+                                        {{ error|escape }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
 
                         {% if form.password1 and form.password2 %}
+                            <!-- Password input -->
                             <div class="col-sm-6 form-group">
-                                <label>Contraseña</label>
-                                <input type="password" class="form-control" name="{{ form.password1.name }}"
-                                       placeholder="Enter firstname" required="">
+                                <label {% if form.password1.errors %}  class="label label-danger" {% else %}
+                                                                       class="label label-primary" {% endif %}
+                                                                       for="{{ form.password1.name }}"
+                                                                       l>Contraseña</label>
+                                <input type="password"
+                                       class="form-control"
+                                       name="{{ form.password1.name }}"
+                                       id="{{ form.password1.name }}"
+                                       placeholder="Enter firstname" required=""/>
+                                {% if form.password1.errors %}
+                                    <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">×</span></button>
+                                        {% for error in form.password1.errors %}
+                                            <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
+                                            {{ error|escape }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
 
                             <div class="col-sm-6 form-group">
-                                <label>Confirme Contraseña</label>
-                                <input type="password" class="form-control" name="{{ form.password2.name }}"
+                                <label {% if form.password2.errors %}  class="label label-danger" {% else %}
+                                                                       class="label label-primary" {% endif %}
+                                                                       for="{{ form.password2.name }}">Confirme
+                                    Contraseña</label>
+                                <input type="password"
+                                       class="form-control"
+                                       name="{{ form.password2.name }}"
+                                       id="{{ form.password2.name }}"
                                        placeholder="Enter firstname" required="">
+                                {% if form.password2.errors %}
+                                    <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">×</span></button>
+                                        {% for error in form.password2.errors %}
+                                            <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
+                                            {{ error|escape }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
                         {% endif %}
 
                         {% if form.profile_type %}
+                            <!-- Profile type input -->
                             <div class="col-sm-6 form-group">
-                                <label>Tipo Personal</label>
-                                <select class="form-control" id="exampleSelect1"
-                                        name="{{ form.profile_type.name }}" size="1">
+                                <label {% if form.profile_type.errors %} class="label label-danger" {% else %}
+                                                                         class="label label-primary" {% endif %}
+                                                                         for="{{ form.profile_type.name }}">Tipo
+                                    Personal</label>
+                                <select {% if form.profile_type.errors %}
+                                    class="form-control label-danger-outline" {% else %}
+                                    class="form-control" {% endif %}
+                                    name="{{ form.profile_type.name }}"
+                                    id="{{ form.profile_type.name }}"
+                                    size="1">
                                     {% for option in form.profile_type.field.choices %}
                                         <option value="{{ option.0 }}">{{ option.1 }}</option>
                                     {% endfor %}
                                 </select>
+
+                                {% if form.profile_type.errors %}
+                                    <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">×</span></button>
+                                        {% for error in form.profile_type.errors %}
+                                            <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
+                                            {{ error|escape }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        {% endif %}
+
+                        {% if form.password %}
+                            <!-- Password type input -->
+                            <div class="col-sm-6 form-group">
+                                <label {% if form.password.errors %} class="label label-danger" {% else %}
+                                                                         class="label label-primary" {% endif %}
+                                                                         for="{{ form.password.name }}">Contraseña</label>
+                                 <input type="password"
+                                       class="form-control"
+                                       name="{{ form.password.name }}"
+                                       id="{{ form.password.name }}"
+                                        value="{{ form.password.value }}"
+                                       placeholder="Enter firstname" required="">
+
+                                {% if form.password.errors %}
+                                    <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">×</span></button>
+                                        {% for error in form.password.errors %}
+                                            <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
+                                            {{ error|escape }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
                             </div>
                         {% endif %}
 
