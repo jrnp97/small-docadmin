@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from docapp.forms import CompanyForm, PersonForm, AntecedentForm, hazards_inlineformset, accidents_formset, ExamForm
 from docapp.models import Company, Person, AntecedentJobs, Hazards, JobAccidents, ExamType
 
-from .chekers import CheckReceptionist, CheckUser
+from .chekers import CheckReceptionist, CheckUser, CheckRecOrDoc
 from .customs import ListFilterView, FormViewPutExtra, FormsetPostManager
 
 
@@ -174,7 +174,7 @@ class UpdatePerson(CheckReceptionist, LoginRequiredMixin, UpdateView):
     context_object_name = 'person'
     model = Person
     form_class = PersonForm
-    template_name = 'docapp/register/register_simple_form.html'
+    template_name = 'docapp/register/employ.html'
     success_url = reverse_lazy('docapp:person_list')
 
     def form_valid(self, form):
@@ -242,7 +242,7 @@ class DetailCompany(CheckReceptionist, LoginRequiredMixin, DetailView):
 detail_company = DetailCompany.as_view()
 
 
-class DetailPerson(CheckReceptionist, LoginRequiredMixin, DetailView):
+class DetailPerson(CheckRecOrDoc, LoginRequiredMixin, DetailView):
     pk_url_kwarg = 'person_id'
     model = Person
     context_object_name = 'person'
@@ -269,7 +269,7 @@ class RegisterExam(CheckReceptionist, LoginRequiredMixin, FormViewPutExtra):
     model_to_filter = Person
     context_object_2_name = 'person'
     success_url = reverse_lazy('docapp:dashboard')
-    template_name = 'docapp/register/register_simple_form.html'
+    template_name = 'docapp/register/exam.html'
 
     def form_valid(self, form):
         person = self.get_object()

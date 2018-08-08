@@ -18,7 +18,7 @@
     {% for error in form.non_form_errors %}
         {{ error|escape }}
     {% endfor %}
-{% endif %}
+{% endif git%}
 <form method="POST">
     {% csrf_token %}
     {{ form|crispy }}

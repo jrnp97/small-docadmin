@@ -31,3 +31,9 @@ class CheckUser(CheckerBase):
         result = (hasattr(self.request.user, 'reception_profile') or self.request.user.is_superuser or
                   hasattr(self.request.user, 'laboratory_profile') or hasattr(self.request.user, 'doctor_profile'))
         return result
+
+
+class CheckRecOrDoc(CheckerBase):
+    def test_func(self, **kwargs):
+        normal_user = hasattr(self.request.user, 'reception_profile') or hasattr(self.request.user, 'doctor_profile')
+        return normal_user or self.request.user.is_superuser

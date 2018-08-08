@@ -31,11 +31,7 @@
         <div class="col-sm-12">
             <div class="panel panel-bd lobidisable">
                 <div class="panel-heading">
-                    <div class="btn-group">
-                        <a class="btn btn-success" href="{% url 'docapp:company_list' %}"> <i class="fa fa-plus"></i>
-                            Empleado
-                        </a>
-                    </div>
+                    <!-- Empy -->
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -52,7 +48,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-4 col-xs-12">
-                                <div class="dataTables_length">
+                                <!--div class="dataTables_length">
                                     <a class="btn btn-default buttons-copy btn-sm" tabindex="0">
                                         <span>Copy</span></a>
                                     <a class="btn btn-default buttons-csv buttons-html5 btn-sm"
@@ -61,8 +57,7 @@
                                     <a class="btn btn-default buttons-pdf buttons-html5 btn-sm"
                                        tabindex="0"><span>PDF</span></a>
                                     <a class="btn btn-default buttons-print btn-sm" tabindex="0"><span>Print</span></a>
-
-                                </div>
+                                </div-->
                             </div>
                             <div class="col-sm-4 col-xs-12">
                                 <div class="dataTables_length">
@@ -77,7 +72,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     {% if person_list %}
                         <div class="table-responsive">
@@ -132,27 +126,19 @@
                                         </td>
                                         <td>
                                             <!-- Detail Link -->
-                                            <a href="{% url 'docapp:update_person' person_id=person.id %}">
+                                            <a href="{% url 'docapp:detail_person' person_id=person.id %}">
                                                 <button class="btn btn-primary btn-xs" data-toggle="tooltip"
                                                         data-placement="left" title="" data-original-title="Ver">
                                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                                 </button>
                                             </a>
                                             <!-- Update Link -->
-                                            <a href="{% url 'docapp:detail_person' person_id=person.id %}">
+                                            <a href="{% url 'docapp:update_person' person_id=person.id %}">
                                                 <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                                                         data-placement="left" title="" data-original-title="Editar">
                                                     <i class="fa fa-edit" aria-hidden="true"></i>
                                                 </button>
                                             </a>
-                                            <!-- Delete Link
-                                            <a href="#">
-                                                <button class="btn btn-danger btn-xs" data-toggle="tooltip"
-                                                        data-placement="right" title="" data-original-title="Borrar">
-                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-
-                                                </button>
-                                            </a>-->
                                         </td>
                                     </tr>
                                 {% endfor %}

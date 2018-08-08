@@ -26,178 +26,75 @@
 
 {% block content_main %}
 
-<div class="row">
+    <div class="row">
         <!-- Form controls -->
-    <div class="col-sm-12">
-        <div class="panel panel-bd">
-            <div class="panel-heading">
-                <div class="btn-group">
-                    <a class="btn btn-primary" href="{% url 'docapp:company_list' %}"> <i class="fa fa-list"></i>
+        <div class="col-sm-12">
+            <div class="panel panel-bd">
+                <div class="panel-heading">
+                    <div class="btn-group">
+                        <a class="btn btn-primary" href="{% url 'docapp:company_list' %}"> <i class="fa fa-list"></i>
                             Lista Empresas</a>
+                    </div>
                 </div>
-            </div>
-            <div class="panel-body">
-                <form class="col-sm-12" method="POST">
-                    {% csrf_token %}
-                    <!-- Name input -->
-                    <div class="col-sm-6 form-group">
-                        <label {% if form.name.errors %}  class="label label-danger" {% else %}
-                                                              class="label label-primary" {% endif %}
-                                                              for="{{ form.name.name }}">Nombre </label>
+                <div class="panel-body">
+                    <form class="col-sm-12" method="POST">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            {% if not forloop.counter|divisibleby:"2" %}
+                                <div class="row">
+                            {% endif %}
 
-                        <input type="text"
-                                {% if form.name.errors %} class="form-control label-danger-outline" {% else %}
-                               class="form-control" {% endif %}
-                               name="{{ form.name.name }}"
-                               id="{{ form.name.name }}" placeholder="Ingrese nombre"
-                                {% if form.name.value %}  value="{{ form.name.value }}" {% endif %}
-                               required=""/>
+                        <div class="col-sm-6 form-group">
+                            <label class="label {% if field.errors %} label-danger {% else %} label-primary {% endif %}"
+                                   for="{{ field.name }}">{{ field.label }}</label>
 
-                        {% if form.name.errors %}
-                            <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                        aria-hidden="true">×</span></button>
-                                {% for error in form.name.errors %}
-                                    <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                    {{ error|escape }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <!-- nit input -->
-					<div class="col-sm-6 form-group">
-                        <label {% if form.nit.errors %}  class="label label-danger" {% else %}
-                                                              class="label label-primary" {% endif %}
-                                                              for="{{ form.nit.name }}">NIT</label>
+                            {% if field.field.widget.input_type == 'select' %}
+                                <!-- Select input -->
+                                <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
+                                        name="{{ field.name }}"
+                                        id="{{ field.name }}"
+                                        size="1">
+                                    {% for option in field.field.choices %}
+                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% elif field.field.widget.input_type == 'checkbox' %}
+                                {{ field }}
+                            {% else %}
+                                <input type="{{ field.field.widget.input_type }}"
+                                       class="{% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %} datepicker {% endif %}
+                                           form-control {% if field.errors %} label-danger-outline {% endif %}"
+                                       name="{{ field.name }}"
+                                       id="{{ field.name }}" placeholder="Ingrese {{ field.label }}"
+                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
+                                        {% if field.field.widget.is_required %}  required="" {% endif %}/>
+                            {% endif %}
 
-                        <input type="number"
-                                {% if form.nit.errors %} class="form-control label-danger-outline" {% else %}
-                               class="form-control" {% endif %}
-                               name="{{ form.nit.name }}"
-                               id="{{ form.nit.name }}" placeholder="Ingrese NIT de la emepresa"
-                                {% if form.nit.value %}  value="{{ form.nit.value }}" {% endif %}
-                               required=""/>
+                            {% if field.errors %}
+                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert"
+                                            aria-label="Close"><span
+                                            aria-hidden="true">×</span></button>
+                                    {% for error in field.errors %}
+                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
+                                        {{ error|escape }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
 
-                        {% if form.nit.errors %}
-                            <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                        aria-hidden="true">×</span></button>
-                                {% for error in form.nit.errors %}
-                                    <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                    {{ error|escape }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <!-- Direction -->
-					<div class="col-sm-6 form-group">
-                        <label {% if form.direction.errors %}  class="label label-danger" {% else %}
-                                                              class="label label-primary" {% endif %}
-                                                              for="{{ form.direction.name }}">Direccion</label>
-
-                        <input type="text"
-                                {% if form.nit.errors %} class="form-control label-danger-outline" {% else %}
-                               class="form-control" {% endif %}
-                               name="{{ form.direction.name }}"
-                               id="{{ form.direction.name }}" placeholder="Ingrese direccion"
-                                {% if form.direction.value %}  value="{{ form.direction.value }}" {% endif %}
-                               required=""/>
-
-                        {% if form.direction.errors %}
-                            <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                        aria-hidden="true">×</span></button>
-                                {% for error in form.direction.errors %}
-                                    <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                    {{ error|escape }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <!-- Landline -->
-                    <div class="col-sm-6 form-group">
-                        <label {% if form.land_line.errors %}  class="label label-danger" {% else %}
-                                                              class="label label-primary" {% endif %}
-                                                              for="{{ form.land_line.name }}">Telefono Fijo</label>
-
-                        <input type="number"
-                                {% if form.land_line.errors %} class="form-control label-danger-outline" {% else %}
-                               class="form-control" {% endif %}
-                               name="{{ form.land_line.name }}"
-                               id="{{ form.land_line.name }}" placeholder="Ingrese Telefono fijo"
-                                {% if form.land_line.value %}  value="{{ form.land_line.value }}" {% endif %}
-                               required=""/>
-
-                        {% if form.land_line.errors %}
-                            <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                        aria-hidden="true">×</span></button>
-                                {% for error in form.land_line.errors %}
-                                    <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                    {{ error|escape }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <!-- Cellphone input -->
-                    <div class="col-sm-6 form-group">
-                        <label {% if form.cellphone.errors %}  class="label label-danger" {% else %}
-                                                              class="label label-primary" {% endif %}
-                                                              for="{{ form.cellphone.name }}">Celular</label>
-
-                        <input type="number"
-                                {% if form.cellphone.errors %} class="form-control label-danger-outline" {% else %}
-                               class="form-control" {% endif %}
-                               name="{{ form.cellphone.name }}"
-                               id="{{ form.cellphone.name }}" placeholder="Ingrese Celular"
-                                {% if form.cellphone.value %}  value="{{ form.cellphone.value }}" {% endif %}
-                               required=""/>
-
-                        {% if form.cellphone.errors %}
-                            <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                        aria-hidden="true">×</span></button>
-                                {% for error in form.cellphone.errors %}
-                                    <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                    {{ error|escape }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <!-- contact email -->
-                    <div class="col-sm-6 form-group">
-                        <label {% if form.contact.errors %}  class="label label-danger" {% else %}
-                                                              class="label label-primary" {% endif %}
-                                                              for="{{ form.contact.name }}">Correo de Contacto</label>
-
-                        <input type="email"
-                                {% if form.cellphone.errors %} class="form-control label-danger-outline" {% else %}
-                               class="form-control" {% endif %}
-                               name="{{ form.contact.name }}"
-                               id="{{ form.contact.name }}" placeholder="Ingrese Correo"
-                                {% if form.contact.value %}  value="{{ form.contact.value }}" {% endif %}
-                               required=""/>
-
-                        {% if form.contact.errors %}
-                            <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                        aria-hidden="true">×</span></button>
-                                {% for error in form.contact.errors %}
-                                    <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                    {{ error|escape }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="col-sm-12 reset-button">
-            	        <hr>
-                        <!--a href="#" class="btn btn-warning">Reset</a-->
-                        <button type="submit" class="btn btn-success">Guardar</button>
-                    </div>
-                </form>
+                            {% if forloop.counter|divisibleby:"2" %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                        <div class="col-sm-12 reset-button">
+                            <hr>
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 {% endblock %}

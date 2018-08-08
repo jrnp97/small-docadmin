@@ -12,13 +12,22 @@ class RegisterLaboratory(LoginRequiredMixin, CheckLaboratory, BaseRegisterExamBe
                          FormViewPutExtra):
     model = Laboratory
     form_class = LabForm
+    template_name = 'docapp/register/exam_register.html'
     extra_context = {'exam_name': 'laboratorio',
                      'parent_object_key': 'laboratory',
-                     'blood_section': blood_section,
-                     'habitos_section': habitos_section,
-                     'exams_section': exams_section,
+                     'formsets': [
+                         {'section_name': 'blood',
+                          'title': 'Examen de Sangre',
+                          'form': blood_section},
+
+                         {'section_name': 'habitos',
+                          'title': 'Habitos',
+                          'form': habitos_section},
+                         {'section_name': 'exams',
+                          'title': 'Examenes',
+                          'form': exams_section}
+                     ]
                      }
-    template_name = 'docapp/register/laboratory_formsets.html'
 
 
 register_laboratory = RegisterLaboratory.as_view()

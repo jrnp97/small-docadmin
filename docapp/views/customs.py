@@ -126,17 +126,20 @@ class FormsetPostManager(object):
         """ Overwrite post method to manage formset """
         parent_form = self.get_form()
         form_sets = {}
-        for key, value in self.extra_context.items():
-            print(f"{key} = {value}")
-            if issubclass(value.__class__ if value.__class__ != type else value, BaseInlineFormSet):
-                form_sets.update({key: value(self.request.POST, self.request.FILES)})
+
+        for formset in self.extra_context.get('formsets'):
+            """ Validating if value is a InlineFormSet and don't have initial data """
+            value = formset.get('form')
+            to_check = value.__class__ if value.__class__ != type else value
+            if issubclass(to_check, BaseInlineFormSet) and value is to_check:
+                form_sets.update({formset.get('section_name'): value(self.request.POST, self.request.FILES)})
                 # TODO Make a constraint to only put request.FILES to formset must have
 
         temp = []
         for key, formset in form_sets.items():
             val = not formset.is_valid()
             if val:
-                messages.error(self.request, message=f"Error, Guardando {key} data mal ingresada")
+                messages.error(self.request, message=f"Error, Guardando {key} datos mal ingresados")
             temp.append(val)
 
         if any(temp):
@@ -160,7 +163,7 @@ class FormsetPostManager(object):
             object_parent = self.object  # Is update process
 
         """ Managing formsets """
-        parent_name = self.extra_context.pop('parent_object_key', None)
+        parent_name = self.extra_context.get('parent_object_key')
         for formset in form_sets.values():
             temp = []
             for form in formset:
@@ -236,16 +239,20 @@ class BaseExamUpdateBehavior:
         """ Overwrite to initialize form information putting initial data """
         actual_object = self.get_object()
         form_sets = {}
-        for key, value in self.extra_context.items():
+
+        for formset in self.extra_context.get('formsets'):
             """ Validating if value is a InlineFormSet and don't have initial data """
+            value = formset.get('form')
             to_check = value.__class__ if value.__class__ != type else value
             if issubclass(to_check, BaseInlineFormSet) and value is to_check:
-                form_sets.update({key: value})
+                form_sets.update({formset.get('section_name'): value})
 
         if len(form_sets) > 0:
             # Get initial data
             alias = self.extra_context.get('parent_object_key')
+
             initial_data = []
+
             for formset in form_sets.values():
                 try:
                     data = formset.model.objects.get(**{alias: actual_object})
@@ -259,8 +266,16 @@ class BaseExamUpdateBehavior:
                     initial_data.append([dict_data])
             # put data on extra_content
             for key, initial in zip(form_sets.keys(), initial_data):
-                formset_factory = self.extra_context[key]
-                self.extra_context[key] = formset_factory(initial=initial)
+                post = 0
+                for idx, formset_dict in enumerate(self.extra_context['formsets']):
+                    if formset_dict.get('section_name') == key:
+                        post = idx
+                        break
+                else:
+                    raise ValueError("Error formset information")
+
+                formset_factory =  self.extra_context['formsets'][post].get('form')
+                self.extra_context['formsets'][post]['form'] = formset_factory(initial=initial)
 
         kwargs.update(self.extra_context)  # Update kwargs
         return super(BaseExamUpdateBehavior, self).get_context_data(**kwargs)

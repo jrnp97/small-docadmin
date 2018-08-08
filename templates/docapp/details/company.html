@@ -1,26 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Empresa</title>
-</head>
-<body>
-<h1>{{ company.name }}</h1>
-<hr>
-<p>NIT: {{ company.nit }}</p>
-<p>Direccion: {{ company.direction }}</p>
-<p>Telefono: {{ company.land_line }}</p>
-<p>Celular: {{ company.cellphone }}</p>
-<p>Email de contacto: {{ company.contact }}</p>
-<hr>
-<h2>Acciones</h2>
-<a href="{% url 'docapp:update_company' company_id=company.id %}">Editar</a>
-<hr>
-{% if request.META.HTTP_REFERER %}
-    <a href="{{ request.META.HTTP_REFERER }}">Lista de empresas</a>
-{% else %}
-    <a href="{% url 'docapp:company_list' %}">Lista de empresas</a>
-{% endif %}
+{% extends 'base/base_dashboard.html' %}
+{% load static %}
+{% block title %} {{ company.name|escape }} {% endblock %}
 
-</body>
-</html>
+
+{% block content_header %}
+    <div class="header-icon">
+        <i class="pe-7s-box1"></i>
+    </div>
+    <div class="header-title">
+        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
+            <div class="input-group">
+                <input name="q" class="form-control" placeholder="Search..." type="text">
+                <span class="input-group-btn">
+                                    <button type="submit" name="search" id="search-btn" class="btn"><i
+                                            class="fa fa-search"></i></button>
+                                </span>
+            </div>
+        </form>
+        <h1>{{ company.name }}</h1>
+        <small>Detalles de la empresa</small>
+        <ol class="breadcrumb hidden-xs">
+            <li>
+                <a href="{% url 'docapp:company_list' %}" class="active">
+                    <i class="pe-7s-home"></i>
+                    Lista Empresas</a>
+            </li>
+        </ol>
+    </div>
+{% endblock %}
+
+{% block content_main %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-bd">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            {% if request.user.reception_profile %}
+                                <span class="pull-right">
+                            <a href="{% url 'docapp:update_company' company_id=company.id %}">
+                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                                        data-placement="left" title="" data-original-title="Editar">
+                                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                                </button>
+                                            </a>
+                            </span>
+                            {% endif %}
+                            <h1>{{ company.name|escape }}</h1>
+                            <address>
+                                <abbr title="NIT">{{ company.nit }}</abbr><br>
+                                <abbr title="Dirección">{{ company.direction }}</abbr><br>
+                                <abbr title="Telefono"> {{ company.land_line }}</abbr><br>
+                                <abbr title="Celular">{{ company.cellphone }}</abbr><br>
+                                <a href="mailto:{{ company.contact }}">{{ company.contact }}</a>
+                            </address>
+                            <address>
+                                <p><b>Ultima vez modificado: </b> {{ company.last_modify }}</p>
+                            </address>
+                        </div>
+                    </div>
+                    <hr>
+                    <h2>Empleados registrados</h2>
+                    <div class="table-responsive m-b-20">
+                        {% if company.person_set.all %}
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Identificacion</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Telefono</th>
+                                    <th>Celular</th>
+                                    <th>Sexo</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                {% for person in company.person_set.all %}
+                                    <tr>
+                                        <td>{{ person.identification }}</td>
+                                        <td>{{ person.name }}</td>
+                                        <td>{{ person.last_name }}</td>
+                                        <td>{{ person.land_line }}</td>
+                                        <td>{{ person.cellphone }}</td>
+                                        <td>{{ person.sex }}</td>
+                                    </tr>
+                                    {% if forloop.counter == 5 %}
+                                        {{ break }}
+                                    {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <hr>
+                            <a class="btn btn-success pull-right"
+                               href="{% url 'docapp:filter_person_list' company_id=company.id %}"><i
+                                    class="fa fa-plus"></i>
+                                Ver más
+                            </a>
+                        {% else %}
+                            <h2>No se encuentran empleados registrados</h2>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="panel-footer text-left">
+                    <p style="color: gainsboro">Registrado por: {{ company.create_by.user }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
