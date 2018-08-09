@@ -1,5 +1,6 @@
 {% extends 'base/base_dashboard.html' %}
-
+{% load static %}
+{% load extract_name %}
 {% block title %} Registro Antecedentes {% endblock %}
 
 {% block content_header %}
@@ -40,7 +41,7 @@
 
                     <form class="col-sm-12" method="POST">
                         {% csrf_token %}
-
+                        <!-- General -->
                         {% for field in form %}
                             {% if not forloop.counter|divisibleby:"2" %}
                                 <div class="row">
@@ -90,7 +91,125 @@
                             {% endif %}
                         </div>
                         {% endfor %}
+                        <hr>
+                        <!-- Section riesgos -->
+                        <section class="riesgos">
+                        <span class="pull-left">
+                            <small><b>Seleccione los riesgos presentados</b></small>
+                        </span><br>
+                            {{ hazard_section.management_form }}
+                            {% for hazard in hazard_section.forms %}
+                                <ul>
+                                    {% for form in hazard %}
+                                        <li class="m-t-20" style="list-style-type: none">
+                                            <input name="{{ form.name }}" id="id_hazards-0-fisico" type="checkbox">
+                                            <label class="label {% if form.errors %} label-danger {% else %} label-primary {% endif %}"
+                                                   for="{{ form.name }}">{{ form.label }}</label>
 
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endfor %}
+
+                            {% if hazard_section.non_form_errors %}
+                                <hr>
+                                {% for error in accident_formset.non_form_errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                            {% endif %}
+                        </section>
+                        <hr>
+                        <section class="accidents">
+
+                            {{ formset.form.management_form }}
+                            <div class="panel panel-bd lobidisable">
+                                <div class="panel-heading">
+                                    <div class="btn-group"><h2>Accidentes</h2></div>
+                                </div>
+
+                                <div class="panel-body">
+                                    {% for form in accident_formset.forms %}
+                                        <section id="accident-{{ forloop.counter0 }}" class="accident_form">
+                                            <h3>Accidente #{{ form.id.html_name|extract_name }}</h3>
+                                            <hr>
+                                            {% for field in form %}
+
+                                                {% if not forloop.counter|divisibleby:"2" %}
+                                                    <div class="row">
+                                                {% endif %}
+
+                                            {% if field.field.widget.input_type == 'hidden' %}
+                                                {{ field }}
+                                            {% else %}
+
+                                                <div class="col-sm-6 form-group">
+
+                                                    <label class="label {% if field.errors %} label-danger
+                                                                            {% else %} label-primary {% endif %}"
+                                                           for="{{ field.name }}">{{ field.label }}</label>
+
+                                                    {% if field.field.widget.input_type == 'select' %}
+                                                        <!-- Select input -->
+                                                        <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
+                                                                name="{{ field.name }}"
+                                                                id="{{ field.name }}"
+                                                                size="1">
+                                                            {% for option in field.field.choices %}
+                                                                <option value="{{ option.0 }}"
+                                                                        {% if field.value == option.0 %}
+                                                                        selected {% endif %}>{{ option.1 }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    {% elif field.field.widget.input_type == 'checkbox' %}
+                                                        {{ field }}
+                                                    {% else %}
+                                                        <input type="{{ field.field.widget.input_type }}"
+                                                               class="{% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %} datepicker {% endif %}
+                                                                      form-control {% if field.errors %} label-danger-outline {% endif %}"
+                                                               name="{{ field.name }}"
+                                                               id="{{ field.name }}"
+                                                               placeholder="Ingrese {{ field.label }}"
+                                                                {% if field.value %}
+                                                               value="{{ field.value }}" {% endif %}
+                                                                {% if field.field.widget.is_required %}
+                                                               required="" {% endif %}/>
+                                                    {% endif %}
+
+                                                    {% if field.errors %}
+                                                        <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
+                                                             role="alert">
+                                                            <button type="button" class="close" data-dismiss="alert"
+                                                                    aria-label="Close"><span
+                                                                    aria-hidden="true">×</span></button>
+                                                            {% for error in field.errors %}
+                                                                <i class="fa fa-exclamation-circle"></i>
+                                                                <strong>Error!</strong>
+                                                                {{ error|escape }}
+                                                            {% endfor %}
+                                                        </div>
+                                                    {% endif %}
+
+                                                </div>
+                                            {% endif %}
+
+                                            {% if forloop.counter|divisibleby:"2" %}
+                                                </div>
+                                            {% endif %}
+
+                                            {% endfor %}
+                                        </section>
+                                    {% endfor %}
+                                </div>
+                                {% if accident_formset.non_form_errors %}
+                                    <hr>
+                                    {% for error in accident_formset.non_form_errors %}
+                                        {{ error|escape }}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+
+
+                        </section>
                         <div class="col-sm-12 reset-button">
                             <hr>
                             <!--a href="#" class="btn btn-warning">Reset</a-->
@@ -103,71 +222,13 @@
     </div>
 
 {% endblock %}
-<!-- -->
-
-{% if messages %}
-    {% for message in messages %}
-        {{ message }}
-    {% endfor %}
-    <hr>
-{% endif %}
-<form method="POST">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <hr>
-    <h2> Riesgos </h2>
-    <!-- Riesgos Section -->
-    {{ hazard_section.management_form }}
-
-    {% for hazard in hazard_section.forms %}
-        <div class="hazard_section">
-            {{ hazard|crispy }}
-        </div>
-    {% endfor %}
-
-    {% if hazard_section.non_form_errors %}
-        <hr>
-        {% for error in accident_formset.non_form_errors %}
-            {{ error|escape }}
-        {% endfor %}
-    {% endif %}
-    <hr>
-    <!-- End Riesgo Section -->
-    <h2>Accidentes</h2>
-
-
-    <div class="accident_formset">
-        {% for accident_form in accident_formset %}
-            {{ accident_form.id }}
-            {% if accident_form.instance.pk %}
-                {{ accident_form.DELETE }}
-            {% endif %}
-            {{ accident_form|crispy }}
-            <hr>
-        {% endfor %}
-    </div>
-
-    {{ accident_formset.management_form }}
-
-    {% if accident_formset.non_form_errors %}
-        <hr>
-        {% for error in accident_formset.non_form_errors %}
-            {{ error|escape }}
-        {% endfor %}
-    {% endif %}
-
-    <hr>
-    <button type="submit"> Guardar</button>
-    <a href="{% url 'docapp:dashboard' %}">Inicio</a>
-</form>
-
-<script type="application/javascript" src="{% static 'js/jquery-3.3.1.slim.min.js' %}"></script>
-<script type="application/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
-<script type="text/javascript">
-    $('.accident_formset').formset({
-        prefix: '{{ accident_formset.prefix }}',
-        formCssClass: 'dynamic-formset2'
-    });
-</script>
-</body>
-</html>
+{% block scripts %}
+    {{ block.super }}
+    <script type="application/javascript" src="{% static 'js/jquery.formset.js' %}"></script>
+    <script type="text/javascript">
+        $('.accident_form').formset({
+            prefix: '{{ accident_formset.prefix }}',
+            formCssClass: 'dynamic-formset2'
+        });
+    </script>
+{% endblock %}
