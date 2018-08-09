@@ -10,8 +10,6 @@ urlpatterns = [
     url(r'^personal/(?P<user_id>[0-9]+)/$', views.detail_personal, name='detail_personal'),
 
     url(r'^update/profile/(?P<user_id>[0-9]+)/$', views.update_profile, name='update_profile'),
-    url(r'^delete/profile/(?P<user_id>[0-9]+)/$', views.delete_profile, name='delete_profile'),
-    url(r'^profile/(?P<user_id>[0-9]+)/$', views.show_profile, name='show_profile'),
     url(r'^profile/(?P<user_id>[0-9]+)/$', views.show_profile, name='show_profile'),
 
     url(r'^users/$', views.user_list, name='user_list')

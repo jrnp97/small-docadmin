@@ -57,7 +57,8 @@
                                         id="{{ field.name }}"
                                         size="1">
                                     {% for option in field.field.choices %}
-                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                        <option value="{{ option.0 }}" {% if field.value == option.0 %}
+                                                selected {% endif %}>{{ option.1 }}</option>
                                     {% endfor %}
                                 </select>
                             {% elif field.field.widget.input_type == 'checkbox' %}

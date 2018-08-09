@@ -19,8 +19,7 @@ class UserAdmin(admin.ModelAdmin):
             if obj.is_superuser:
                 info = {'user': obj}
                 ReceptionProfile(**info).save()
-                LaboratoryProfile(**info).save()
-                DoctorProfile(**info).save()
+                # Administrator only can be receptionist profile
             elif obj.profile_type == 'receptionist':
                 info = {'user': obj}
                 reception = ReceptionProfile(**info)

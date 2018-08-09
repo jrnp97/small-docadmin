@@ -44,7 +44,6 @@ class BaseUserForm(forms.ModelForm):
                 elif instance.profile_type == 'doctor':
                     info = {'user': instance}
                     doctor = DoctorProfile(**info)
-                    # Save doctor
                     doctor.save()
             except IntegrityError:
                 instance.delete(destroy=True)

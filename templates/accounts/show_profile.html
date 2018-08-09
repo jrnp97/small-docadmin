@@ -59,20 +59,6 @@
                     </section>
                 </div>
 
-
-                <!--<div class="twt-category">
-                    <ul>
-                        <li class="active tweets-color"><h5>627</h5> Tweets</li>
-                        <li class="following-color"><h5>528</h5> Following</li>
-                        <li class="followers-color"><h5>2015</h5> Followers</li>
-                    </ul>
-                </div>
-
-                <div class="twt-write col-sm-12">
-                    <textarea placeholder="Write your Tweet and Enter" rows="1"
-                              class="form-control t-text-area"></textarea>
-                </div>-->
-
                 <footer class="twt-footer">
                     Ultima Vez Activo<span class="pull-right">{{ user.last_login }}</span>
                 </footer>
@@ -81,30 +67,3 @@
         </div>
     </div>
 {% endblock %}
-
-<!--<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Profile Detail</title>
-</head>
-<body>
-<h1>{{ user.get_full_name }}</h1>
-<hr>
-<h2>Basic information</h2>
-<p><b>First Name:</b> {{ user.first_name }}</p>
-<p><b>Last Name:</b> {{ user.last_name }}</p>
-<p><b>Email:</b> {{ user.email }}</p>
-<p><b>Active:</b> {{ user.is_active }}</p>
-<p><b>Last Login:</b> {{ user.last_login }}</p>
-<p><b>Role:</b> {{ user.profile_type }}</p>
-
-    <hr>
-    <h2>Acciones</h2>
-    <a role="button" href="">Edit profile</a>
-    <a role="button" href="{% url 'accounts:delete_personal' user_id=user.id %}">Delete Profile</a>
-
-    <a href="{% url 'accounts:user_list' %}">Cancelar</a>
-<hr>
-</body>
-</html>-->

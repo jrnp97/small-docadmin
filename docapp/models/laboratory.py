@@ -29,6 +29,12 @@ class Laboratory(models.Model):
     def get_person(self):
         return self.exam_type.person.name
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        response = super(Laboratory, self).save(force_insert, force_update, using, update_fields)
+        self.exam_type.update_state()
+        return response
+
     class Meta:
         db_table = "laboratory"
 

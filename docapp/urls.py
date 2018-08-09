@@ -24,6 +24,7 @@ urlpatterns = [
 
     # Exam urls
     url(r'^register/exam/(?P<person_id>[0-9]+)/$', views.register_exam, name='register_exam'),
+    # url(r'^update/exam/(?P<pk>[0-9]+)/$', views.update_exam, name='update_exam'),
     url(r'^exams/$', views.exam_list, name='exam_list'),
 
     # Registro de examanes

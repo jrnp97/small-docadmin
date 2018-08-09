@@ -24,6 +24,12 @@ class Visiometry(models.Model):
     def __str__(self):
         return self.exam_type.name
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        response = super(Visiometry, self).save(force_insert, force_update, using, update_fields)
+        self.exam_type.update_state()
+        return response
+
     class Meta:
         db_table = "exam_visiometria"
 

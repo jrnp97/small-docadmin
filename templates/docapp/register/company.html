@@ -17,10 +17,6 @@
         </form>
         <h1>Registro Empresas</h1>
         <small>Ingrese informacion correspondiente</small>
-        <ol class="breadcrumb hidden-xs">
-            <li><a href="{% url 'docapp:dashboard' %}"><i class="pe-7s-home"></i> Home</a></li>
-            <li class="active">Dashboard</li>
-        </ol>
     </div>
 {% endblock %}
 
@@ -55,7 +51,8 @@
                                         id="{{ field.name }}"
                                         size="1">
                                     {% for option in field.field.choices %}
-                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                        <option value="{{ option.0 }}" {% if field.value == option.0 %}
+                                                selected {% endif %}>{{ option.1 }}</option>
                                     {% endfor %}
                                 </select>
                             {% elif field.field.widget.input_type == 'checkbox' %}

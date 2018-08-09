@@ -9,7 +9,7 @@ User = get_user_model()
 
 # Create your models here.
 class Company(models.Model):
-    name = models.CharField(max_length=300, null=False, blank=False)
+    name = models.CharField(max_length=300, null=False, blank=False, unique=True)
     nit = models.PositiveIntegerField(verbose_name='NIT')
     direction = models.CharField(max_length=500, null=False, blank=False)
     land_line = models.PositiveIntegerField(null=True)
@@ -110,6 +110,25 @@ class ExamType(models.Model):
                          hasattr(self, 'occupational'), hasattr(self, 'audiometry'),
                          hasattr(self, 'laboratory')]
         return examenes_done.count(1) * 25
+
+    def finished(self):
+        examenes_done = [hasattr(self, 'visiometry'), hasattr(self, 'audiology'),
+                         hasattr(self, 'occupational'), hasattr(self, 'audiometry'),
+                         hasattr(self, 'laboratory')]
+        return all(examenes_done)
+
+    def update_state(self):
+        process = self.get_process()
+        change = False
+        if self.state == 'pendiente' and process > 0 and process < 100:
+            self.state = 'iniciado'
+            change = True
+        elif self.state == 'iniciado' and process == 100:
+            self.state = 'finalizado'
+            change = True
+        if change:
+            self.save()
+
 
 
 class AntecedentJobs(models.Model):

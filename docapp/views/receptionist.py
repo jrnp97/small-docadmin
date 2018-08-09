@@ -83,7 +83,7 @@ person_antecedent_list = AntecedentList.as_view()
 class RegisterCompany(CheckReceptionist, LoginRequiredMixin, FormView):
     form_class = CompanyForm
     template_name = 'docapp/register/company.html'
-    success_url = reverse_lazy('docapp:register_company')
+    success_url = reverse_lazy('docapp:company_list')
 
     def form_valid(self, form):
         # Add Create_by

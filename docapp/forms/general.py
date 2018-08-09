@@ -69,6 +69,26 @@ class ExamForm(forms.ModelForm):
             instance.save()
         return instance
 
+"""
+class ExamUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Exam
+        fields = ('state',)
+
+    def clean(self):
+        # Validate when register exam it's state been pendiente 
+        if any(self.errors):
+            return
+
+        if getattr(self, 'initial') and self.cleaned_data.get('state') != 'pendiente':
+            raise forms.ValidationError(
+                message='El estado no puede ser diferente a pendiente, apenas se inicia el proceso',
+                code='invalid'
+            )
+        else:
+            delattr(self, 'initial')  # Clean form data
+"""
+
 
 class AntecedentForm(forms.ModelForm):
     class Meta:

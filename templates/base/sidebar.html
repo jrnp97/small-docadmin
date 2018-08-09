@@ -25,12 +25,15 @@
                 <!-- Personal options -->
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-user-md"></i><span>Personal</span>
-                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        <i class="fa fa-user-circle-o"></i><span>Recursos Humanos</span>
+                        <span class="pull-right-container">
+                                            <i class="fa fa-angle-left pull-right"></i>
+                                        </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{% url 'accounts:register_personal' %}">Registro</a></li>
-                        <li><a href="{% url 'accounts:user_list' %}">Lista</a></li>
+                        <li><a href="{% url 'accounts:register_personal' %}">Añadir Empleado</a></li>
+                        <li><a href="{% url 'accounts:user_list' %}">Lista Empleados</a></li>
+
                     </ul>
                 </li>
             {% endif %}

@@ -1,14 +1,16 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import UpdateView
+from django.core.urlresolvers import reverse_lazy
 
-from docapp.models import Visiometry, Audiology, Audiometry, Occupational
+from docapp.models import Visiometry, Audiology, Audiometry, Occupational, ExamType
 from docapp.forms import (VisioForm, sintomas_section, ant_enfermedad_section, ant_uso_lentes_section, ant_extra_exams,
                           agudeza_section, cronomatica_section,
                           AudioForm, ananmesis_section, ant_familiar_section, ant_otro_section, exposicion_section,
                           estado_actual_section,
                           AudiometriaForm, otoscopia_section, information_section,
                           OcupaForm, ant_familiares_section, habitos_section, fisico_general_form,
-                          organos_sentidos_section, conclusion_section)
+                          organos_sentidos_section, conclusion_section,
+                          ExamForm)
 
 from .chekers import CheckDoctor
 from .customs import FormViewPutExtra, FormsetPostManager, BaseRegisterExamBehavior, BaseExamUpdateBehavior
@@ -183,6 +185,7 @@ update_visiometry = UpdateVisiometry.as_view()
 class UpdateAudiology(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, FormsetPostManager, UpdateView):
     model = Audiology
     form_class = AudioForm
+    template_name = 'docapp/register/exam_register.html'
     extra_context = {'exam_name': 'audiologia',
                      'parent_object_key': 'audiology',
                      'formsets': [
@@ -207,8 +210,6 @@ class UpdateAudiology(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, F
                           'form': estado_actual_section},
                      ]
                      }
-
-    template_name = 'docapp/register/audiology_formsets.html'
 
 
 update_audiology = UpdateAudiology.as_view()
@@ -265,3 +266,24 @@ class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior
 
 
 update_occupational = UpdateOccupational.as_view()
+
+"""
+class UpdateExam(LoginRequiredMixin, CheckDoctor,  UpdateView):
+    model = ExamType
+    form_class = ExamForm
+    success_url = reverse_lazy('docapp:exam_list')
+    template_name = 'docapp/register/exam.html'
+
+    def form_valid(self, form):
+        exam = self.get_object()
+        form.person = exam.person
+        form.create_by = self.request.user.reception_profile
+        form.initial = True
+        instance = form.save()
+        if instance:
+            messages.success(self.request, message="Examen Actualizado exitosamente")
+        return super(RegisterExam, self).form_valid(form)
+
+
+register_exam = UpdateExam.as_view()
+"""

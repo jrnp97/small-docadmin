@@ -19,10 +19,6 @@
         </form>
         <h1>Empleados</h1>
         <small>Lista de empleados</small>
-        <ol class="breadcrumb hidden-xs">
-            <li><a href="{% url 'docapp:dashboard' %}"><i class="pe-7s-home"></i> Home</a></li>
-            <li class="active">Dashboard</li>
-        </ol>
     </div>
 {% endblock %}
 
@@ -30,9 +26,20 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="panel panel-bd lobidisable">
-                <div class="panel-heading">
-                    <!-- Empy -->
-                </div>
+                <div class="panel-heading"> <!-- Empy --> </div>
+                {% if messages %}
+                    <div class="text-center">
+                        {% for message in messages %}
+                            <div class="alert alert-sm alert-{{ message.level_tag }} alert-dismissible m-t-20"
+                                 role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">×</span></button>
+                                <i class="fa fa-exclamation-circle"></i>
+                                <strong>{{ message.level_tag|capfirst }}!</strong> {{ message|escape }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <div class="panel-body">
                     <div class="row">
                         <div class="panel-header">
