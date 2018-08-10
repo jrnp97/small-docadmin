@@ -1,46 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Antecedente</title>
-</head>
-<body>
-<h1>Antecedentes de {{ antecedent.person }}</h1>
-<hr>
-<p>Empresa donde laboro: {{ antecedent.company }}</p>
-<p>Cargo que tuvo: {{ antecedent.occupation }}</p>
-<p>Tiempo de duracion: {{ antecedent.time }}</p>
-<p>Uso EPP: {{ antecedent.uso_epp }}</p>
-<p>Numero de riesgos: {{ antecedent.hazards.get_number_hazard }}</p>
-<p>Riesgos: {{ antecedent.hazards.as_dict }} </p>
-<p>Registrado por: {{ antecedent.create_by.user.username }}</p>
-<p>Ultima vez modificado: {{ antecedent.last_modify }}</p>
-<hr>
-<h2>Accidentes</h2>
-<hr>
-{% if antecedent.accidents.all %}
-    {% for accident in antecedent.accidents.all %}
-        <h3>Accidente #{{ forloop.counter }}</h3>
-        <hr>
-        <p>Tipo de accidente: {{ accident.tipo }}</p>
-        <p>Cuenta con secuelas: {{ accident.secuelas }}</p>
-        <p>Fecha: {{ accident.fecha }}</p>
-        <p>Fue atendido: {{ accident.atendido }}</p>
-        <p>Calificado: {{ accident.calificado }}</p>
-        <p>Descripcion: {{ accident.description }}</p>
-        <p>Registrado por: {{ accident.create_by.user }}</p>
-    {% endfor %}
-{% else %}
-    <h3>No registra Accidentes</h3>
-{% endif %}
-<hr>
-<h3>Acciones</h3>
-<a href="{% url 'docapp:update_antecedent' antecedent_id=antecedent.id %}">Editar</a>
-<hr>
-{% if request.META.HTTP_REFERER %}
-    <a href="{{ request.META.HTTP_REFERER }}">Lista de empresas</a>
-{% else %}
-    <a href="{% url 'docapp:company_list' %}">Lista de empresas</a>
-{% endif %}
-</body>
-</html>
+{% extends 'base/base_dashboard.html' %}
+{% load static %}
+{% block title %} Detalles | Antecedente {% endblock %}
+
+{% block content_header %}
+    <div class="header-icon">
+        <i class="pe-7s-box1"></i>
+    </div>
+    <div class="header-title">
+        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
+            <div class="input-group">
+                <input name="q" class="form-control" placeholder="Search..." type="text">
+                <span class="input-group-btn">
+                                    <button type="submit" name="search" id="search-btn" class="btn"><i
+                                            class="fa fa-search"></i></button>
+                                </span>
+            </div>
+        </form>
+        <h1>Antecedentes de {{ antecedent.person }}</h1>
+        <small>Detalles del antecedente</small>
+        <ol class="breadcrumb hidden-xs">
+            <li>
+                <a href="{% url 'docapp:person_antecedent_list' person_id=antecedent.person.id %}" class="active">
+                    <i class="pe-7s-home"></i>
+                    Lista Antecedentes</a>
+            </li>
+        </ol>
+    </div>
+{% endblock %}
+
+{% block content_main %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-bd">
+                <div class="panel-body">
+                    <!-- Title -->
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            {% if request.user.reception_profile %}
+                                <span class="pull-right">
+                                <a href="{% url 'docapp:update_antecedent' antecedent_id=antecedent.id %}">
+                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                                        data-placement="left" title="" data-original-title="Editar">
+                                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                                </button>
+                                            </a>
+                            </span>
+                            {% endif %}
+                            <h1>Antecedentes de {{ antecedent.person }}</h1>
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- Information -->
+                    <div class="row">
+                        <div class="col-sm-12 text-left">
+                            <p><b>Empresa donde laboro:</b> {{ antecedent.company }}</p>
+                            <p><b>Cargo que tuvo:</b> {{ antecedent.occupation }}</p>
+                            <p><b>Tiempo de duracion:</b> {{ antecedent.time }}</p>
+                            <p><b>Uso EPP:</b> {{ antecedent.uso_epp }}</p>
+                            <p><b>Numero de riesgos:</b> {{ antecedent.hazards.get_number_hazard }}</p>
+                            <p><b>Riesgos:</b> {{ antecedent.hazards.get_label_hazards }} </p>
+                            <p><b>Registrado por:</b> {{ antecedent.create_by.user.username }}</p>
+                            <p><b>Ultima vez modificado:</b> {{ antecedent.last_modify }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer text-left">
+                    <p style="color: gainsboro">Registrado por: {{ antecedent.create_by.user.username }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

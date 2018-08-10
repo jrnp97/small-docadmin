@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 
-from docapp.models import Company, Person, ExamType as Exam, AntecedentJobs, JobAccidents, Hazards
+from docapp.models import Company, Person, ExamType as Exam, AntecedentJobs, Hazards
 
 
 class CompanyForm(forms.ModelForm):
@@ -122,7 +122,7 @@ hazards_inlineformset = forms.inlineformset_factory(parent_model=AntecedentJobs,
                                                     max_num=1
                                                     )
 
-
+"""
 class AccidentsForm(forms.ModelForm):
     class Meta:
         model = JobAccidents
@@ -134,3 +134,4 @@ class AccidentsForm(forms.ModelForm):
 accidents_formset = forms.inlineformset_factory(parent_model=AntecedentJobs, model=JobAccidents,
                                                 form=AccidentsForm,
                                                 can_delete=True)
+"""

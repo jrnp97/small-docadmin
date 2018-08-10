@@ -46,14 +46,10 @@ class BloodExam(models.Model):
     )
 
     BLOOD_TYPE = (
-        ('a+', 'A+'),
-        ('a-', 'A-'),
-        ('b+', 'B+'),
-        ('b-', 'B-'),
-        ('ab+', 'AB+'),
-        ('ab-', 'AB-'),
-        ('o+', 'O+'),
-        ('o-', 'O-')
+        ('a', 'A'),
+        ('b-', 'B'),
+        ('ab-', 'AB'),
+        ('o+', 'O'),
     )
     rh_information = models.CharField(verbose_name='RH', max_length=1, choices=RH, null=False, blank=False)
     blood_type = models.CharField(verbose_name='tipo_sangre', max_length=5, choices=BLOOD_TYPE, null=False,

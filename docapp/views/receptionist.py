@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 
-from docapp.forms import CompanyForm, PersonForm, AntecedentForm, hazards_inlineformset, accidents_formset, ExamForm
-from docapp.models import Company, Person, AntecedentJobs, Hazards, JobAccidents, ExamType
+from docapp.forms import CompanyForm, PersonForm, AntecedentForm, hazards_inlineformset, ExamForm
+from docapp.models import Company, Person, AntecedentJobs, Hazards, ExamType
 
 from .chekers import CheckReceptionist, CheckUser, CheckRecOrDoc
 from .customs import ListFilterView, FormViewPutExtra, FormsetPostManager
@@ -126,13 +126,17 @@ class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManag
     pk_url_kwarg = 'person_id'
     form_class = AntecedentForm
     model = AntecedentJobs
-    template_name = 'docapp/register/register_antecedent_formsets.html'
+    template_name = 'docapp/register/antecedent.html'
     success_url = reverse_lazy('docapp:person_list')
     model_to_filter = Person
     context_object_2_name = 'person'
     extra_context = {'parent_object_key': 'work',
-                     'accident_formset': accidents_formset,
-                     'hazard_section': hazards_inlineformset}
+                     'formsets': [
+                         {'section_name': 'riesgos',
+                          'title': 'Riesgos',
+                          'form': hazards_inlineformset}
+                     ]
+                     }
 
     def _custom_save(self, form):
         person = self.get_object()
@@ -195,11 +199,15 @@ class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManager
     context_object_name = 'antecedent'
     model = AntecedentJobs
     form_class = AntecedentForm
-    template_name = 'docapp/register/register_antecedent_formsets.html'
+    template_name = 'docapp/register/antecedent.html'
     success_url = reverse_lazy('docapp:person_list')
     extra_context = {'parent_object_key': 'work',
-                     'accident_formset': accidents_formset,
-                     'hazard_section': hazards_inlineformset}
+                     'formsets': [
+                         {'section_name': 'riesgos',
+                          'title': 'Riesgos',
+                          'form': hazards_inlineformset}
+                     ]
+                     }
 
     def form_valid(self, form):
         """ Overwrite form_valid to add missing information"""
@@ -212,18 +220,21 @@ class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManager
         """ Overwrite get_context_data method to append formset necessary"""
         antecedent = self.get_object()
         try:
-            hazard_initial_data = [Hazards.objects.get(work=antecedent).as_dict()]
+            data = Hazards.objects.get(work=antecedent)
+            dict_data = vars(data)
+            # Delete unneeded info
+            dict_data.pop('_state', None)
+            dict_data.pop('id', None)
+            hazard_initial_data = [dict_data]
         except ObjectDoesNotExist:
             hazard_initial_data = []
-        accident_data = JobAccidents.objects.filter(work=antecedent)
-        accident_initial_data = []
-        for accident in accident_data:
-            accident_initial_data.append(accident.as_dict())
-        print(accident_initial_data)
-        print(len(accident_initial_data))
         self.extra_context = {'parent_object_key': 'work',
-                              'hazard_section': hazards_inlineformset(initial=hazard_initial_data),
-                              'accident_formset': accidents_formset(initial=accident_initial_data)}
+                              'formsets': [
+                                  {'section_name': 'riesgos',
+                                   'title': 'Riesgos',
+                                   'form': hazards_inlineformset(initial=hazard_initial_data)}
+                              ]
+                              }
         kwargs.update(self.extra_context)
         return super(UpdateAntecedent, self).get_context_data(**kwargs)
 

@@ -130,7 +130,6 @@ class ExamType(models.Model):
             self.save()
 
 
-
 class AntecedentJobs(models.Model):
     company = models.CharField(max_length=300, null=False, blank=False)
     occupation = models.CharField(max_length=500, null=False, blank=False)
@@ -173,39 +172,13 @@ class Hazards(models.Model):
                    )
         return str(hazards.count(True))
 
-    def as_dict(self):
-        return {
-            'fisico': self.fisico,
-            'quimico': self.quimico,
-            'mecanico': self.mecanico,
-            'ergonomico': self.ergonomico,
-            'electrico': self.electrico,
-            'psicologico': self.psicologico,
-            'locativo': self.locativo,
-        }
-
-
-class JobAccidents(models.Model):
-    secuelas = models.TextField(null=False, blank=False)
-    tipo = models.CharField(max_length=200, null=False, blank=False)
-    atendido = models.BooleanField(default=False, null=False, blank=False)
-    calificado = models.BooleanField(default=False, null=False, blank=False)
-    fecha = models.DateField(null=False, blank=False)
-    description = models.TextField(null=False, blank=False)
-
-    work = models.ForeignKey(AntecedentJobs, on_delete=models.CASCADE, related_name='accidents')
-
-    create_by = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.tipo
-
-    def as_dict(self):
-        return {
-            'secuelas': self.secuelas,
-            'tipo': self.tipo,
-            'atendido': self.atendido,
-            'calificado': self.calificado,
-            'fecha': self.fecha,
-            'description': self.description,
-        }
+    def get_label_hazards(self):
+        hazards = {'fisico': self.fisico,
+                   'quimico': self.quimico,
+                   'mecanico': self.mecanico,
+                   'ergonomico': self.ergonomico,
+                   'electrico': self.electrico,
+                   'psicologico': self.psicologico,
+                   'locativo': self.locativo
+                   }
+        return ", ".join([key for key, val in hazards.items() if val])
