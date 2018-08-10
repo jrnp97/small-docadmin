@@ -70,49 +70,49 @@ class Exams(models.Model):
             (APLICA, 'Aplica'),
         )
 
-        vdrl_date = models.DateField(null=False, blank=False)
-        vdrl_lab = models.CharField(max_length=100, null=False, blank=False)
-        vdrl_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=False, blank=False)
+        vdrl_date = models.DateField(null=True, blank=True)
+        vdrl_lab = models.CharField(max_length=100, null=True, blank=True)
+        vdrl_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
-        serologia_date = models.DateField(null=False, blank=False)
-        serologia_lab = models.CharField(max_length=100, null=False, blank=False)
-        serologia_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=False, blank=False)
+        serologia_date = models.DateField(null=True, blank=True)
+        serologia_lab = models.CharField(max_length=100, null=True, blank=True)
+        serologia_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
-        hemograma_date = models.DateField(null=False, blank=False)
-        hemograma_lab = models.CharField(max_length=100, null=False, blank=False)
-        hemograma_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=False, blank=False)
+        hemograma_date = models.DateField(null=True, blank=True)
+        hemograma_lab = models.CharField(max_length=100, null=True, blank=True)
+        hemograma_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
-        uroanalisis_date = models.DateField(null=False, blank=False)
-        uroanalisis_lab = models.CharField(max_length=100, null=False, blank=False)
-        uroanalisis_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=False, blank=False)
+        uroanalisis_date = models.DateField(null=True, blank=True)
+        uroanalisis_lab = models.CharField(max_length=100, null=True, blank=True)
+        uroanalisis_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
-        colesterol_total_date = models.DateField(null=False, blank=False)
-        colesterol_total_lab = models.CharField(max_length=100, null=False, blank=False)
-        colesterol_total_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=False, blank=False)
+        colesterol_total_date = models.DateField(null=True, blank=True)
+        colesterol_total_lab = models.CharField(max_length=100, null=True, blank=True)
+        colesterol_total_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
-        colesterol_hdi_date = models.DateField(null=False, blank=False)
-        colesterol_hdi_lab = models.CharField(max_length=100, null=False, blank=False)
-        colesterol_hdi_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=False, blank=False)
+        colesterol_hdi_date = models.DateField(null=True, blank=True)
+        colesterol_hdi_lab = models.CharField(max_length=100, null=True, blank=True)
+        colesterol_hdi_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
-        trigliceridos_date = models.DateField(null=False, blank=False)
-        trigliceridos_lab = models.CharField(max_length=100, null=False, blank=False)
-        trigliceridos_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=False, blank=False)
+        trigliceridos_date = models.DateField(null=True, blank=True)
+        trigliceridos_lab = models.CharField(max_length=100, null=True, blank=True)
+        trigliceridos_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
-        colesterol_ldi_date = models.DateField(null=False, blank=False)
-        colesterol_ldi_lab = models.CharField(max_length=100, null=False, blank=False)
-        colesterol_ldi_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=False, blank=False)
+        colesterol_ldi_date = models.DateField(null=True, blank=True)
+        colesterol_ldi_lab = models.CharField(max_length=100, null=True, blank=True)
+        colesterol_ldi_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
-        KOH_unias_date = models.DateField(null=False, blank=False)
-        KOH_unias_lab = models.CharField(max_length=100, null=False, blank=False)
-        KOH_unias_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=False, blank=False)
+        KOH_unias_date = models.DateField(null=True, blank=True)
+        KOH_unias_lab = models.CharField(max_length=100, null=True, blank=True)
+        KOH_unias_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
-        frotis_garganta_date = models.DateField(null=False, blank=False)
-        frotis_garganta_lab = models.CharField(max_length=100, null=False, blank=False)
-        frotis_garganta_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=False, blank=False)
+        frotis_garganta_date = models.DateField(null=True, blank=True)
+        frotis_garganta_lab = models.CharField(max_length=100, null=True, blank=True)
+        frotis_garganta_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
-        coprologico_date = models.DateField(null=False, blank=False)
-        coprologico_lab = models.CharField(max_length=100, null=False, blank=False)
-        coprologico_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=False, blank=False)
+        coprologico_date = models.DateField(null=True, blank=True)
+        coprologico_lab = models.CharField(max_length=100, null=True, blank=True)
+        coprologico_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
         laboratory = models.OneToOneField(Laboratory,
                                           null=False,

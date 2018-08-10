@@ -1,8 +1,5 @@
 # TODO
-- Change label to forms
-- Delete and re-create database data
-- Integrate Antecedent Forms
-- Integrate Accident to Antecedents
+- Change label to forms on Person
 
 <!-- Accident Model
 class JobAccidents(models.Model):
