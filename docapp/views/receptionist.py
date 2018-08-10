@@ -279,7 +279,7 @@ class RegisterExam(CheckReceptionist, LoginRequiredMixin, FormViewPutExtra):
     form_class = ExamForm
     model_to_filter = Person
     context_object_2_name = 'person'
-    success_url = reverse_lazy('docapp:dashboard')
+    success_url = reverse_lazy('docapp:exam_list')
     template_name = 'docapp/register/exam.html'
 
     def form_valid(self, form):

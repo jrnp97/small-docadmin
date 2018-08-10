@@ -56,13 +56,13 @@
 
                     <div class="col-sm-6 form-group">
                         <label class="label {% if field.errors %} label-danger {% else %} label-primary {% endif %}"
-                               for="{{ field.name }}">{{ field.label }}</label>
+                               for="{{ field.id_for_label }}">{{ field.label }}</label>
 
                         {% if field.field.widget.input_type == 'select' %}
                             <!-- Select input -->
                             <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                    name="{{ field.name }}"
-                                    id="{{ field.name }}"
+                                    name="{{ field.html_name }}"
+                                    id="{{ field.auto_id }}"
                                     size="1">
                                 {% for option in field.field.choices %}
                                     <option value="{{ option.0 }}">{{ option.1 }}</option>
@@ -74,8 +74,8 @@
                             <input type="{{ field.field.widget.input_type }}"
                                    class="{% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %} datepicker {% endif %}
                                            form-control {% if field.errors %} label-danger-outline {% endif %}"
-                                   name="{{ field.name }}"
-                                   id="{{ field.name }}" placeholder="Ingrese {{ field.label }}"
+                                   name="{{ field.html_name }}"
+                                   id="{{ field.auto_id }}" placeholder="Ingrese {{ field.label }}"
                                     {% if field.value %}  value="{{ field.value }}" {% endif %}
                                     {% if field.field.widget.is_required %}  required="" {% endif %}/>
                         {% endif %}
@@ -119,13 +119,13 @@
                                         <div class="col-sm-6 form-group">
                                             <label class="label {% if field.errors %} label-danger
                                                                         {% else %} label-primary {% endif %}"
-                                                   for="{{ field.name }}">{{ field.label }}</label>
+                                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
 
                                             {% if field.field.widget.input_type == 'select' %}
                                                 <!-- Select input -->
                                                 <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                                        name="{{ field.name }}"
-                                                        id="{{ field.name }}"
+                                                        name="{{ field.html_name }}"
+                                                        id="{{ field.auto_id }}"
                                                         size="1">
                                                     {% for option in field.field.choices %}
                                                         <option value="{{ option.0 }}" {% if field.value == option.0 %}
@@ -138,8 +138,8 @@
                                                 <input type="{{ field.field.widget.input_type }}"
                                                        class="{% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %} datepicker {% endif %}
                                                                   form-control {% if field.errors %} label-danger-outline {% endif %}"
-                                                       name="{{ field.name }}"
-                                                       id="{{ field.name }}"
+                                                       name="{{ field.html_name }}"
+                                                       id="{{ field.auto_id }}"
                                                        placeholder="Ingrese {{ field.label }}"
                                                         {% if field.value %}  value="{{ field.value }}" {% endif %}
                                                         {% if field.field.widget.is_required %}

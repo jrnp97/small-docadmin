@@ -144,7 +144,17 @@ class FormsetPostManager(object):
 
         if any(temp):
             # Update formsets information (append errors and data)
-            self.extra_context = form_sets.copy()
+            for key, value in form_sets.items():
+                pos = -1
+                for idx, formset in enumerate(self.extra_context['formsets']):
+                    if formset['section_name'] == key:
+                        pos = idx
+                        break
+                else:
+                    raise SuspiciousOperation(
+                        "Error en intern process"
+                    )
+                self.extra_context['formsets'][pos]['form'] = value
             return self.form_invalid(form=parent_form)
             # TODO Check if form_invalid method work with self.object when is None
 

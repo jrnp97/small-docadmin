@@ -272,7 +272,7 @@ class UpdateExam(LoginRequiredMixin, CheckDoctor,  UpdateView):
     model = ExamType
     form_class = ExamForm
     success_url = reverse_lazy('docapp:exam_list')
-    template_name = 'docapp/register/exam.html'
+    template_name = 'docapp/register/exam_register.html'
 
     def form_valid(self, form):
         exam = self.get_object()
