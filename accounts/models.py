@@ -13,8 +13,8 @@ class User(AbstractUser):
     LAB = 'laboratory'
     PROFILE_TYPE = (
         (DOCTOR, 'Doctor'),
-        (RECP, 'Receptionist'),
-        (LAB, 'Laboratory')
+        (RECP, 'Receptionista'),
+        (LAB, 'Laboratorio')
     )
     profile_type = models.CharField(max_length=20, choices=PROFILE_TYPE, null=True, blank=True)
 

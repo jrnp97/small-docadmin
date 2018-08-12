@@ -2,120 +2,68 @@
 from django.utils import timezone
 from django.db import models
 
-from .general import ExamType
+from .general import TipoExamen
 from accounts.models import LaboratoryProfile
 
 
 class Laboratory(models.Model):
-    create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
-    last_modify = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    exam_type = models.OneToOneField(ExamType,
-                                     null=False,
-                                     blank=False,
-                                     on_delete=models.CASCADE,
-                                     related_name='laboratory')
-    create_by = models.ForeignKey(LaboratoryProfile,
-                                  null=False,
-                                  blank=False,
-                                  on_delete=models.CASCADE,
-                                  related_name='laboratory_forms')
+    fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
+    ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
+
+    tipo_examen = models.OneToOneField(TipoExamen, on_delete=models.PROTECT, related_name='laboratorio')
+    registrado_por = models.ForeignKey(LaboratoryProfile, on_delete=models.CASCADE,
+                                       related_name='formularios_laboratorios')
 
     def __str__(self):
-        return "Laboratory"
+        return "Laboratorio"
 
     def get_exam_type(self):
-        return self.exam_type.name
+        return self.tipo_examen.tipo
 
     def get_person(self):
-        return self.exam_type.person.name
+        return self.tipo_examen.paciente.nombres
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         response = super(Laboratory, self).save(force_insert, force_update, using, update_fields)
-        self.exam_type.update_state()
+        self.tipo_examen.update_state()
         return response
 
     class Meta:
         db_table = "laboratory"
 
 
-class BloodExam(models.Model):
-    RH = (
-        ('+', 'Positivo'),
-        ('-', 'Negativo')
-    )
+class ExamenSangre(models.Model):
+    RH = (('+', '+'),
+          ('-', '-'),)
 
-    BLOOD_TYPE = (
-        ('a', 'A'),
-        ('b-', 'B'),
-        ('ab-', 'AB'),
-        ('o+', 'O'),
-    )
-    rh_information = models.CharField(verbose_name='RH', max_length=1, choices=RH, null=False, blank=False)
-    blood_type = models.CharField(verbose_name='tipo_sangre', max_length=5, choices=BLOOD_TYPE, null=False,
-                                  blank=False)
+    TIPOS_DE_SANGRES = (('a', 'A'),
+                        ('b-', 'B'),
+                        ('o+', 'O'),
+                        ('ab-', 'AB'),)
 
-    laboratory = models.OneToOneField(Laboratory,
-                                      null=False,
-                                      blank=False,
-                                      on_delete=models.CASCADE,
+    informacion_rh = models.CharField(verbose_name='RH', max_length=1, choices=RH, null=False, blank=False)
+    tipo_de_sangre = models.CharField(verbose_name='tipo_sangre', max_length=5, choices=TIPOS_DE_SANGRES, null=False,
+                                      blank=False)
+
+    laboratory = models.OneToOneField(Laboratory, primary_key=True, on_delete=models.CASCADE,
                                       related_name='examen_sangre')
 
 
-class Exams(models.Model):
-        NO_APLICA = 'n'
-        APLICA = 'a'
-        RESULTS = (
-            (NO_APLICA, 'No aplica'),
-            (APLICA, 'Aplica'),
-        )
+class Examenes(models.Model):
+    NO_APLICA = 'n'
+    APLICA = 'a'
+    RESULTS = ((NO_APLICA, 'No aplica'),
+               (APLICA, 'Aplica'),)
+    nombre = models.CharField(max_length=50, null=False, blank=False)
+    fecha = models.DateField(null=True, blank=True)
+    laboratorio = models.CharField(max_length=100, null=True, blank=True)
+    resultado = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
-        vdrl_date = models.DateField(null=True, blank=True)
-        vdrl_lab = models.CharField(max_length=100, null=True, blank=True)
-        vdrl_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
+    laboratory = models.OneToOneField(Laboratory, primary_key=True, on_delete=models.CASCADE,
+                                      related_name='examen_laboratorio')
 
-        serologia_date = models.DateField(null=True, blank=True)
-        serologia_lab = models.CharField(max_length=100, null=True, blank=True)
-        serologia_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
 
-        hemograma_date = models.DateField(null=True, blank=True)
-        hemograma_lab = models.CharField(max_length=100, null=True, blank=True)
-        hemograma_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
-
-        uroanalisis_date = models.DateField(null=True, blank=True)
-        uroanalisis_lab = models.CharField(max_length=100, null=True, blank=True)
-        uroanalisis_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
-
-        colesterol_total_date = models.DateField(null=True, blank=True)
-        colesterol_total_lab = models.CharField(max_length=100, null=True, blank=True)
-        colesterol_total_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
-
-        colesterol_hdi_date = models.DateField(null=True, blank=True)
-        colesterol_hdi_lab = models.CharField(max_length=100, null=True, blank=True)
-        colesterol_hdi_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
-
-        trigliceridos_date = models.DateField(null=True, blank=True)
-        trigliceridos_lab = models.CharField(max_length=100, null=True, blank=True)
-        trigliceridos_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
-
-        colesterol_ldi_date = models.DateField(null=True, blank=True)
-        colesterol_ldi_lab = models.CharField(max_length=100, null=True, blank=True)
-        colesterol_ldi_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
-
-        KOH_unias_date = models.DateField(null=True, blank=True)
-        KOH_unias_lab = models.CharField(max_length=100, null=True, blank=True)
-        KOH_unias_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
-
-        frotis_garganta_date = models.DateField(null=True, blank=True)
-        frotis_garganta_lab = models.CharField(max_length=100, null=True, blank=True)
-        frotis_garganta_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
-
-        coprologico_date = models.DateField(null=True, blank=True)
-        coprologico_lab = models.CharField(max_length=100, null=True, blank=True)
-        coprologico_result = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
-
-        laboratory = models.OneToOneField(Laboratory,
-                                          null=False,
-                                          blank=False,
-                                          on_delete=models.CASCADE,
-                                          related_name='examanes_laboratorios')
+"""
+Model to placefalia
+"""

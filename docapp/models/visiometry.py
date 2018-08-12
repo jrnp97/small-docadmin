@@ -2,36 +2,29 @@
 from django.utils import timezone
 from django.db import models
 
-from .general import ExamType
+from .general import TipoExamen
 from accounts.models import DoctorProfile
 
 
 class Visiometry(models.Model):
-    create_date = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
-    last_modify = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    exam_type = models.OneToOneField(ExamType,
-                                     null=False,
-                                     blank=False,
-                                     on_delete=models.CASCADE,
-                                     related_name='visiometry')
+    fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
+    ultima_vez_modificaco = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
 
-    create_by = models.ForeignKey(DoctorProfile,
-                                  null=False,
-                                  blank=False,
-                                  on_delete=models.CASCADE,
-                                  related_name='visiometry_forms')
+    tipo_examen = models.OneToOneField(TipoExamen, on_delete=models.CASCADE, related_name='visiometria')
+    registrado_por = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.PROTECT,
+                                       related_name='formularios_visiometria')
 
     def __str__(self):
-        return self.exam_type.name
+        return "Visiometria"
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         response = super(Visiometry, self).save(force_insert, force_update, using, update_fields)
-        self.exam_type.update_state()
+        self.tipo_examen.update_state()
         return response
 
     class Meta:
-        db_table = "exam_visiometria"
+        db_table = "exam_visiometry"
 
 
 class Sintomas(models.Model):
@@ -50,15 +43,10 @@ class Sintomas(models.Model):
 
     observaciones = models.TextField(null=True, blank=True)
 
-    visiometry = models.OneToOneField(Visiometry,
-                                      null=False,
-                                      blank=False,
-                                      on_delete=models.CASCADE,
-                                      related_name='sintomas')
+    visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='sintomas')
 
 
-class Ant_enfermedad(models.Model):
-    # Enfermedad
+class AntEnfermedad(models.Model):
     hipertension = models.BooleanField(default=False, null=False, blank=True)
     diabetes = models.BooleanField(default=False, null=False, blank=True)
     colesterol_alto = models.BooleanField(default=False, null=False, blank=True)
@@ -72,15 +60,12 @@ class Ant_enfermedad(models.Model):
     miopia = models.BooleanField(default=False, null=False, blank=True)
     astigmatismo = models.BooleanField(default=False, null=False, blank=True)
 
-    visiometry = models.OneToOneField(Visiometry,
-                                      null=False,
-                                      blank=False,
-                                      on_delete=models.CASCADE,
-                                      related_name='antecedent_sicks')
+    observaciones = models.TextField(null=True, blank=True)
+
+    visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='antecedentes_enfermedades')
 
 
-class Ant_uso_lentes(models.Model):
-    # Uso de lentes
+class AntUsoLentes(models.Model):
     cerca = models.BooleanField(default=False, null=False, blank=True)
     lejos = models.BooleanField(default=False, null=False, blank=True)
     bifocales = models.BooleanField(default=False, null=False, blank=True)
@@ -89,15 +74,12 @@ class Ant_uso_lentes(models.Model):
     oscuros = models.BooleanField(default=False, null=False, blank=True)
     filtro = models.BooleanField(default=False, null=False, blank=True)
 
-    visiometry = models.OneToOneField(Visiometry,
-                                      null=False,
-                                      blank=False,
-                                      on_delete=models.CASCADE,
-                                      related_name='antecedent_uso_lentes')
+    observaciones = models.TextField(null=True, blank=True)
+
+    visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='antecedente_uso_lentes')
 
 
-class Ant_exam_externo(models.Model):
-    # Examen Externo
+class AntExamenExterno(models.Model):
     hiperemia = models.BooleanField(default=False, null=False, blank=True)
     pterigion = models.BooleanField(default=False, null=False, blank=True)
     descamacion_parpados = models.BooleanField(default=False, null=False, blank=True)
@@ -106,14 +88,9 @@ class Ant_exam_externo(models.Model):
     estrabismo = models.BooleanField(default=False, null=False, blank=True)
 
     otros_examenes = models.TextField(null=True, blank=True)
-
     observaciones = models.TextField(null=True, blank=True)
 
-    visiometry = models.OneToOneField(Visiometry,
-                                      null=False,
-                                      blank=False,
-                                      on_delete=models.CASCADE,
-                                      related_name='antecedent_exam_externo')
+    visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='antecedente_examen_externo')
 
 
 class Agudeza(models.Model):
@@ -124,11 +101,7 @@ class Agudeza(models.Model):
     ojo_izquierdo = models.CharField(max_length=10, choices=OPTIONS)
     ojo_derecho = models.CharField(max_length=10, choices=OPTIONS)
 
-    visiometry = models.OneToOneField(Visiometry,
-                                      null=False,
-                                      blank=False,
-                                      on_delete=models.CASCADE,
-                                      related_name='agudeza')
+    visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='agudeza')
 
 
 class Cronomatica(models.Model):
@@ -139,8 +112,4 @@ class Cronomatica(models.Model):
     ojo_izquierdo = models.CharField(max_length=10, choices=OPTIONS)
     ojo_derecho = models.CharField(max_length=10, choices=OPTIONS)
 
-    visiometry = models.OneToOneField(Visiometry,
-                                      null=False,
-                                      blank=False,
-                                      on_delete=models.CASCADE,
-                                      related_name='cronomatica')
+    visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='cronomatica')
