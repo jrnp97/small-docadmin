@@ -1,23 +1,17 @@
 from django import forms
-from django.core.exceptions import ObjectDoesNotExist
 
-from docapp.models import Company, Person, ExamType as Exam, AntecedentJobs, Hazards
+from docapp.models import Empresa, Paciente, TipoExamen, AntecedentesLaborales, Riesgos
 
 
 class CompanyForm(forms.ModelForm):
     class Meta:
-        model = Company
-        fields = ('name',
-                  'nit',
-                  'direction',
-                  'land_line',
-                  'cellphone',
-                  'contact',)
-        exclude = ('create_by',)
+        model = Empresa
+        fields = ('nombre', 'nit', 'direccion', 'telefono', 'celular', 'correo_contacto',)
+        exclude = ('registrado_por',)
 
     def save(self, commit=True):
         instance = super(CompanyForm, self).save(commit=False)
-        instance.create_by = self.create_by
+        instance.registrado_por = self.create_by
         if commit:
             instance.save()
         return instance
@@ -25,17 +19,17 @@ class CompanyForm(forms.ModelForm):
 
 class PersonForm(forms.ModelForm):
     class Meta:
-        model = Person
-        fields = ('name', 'last_name', 'identification', 'born_place', 'born_date',
-                  'sex', 'civil_state', 'number_sons', 'direction', 'land_line',
-                  'cellphone', 'occupation', 'position', 'stratus', 'training_student',
-                  'sena_learner', 'number_patronal',)
-        exclude = ('create_by', 'company',)
+        model = Paciente
+        fields = ('nombres', 'apellidos', 'identificacion', 'lugar_de_nacimiento', 'fecha_de_nacimiento',
+                  'sexo', 'estado_civil', 'numero_de_hijos', 'direccion', 'telefono',
+                  'celular', 'ocupacion', 'posicion', 'estrato', 'estudiante_en_entrenamiento',
+                  'aprendiz_sena', 'numero_patronal',)
+        exclude = ('registrado_por', 'empresa',)
 
     def save(self, commit=True):
         instance = super(PersonForm, self).save(commit=False)
-        instance.create_by = self.create_by
-        instance.company = self.company
+        instance.registrado_por = self.create_by
+        instance.empresa = self.company
         if commit:
             instance.save()
         return instance
@@ -43,17 +37,16 @@ class PersonForm(forms.ModelForm):
 
 class ExamForm(forms.ModelForm):
     class Meta:
-        model = Exam
-        fields = ('name',
-                  'state',)
-        exclude = ('create_by', 'person',)
+        model = TipoExamen
+        fields = ('tipo', 'estado',)
+        exclude = ('registrado_por', 'paciente',)
 
     def clean(self):
         """ Validate when register exam it's state been pendiente """
         if any(self.errors):
             return
 
-        if hasattr(self, 'initial') and self.cleaned_data.get('state') != 'pendiente':
+        if hasattr(self, 'initial') and self.cleaned_data.get('estado') != 'pendiente':
             raise forms.ValidationError(
                 message='El estado no puede ser diferente a pendiente, apenas se inicia el proceso',
                 code='invalid'
@@ -63,44 +56,23 @@ class ExamForm(forms.ModelForm):
 
     def save(self, commit=True, **kwargs):
         instance = super(ExamForm, self).save(commit=False)
-        instance.create_by = self.create_by
-        instance.person = self.person
+        instance.registrado_por = self.create_by
+        instance.paciente = self.person
         if commit:
             instance.save()
         return instance
 
-"""
-class ExamUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Exam
-        fields = ('state',)
-
-    def clean(self):
-        # Validate when register exam it's state been pendiente 
-        if any(self.errors):
-            return
-
-        if getattr(self, 'initial') and self.cleaned_data.get('state') != 'pendiente':
-            raise forms.ValidationError(
-                message='El estado no puede ser diferente a pendiente, apenas se inicia el proceso',
-                code='invalid'
-            )
-        else:
-            delattr(self, 'initial')  # Clean form data
-"""
-
 
 class AntecedentForm(forms.ModelForm):
     class Meta:
-        model = AntecedentJobs
-        fields = ('company', 'occupation', 'time', 'uso_epp',)
-
-        exclude = ('create_by', 'person',)
+        model = AntecedentesLaborales
+        fields = ('nombre_empresa', 'ocupacion', 'tiempo', 'uso_epp',)
+        exclude = ('registrado_por', 'persona',)
 
     def save(self, commit=True):
         instance = super(AntecedentForm, self).save(commit=False)
-        instance.create_by = self.create_by
-        instance.person = self.person
+        instance.registrado_por = self.create_by
+        instance.persona = self.person
         if commit:
             instance.save()
         return instance
@@ -108,30 +80,12 @@ class AntecedentForm(forms.ModelForm):
 
 class AntHazardForm(forms.ModelForm):
     class Meta:
-        model = Hazards
+        model = Riesgos
         fields = ('fisico', 'fisico', 'quimico',
                   'mecanico', 'ergonomico', 'electrico',
                   'electrico', 'psicologico', 'locativo')
-        exclude = ('work',)
+        exclude = ('empresa',)
 
 
-hazards_inlineformset = forms.inlineformset_factory(parent_model=AntecedentJobs, model=Hazards,
-                                                    form=AntHazardForm,
-                                                    can_delete=False,
-                                                    extra=1,
-                                                    max_num=1
-                                                    )
-
-"""
-class AccidentsForm(forms.ModelForm):
-    class Meta:
-        model = JobAccidents
-        fields = ('secuelas', 'tipo', 'atendido',
-                  'calificado', 'fecha', 'description',)
-        exclude = ('create_by',)
-
-
-accidents_formset = forms.inlineformset_factory(parent_model=AntecedentJobs, model=JobAccidents,
-                                                form=AccidentsForm,
-                                                can_delete=True)
-"""
+hazards_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLaborales, model=Riesgos,
+                                                    form=AntHazardForm, can_delete=False, extra=1, max_num=1)

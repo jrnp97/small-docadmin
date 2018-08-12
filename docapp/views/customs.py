@@ -7,7 +7,7 @@ from django.core.exceptions import SuspiciousOperation, ObjectDoesNotExist
 from django.forms.models import BaseInlineFormSet
 from django.core.urlresolvers import reverse_lazy
 
-from docapp.models import ExamType
+from docapp.models import TipoExamen
 
 
 class ListFilterView(ListView, SingleObjectMixin):
@@ -200,7 +200,7 @@ class FormsetPostManager(object):
 # Register exams
 class BaseRegisterExamBehavior:
     pk_url_kwarg = 'exam_id'
-    model_to_filter = ExamType
+    model_to_filter = TipoExamen
     context_object_2_name = 'exam'
     success_url = reverse_lazy('docapp:exam_list')
 
@@ -218,7 +218,7 @@ class BaseRegisterExamBehavior:
     def get(self, request, *args, **kwargs):
         exam_id = kwargs.get('exam_id')
         try:
-            exam = ExamType.objects.get(pk=exam_id)
+            exam = TipoExamen.objects.get(pk=exam_id)
         except ObjectDoesNotExist:
             pass
         else:

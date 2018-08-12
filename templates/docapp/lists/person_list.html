@@ -1,6 +1,6 @@
 {% extends 'base/base_dashboard.html' %}
 {% load static %}
-{% block title %} Lista Empleados {% endblock %}
+{% block title %} Lista Personas {% endblock %}
 
 
 {% block content_header %}
@@ -17,8 +17,8 @@
                                 </span>
             </div>
         </form>
-        <h1>Empleados</h1>
-        <small>Lista de empleados</small>
+        <h1>Personas Independientes</h1>
+        <small>Lista de personas independientes</small>
     </div>
 {% endblock %}
 
@@ -26,7 +26,14 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="panel panel-bd lobidisable">
-                <div class="panel-heading"> <!-- Empy --> </div>
+                <div class="panel-heading">
+                    <div class="btn-group">
+                        <a class="btn btn-success" href="{% url 'docapp:register_person' %}"><i
+                                class="fa fa-plus"></i>
+                            Persona
+                        </a>
+                    </div>
+                </div>
                 {% if messages %}
                     <div class="text-center">
                         {% for message in messages %}
@@ -54,18 +61,7 @@
                                         </select> Empleados por pagina</label>
                                 </div>
                             </div>
-                            <div class="col-sm-4 col-xs-12">
-                                <!--div class="dataTables_length">
-                                    <a class="btn btn-default buttons-copy btn-sm" tabindex="0">
-                                        <span>Copy</span></a>
-                                    <a class="btn btn-default buttons-csv buttons-html5 btn-sm"
-                                       tabindex="0"><span>CSV</span></a>
-                                    <a class="btn btn-default buttons-excel buttons-html5 btn-sm" tabindex="0"><span>Excel</span></a>
-                                    <a class="btn btn-default buttons-pdf buttons-html5 btn-sm"
-                                       tabindex="0"><span>PDF</span></a>
-                                    <a class="btn btn-default buttons-print btn-sm" tabindex="0"><span>Print</span></a>
-                                </div-->
-                            </div>
+                            <div class="col-sm-4 col-xs-12"> <!-- Empty --> </div>
                             <div class="col-sm-4 col-xs-12">
                                 <div class="dataTables_length">
                                     <div class="input-group custom-search-form">
@@ -100,13 +96,14 @@
                                 <tbody>
                                 {% for person in person_list %}
                                     <tr>
-                                        <td>{{ person.identification }}</td>
-                                        <td>{{ person.name }}</td>
-                                        <td>{{ person.last_name }}</td>
-                                        <td>{{ person.land_line }}</td>
-                                        <td>{{ person.cellphone }}</td>
-                                        <td>{{ person.sex }}</td>
-                                        <td>{{ person.company }}</td>
+                                        <td>{{ person.identificacion }}</td>
+                                        <td>{{ person.nombres }}</td>
+                                        <td>{{ person.apellidos }}</td>
+                                        <td>{{ person.telefono }}</td>
+                                        <td>{{ person.celular }}</td>
+                                        <td>{{ person.sexo }}</td>
+                                        <td>{% if person.empresa %} {{ person.empresa }} {% else %} No
+                                            presenta {% endif %}</td>
                                         <td>
                                             <a href="{% url 'docapp:register_exam' person_id=person.id %}">
                                                 <button class="btn btn-warning btn-xs" data-toggle="tooltip"

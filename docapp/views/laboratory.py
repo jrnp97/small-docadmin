@@ -3,8 +3,9 @@ from django.views.generic import UpdateView
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
 
+"""
 from docapp.models import Laboratory
-from docapp.forms import LabForm, blood_section, habitos_section, exams_section
+from docapp.forms import LabForm, blood_section, exams_section
 
 from .chekers import CheckLaboratory
 from .customs import FormsetPostManager, FormViewPutExtra, BaseRegisterExamBehavior, BaseExamUpdateBehavior
@@ -60,7 +61,7 @@ class UpdateLaboratory(LoginRequiredMixin, CheckLaboratory, BaseExamUpdateBehavi
     template_name = 'docapp/register/exam_register.html'
 
     def form_valid(self, form):
-        """ Overwrite form_valid to add missing information"""
+        # Overwrite form_valid to add missing information
         object_saved = self.get_object()
         form.create_by = self.request.user.laboratory_profile
         form.exam_type = object_saved.exam_type
@@ -68,3 +69,4 @@ class UpdateLaboratory(LoginRequiredMixin, CheckLaboratory, BaseExamUpdateBehavi
 
 
 update_laboratory = UpdateLaboratory.as_view()
+"""

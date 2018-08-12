@@ -17,7 +17,7 @@
                                 </span>
             </div>
         </form>
-        <h1>{{ company.name }}</h1>
+        <h1>{{ company.nombre }}</h1>
         <small>Detalles de la empresa</small>
         <ol class="breadcrumb hidden-xs">
             <li>
@@ -46,23 +46,23 @@
                                             </a>
                             </span>
                             {% endif %}
-                            <h1>{{ company.name|escape }}</h1>
+                            <h1>{{ company.nombre|escape }}</h1>
                             <address>
                                 <abbr title="NIT">{{ company.nit }}</abbr><br>
-                                <abbr title="Dirección">{{ company.direction }}</abbr><br>
-                                <abbr title="Telefono"> {{ company.land_line }}</abbr><br>
-                                <abbr title="Celular">{{ company.cellphone }}</abbr><br>
-                                <a href="mailto:{{ company.contact }}">{{ company.contact }}</a>
+                                <abbr title="Dirección">{{ company.direccion }}</abbr><br>
+                                <abbr title="Telefono"> {{ company.telefono }}</abbr><br>
+                                <abbr title="Celular">{{ company.celular }}</abbr><br>
+                                <a href="mailto:{{ company.correo_contacto }}">{{ company.correo_contacto }}</a>
                             </address>
                             <address>
-                                <p><b>Ultima vez modificado: </b> {{ company.last_modify }}</p>
+                                <p><b>Ultima vez modificado: </b> {{ company.ultima_vez_modificado }}</p>
                             </address>
                         </div>
                     </div>
                     <hr>
                     <h2>Empleados registrados</h2>
                     <div class="table-responsive m-b-20">
-                        {% if company.person_set.all %}
+                        {% if company.empleados.all %}
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
@@ -76,14 +76,14 @@
                                 </thead>
 
                                 <tbody>
-                                {% for person in company.person_set.all %}
+                                {% for person in company.empleados.all %}
                                     <tr>
-                                        <td>{{ person.identification }}</td>
-                                        <td>{{ person.name }}</td>
-                                        <td>{{ person.last_name }}</td>
-                                        <td>{{ person.land_line }}</td>
-                                        <td>{{ person.cellphone }}</td>
-                                        <td>{{ person.sex }}</td>
+                                        <td>{{ person.identificacion }}</td>
+                                        <td>{{ person.nombres }}</td>
+                                        <td>{{ person.apellidos }}</td>
+                                        <td>{{ person.telefono }}</td>
+                                        <td>{{ person.celular }}</td>
+                                        <td>{{ person.sexo }}</td>
                                     </tr>
                                     {% if forloop.counter == 5 %}
                                         {{ break }}
@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="panel-footer text-left">
-                    <p style="color: gainsboro">Registrado por: {{ company.create_by.user }}</p>
+                    <p style="color: gainsboro">Registrado por: {{ company.registrado_por.user }}</p>
                 </div>
             </div>
         </div>

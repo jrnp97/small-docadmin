@@ -54,12 +54,13 @@
                 <!-- Employees options -->
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-user"></i><span>Empleados</span>
+                        <i class="fa fa-user"></i><span>Independientes</span>
                         <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                     </a>
                     <ul class="treeview-menu">
+                        <li><a href="{% url 'docapp:register_person' %}">Registrar</a></li>
                         <li><a href="{% url 'docapp:person_list' %}">Lista</a></li>
                     </ul>
                 </li>

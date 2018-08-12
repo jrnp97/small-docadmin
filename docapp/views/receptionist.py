@@ -6,10 +6,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 
 from docapp.forms import CompanyForm, PersonForm, AntecedentForm, hazards_inlineformset, ExamForm
-from docapp.models import Company, Person, AntecedentJobs, Hazards, ExamType
+from docapp.models import Empresa, Paciente, AntecedentesLaborales, Riesgos, TipoExamen
 
 from .chekers import CheckReceptionist, CheckUser, CheckRecOrDoc
-from .customs import ListFilterView, FormViewPutExtra, FormsetPostManager
+from .customs import FormViewPutExtra, FormsetPostManager
 
 
 # Create your views here.
@@ -27,60 +27,52 @@ dashboard = Dashboard.as_view()
 
 
 # List Views
-class CompanyList(CheckReceptionist, LoginRequiredMixin, ListView):
+class ListaEmpresas(CheckReceptionist, LoginRequiredMixin, ListView):
     context_object_name = 'company_list'
-    model = Company
+    model = Empresa
     template_name = 'docapp/lists/company_list.html'
 
 
-company_list = CompanyList.as_view()
+company_list = ListaEmpresas.as_view()
 
 
-class PersonList(CheckReceptionist, LoginRequiredMixin, ListView):
+class ListaPersonasIndependientes(CheckReceptionist, LoginRequiredMixin, ListView):
     context_object_name = 'person_list'
-    model = Person
+    model = Paciente
+    queryset = Paciente.objects.filter(empresa=None)
     template_name = 'docapp/lists/person_list.html'
 
 
-person_list = PersonList.as_view()
+person_list = ListaPersonasIndependientes.as_view()
 
 
-class PersonListFilter(CheckReceptionist, LoginRequiredMixin, ListFilterView):
+class EmpleadosEmpresa(CheckReceptionist, LoginRequiredMixin, DetailView):
     pk_url_kwarg = 'company_id'
-    context_object_name = 'person_list'
-    model = Person
-    model_to_filter = Company
-    context_object_2_name = 'company'
+    context_object_name = 'company'
+    model = Empresa
     template_name = 'docapp/lists/person_list_company.html'
 
-    def get_queryset(self):
-        company = self.get_object()
-        self.queryset = Person.objects.filter(company=company)
-        return super(PersonListFilter, self).get_queryset()
+
+filter_person_list = EmpleadosEmpresa.as_view()
 
 
-filter_person_list = PersonListFilter.as_view()
-
-
-class AntecedentList(CheckReceptionist, LoginRequiredMixin, ListFilterView):
+class ListaAntecedentesEmpleado(CheckReceptionist, LoginRequiredMixin, DetailView):
     pk_url_kwarg = 'person_id'
     context_object_name = 'antecedent_list'
-    model = AntecedentJobs
-    model_to_filter = Person
-    context_object_2_name = 'person'
+    model = Paciente
     template_name = 'docapp/lists/antecedent_list.html'
 
-    def get_queryset(self):
-        person = self.get_object()
-        self.queryset = AntecedentJobs.objects.filter(person=person)
-        return super(AntecedentList, self).get_queryset()
+    def get_context_data(self, **kwargs):
+        paciente = self.get_object()
+        kwargs.update({'antecedent_list': paciente.antecedentes.all()})
+        return super(ListaAntecedentesEmpleado, self).get_context_data(**kwargs)
 
 
-person_antecedent_list = AntecedentList.as_view()
+person_antecedent_list = ListaAntecedentesEmpleado.as_view()
 
 
 # Register Views
-class RegisterCompany(CheckReceptionist, LoginRequiredMixin, FormView):
+class RegisterEmpresa(CheckReceptionist, LoginRequiredMixin, FormView):
     form_class = CompanyForm
     template_name = 'docapp/register/company.html'
     success_url = reverse_lazy('docapp:company_list')
@@ -91,27 +83,24 @@ class RegisterCompany(CheckReceptionist, LoginRequiredMixin, FormView):
         instance = form.save()
         if instance:
             messages.success(self.request, message="Empresa registrada existosamente")
-        return super(RegisterCompany, self).form_valid(form)
+        return super(RegisterEmpresa, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         kwargs['detail'] = 'Empresas'
-        return super(RegisterCompany, self).get_context_data(**kwargs)
+        return super(RegisterEmpresa, self).get_context_data(**kwargs)
 
 
-register_company = RegisterCompany.as_view()
+register_company = RegisterEmpresa.as_view()
 
 
-class RegisterPerson(CheckReceptionist, LoginRequiredMixin, FormViewPutExtra):
-    pk_url_kwarg = 'company_id'
+class RegisterPerson(CheckReceptionist, LoginRequiredMixin, FormView):
     form_class = PersonForm
-    model = Person
+    model = Paciente
     template_name = 'docapp/register/employ.html'
     success_url = reverse_lazy('docapp:person_list')
-    model_to_filter = Company
 
     def form_valid(self, form):
-        company = self.get_object()
-        form.company = company
+        form.company = None
         form.create_by = self.request.user.reception_profile
         instance = form.save()
         if instance:
@@ -122,13 +111,34 @@ class RegisterPerson(CheckReceptionist, LoginRequiredMixin, FormViewPutExtra):
 register_person = RegisterPerson.as_view()
 
 
+class RegistrarEmleado(CheckReceptionist, LoginRequiredMixin, FormViewPutExtra):
+    pk_url_kwarg = 'company_id'
+    form_class = PersonForm
+    model = Paciente
+    template_name = 'docapp/register/employ.html'
+    success_url = reverse_lazy('docapp:person_list')
+    model_to_filter = Empresa
+
+    def form_valid(self, form):
+        company = self.get_object()
+        form.company = company
+        form.create_by = self.request.user.reception_profile
+        instance = form.save()
+        if instance:
+            messages.success(self.request, message="Persona registrada exitosamente")
+        return super(RegistrarEmleado, self).form_valid(form)
+
+
+register_employ = RegistrarEmleado.as_view()
+
+
 class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManager, FormViewPutExtra):
     pk_url_kwarg = 'person_id'
     form_class = AntecedentForm
-    model = AntecedentJobs
+    model = AntecedentesLaborales
     template_name = 'docapp/register/antecedent.html'
     success_url = reverse_lazy('docapp:person_list')
-    model_to_filter = Person
+    model_to_filter = Paciente
     context_object_2_name = 'person'
     extra_context = {'parent_object_key': 'work',
                      'formsets': [
@@ -153,10 +163,10 @@ register_antecedent = RegisterAntecedent.as_view()
 
 
 # Update Views
-class UpdateCompany(CheckReceptionist, LoginRequiredMixin, UpdateView):
+class UpdateEmpresa(CheckReceptionist, LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'company_id'
     context_object_name = 'company'
-    model = Company
+    model = Empresa
     form_class = CompanyForm
     template_name = 'docapp/register/company.html'
     success_url = reverse_lazy('docapp:company_list')
@@ -167,16 +177,16 @@ class UpdateCompany(CheckReceptionist, LoginRequiredMixin, UpdateView):
         instance = form.save()
         if instance:
             messages.success(self.request, message="Empresa actualizada existosamente")
-        return super(UpdateCompany, self).form_valid(form)
+        return super(UpdateEmpresa, self).form_valid(form)
 
 
-update_company = UpdateCompany.as_view()
+update_company = UpdateEmpresa.as_view()
 
 
 class UpdatePerson(CheckReceptionist, LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'person_id'
     context_object_name = 'person'
-    model = Person
+    model = Paciente
     form_class = PersonForm
     template_name = 'docapp/register/employ.html'
     success_url = reverse_lazy('docapp:person_list')
@@ -197,7 +207,7 @@ update_person = UpdatePerson.as_view()
 class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManager, UpdateView):
     pk_url_kwarg = 'antecedent_id'
     context_object_name = 'antecedent'
-    model = AntecedentJobs
+    model = AntecedentesLaborales
     form_class = AntecedentForm
     template_name = 'docapp/register/antecedent.html'
     success_url = reverse_lazy('docapp:person_list')
@@ -220,7 +230,7 @@ class UpdateAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManager
         """ Overwrite get_context_data method to append formset necessary"""
         antecedent = self.get_object()
         try:
-            data = Hazards.objects.get(work=antecedent)
+            data = Riesgos.objects.get(work=antecedent)
             dict_data = vars(data)
             # Delete unneeded info
             dict_data.pop('_state', None)
@@ -243,19 +253,19 @@ update_antecedent = UpdateAntecedent.as_view()
 
 
 # Detail Views
-class DetailCompany(CheckReceptionist, LoginRequiredMixin, DetailView):
+class DetailEmpresa(CheckReceptionist, LoginRequiredMixin, DetailView):
     pk_url_kwarg = 'company_id'
-    model = Company
+    model = Empresa
     context_object_name = 'company'
     template_name = 'docapp/details/company.html'
 
 
-detail_company = DetailCompany.as_view()
+detail_company = DetailEmpresa.as_view()
 
 
 class DetailPerson(CheckRecOrDoc, LoginRequiredMixin, DetailView):
     pk_url_kwarg = 'person_id'
-    model = Person
+    model = Paciente
     context_object_name = 'person'
     template_name = 'docapp/details/person.html'
 
@@ -265,7 +275,7 @@ detail_person = DetailPerson.as_view()
 
 class DetailAntecedent(CheckReceptionist, LoginRequiredMixin, DetailView):
     pk_url_kwarg = 'antecedent_id'
-    model = AntecedentJobs
+    model = AntecedentesLaborales
     context_object_name = 'antecedent'
     template_name = 'docapp/details/antecedent.html'
 
@@ -275,9 +285,9 @@ detail_antecedent = DetailAntecedent.as_view()
 
 class RegisterExam(CheckReceptionist, LoginRequiredMixin, FormViewPutExtra):
     pk_url_kwarg = 'person_id'
-    model = ExamType
+    model = TipoExamen
     form_class = ExamForm
-    model_to_filter = Person
+    model_to_filter = Paciente
     context_object_2_name = 'person'
     success_url = reverse_lazy('docapp:exam_list')
     template_name = 'docapp/register/exam.html'
@@ -297,7 +307,7 @@ register_exam = RegisterExam.as_view()
 
 
 class ExamList(LoginRequiredMixin, CheckUser, ListView):
-    model = ExamType
+    model = TipoExamen
     context_object_name = 'exam_list'
     template_name = 'docapp/lists/exam_list.html'
 

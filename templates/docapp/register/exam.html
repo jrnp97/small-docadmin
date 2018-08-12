@@ -32,14 +32,19 @@
             <div class="panel panel-bd">
                 <div class="panel-heading">
                     <div class="btn-group">
-                        <a class="btn btn-primary" href="{% url 'docapp:person_list' %}"> <i class="fa fa-list"></i>
-                            Lista Pacientes</a>
-                    </div>
-                </div>
+                        <h1>Registro examen</h1>
+                    </div></div>
                 <div class="panel-body">
 
                     <form class="col-sm-12" method="POST">
                         {% csrf_token %}
+                    {% if form.non_field_errors %}
+                        <ul>
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
 
                         {% for field in form %}
                             {% if not forloop.counter|divisibleby:"2" %}
@@ -48,13 +53,13 @@
 
                         <div class="col-sm-6 form-group">
                             <label class="label {% if field.errors %} label-danger {% else %} label-primary {% endif %}"
-                                   for="{{ field.name }}">{{ field.label }}</label>
+                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
 
                             {% if field.field.widget.input_type == 'select' %}
                                 <!-- Select input -->
                                 <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                        name="{{ field.name }}"
-                                        id="{{ field.name }}"
+                                        name="{{ field.html_name }}"
+                                        id="{{ field.auto_id }}"
                                         size="1">
                                     {% for option in field.field.choices %}
                                         <option value="{{ option.0 }}" {% if field.value == option.0 %}
@@ -67,8 +72,8 @@
                                 <input type="{{ field.field.widget.input_type }}"
                                        class="{% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %} datepicker {% endif %}
                                            form-control {% if field.errors %} label-danger-outline {% endif %}"
-                                       name="{{ field.name }}"
-                                       id="{{ field.name }}" placeholder="Ingrese {{ field.label }}"
+                                       name="{{ field.html_name }}"
+                                       id="{{ field.auto_id }}" placeholder="Ingrese {{ field.label }}"
                                         {% if field.value %}  value="{{ field.value }}" {% endif %}
                                         {% if field.field.widget.is_required %}  required="" {% endif %}/>
                             {% endif %}
@@ -93,7 +98,6 @@
 
                         <div class="col-sm-12 reset-button">
                             <hr>
-                            <!--a href="#" class="btn btn-warning">Reset</a-->
                             <button type="submit" class="btn btn-success">Guardar</button>
                         </div>
                     </form>

@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse_lazy
-
+"""
 from docapp.models import Visiometry, Audiology, Audiometry, Occupational, ExamType
 from docapp.forms import (VisioForm, sintomas_section, ant_enfermedad_section, ant_uso_lentes_section, ant_extra_exams,
                           agudeza_section, cronomatica_section,
@@ -267,23 +267,4 @@ class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior
 
 update_occupational = UpdateOccupational.as_view()
 
-"""
-class UpdateExam(LoginRequiredMixin, CheckDoctor,  UpdateView):
-    model = ExamType
-    form_class = ExamForm
-    success_url = reverse_lazy('docapp:exam_list')
-    template_name = 'docapp/register/exam_register.html'
-
-    def form_valid(self, form):
-        exam = self.get_object()
-        form.person = exam.person
-        form.create_by = self.request.user.reception_profile
-        form.initial = True
-        instance = form.save()
-        if instance:
-            messages.success(self.request, message="Examen Actualizado exitosamente")
-        return super(RegisterExam, self).form_valid(form)
-
-
-register_exam = UpdateExam.as_view()
 """

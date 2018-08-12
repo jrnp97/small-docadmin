@@ -105,16 +105,16 @@
 
                                 {% for exam in exam_list %}
                                     <tr>
-                                        <td> {{ exam.name }} </td>
-                                        <td> {{ exam.person }}
-                                            <a href="{% url 'docapp:detail_person' person_id=exam.person.id %}">
+                                        <td> {{ exam.tipo }} </td>
+                                        <td> {{ exam.paciente }}
+                                            <a href="{% url 'docapp:detail_person' person_id=exam.paciente.id %}">
                                                 <button class="btn btn-primary btn-xs" data-toggle="tooltip"
                                                         data-placement="left" title="" data-original-title="Ver">
                                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                                 </button>
                                             </a>
                                         </td>
-                                        <td> {{ exam.create_by.user }}
+                                        <td> {{ exam.registrado_por.user }}
                                             {% if request.user.is_superuser %}
                                                 <a href="{% url 'accounts:detail_personal' user_id=exam.create_by.user.id %}">
                                                     <button class="btn btn-primary btn-xs" data-toggle="tooltip"
@@ -124,8 +124,8 @@
                                                 </a>
                                             {% endif %}
                                         </td>
-                                        <td> {{ exam.create_date }} </td>
-                                        <td> {{ exam.state }}
+                                        <td> {{ exam.fecha_de_creacion }} </td>
+                                        <td> {{ exam.estado }}
                                             <!--{% if request.user.doctor_profile %}
                                             <a href="">
                                                 <button class="btn btn-warning btn-xs" data-toggle="tooltip"
