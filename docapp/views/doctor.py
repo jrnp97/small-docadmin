@@ -1,21 +1,59 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse_lazy
-"""
-from docapp.models import Visiometry, Audiology, Audiometry, Occupational, ExamType
-from docapp.forms import (VisioForm, sintomas_section, ant_enfermedad_section, ant_uso_lentes_section, ant_extra_exams,
-                          agudeza_section, cronomatica_section,
-                          AudioForm, ananmesis_section, ant_familiar_section, ant_otro_section, exposicion_section,
-                          estado_actual_section,
-                          AudiometriaForm, otoscopia_section, information_section,
-                          OcupaForm, ant_familiares_section, habitos_section, fisico_general_form,
-                          organos_sentidos_section, conclusion_section,
-                          ExamForm)
+
+from docapp.models import TipoExamen, Occupational
+from docapp.forms import (OcupaForm,
+                          ant_familiares_section,
+                          ant_gineco_section,
+                          habito_alcohol_section, habito_cigarillo_section, habito_droga_section,
+                          habito_general_section,
+                          exam_fisico_oidos_section, examen_fisico_abdomen_section, examen_fisico_boca_section,
+                          examen_fisico_columna_section, examen_fisico_corazon_section, examen_fisico_cuello_section,
+                          examen_fisico_extremidades_section, examen_fisico_general_section,
+                          examen_fisico_genito_unitario_section, examen_fisico_nariz_section,
+                          examen_fisico_neurologico_section, examen_fisico_ojos_section,
+                          examen_fisico_torax_pulmones_section, conclusion_section)
 
 from .chekers import CheckDoctor
 from .customs import FormViewPutExtra, FormsetPostManager, BaseRegisterExamBehavior, BaseExamUpdateBehavior
 
 
+class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
+                           FormViewPutExtra):
+    model = Occupational
+    form_class = OcupaForm
+    template_name = 'docapp/register/exams/occupational.html'
+    extra_context = {'exam_name': 'ocupacional',
+                     'parent_object_key': 'occupational',
+                     'formsets': [
+                         {'section_name': 'ant_familiares',
+                          'title': 'Antecedentes Familiares',
+                          'form': ant_familiares_section},
+
+                         {'section_name': 'ant_gineco_section',
+                          'title': 'Antecedentes Gineco-Obstetricos',
+                          'form': ant_gineco_section},
+                         {'section_name': 'habitos_generales',
+                          'title': 'Habitos Generales',
+                          'form': habito_general_section},
+                         {'section_name': 'habito_alcohol',
+                          'title': 'Habito Alcohol',
+                          'form': habito_alcohol_section},
+                         {'section_name': 'habito_cigarrillo',
+                          'title': 'Habito Cigarillo',
+                          'form': habito_cigarillo_section},
+                         {'section_name': 'habito_droga',
+                          'title': 'Habito Droga',
+                          'form': habito_droga_section},
+                     ]
+                     }
+
+
+register_occupational = RegisterOccupational.as_view()
+
+
+"""
 # Register views
 class RegisterVisiometry(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
                          FormViewPutExtra):
@@ -108,40 +146,6 @@ class RegisterAudiometry(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavi
 
 
 register_audiometry = RegisterAudiometry.as_view()
-
-
-class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
-                           FormViewPutExtra):
-    model = Occupational
-    form_class = OcupaForm
-    template_name = 'docapp/register/exam_register.html'
-    extra_context = {'exam_name': 'ocupacional',
-                     'parent_object_key': 'occupational',
-                     'formsets': [
-                         {'section_name': 'ant_familiares',
-                          'title': 'Antecedentes Familiares',
-                          'form': ant_familiares_section},
-
-                         {'section_name': 'habitos',
-                          'title': 'Habitos',
-                          'form': habitos_section},
-
-                         {'section_name': 'fisico_general',
-                          'title': 'Estado Fisico General',
-                          'form': fisico_general_form},
-
-                         {'section_name': 'organos_sentidos',
-                          'title': 'Organos de los Sentidos',
-                          'form': organos_sentidos_section},
-
-                         {'section_name': 'conclusion',
-                          'title': 'Conclusiones',
-                          'form': conclusion_section}
-                     ]
-                     }
-
-
-register_occupational = RegisterOccupational.as_view()
 
 
 # Update views

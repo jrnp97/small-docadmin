@@ -70,7 +70,7 @@ class AntGinecoObstetricos(models.Model):
 
 # Habitos Opciones
 class HabitoAlcohol(models.Model):
-    alcohol = models.BooleanField(default=False)
+    aplica = models.BooleanField(default=False, null=False, blank=True)
     tiempo_de_abstinencia = models.PositiveIntegerField(null=True, blank=True)
     FRECUENCIA = (('diaria', 'Diaria'),
                   ('semanal', 'Semanal'),
@@ -81,7 +81,7 @@ class HabitoAlcohol(models.Model):
 
 
 class HabitoDroga(models.Model):
-    droga = models.BooleanField(default=False)
+    aplica = models.BooleanField(default=False, null=False, blank=True)
     tiempo_de_abstinencia = models.PositiveIntegerField(null=True, blank=True)
     descripcion = models.CharField(verbose_name='droga_descripcion', max_length=100, null=True, blank=True)
     occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
@@ -89,7 +89,7 @@ class HabitoDroga(models.Model):
 
 
 class HabitoCigarrillo(models.Model):
-    cigarette = models.BooleanField(verbose_name='cigarrillo', default=False)
+    aplica = models.BooleanField(default=False, null=False, blank=True)
     tiempo_de_abstinencia = models.PositiveIntegerField(null=True, blank=True)
     numbero_diarios = models.PositiveIntegerField(null=True, blank=True)
     anios = models.PositiveIntegerField(verbose_name='años', null=True, blank=True)
