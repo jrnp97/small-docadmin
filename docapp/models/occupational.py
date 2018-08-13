@@ -83,7 +83,7 @@ class HabitoAlcohol(models.Model):
 class HabitoDroga(models.Model):
     aplica = models.BooleanField(default=False, null=False, blank=True)
     tiempo_de_abstinencia = models.PositiveIntegerField(null=True, blank=True)
-    descripcion = models.CharField(verbose_name='droga_descripcion', max_length=100, null=True, blank=True)
+    descripcion = models.TextField(null=True, blank=True)
     occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='habito_droga')
 
@@ -91,14 +91,14 @@ class HabitoDroga(models.Model):
 class HabitoCigarrillo(models.Model):
     aplica = models.BooleanField(default=False, null=False, blank=True)
     tiempo_de_abstinencia = models.PositiveIntegerField(null=True, blank=True)
-    numbero_diarios = models.PositiveIntegerField(null=True, blank=True)
+    numero_diarios = models.PositiveIntegerField(null=True, blank=True)
     anios = models.PositiveIntegerField(verbose_name='años', null=True, blank=True)
     occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='habito_cigarillo')
 
 
 class HabitoGenerales(models.Model):
-    acciones_en_tiempo_libre = models.CharField(max_length=300, verbose_name='tiempo_libre', null=False, blank=False)
+    acciones_en_tiempo_libre = models.TextField(null=False, blank=False)
     occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='habito_general')
 
@@ -107,6 +107,8 @@ class HabitoGenerales(models.Model):
 """
 # TODO Seccion BIOMETRIA !!!
 """
+
+
 class ExamFisicoAspectoGeneral(models.Model):
     # # General
     apariencia_general = models.BooleanField(default=False, null=False, blank=True)

@@ -8,12 +8,18 @@ from docapp.forms import (OcupaForm,
                           ant_gineco_section,
                           habito_alcohol_section, habito_cigarillo_section, habito_droga_section,
                           habito_general_section,
-                          exam_fisico_oidos_section, examen_fisico_abdomen_section, examen_fisico_boca_section,
-                          examen_fisico_columna_section, examen_fisico_corazon_section, examen_fisico_cuello_section,
-                          examen_fisico_extremidades_section, examen_fisico_general_section,
-                          examen_fisico_genito_unitario_section, examen_fisico_nariz_section,
-                          examen_fisico_neurologico_section, examen_fisico_ojos_section,
-                          examen_fisico_torax_pulmones_section, conclusion_section)
+                          examen_fisico_general_section,
+                          examen_fisico_ojos_section, examen_fisico_oidos_section, examen_fisico_nariz_section,
+                          examen_fisico_boca_section,
+                          examen_fisico_cuello_section,
+                          examen_fisico_torax_pulmones_section,
+                          examen_fisico_corazon_section,
+                          examen_fisico_abdomen_section,
+                          examen_fisico_genito_unitario_section,
+                          examen_fisico_columna_section,
+                          examen_fisico_extremidades_section,
+                          examen_fisico_neurologico_section,
+                          conclusion_section)
 
 from .chekers import CheckDoctor
 from .customs import FormViewPutExtra, FormsetPostManager, BaseRegisterExamBehavior, BaseExamUpdateBehavior
@@ -30,10 +36,10 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
                          {'section_name': 'ant_familiares',
                           'title': 'Antecedentes Familiares',
                           'form': ant_familiares_section},
-
                          {'section_name': 'ant_gineco_section',
                           'title': 'Antecedentes Gineco-Obstetricos',
                           'form': ant_gineco_section},
+                         # Habitos
                          {'section_name': 'habitos_generales',
                           'title': 'Habitos Generales',
                           'form': habito_general_section},
@@ -46,12 +52,57 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
                          {'section_name': 'habito_droga',
                           'title': 'Habito Droga',
                           'form': habito_droga_section},
+                         # Examen Fisico
+                         # # Organos de los sentidos
+                         {'section_name': 'org_boca',
+                          'title': 'Boca',
+                          'form': examen_fisico_boca_section},
+
+                         {'section_name': 'org_nariz',
+                          'title': 'Nariz',
+                          'form': examen_fisico_nariz_section},
+
+                         {'section_name': 'org_oidos',
+                          'title': 'Oidos',
+                          'form': examen_fisico_oidos_section},
+
+                         {'section_name': 'org_ojos',
+                          'title': 'Ojos',
+                          'form': examen_fisico_ojos_section},
+
+                         # # Fin Organos
+                         {'section_name': 'aspecto_general',
+                          'title': 'Aspecto General',
+                          'form': examen_fisico_general_section},
+                         {'section_name': 'exm_cuello',
+                          'title': 'Cuello',
+                          'form': examen_fisico_cuello_section},
+                         {'section_name': 'exm_torax_pulmones',
+                          'title': 'Torax y Pulmones',
+                          'form': examen_fisico_torax_pulmones_section},
+                         {'section_name': 'exm_corazon',
+                          'title': 'Corazon',
+                          'form': examen_fisico_corazon_section},
+                         {'section_name': 'exm_abdomen',
+                          'title': 'Abdomen',
+                          'form': examen_fisico_abdomen_section},
+                         {'section_name': 'exm_genito_unitario',
+                          'title': 'Genito Unitario',
+                          'form': examen_fisico_genito_unitario_section},
+                         {'section_name': 'exm_columna',
+                          'title': 'Columna',
+                          'form': examen_fisico_columna_section},
+                         {'section_name': 'exm_extremidades',
+                          'title': 'Extremidades',
+                          'form': examen_fisico_extremidades_section},
+                         {'section_name': 'exm_neurologico',
+                          'title': 'Neurologico',
+                          'form': examen_fisico_neurologico_section}
                      ]
                      }
 
 
 register_occupational = RegisterOccupational.as_view()
-
 
 """
 # Register views

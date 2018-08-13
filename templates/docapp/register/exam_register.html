@@ -48,6 +48,7 @@
         <div class="col-sm-12">
             <form method="POST">
                 {% csrf_token %}
+                <!-- form general -->
                 {% if form.fields %}
                     {% for field in form %}
                         {% if not forloop.counter|divisibleby:"2" %}
@@ -100,6 +101,7 @@
                 {% endif %}
                 <!-- Render sections -->
                 {% for formset in formsets %}
+
                     <section class="{{ formset.section_name }}">
                         {{ formset.form.management_form }}
                         <div class="panel panel-bd lobidisable">

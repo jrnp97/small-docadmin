@@ -76,7 +76,7 @@ examen_fisico_nariz_section = forms.inlineformset_factory(parent_model=Occupatio
 examen_fisico_neurologico_section = forms.inlineformset_factory(parent_model=Occupational, model=ExamFisicoNeurologico,
                                                                 extra=1, max_num=1, can_delete=False, fields='__all__')
 
-exam_fisico_oidos_section = forms.inlineformset_factory(parent_model=Occupational, model=ExamFisicoOidos, extra=1,
+examen_fisico_oidos_section = forms.inlineformset_factory(parent_model=Occupational, model=ExamFisicoOidos, extra=1,
                                                         max_num=1, can_delete=False, fields='__all__')
 
 examen_fisico_ojos_section = forms.inlineformset_factory(parent_model=Occupational, model=ExamFisicoOjos, extra=1,
