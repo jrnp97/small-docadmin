@@ -53,27 +53,24 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
                           'title': 'Habito Droga',
                           'form': habito_droga_section},
                          # Examen Fisico
+                         {'section_name': 'aspecto_general',
+                          'title': 'Aspecto General',
+                          'form': examen_fisico_general_section},
                          # # Organos de los sentidos
                          {'section_name': 'org_boca',
                           'title': 'Boca',
                           'form': examen_fisico_boca_section},
-
                          {'section_name': 'org_nariz',
                           'title': 'Nariz',
                           'form': examen_fisico_nariz_section},
-
                          {'section_name': 'org_oidos',
                           'title': 'Oidos',
                           'form': examen_fisico_oidos_section},
-
                          {'section_name': 'org_ojos',
                           'title': 'Ojos',
                           'form': examen_fisico_ojos_section},
 
                          # # Fin Organos
-                         {'section_name': 'aspecto_general',
-                          'title': 'Aspecto General',
-                          'form': examen_fisico_general_section},
                          {'section_name': 'exm_cuello',
                           'title': 'Cuello',
                           'form': examen_fisico_cuello_section},
@@ -86,9 +83,6 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
                          {'section_name': 'exm_abdomen',
                           'title': 'Abdomen',
                           'form': examen_fisico_abdomen_section},
-                         {'section_name': 'exm_genito_unitario',
-                          'title': 'Genito Unitario',
-                          'form': examen_fisico_genito_unitario_section},
                          {'section_name': 'exm_columna',
                           'title': 'Columna',
                           'form': examen_fisico_columna_section},
@@ -97,7 +91,14 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
                           'form': examen_fisico_extremidades_section},
                          {'section_name': 'exm_neurologico',
                           'title': 'Neurologico',
-                          'form': examen_fisico_neurologico_section}
+                          'form': examen_fisico_neurologico_section},
+                         {'section_name': 'exm_genito_unitario',
+                          'title': 'Genito Unitario',
+                          'form': examen_fisico_genito_unitario_section},
+                         # Fin examen fisico
+                         {'section_name': 'conclusiones',
+                          'title': 'Conclusiones',
+                          'form': conclusion_section}
                      ]
                      }
 
