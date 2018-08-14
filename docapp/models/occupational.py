@@ -10,7 +10,7 @@ class Occupational(models.Model):
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
 
-    tipo_examen = models.OneToOneField(TipoExamen, on_delete=models.CASCADE, related_name='occupational')
+    tipo_examen = models.OneToOneField(TipoExamen, on_delete=models.CASCADE, related_name='ocupacional')
     registrado_por = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.PROTECT,
                                        related_name='formulario_ocupacional')
 

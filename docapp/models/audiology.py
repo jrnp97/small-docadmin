@@ -57,8 +57,7 @@ class AntFamiliares(models.Model):
     enfermedad_meniere = models.BooleanField(default=False, null=False, blank=True)
     hipertension = models.BooleanField(default=False, null=False, blank=True)
     diabetes = models.BooleanField(default=False, null=False, blank=True)
-    otro_familiar = models.TextField(null=True, blank=True)
-    descripcion = models.TextField(null=True, blank=True)
+    observaciones = models.TextField(null=True, blank=True)
     audiology = models.OneToOneField(Audiology, primary_key=True, on_delete=models.CASCADE,
                                      related_name='antecedentes_familiares')
 
@@ -72,8 +71,7 @@ class OtrosAntecedentes(models.Model):
     servicio_militar_arma = models.BooleanField(default=False, null=False, blank=True)
     diureticos_asa = models.BooleanField(default=False, null=False, blank=True)
     exposicion_mercurio = models.BooleanField(default=False, null=False, blank=True)
-    otros = models.TextField(null=True, blank=True)
-
+    observaciones = models.TextField(null=True, blank=True)
     audiology = models.OneToOneField(Audiology, primary_key=True, on_delete=models.CASCADE,
                                      related_name='otros_antecedentes')
 
@@ -84,68 +82,95 @@ OPCIONES = (('si', 'Si'),
 
 
 # Exposiciones opciones
-class Exposiciones(models.Model):
+class ExposicionAudifonos(models.Model):
+    estado = models.CharField(max_length=10, choices=OPCIONES, null=False, blank=False)
     tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
     frecuencia = models.PositiveIntegerField(null=True, blank=True)
     tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
     epa = models.PositiveIntegerField(null=True, blank=True)
     audiology = models.OneToOneField(Audiology, null=False, blank=False,
-                                     on_delete=models.CASCADE, related_name='exposiciones')
-
-
-class ExposicionAudifonos(models.Model):
-    estado = models.CharField(max_length=10, choices=OPCIONES, null=False, blank=False)
-    exposicion = models.OneToOneField(Exposiciones, related_name='audifonos')
+                                     on_delete=models.CASCADE, related_name='exposicion_audifonos')
 
 
 class ExposicionMotocicleta(models.Model):
     estado = models.CharField(max_length=10, choices=OPCIONES, null=False, blank=False)
-    exposicion = models.OneToOneField(Exposiciones, related_name='motocicleta')
-
-
-class ExposicionAutomotriz(models.Model):
-    estado = models.CharField(max_length=10, choices=OPCIONES, null=False, blank=False)
-    exposicion = models.OneToOneField(Exposiciones, related_name='automotriz')
-
-
-class ExposicionMaquinariaPesada(models.Model):
-    estado = models.CharField(max_length=10, choices=OPCIONES, null=False, blank=False)
-    exposicion = models.OneToOneField(Exposiciones, related_name='maquinaria_pesada')
-
-
-# Estado Actual opciones
-class EstadoActual(models.Model):
     tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
     frecuencia = models.PositiveIntegerField(null=True, blank=True)
     tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
     epa = models.PositiveIntegerField(null=True, blank=True)
     audiology = models.OneToOneField(Audiology, null=False, blank=False,
-                                     on_delete=models.CASCADE, related_name='estado_actual')
+                                     on_delete=models.CASCADE, related_name='exposicion_motocicleta')
 
 
+class ExposicionAutomotriz(models.Model):
+    estado = models.CharField(max_length=10, choices=OPCIONES, null=False, blank=False)
+    tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
+    epa = models.PositiveIntegerField(null=True, blank=True)
+    audiology = models.OneToOneField(Audiology, null=False, blank=False,
+                                     on_delete=models.CASCADE, related_name='exposicion_automotriz')
+
+
+class ExposicionMaquinariaPesada(models.Model):
+    estado = models.CharField(max_length=10, choices=OPCIONES, null=False, blank=False)
+    tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
+    epa = models.PositiveIntegerField(null=True, blank=True)
+    audiology = models.OneToOneField(Audiology, null=False, blank=False,
+                                     on_delete=models.CASCADE, related_name='exposicion_maquinaria_pesada')
+
+
+# Estado Actual opciones
 class RuidoMolestia(models.Model):
     estado = models.CharField(max_length=10, choices=OPCIONES, null=False, blank=False)
-    estado_actual = models.OneToOneField(EstadoActual, related_name='ruido_molestia')
+    tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
+    epa = models.PositiveIntegerField(null=True, blank=True)
+    audiology = models.OneToOneField(Audiology, null=False, blank=False,
+                                     on_delete=models.CASCADE, related_name='estado_actual_ruido_molestia')
 
 
 class VolumenTv(models.Model):
     estado = models.CharField(max_length=10, choices=OPCIONES, null=False, blank=False)
-    estado_actual = models.OneToOneField(EstadoActual, related_name='volumen_tv')
+    tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
+    epa = models.PositiveIntegerField(null=True, blank=True)
+    audiology = models.OneToOneField(Audiology, null=False, blank=False,
+                                     on_delete=models.CASCADE, related_name='estado_actual_volumen_tv')
 
 
 class FrasesRepetidas(models.Model):
     estado = models.CharField(max_length=10, choices=OPCIONES, null=False, blank=False)
-    estado_actual = models.OneToOneField(EstadoActual, related_name='frases_repetidas')
+    tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
+    epa = models.PositiveIntegerField(null=True, blank=True)
+    audiology = models.OneToOneField(Audiology, null=False, blank=False,
+                                     on_delete=models.CASCADE, related_name='estado_actual_frases_repetidas')
 
 
 class Escucha(models.Model):
     estado = models.CharField(max_length=10, choices=OPCIONES, null=False, blank=False)
-    estado_actual = models.OneToOneField(EstadoActual, related_name='escucha')
+    tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
+    epa = models.PositiveIntegerField(null=True, blank=True)
+    audiology = models.OneToOneField(Audiology, null=False, blank=False,
+                                     on_delete=models.CASCADE, related_name='estado_actual_escucha')
 
 
 class EscuchaRuido(models.Model):
     estado = models.CharField(max_length=10, choices=OPCIONES, null=False, blank=False)
-    estado_actual = models.OneToOneField(EstadoActual, related_name='escucha_ruido')
+    tiempo_exposicion = models.PositiveIntegerField(null=True, blank=True)
+    frecuencia = models.PositiveIntegerField(null=True, blank=True)
+    tiempo_uso = models.PositiveIntegerField(null=True, blank=True)
+    epa = models.PositiveIntegerField(null=True, blank=True)
+    audiology = models.OneToOneField(Audiology, null=False, blank=False,
+                                     on_delete=models.CASCADE, related_name='estado_actual_escucha_ruido')
 
 
 class Information(models.Model):
@@ -155,7 +180,6 @@ class Information(models.Model):
 
 
 class Otoscopia(models.Model):
-    otoscopia_izq = models.ImageField(upload_to='otoscopia/%Y/%m/%d/')
-    otoscopia_der = models.ImageField(upload_to='otoscopia/%Y/%m/%d/')
-
+    otoscopia_izquierdo = models.ImageField(upload_to='otoscopia/%Y/%m/%d/')
+    otoscopia_derecho = models.ImageField(upload_to='otoscopia/%Y/%m/%d/')
     audiology = models.OneToOneField(Audiology, primary_key=True, on_delete=models.CASCADE, related_name='otoscopia')

@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse_lazy
 
-from docapp.models import TipoExamen, Occupational
+from docapp.models import TipoExamen, Occupational, Audiology
 from docapp.forms import (OcupaForm,
                           ant_familiares_section,
                           ant_gineco_section,
@@ -21,6 +21,18 @@ from docapp.forms import (OcupaForm,
                           examen_fisico_neurologico_section,
                           conclusion_section)
 
+from docapp.forms import (AudioForm,
+                          ananmesis_section,
+                          ant_familiar_section,
+                          ant_otro_section,
+                          exposicion_audifonos_section, exposicion_auto_section, exposicion_moto_section,
+                          exposicion_pesada_section,
+                          estado_actual_escucha_ruido_section, estado_actual_escucha_section,
+                          estado_actual_frases_repetidas_section,
+                          estado_actual_ruido_molestia_section, estado_actual_volumen_tv_section,
+                          information_section,
+                          otoscopia_section)
+
 from .chekers import CheckDoctor
 from .customs import FormViewPutExtra, FormsetPostManager, BaseRegisterExamBehavior, BaseExamUpdateBehavior
 
@@ -31,7 +43,7 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
     form_class = OcupaForm
     template_name = 'docapp/register/exams/occupational.html'
     extra_context = {'exam_name': 'ocupacional',
-                     'parent_object_key': 'occupational',
+                     'parent_object_key': 'ocupacional',
                      'formsets': [
                          {'section_name': 'ant_familiares',
                           'title': 'Antecedentes Familiares',
@@ -105,6 +117,66 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
 
 register_occupational = RegisterOccupational.as_view()
 
+
+class RegisterAudiology(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
+                        FormViewPutExtra):
+    model = Audiology
+    form_class = AudioForm
+    template_name = 'docapp/register/exams/audilogy.html'
+    extra_context = {'exam_name': 'audiologia',
+                     'parent_object_key': 'audiologia',
+                     'formsets': [
+                         {'section_name': 'ananmesis',
+                          'title': 'Ananmesis',
+                          'form': ananmesis_section},
+                         {'section_name': 'ant_familiar',
+                          'title': 'Antecedentes Familiares',
+                          'form': ant_familiar_section},
+                         {'section_name': 'ant_otros',
+                          'title': 'Otros Antecedentes',
+                          'form': ant_otro_section},
+                         # Exposiciones
+                         {'section_name': 'exp_audifonos',
+                          'title': 'Uso de Audifonos',
+                          'form': exposicion_audifonos_section},
+                         {'section_name': 'exo_moto',
+                          'title': 'Uso de Motocicleta',
+                          'form': exposicion_moto_section},
+                         {'section_name': 'exp_automotriz',
+                          'title': 'Uso de Automotriz',
+                          'form': exposicion_auto_section},
+                         {'section_name': 'exp_maq_pesada',
+                          'title': 'Uso de Maquinaria Pesada',
+                          'form': exposicion_pesada_section},
+                         # Estado Actual
+                         {'section_name': 'est_ruido_molestia',
+                          'title': '¿Le molesta el ruido?',
+                          'form': estado_actual_ruido_molestia_section},
+                         {'section_name': 'est_vol_tv',
+                          'title': '¿Debe subir el volumen del televisor?',
+                          'form': estado_actual_volumen_tv_section},
+                         {'section_name': 'est_fra_repite',
+                          'title': '¿En una conversación le repiten las frases?',
+                          'form': estado_actual_frases_repetidas_section},
+                         {'section_name': 'est_esc_oye',
+                          'title': '¿Escucha bien?',
+                          'form': estado_actual_escucha_section},
+                         {'section_name': 'est_esc_ruido',
+                          'title': '¿Escucha bien cuando hay ruido?',
+                          'form': estado_actual_escucha_ruido_section},
+                         # End Estado Actual
+                         {'section_name': 'informacion',
+                          'title': 'Informacion',
+                          'form': information_section},
+                         {'section_name': 'otoscopia',
+                          'title': 'Otoscopia',
+                          'form': otoscopia_section},
+                     ]
+                     }
+
+
+register_audiology = RegisterAudiology.as_view()
+
 """
 # Register views
 class RegisterVisiometry(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
@@ -177,27 +249,6 @@ class RegisterAudiology(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavio
 
 
 register_audiology = RegisterAudiology.as_view()
-
-
-class RegisterAudiometry(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
-                         FormViewPutExtra):
-    model = Audiometry
-    form_class = AudiometriaForm
-    template_name = 'docapp/register/exam_register.html'
-    extra_context = {'exam_name': 'audiometria',
-                     'parent_object_key': 'audiometry',
-                     'formsets': [
-                         {'section_name': 'otoscopia',
-                          'title': 'Otoscopia',
-                          'form': otoscopia_section},
-                         {'section_name': 'information',
-                          'title': 'Información',
-                          'form': information_section}
-                     ]
-                     }
-
-
-register_audiometry = RegisterAudiometry.as_view()
 
 
 # Update views

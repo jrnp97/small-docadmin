@@ -4,8 +4,8 @@ from docapp.models import (Audiology,
                            Ananmesis,
                            AntFamiliares,
                            OtrosAntecedentes,
-                           Exposiciones, ExposicionAudifonos, ExposicionMotocicleta, ExposicionAutomotriz, ExposicionMaquinariaPesada,
-                           EstadoActual, RuidoMolestia, VolumenTv, FrasesRepetidas, Escucha, EscuchaRuido,
+                           ExposicionAudifonos, ExposicionMotocicleta, ExposicionAutomotriz, ExposicionMaquinariaPesada,
+                           RuidoMolestia, VolumenTv, FrasesRepetidas, Escucha, EscuchaRuido,
                            Information,
                            Otoscopia)
 
@@ -46,97 +46,97 @@ class CleanChilds(object):
 
 
 # Exposiciones
-class ExpoAudifonos(CleanChilds, forms.ModelForm):
+class ExpoAudifonos(forms.ModelForm):
     class Meta:
         model = ExposicionAudifonos
         fields = '__all__'
 
 
-exposicion_audifonos_section = forms.inlineformset_factory(parent_model=Exposiciones, model=ExposicionAudifonos,
-                                                           form=ExpoAudifonos, extra=1, max_num=1, can_delete=False, )
+exposicion_audifonos_section = forms.inlineformset_factory(parent_model=Audiology, model=ExposicionAudifonos,
+                                                           form=ExpoAudifonos, extra=1, max_num=1, can_delete=False,)
 
 
-class ExpoMotocicleta(CleanChilds, forms.ModelForm):
+class ExpoMotocicleta(forms.ModelForm):
     class Meta:
         model = ExposicionMotocicleta
         fields = '__all__'
 
 
-exposicion_moto_section = forms.inlineformset_factory(parent_model=Exposiciones, model=ExposicionMotocicleta,
+exposicion_moto_section = forms.inlineformset_factory(parent_model=Audiology, model=ExposicionMotocicleta,
                                                       form=ExpoMotocicleta, extra=1, max_num=1, can_delete=False, )
 
 
-class ExpoAutomotriz(CleanChilds, forms.ModelForm):
+class ExpoAutomotriz(forms.ModelForm):
     class Meta:
         model = ExposicionAutomotriz
         fields = '__all__'
 
 
-exposicion_auto_section = forms.inlineformset_factory(parent_model=Exposiciones, model=ExposicionAutomotriz,
+exposicion_auto_section = forms.inlineformset_factory(parent_model=Audiology, model=ExposicionAutomotriz,
                                                       form=ExpoAutomotriz, extra=1, max_num=1, can_delete=False, )
 
 
-class ExpoMaquinariaPesada(CleanChilds, forms.ModelForm):
+class ExpoMaquinariaPesada(forms.ModelForm):
     class Meta:
         model = ExposicionMaquinariaPesada
         fields = '__all__'
 
 
-exposicion_pesada_section = forms.inlineformset_factory(parent_model=Exposiciones, model=ExposicionMaquinariaPesada,
+exposicion_pesada_section = forms.inlineformset_factory(parent_model=Audiology, model=ExposicionMaquinariaPesada,
                                                         form=ExpoMaquinariaPesada, extra=1, max_num=1,
                                                         can_delete=False, )
 
 
 # Estado Actual
-class EstRuidoMolestia(CleanChilds, forms.ModelForm):
+class EstRuidoMolestia(forms.ModelForm):
     class Meta:
         model = RuidoMolestia
         fields = '__all__'
 
 
-estado_actual_ruido_molestia_section = forms.inlineformset_factory(parent_model=EstadoActual, model=RuidoMolestia,
+estado_actual_ruido_molestia_section = forms.inlineformset_factory(parent_model=Audiology, model=RuidoMolestia,
                                                                    form=EstRuidoMolestia,
                                                                    extra=1, max_num=1, can_delete=False, )
 
 
-class EstVolumenTv(CleanChilds, forms.ModelForm):
+class EstVolumenTv(forms.ModelForm):
     class Meta:
         model = VolumenTv
         fields = '__all__'
 
 
-estado_actual_volumen_tv_section = forms.inlineformset_factory(parent_model=EstadoActual, model=VolumenTv,
+estado_actual_volumen_tv_section = forms.inlineformset_factory(parent_model=Audiology, model=VolumenTv,
                                                                form=EstVolumenTv, extra=1,
                                                                max_num=1, can_delete=False, )
 
 
-class EstFrasesRepetidas(CleanChilds, forms.ModelForm):
+class EstFrasesRepetidas(forms.ModelForm):
     class Meta:
         model = FrasesRepetidas
         fields = '__all__'
 
 
-estado_actual_frases_repetidas_section = forms.inlineformset_factory(parent_model=EstadoActual, model=FrasesRepetidas,
+estado_actual_frases_repetidas_section = forms.inlineformset_factory(parent_model=Audiology, model=FrasesRepetidas,
                                                                      form=EstFrasesRepetidas, extra=1, max_num=1,
                                                                      can_delete=False, )
 
 
-class EstEscucha(CleanChilds, forms.ModelForm):
+class EstEscucha(forms.ModelForm):
     class Meta:
         model = Escucha
         fields = '__all__'
 
 
-estado_actual_escucha_section = forms.inlineformset_factory(parent_model=EstadoActual, model=Escucha, form=EstEscucha,
+estado_actual_escucha_section = forms.inlineformset_factory(parent_model=Audiology, model=Escucha, form=EstEscucha,
                                                             extra=1, max_num=1, can_delete=False, )
 
 
-class EstEscuchaRuido(CleanChilds, forms.ModelForm):
+class EstEscuchaRuido(forms.ModelForm):
     class Meta:
         model = EscuchaRuido
         fields = '__all__'
 
 
-estado_actual_escucha_radio_section = forms.inlineformset_factory(parent_model=EstadoActual, model=EscuchaRuido,
+estado_actual_escucha_ruido_section = forms.inlineformset_factory(parent_model=Audiology, model=EscuchaRuido,
                                                                   form=EstEscuchaRuido, extra=1, max_num=1,
                                                                   can_delete=False, )

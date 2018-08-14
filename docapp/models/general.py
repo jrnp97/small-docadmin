@@ -104,14 +104,13 @@ class TipoExamen(models.Model):
         return self.tipo
 
     def get_process(self):
-        examenes_done = [hasattr(self, 'visiometry'), hasattr(self, 'audiology'), hasattr(self, 'occupational'),
-                         hasattr(self, 'audiometry'), hasattr(self, 'laboratory')]
+        examenes_done = [hasattr(self, 'visiometria'), hasattr(self, 'audiologia'),
+                         hasattr(self, 'ocupacional'), hasattr(self, 'laboratorio')]
         return examenes_done.count(True) * 25
 
     def finished(self):
-        examenes_done = [hasattr(self, 'visiometry'), hasattr(self, 'audiology'),
-                         hasattr(self, 'occupational'), hasattr(self, 'audiometry'),
-                         hasattr(self, 'laboratory')]
+        examenes_done = [hasattr(self, 'visiometria'), hasattr(self, 'audiologia'),
+                         hasattr(self, 'ocupacional'), hasattr(self, 'laboratorio')]
         return all(examenes_done)
 
     def update_state(self):

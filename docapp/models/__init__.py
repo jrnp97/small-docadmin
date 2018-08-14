@@ -4,9 +4,9 @@ from .audiology import (Audiology,
                         Ananmesis,
                         AntFamiliares,
                         OtrosAntecedentes,
-                        Exposiciones, ExposicionAudifonos, ExposicionMotocicleta, ExposicionAutomotriz,
+                        ExposicionAudifonos, ExposicionMotocicleta, ExposicionAutomotriz,
                         ExposicionMaquinariaPesada,
-                        EstadoActual, RuidoMolestia, VolumenTv, FrasesRepetidas, Escucha, EscuchaRuido,
+                        RuidoMolestia, VolumenTv, FrasesRepetidas, Escucha, EscuchaRuido,
                         Information,
                         Otoscopia)
 
