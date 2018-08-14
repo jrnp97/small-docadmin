@@ -86,10 +86,7 @@ class AntExamenExterno(models.Model):
     secrecion = models.BooleanField(default=False, null=False, blank=True)
     pigmentacion = models.BooleanField(default=False, null=False, blank=True)
     estrabismo = models.BooleanField(default=False, null=False, blank=True)
-
-    otros_examenes = models.TextField(null=True, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-
     visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='antecedente_examen_externo')
 
 

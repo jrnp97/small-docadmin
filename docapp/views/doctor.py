@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse_lazy
 
-from docapp.models import TipoExamen, Occupational, Audiology
+from docapp.models import TipoExamen, Occupational, Audiology, Visiometry
 from docapp.forms import (OcupaForm,
                           ant_familiares_section,
                           ant_gineco_section,
@@ -32,6 +32,9 @@ from docapp.forms import (AudioForm,
                           estado_actual_ruido_molestia_section, estado_actual_volumen_tv_section,
                           information_section,
                           otoscopia_section)
+
+from docapp.forms import (VisioForm, sintomas_section, ant_enfermedad_section, ant_uso_lentes_section,
+                          ant_extra_exams, agudeza_section, cronomatica_section)
 
 from .chekers import CheckDoctor
 from .customs import FormViewPutExtra, FormsetPostManager, BaseRegisterExamBehavior, BaseExamUpdateBehavior
@@ -177,13 +180,12 @@ class RegisterAudiology(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavio
 
 register_audiology = RegisterAudiology.as_view()
 
-"""
-# Register views
+
 class RegisterVisiometry(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
                          FormViewPutExtra):
     model = Visiometry
     form_class = VisioForm
-    template_name = 'docapp/register/exam_register.html'
+    template_name = 'docapp/register/exams/visiometry.html'
     extra_context = {'exam_name': 'visiometria',
                      'parent_object_key': 'visiometry',
                      'formsets': [
@@ -200,7 +202,7 @@ class RegisterVisiometry(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavi
                           'form': ant_uso_lentes_section},
 
                          {'section_name': 'ant_extra_exams',
-                          'title': 'Antecedentes de Examanes',
+                          'title': 'Antecedentes de Examenes',
                           'form': ant_extra_exams},
 
                          {'section_name': 'agudeza',
@@ -217,40 +219,7 @@ class RegisterVisiometry(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavi
 register_visiometry = RegisterVisiometry.as_view()
 
 
-class RegisterAudiology(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
-                        FormViewPutExtra):
-    model = Audiology
-    form_class = AudioForm
-    template_name = 'docapp/register/exam_register.html'
-    extra_context = {'exam_name': 'audiologia',
-                     'parent_object_key': 'audiology',
-                     'formsets': [
-                         {'section_name': 'ananmesis',
-                          'title': 'Ananmesis',
-                          'form': ananmesis_section},
-
-                         {'section_name': 'ant_familiar',
-                          'title': 'Antecedentes Familiares',
-                          'form': ant_familiar_section},
-
-                         {'section_name': 'ant_otros',
-                          'title': 'Otros Antecedentes',
-                          'form': ant_otro_section},
-
-                         {'section_name': 'exposicion',
-                          'title': 'Exposiciones',
-                          'form': exposicion_section},
-
-                         {'section_name': 'estado_actual',
-                          'title': 'Estado Actual',
-                          'form': estado_actual_section},
-                     ]
-                     }
-
-
-register_audiology = RegisterAudiology.as_view()
-
-
+"""
 # Update views
 class UpdateVisiometry(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, FormsetPostManager, UpdateView):
     model = Visiometry
@@ -320,26 +289,6 @@ class UpdateAudiology(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, F
 
 
 update_audiology = UpdateAudiology.as_view()
-
-
-class UpdateAudiometry(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, FormsetPostManager, UpdateView):
-    model = Audiometry
-    form_class = AudiometriaForm
-    template_name = 'docapp/register/exam_register.html'
-    extra_context = {'exam_name': 'audiometria',
-                     'parent_object_key': 'audiometry',
-                     'formsets': [
-                         {'section_name': 'otoscopia',
-                          'title': 'Otoscopia',
-                          'form': otoscopia_section},
-                         {'section_name': 'information',
-                          'title': 'Información',
-                          'form': information_section}
-                     ]
-                     }
-
-
-update_audiometry = UpdateAudiometry.as_view()
 
 
 class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, FormsetPostManager, UpdateView):
