@@ -159,15 +159,13 @@
                             <hr>
                             <!-- TextArea options -->
                             <div class="row">
-                                <div class="container">
+
                                     {% for field in formsets.0.form.forms.0 %}
                                         {% if not field.field.widget.input_type %}
                                             <div class="form-group col-sm-6">
                                                 <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
                                                        for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <textarea class="form-control" name="{{ field.html_name }}" rows="5"
-                                                          id="{{ field.auto_id }}">{% if field.value %}
-                                                    {{ field.value }} {% endif %}</textarea>
+                                                <textarea class="form-control" name="{{ field.html_name }}" rows="5" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
                                             </div>
                                             <!-- Display errors -->
                                             {% if field.errors %}
@@ -185,7 +183,6 @@
                                             {% endif %}
                                         {% endif %}
                                     {% endfor %}
-                                </div>
                             </div>
                             <!-- Hidden Inputs -->
                             {% for field in formsets.0.form.forms.0 %}
@@ -246,15 +243,13 @@
                             <hr>
                             <!-- TextArea options -->
                             <div class="row">
-                                <div class="container">
+
                                     {% for field in formsets.1.form.forms.0 %}
                                         {% if not field.field.widget.input_type %}
                                             <div class="form-group col-sm-6">
                                                 <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
                                                        for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <textarea class="form-control" name="{{ field.html_name }}" rows="5"
-                                                          id="{{ field.auto_id }}">{% if field.value %}
-                                                    {{ field.value }} {% endif %}</textarea>
+                                                <textarea class="form-control" name="{{ field.html_name }}" rows="5" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
                                             </div>
                                             <!-- Display errors -->
                                             {% if field.errors %}
@@ -272,7 +267,6 @@
                                             {% endif %}
                                         {% endif %}
                                     {% endfor %}
-                                </div>
                             </div>
                             <!-- Hidden Inputs -->
                             {% for field in formsets.1.form.forms.0 %}
@@ -333,15 +327,13 @@
                             <hr>
                             <!-- TextArea options -->
                             <div class="row">
-                                <div class="container">
+
                                     {% for field in formsets.2.form.forms.0 %}
                                         {% if not field.field.widget.input_type %}
                                             <div class="form-group col-sm-6">
                                                 <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
                                                        for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <textarea class="form-control" name="{{ field.html_name }}" rows="5"
-                                                          id="{{ field.auto_id }}">{% if field.value %}
-                                                    {{ field.value }} {% endif %}</textarea>
+                                                <textarea class="form-control" name="{{ field.html_name }}" rows="5" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
                                             </div>
                                             <!-- Display errors -->
                                             {% if field.errors %}
@@ -359,7 +351,6 @@
                                             {% endif %}
                                         {% endif %}
                                     {% endfor %}
-                                </div>
                             </div>
                             <!-- Hidden Inputs -->
                             {% for field in formsets.2.form.forms.0 %}
@@ -420,15 +411,13 @@
                             <hr>
                             <!-- TextArea options -->
                             <div class="row">
-                                <div class="container">
+
                                     {% for field in formsets.3.form.forms.0 %}
                                         {% if not field.field.widget.input_type %}
                                             <div class="form-group col-sm-6">
                                                 <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
                                                        for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <textarea class="form-control" name="{{ field.html_name }}" rows="5"
-                                                          id="{{ field.auto_id }}">{% if field.value %}
-                                                    {{ field.value }} {% endif %}</textarea>
+                                                <textarea class="form-control" name="{{ field.html_name }}" rows="5" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
                                             </div>
                                             <!-- Display errors -->
                                             {% if field.errors %}
@@ -446,7 +435,6 @@
                                             {% endif %}
                                         {% endif %}
                                     {% endfor %}
-                                </div>
                             </div>
                             <!-- Hidden Inputs -->
                             {% for field in formsets.3.form.forms.0 %}
