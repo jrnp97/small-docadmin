@@ -48,7 +48,7 @@ class AntPersonalesFamiliares(models.Model):
 
     observaciones = models.TextField(null=True, blank=True)
 
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='antecedentes_personales_familiares')
 
 
@@ -64,7 +64,7 @@ class AntGinecoObstetricos(models.Model):
     disminorrea = models.BooleanField(default=False, null=False, blank=True)
     FUP = models.DateField(null=True, blank=True)
     clase = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='antecedente_gineco_obstetricos')
 
 
@@ -76,7 +76,7 @@ class HabitoAlcohol(models.Model):
                   ('semanal', 'Semanal'),
                   ('ocacional', 'Ocacional'),)
     frecuencia = models.CharField(max_length=15, choices=FRECUENCIA, null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='habito_alcohol')
 
 
@@ -84,7 +84,7 @@ class HabitoDroga(models.Model):
     aplica = models.BooleanField(default=False, null=False, blank=True)
     tiempo_de_abstinencia = models.PositiveIntegerField(null=True, blank=True)
     descripcion = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='habito_droga')
 
 
@@ -93,13 +93,13 @@ class HabitoCigarrillo(models.Model):
     tiempo_de_abstinencia = models.PositiveIntegerField(null=True, blank=True)
     numero_diarios = models.PositiveIntegerField(null=True, blank=True)
     anios = models.PositiveIntegerField(verbose_name='años', null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='habito_cigarillo')
 
 
 class HabitoGenerales(models.Model):
     acciones_en_tiempo_libre = models.TextField(null=False, blank=False)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='habito_general')
 
 
@@ -119,7 +119,7 @@ class ExamFisicoAspectoGeneral(models.Model):
     tolerancia_irritantes = models.BooleanField(default=False, null=False, blank=True)
     unias = models.BooleanField(verbose_name='uñas', default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_aspecto_general')
 
 
@@ -130,7 +130,7 @@ class ExamFisicoOjos(models.Model):
     vision_periferica = models.BooleanField(default=False, null=False, blank=True)
     forias = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_ojos')
 
 
@@ -138,7 +138,7 @@ class ExamFisicoOidos(models.Model):
     pabellones = models.BooleanField(default=False, null=False, blank=True)
     otoscopia = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_oidos')
 
 
@@ -146,7 +146,7 @@ class ExamFisicoNariz(models.Model):
     tabique_cornetes = models.BooleanField(default=False, null=False, blank=True)
     senos_paranasales = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_nariz')
 
 
@@ -155,7 +155,7 @@ class ExamFisicoBoca(models.Model):
     amigdalas = models.BooleanField(default=False, null=False, blank=True)
     dentadura = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_boca')
 
 
@@ -163,7 +163,7 @@ class ExamFisicoCuello(models.Model):
     movimientos = models.BooleanField(default=False, null=False, blank=True)
     palpacion = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_cuello')
 
 
@@ -172,7 +172,7 @@ class ExamFisicoToraxPulmones(models.Model):
     palpacion = models.BooleanField(default=False, null=False, blank=True)
     auscultacion = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_torax_pulmones')
 
 
@@ -181,7 +181,7 @@ class ExamFisicoCorazon(models.Model):
     ruidos_cardiacos = models.BooleanField(default=False, null=False, blank=True)
     circularion_periferica = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_corazon')
 
 
@@ -190,7 +190,7 @@ class ExamFisicoAbdomen(models.Model):
     papacion_organos = models.BooleanField(default=False, null=False, blank=True)
     anillos_inguinales = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_abdomen')
 
 
@@ -198,7 +198,7 @@ class ExamFisicoGenitoUnitario(models.Model):
     riniones = models.BooleanField(verbose_name='riñones', default=False, null=False, blank=True)
     genitales_externos = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_genito_unitario')
 
 
@@ -207,7 +207,7 @@ class ExamFisicoColumna(models.Model):
     movilidad = models.BooleanField(default=False, null=False, blank=True)
     tono_musculos_paravertebrales = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_columna')
 
 
@@ -218,7 +218,7 @@ class ExamFisicoExtremidades(models.Model):
     movilidad_dedos_manos = models.BooleanField(default=False, null=False, blank=True)
     articulaciones = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_extremidades')
 
 
@@ -228,7 +228,7 @@ class ExamFisicoNeurologico(models.Model):
     sensibilidad_profunda = models.BooleanField(default=False, null=False, blank=True)
     reflejos = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='examen_fisico_neurologico')
 
 
@@ -246,5 +246,5 @@ class Conclusion(models.Model):
     limitaciones = models.TextField(null=True, blank=True)
     recomendaciones = models.TextField(null=False, blank=False)
 
-    occupational = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
+    ocupacional = models.OneToOneField(Occupational, null=False, blank=False, on_delete=models.CASCADE,
                                         related_name='conclusiones')

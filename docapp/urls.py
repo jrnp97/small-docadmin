@@ -31,15 +31,13 @@ urlpatterns = [
     url(r'^register/(?P<exam_id>[0-9]+)/occupational/$', views.register_occupational, name='register_occupational'),
     url(r'^register/(?P<exam_id>[0-9]+)/audiology/$', views.register_audiology, name='register_audiology'),
     url(r'^register/(?P<exam_id>[0-9]+)/visiometry/$', views.register_visiometry, name='register_visiometry'),
+    # Update exams
+    url(r'^occupational/(?P<pk>[0-9]+)/$', views.update_ocupacional, name='update_ocupacional'),
+    url(r'^audiology/(?P<pk>[0-9]+)/$', views.update_audiologia, name='update_audiologia'),
+    url(r'^visiometry/(?P<pk>[0-9]+)/$', views.update_visiometria, name='update_visiometria'),
 ]
 
 """ 
     url(r'^register/(?P<exam_id>[0-9]+)/laboratory/$', views.register_laboratory, name='register_laboratory'),
-
-    # Actualizacion de examenes
-    url(r'^visiometry/(?P<pk>[0-9]+)/$', views.update_visiometry, name='update_visiometry'),
-    url(r'^audiometry/(?P<pk>[0-9]+)/$', views.update_audiometry, name='update_audiometry'),
-    url(r'^audiology/(?P<pk>[0-9]+)/$', views.update_audiology, name='update_audiology'),
-    url(r'^occupational/(?P<pk>[0-9]+)/$', views.update_occupational, name='update_occupational'),
     url(r'^laboratory/(?P<pk>[0-9]+)/$', views.update_laboratory, name='update_laboratory'),
 """

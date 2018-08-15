@@ -129,7 +129,7 @@
                                                         <input type="checkbox" class="form-check-input"
                                                                name="{{ field.html_name }}"
                                                                id="{{ field.auto_id }}"
-                                                                {% if form.initial %} checked {% endif %}/>
+                                                                {% if field.initial %} checked {% endif %}/>
                                                         <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
                                                                for="{{ field.id_for_label }}">
                                                             {{ field.label }}
@@ -216,7 +216,7 @@
                                                         <input type="checkbox" class="form-check-input"
                                                                name="{{ field.html_name }}"
                                                                id="{{ field.auto_id }}"
-                                                                {% if form.initial %} checked {% endif %}/>
+                                                                {% if field.initial %} checked {% endif %}/>
                                                         <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
                                                                for="{{ field.id_for_label }}">
                                                             {{ field.label }}
@@ -303,7 +303,7 @@
                                                         <input type="checkbox" class="form-check-input"
                                                                name="{{ field.html_name }}"
                                                                id="{{ field.auto_id }}"
-                                                                {% if form.initial %} checked {% endif %}/>
+                                                                {% if field.initial %} checked {% endif %}/>
                                                         <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
                                                                for="{{ field.id_for_label }}">
                                                             {{ field.label }}
@@ -390,7 +390,7 @@
                                                         <input type="checkbox" class="form-check-input"
                                                                name="{{ field.html_name }}"
                                                                id="{{ field.auto_id }}"
-                                                                {% if form.initial %} checked {% endif %}/>
+                                                                {% if field.initial %} checked {% endif %}/>
                                                         <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
                                                                for="{{ field.id_for_label }}">
                                                             {{ field.label }}

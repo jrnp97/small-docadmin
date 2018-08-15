@@ -181,10 +181,10 @@ class FormsetPostManager(object):
                     form.cleaned_data.pop('DELETE', None)  # Clean formset data
                     data = form.cleaned_data.copy()
                     data.update({parent_name: object_parent})
-                    if hasattr(formset.model, 'create_by'):
+                    if hasattr(formset.model, 'registrado_por'):
                         # Extract related name from relationship
                         alias = formset.model.create_by.field.related_model.user.field.cached_col.alias
-                        data.update({'create_by': getattr(self.request.user, alias)})
+                        data.update({'registrado_por': getattr(self.request.user, alias)})
                     temp.append(formset.model(**data))
             try:
                 with transaction.atomic():
@@ -235,34 +235,38 @@ class BaseRegisterExamBehavior:
 
 # Update exams
 class BaseExamUpdateBehavior:
-    success_url = reverse_lazy('docapp:person_list')
-    extra_content = None
+    success_url = reverse_lazy('docapp:exam_list')
 
     def form_valid(self, form):
         """ Overwrite form_valid to add missing information"""
         object_saved = self.get_object()
-        form.create_by = self.request.user.reception_profile
-        form.exam_type = object_saved.exam_type
+        form.create_by = self.request.user.doctor_profile
+        form.exam_type = object_saved.tipo_examen
         return super(BaseExamUpdateBehavior, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
-        """ Overwrite to initialize form information putting initial data """
+        # Overwrite to initialize form information putting initial data
+        kwargs.update(self.extra_context)
         actual_object = self.get_object()
-        form_sets = {}
-
+        # Copy all formset to individuality
+        section_names = []
+        formsets = []
+        titles = []
         for formset in self.extra_context.get('formsets'):
-            """ Validating if value is a InlineFormSet and don't have initial data """
+            # Validating if value is a InlineFormSet and don't have initial data
             value = formset.get('form')
             to_check = value.__class__ if value.__class__ != type else value
             if issubclass(to_check, BaseInlineFormSet) and value is to_check:
-                form_sets.update({formset.get('section_name'): value})
+                formsets.append(formset.get('form'))
+                section_names.append(formset.get('section_name'))
+                titles.append(formset.get('title'))
+
+        form_sets = {key: value for key, value in zip(section, extra_copy)}
 
         if len(form_sets) > 0:
             # Get initial data
             alias = self.extra_context.get('parent_object_key')
-
             initial_data = []
-
             for formset in form_sets.values():
                 try:
                     data = formset.model.objects.get(**{alias: actual_object})
@@ -275,17 +279,9 @@ class BaseExamUpdateBehavior:
                     dict_data.pop('id', None)
                     initial_data.append([dict_data])
             # put data on extra_content
-            for key, initial in zip(form_sets.keys(), initial_data):
-                post = 0
-                for idx, formset_dict in enumerate(self.extra_context['formsets']):
-                    if formset_dict.get('section_name') == key:
-                        post = idx
-                        break
-                else:
-                    raise ValueError("Error formset information")
+            for idx, initial in enumerate(initial_data):
+                formset_factory = extra_copy[idx]
+                extra_copy[idx] = formset_factory(initial=initial)
 
-                formset_factory =  self.extra_context['formsets'][post].get('form')
-                self.extra_context['formsets'][post]['form'] = formset_factory(initial=initial)
-
-        kwargs.update(self.extra_context)  # Update kwargs
+        kwargs.update({'formsets': extra_copy})  # Update kwargs
         return super(BaseExamUpdateBehavior, self).get_context_data(**kwargs)

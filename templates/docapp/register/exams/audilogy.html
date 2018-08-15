@@ -118,7 +118,6 @@
                     <div class="panel-body">
                         <div class="row">
                             {% for field in formsets.0.form.forms.0 %}
-                                <!-- Select options -->
                                 {% if field.field.widget.input_type == 'select' %}
                                     <div class="col-sm-4">
                                         <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
@@ -137,7 +136,6 @@
                                                 </option>
                                             {% endfor %}
                                         </select>
-                                        <!-- Display errors -->
                                         {% if field.errors %}
                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
                                                  role="alert">
@@ -153,8 +151,8 @@
                                         {% endif %}
                                     </div>
                                 {% endif %}
-                                <!-- TextArea options -->
                                 {% if not field.field.widget.input_type %}
+                                    <!-- TextArea options -->
                                     <div class="form-group col-sm-4">
                                         <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
                                                for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -162,8 +160,8 @@
                                                   id="{{ field.auto_id }}">{% if field.value %}
                                             {{ field.value }} {% endif %}</textarea>
                                     </div>
-                                    <!-- Display errors -->
                                     {% if field.errors %}
+                                        <!-- Display errors -->
                                         <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
                                              role="alert">
                                             <button type="button" class="close" data-dismiss="alert"
@@ -177,8 +175,9 @@
                                         </div>
                                     {% endif %}
                                 {% endif %}
-                                <!-- Date options -->
+
                                 {% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %}
+                                    <!-- Date options -->
                                     <div class="col-sm-4 form-group">
                                         <div class="form-group">
                                             <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
@@ -187,12 +186,12 @@
                                                    class="form-control {% if field.errors %} label-danger-outline {% endif %}"
                                                    name="{{ field.html_name }}"
                                                    id="{{ field.auto_id }}"
-                                                    {% if field.value %}  value="{{ field.value }}" {% endif %}
+                                                    {% if field.value %}  value="{{ field.value|date:"Y-m-d" }}" {% endif %}
                                                     {% if field.field.widget.is_required %}
                                                    required="" {% endif %}/>
                                         </div>
-                                        <!-- Display errors -->
                                         {% if field.errors %}
+                                            <!-- Display errors -->
                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
                                                  role="alert">
                                                 <button type="button" class="close" data-dismiss="alert"
@@ -235,7 +234,7 @@
                                                         <input type="checkbox" class="form-check-input"
                                                                name="{{ field.html_name }}"
                                                                id="{{ field.auto_id }}"
-                                                                {% if form.initial %} checked {% endif %}/>
+                                                                {% if field.initial %} checked {% endif %}/>
                                                         <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
                                                                for="{{ field.id_for_label }}">
                                                             {{ field.label }}
@@ -322,7 +321,7 @@
                                                         <input type="checkbox" class="form-check-input"
                                                                name="{{ field.html_name }}"
                                                                id="{{ field.auto_id }}"
-                                                                {% if form.initial %} checked {% endif %}/>
+                                                                {% if field.initial %} checked {% endif %}/>
                                                         <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
                                                                for="{{ field.id_for_label }}">
                                                             {{ field.label }}
@@ -1151,7 +1150,7 @@
                             {% endfor %}
                         </div>
                         <!-- Hidden Inputs -->
-                        {% for field in formsets.12.form.forms.0 %}
+                        {% for field in formsets.13.form.forms.0 %}
                             {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
                         {% endfor %}
                         <!-- End body -->

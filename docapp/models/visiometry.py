@@ -43,7 +43,7 @@ class Sintomas(models.Model):
 
     observaciones = models.TextField(null=True, blank=True)
 
-    visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='sintomas')
+    visiometria = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='sintomas')
 
 
 class AntEnfermedad(models.Model):
@@ -62,7 +62,7 @@ class AntEnfermedad(models.Model):
 
     observaciones = models.TextField(null=True, blank=True)
 
-    visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='antecedentes_enfermedades')
+    visiometria = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='antecedentes_enfermedades')
 
 
 class AntUsoLentes(models.Model):
@@ -76,7 +76,7 @@ class AntUsoLentes(models.Model):
 
     observaciones = models.TextField(null=True, blank=True)
 
-    visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='antecedente_uso_lentes')
+    visiometria = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='antecedente_uso_lentes')
 
 
 class AntExamenExterno(models.Model):
@@ -87,7 +87,7 @@ class AntExamenExterno(models.Model):
     pigmentacion = models.BooleanField(default=False, null=False, blank=True)
     estrabismo = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='antecedente_examen_externo')
+    visiometria = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='antecedente_examen_externo')
 
 
 class Agudeza(models.Model):
@@ -98,7 +98,7 @@ class Agudeza(models.Model):
     ojo_izquierdo = models.CharField(max_length=10, choices=OPTIONS)
     ojo_derecho = models.CharField(max_length=10, choices=OPTIONS)
 
-    visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='agudeza')
+    visiometria = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='agudeza')
 
 
 class Cronomatica(models.Model):
@@ -109,4 +109,4 @@ class Cronomatica(models.Model):
     ojo_izquierdo = models.CharField(max_length=10, choices=OPTIONS)
     ojo_derecho = models.CharField(max_length=10, choices=OPTIONS)
 
-    visiometry = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='cronomatica')
+    visiometria = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='cronomatica')
