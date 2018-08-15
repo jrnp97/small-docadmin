@@ -261,7 +261,7 @@ class BaseExamUpdateBehavior:
                 section_names.append(formset.get('section_name'))
                 titles.append(formset.get('title'))
 
-        form_sets = {key: value for key, value in zip(section, extra_copy)}
+        form_sets = {key: value for key, value in zip(section_names, formsets)}
 
         if len(form_sets) > 0:
             # Get initial data
@@ -280,8 +280,11 @@ class BaseExamUpdateBehavior:
                     initial_data.append([dict_data])
             # put data on extra_content
             for idx, initial in enumerate(initial_data):
-                formset_factory = extra_copy[idx]
-                extra_copy[idx] = formset_factory(initial=initial)
+                formset_factory = formsets[idx]
+                formsets[idx] = formset_factory(initial=initial)
+            temp = []
+            for title, section, form in zip(titles, section_names, formsets):
+                temp.append({'title': title, 'section_name': section, 'form': form})
 
-        kwargs.update({'formsets': extra_copy})  # Update kwargs
+        kwargs.update({'formsets': temp})  # Update kwargs
         return super(BaseExamUpdateBehavior, self).get_context_data(**kwargs)

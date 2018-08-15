@@ -1,5 +1,8 @@
 from django.contrib import admin
 
+from docapp.models import Otoscopia
+
+admin.site.register(Otoscopia)
 """
 # Register your models here.
 
