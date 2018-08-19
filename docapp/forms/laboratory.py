@@ -20,5 +20,4 @@ class LabForm(forms.ModelForm):
 blood_section = forms.inlineformset_factory(parent_model=Laboratory, model=ExamenSangre, extra=1, max_num=1,
                                             can_delete=False, fields='__all__')
 
-exams_section = forms.inlineformset_factory(parent_model=Laboratory, model=Examenes, extra=1, max_num=1,
-                                            can_delete=False, fields='__all__')
+exams_section = forms.inlineformset_factory(parent_model=Laboratory, model=Examenes, can_delete=True, fields='__all__')

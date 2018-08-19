@@ -43,7 +43,7 @@ class ExamenSangre(models.Model):
                         ('ab-', 'AB'),)
 
     informacion_rh = models.CharField(verbose_name='RH', max_length=1, choices=RH, null=False, blank=False)
-    tipo_de_sangre = models.CharField(verbose_name='tipo_sangre', max_length=5, choices=TIPOS_DE_SANGRES, null=False,
+    tipo_de_sangre = models.CharField(max_length=5, choices=TIPOS_DE_SANGRES, null=False,
                                       blank=False)
 
     laboratory = models.OneToOneField(Laboratory, primary_key=True, on_delete=models.CASCADE,
@@ -51,19 +51,9 @@ class ExamenSangre(models.Model):
 
 
 class Examenes(models.Model):
-    NO_APLICA = 'n'
-    APLICA = 'a'
-    RESULTS = ((NO_APLICA, 'No aplica'),
-               (APLICA, 'Aplica'),)
-    nombre = models.CharField(max_length=50, null=False, blank=False)
+    nombre_examen = models.CharField(max_length=50, null=False, blank=False)
     fecha = models.DateField(null=True, blank=True)
-    laboratorio = models.CharField(max_length=100, null=True, blank=True)
-    resultado = models.CharField(max_length=1, choices=RESULTS, default=NO_APLICA, null=True, blank=True)
+    nombre_laboratorio = models.CharField(max_length=100, null=True, blank=True)
 
     laboratory = models.OneToOneField(Laboratory, primary_key=True, on_delete=models.CASCADE,
                                       related_name='examen_laboratorio')
-
-
-"""
-Model to placefalia
-"""

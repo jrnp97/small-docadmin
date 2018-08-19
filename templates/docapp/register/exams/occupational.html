@@ -165,13 +165,11 @@
                                         <div class="form-group col-sm-6">
                                             <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
                                                    for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                            <textarea class="form-control" name="{{ field.html_name }}" rows="5"
-                                                      id="{{ field.auto_id }}"
-                                                    {% if field.value %}  value="{{ field.value }}" {% endif %}>
-                                            </textarea>
+                                            <textarea class="form-control" name="{{ field.html_name }}" rows="5" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
                                         </div>
-                                        <!-- Display errors -->
+
                                         {% if field.errors %}
+                                            <!-- Display errors -->
                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
                                                  role="alert">
                                                 <button type="button" class="close" data-dismiss="alert"
@@ -251,9 +249,8 @@
                                                        class="form-control {% if field.errors %} label-danger-outline {% endif %}"
                                                        name="{{ field.html_name }}"
                                                        id="{{ field.auto_id }}"
-                                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                        {% if field.field.widget.is_required %}
-                                                       required="" {% endif %}/>
+                                                       {% if field.value %}  value="{{ field.value|date:"Y-m-d" }}" {% endif %}
+                                                       {% if field.field.widget.is_required %} required="" {% endif %}/>
                                             </div>
                                             <!-- Display errors -->
                                             {% if field.errors %}
@@ -281,10 +278,7 @@
                                         <div class="form-group col-sm-4">
                                             <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
                                                    for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                            <textarea class="form-control" name="{{ field.html_name }}" rows="5"
-                                                      id="{{ field.auto_id }}"
-                                                    {% if field.value %} value="{{ field.value }}" {% endif %}>
-                                            </textarea>
+                                            <textarea class="form-control" name="{{ field.html_name }}" rows="5" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
                                         </div>
                                         <!-- Display errors -->
                                         {% if field.errors %}
@@ -560,10 +554,7 @@
                                                        for="{{ field.id_for_label }}">
                                                     {{ field.label }}
                                                 </label>
-                                                <textarea class="form-control" name="{{ field.html_name }}" rows="1"
-                                                          id="{{ field.auto_id }}"
-                                                        {% if field.value %} value="{{ field.value }}" {% endif %}>
-                                                </textarea>
+                                                <textarea class="form-control" name="{{ field.html_name }}" rows="5" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
                                                 <!-- Display errors -->
                                                 {% if field.errors %}
                                                     <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -601,11 +592,7 @@
                                                            for="{{ field.id_for_label }}">
                                                         {{ field.label }}
                                                     </label>
-                                                    <textarea class="form-control" name="{{ field.html_name }}"
-                                                              rows="5"
-                                                              id="{{ field.auto_id }}" {% if field.value %}
-                                                              value="{{ field.value }}" {% endif %}>
-                                                    </textarea>
+                                                   <textarea class="form-control" name="{{ field.html_name }}" rows="5" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
                                                 </div>
                                                 <!-- Display errors -->
                                                 {% if field.errors %}
@@ -698,10 +685,7 @@
                                                     {{ field.label }}
                                                 </label>
 
-                                                <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                          id="{{ field.auto_id }}"
-                                                        {% if field.value %}
-                                                          value="{{ field.value }}" {% endif %}></textarea>
+                                                <textarea class="form-control" name="{{ field.html_name }}" rows="5" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                 {% if field.errors %}
                                                     <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -784,10 +768,7 @@
                                                             {{ field.label }}
                                                         </label>
 
-                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                                  id="{{ field.auto_id }}"
-                                                                {% if field.value %}
-                                                                  value="{{ field.value }}" {% endif %}></textarea>
+                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                         {% if field.errors %}
                                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -861,10 +842,7 @@
                                                             {{ field.label }}
                                                         </label>
 
-                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                                  id="{{ field.auto_id }}"
-                                                                {% if field.value %}
-                                                                  value="{{ field.value }}" {% endif %}></textarea>
+                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                         {% if field.errors %}
                                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -937,10 +915,7 @@
                                                             {{ field.label }}
                                                         </label>
 
-                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                                  id="{{ field.auto_id }}"
-                                                                {% if field.value %}
-                                                                  value="{{ field.value }}" {% endif %}></textarea>
+                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                         {% if field.errors %}
                                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -1013,10 +988,7 @@
                                                             {{ field.label }}
                                                         </label>
 
-                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                                  id="{{ field.auto_id }}"
-                                                                {% if field.value %}
-                                                                  value="{{ field.value }}" {% endif %}></textarea>
+                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                         {% if field.errors %}
                                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -1098,10 +1070,7 @@
                                                             {{ field.label }}
                                                         </label>
 
-                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                                  id="{{ field.auto_id }}"
-                                                                {% if field.value %}
-                                                                  value="{{ field.value }}" {% endif %}></textarea>
+                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                         {% if field.errors %}
                                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -1173,10 +1142,7 @@
                                                             {{ field.label }}
                                                         </label>
 
-                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                                  id="{{ field.auto_id }}"
-                                                                {% if field.value %}
-                                                                  value="{{ field.value }}" {% endif %}></textarea>
+                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                         {% if field.errors %}
                                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -1248,10 +1214,7 @@
                                                             {{ field.label }}
                                                         </label>
 
-                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                                  id="{{ field.auto_id }}"
-                                                                {% if field.value %}
-                                                                  value="{{ field.value }}" {% endif %}></textarea>
+                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                         {% if field.errors %}
                                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -1323,10 +1286,7 @@
                                                             {{ field.label }}
                                                         </label>
 
-                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                                  id="{{ field.auto_id }}"
-                                                                {% if field.value %}
-                                                                  value="{{ field.value }}" {% endif %}></textarea>
+                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                         {% if field.errors %}
                                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -1400,10 +1360,7 @@
                                                             {{ field.label }}
                                                         </label>
 
-                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                                  id="{{ field.auto_id }}"
-                                                                {% if field.value %}
-                                                                  value="{{ field.value }}" {% endif %}></textarea>
+                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                         {% if field.errors %}
                                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -1475,10 +1432,7 @@
                                                             {{ field.label }}
                                                         </label>
 
-                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                                  id="{{ field.auto_id }}"
-                                                                {% if field.value %}
-                                                                  value="{{ field.value }}" {% endif %}></textarea>
+                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                         {% if field.errors %}
                                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -1550,10 +1504,7 @@
                                                             {{ field.label }}
                                                         </label>
 
-                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                                  id="{{ field.auto_id }}"
-                                                                {% if field.value %}
-                                                                  value="{{ field.value }}" {% endif %}></textarea>
+                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                         {% if field.errors %}
                                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -1625,10 +1576,7 @@
                                                             {{ field.label }}
                                                         </label>
 
-                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                                  id="{{ field.auto_id }}"
-                                                                {% if field.value %}
-                                                                  value="{{ field.value }}" {% endif %}></textarea>
+                                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
 
                                                         {% if field.errors %}
                                                             <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
@@ -1709,10 +1657,7 @@
                                     <div class="form-group col-sm-4">
                                         <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
                                                for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                        <textarea class="form-control" name="{{ field.html_name }}" rows="5"
-                                                  id="{{ field.auto_id }}"
-                                                {% if field.value %}  value="{{ field.value }}" {% endif %}>
-                                        </textarea>
+                                        <textarea class="form-control" name="{{ field.html_name }}" rows="5" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
                                     </div>
                                     <!-- Display errors -->
                                     {% if field.errors %}

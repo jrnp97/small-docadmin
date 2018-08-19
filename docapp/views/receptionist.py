@@ -140,7 +140,8 @@ class RegisterAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManag
     success_url = reverse_lazy('docapp:person_list')
     model_to_filter = Paciente
     context_object_2_name = 'person'
-    extra_context = {'parent_object_key': 'work',
+    extra_context = {'exam_name': 'Antecedente',
+                     'parent_object_key': 'work',
                      'formsets': [
                          {'section_name': 'riesgos',
                           'title': 'Riesgos',

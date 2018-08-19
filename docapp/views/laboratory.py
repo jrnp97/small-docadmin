@@ -3,7 +3,7 @@ from django.views.generic import UpdateView
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
 
-"""
+
 from docapp.models import Laboratory
 from docapp.forms import LabForm, blood_section, exams_section
 
@@ -15,7 +15,7 @@ class RegisterLaboratory(LoginRequiredMixin, CheckLaboratory, BaseRegisterExamBe
                          FormViewPutExtra):
     model = Laboratory
     form_class = LabForm
-    template_name = 'docapp/register/exam_register.html'
+    template_name = 'docapp/register/exams/laboratory.html'
     extra_context = {'exam_name': 'laboratorio',
                      'parent_object_key': 'laboratory',
                      'formsets': [
@@ -69,4 +69,3 @@ class UpdateLaboratory(LoginRequiredMixin, CheckLaboratory, BaseExamUpdateBehavi
 
 
 update_laboratory = UpdateLaboratory.as_view()
-"""

@@ -200,6 +200,7 @@ class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior
 
 update_ocupacional = UpdateOccupational.as_view()
 
+
 class RegisterAudiology(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
                         FormViewPutExtra):
     model = Audiology
@@ -311,7 +312,8 @@ class UpdateAudiology(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, F
                           'form': information_section},
                          {'section_name': 'otoscopia',
                           'title': 'Otoscopia',
-                          'form': otoscopia_section},
+                          'form': otoscopia_section,
+                          'has_files': True},
                      ]
                      }
 
