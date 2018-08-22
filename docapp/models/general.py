@@ -2,12 +2,12 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from accounts.models import ReceptionProfile
+from accounts.models import ReceptionProfile, DoctorProfile
 
 User = get_user_model()
 
 
-# Create your models here.
+# Models to manage company employs
 class Empresa(models.Model):
     nombre = models.CharField(max_length=300, null=False, blank=False, unique=True)
     nit = models.PositiveIntegerField(verbose_name='NIT')
@@ -16,6 +16,7 @@ class Empresa(models.Model):
     celular = models.PositiveIntegerField(null=False, blank=False)
     correo_contacto = models.EmailField(null=False, blank=False)
 
+    fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
 
@@ -23,18 +24,12 @@ class Empresa(models.Model):
         return self.nombre
 
 
-class Paciente(models.Model):
-    nombres = models.CharField(max_length=300, null=False, blank=False)
-    apellidos = models.CharField(max_length=300, null=False, blank=False)
-    identificacion = models.PositiveIntegerField(unique=True)
-    lugar_de_nacimiento = models.CharField(max_length=500, null=False, blank=False)
-    fecha_de_nacimiento = models.DateField(null=False, blank=False)
-
+class PacienteEmpresa(models.Model):
+    """ Model to save ''employ'' information """
     SEXOS = (
         ('masculino', 'Masculino'),
         ('femenino', 'Femenino')
     )
-    sexo = models.CharField(max_length=15, choices=SEXOS, null=False, blank=False)
 
     ESTADOS_CIVILES = (
         ('soltero', 'Soltero'),
@@ -43,6 +38,15 @@ class Paciente(models.Model):
         ('union libre', 'Union Libre')
     )
 
+    nombres = models.CharField(max_length=300, null=False, blank=False)
+    apellidos = models.CharField(max_length=300, null=False, blank=False)
+    identificacion = models.PositiveIntegerField(unique=True)
+    lugar_de_nacimiento = models.CharField(max_length=500, null=False, blank=False)
+    fecha_de_nacimiento = models.DateField(null=False, blank=False)
+    eps = models.CharField(verbose_name='EPS', max_length=50, null=False, blank=False)
+    arl = models.CharField(verbose_name='ARL', max_length=50, null=False, blank=False)
+    fondo_pensiones = models.CharField(max_length=50, null=False, blank=False)
+    sexo = models.CharField(max_length=15, choices=SEXOS, null=False, blank=False)
     estado_civil = models.CharField(max_length=20, choices=ESTADOS_CIVILES, null=False, blank=False)
     numero_de_hijos = models.PositiveIntegerField()
     direccion = models.CharField(max_length=500, null=False, blank=False)
@@ -55,9 +59,10 @@ class Paciente(models.Model):
     aprendiz_sena = models.BooleanField(default=False)
     numero_patronal = models.PositiveIntegerField(null=False, blank=False)
 
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, null=True, related_name='empleados')
+    fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
-    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, null=True, related_name='empleados')
 
     def __str__(self):
         return self.get_full_name()
@@ -80,7 +85,8 @@ class Paciente(models.Model):
             return None
 
 
-class TipoExamen(models.Model):
+class Examinacion(models.Model):
+    """ Model to register a process over a pacient """
     TIPOS = (
         ('ingreso', 'Ingreso'),
         ('periodico', 'Periodico'),
@@ -89,16 +95,20 @@ class TipoExamen(models.Model):
         ('post-incapacidad', 'Post-Incapacidad')
     )
     tipo = models.CharField(max_length=20, choices=TIPOS, null=False, blank=False)
-    fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
+
     ESTADOS = (
         ('pendiente', 'Pendiente'),
         ('iniciado', 'Iniciado'),
-        ('problemas', 'Problema'),
+        ('problemas', 'En Problema'),
         ('finalizado', 'Finalizado'),
     )
     estado = models.CharField(max_length=20, choices=ESTADOS, null=False, blank=False)
+
+    paciente_id = models.ForeignKey(PacienteEmpresa, on_delete=models.CASCADE, related_name='examinaciones')
+    fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
+    ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='examenes')
+    manejado_por = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.tipo
@@ -127,15 +137,16 @@ class TipoExamen(models.Model):
 
 
 class AntecedentesLaborales(models.Model):
+    """ Model to save Antecedents only can fill a doctor """
     nombre_empresa = models.CharField(max_length=300, null=False, blank=False)
     ocupacion = models.CharField(max_length=500, null=False, blank=False)
     tiempo = models.PositiveIntegerField(null=False, blank=False)
     uso_epp = models.BooleanField(default=False, null=False, blank=False)
 
-    persona = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='antecedentes')
-
+    persona = models.ForeignKey(PacienteEmpresa, on_delete=models.CASCADE, related_name='antecedentes')
+    fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='antecedentes')
+    registrado_por = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE, related_name='antecedentes')
 
     def __str__(self):
         return self.nombre_empresa
@@ -150,7 +161,7 @@ class Riesgos(models.Model):
     psicologico = models.BooleanField(default=False, null=False, blank=False)
     locativo = models.BooleanField(default=False, null=False, blank=False)
 
-    empresa = models.OneToOneField(AntecedentesLaborales, on_delete=models.CASCADE, primary_key=True, related_name='hazards')
+    empresa_id = models.OneToOneField(AntecedentesLaborales, on_delete=models.CASCADE, related_name='riesgos')
 
     def __str__(self):
         return self.get_number_hazard()
@@ -161,9 +172,72 @@ class Riesgos(models.Model):
         return str(hazards.count(True))
 
     def get_label_hazards(self):
-        hazards = {'fisico': self.fisico, 'quimico': self.quimico, 'mecanico': self.mecanico,
-                   'ergonomico': self.ergonomico, 'electrico': self.electrico, 'psicologico': self.psicologico,
-                   'locativo': self.locativo
-                   }
+        return ", ".join([key for key, val in vars(self).items() if val])
 
-        return ", ".join([key for key, val in hazards.items() if val])
+
+class Accidentes(models.Model):
+    """ Model to register accidentos of a previous work """
+    tipo = models.CharField(max_length=200, null=False, blank=False)
+    secuelas = models.TextField(null=False, blank=False)
+    atendido = models.BooleanField(default=False, null=False, blank=False)
+    calificado = models.BooleanField(default=False, null=False, blank=False)
+    fecha = models.DateField(null=False, blank=False)
+    descripcion = models.TextField(null=False, blank=False)
+
+    antecedente_id = models.ForeignKey(AntecedentesLaborales, on_delete=models.CASCADE, related_name='accidentes')
+    fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
+    ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
+    registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
+
+
+# Models to manage simple person information
+class PacienteParticular(models.Model):
+    """ Model to save simple person information """
+    SEXOS = (
+        ('masculino', 'Masculino'),
+        ('femenino', 'Femenino')
+    )
+
+    ESTADOS_CIVILES = (
+        ('soltero', 'Soltero'),
+        ('casado', 'Casado'),
+        ('viudo', 'Viudo'),
+        ('union libre', 'Union Libre')
+    )
+    nombres = models.CharField(max_length=300, null=False, blank=False)
+    apellidos = models.CharField(max_length=300, null=False, blank=False)
+    identificacion = models.PositiveIntegerField(unique=True)
+    lugar_de_nacimiento = models.CharField(max_length=500, null=False, blank=False)
+    fecha_de_nacimiento = models.DateField(null=False, blank=False)
+    eps = models.CharField(verbose_name='EPS', max_length=50, null=False, blank=False)
+    arl = models.CharField(verbose_name='ARL', max_length=50, null=False, blank=False)
+    fondo_pensiones = models.CharField(max_length=50, null=False, blank=False)
+    sexo = models.CharField(max_length=15, choices=SEXOS, null=False, blank=False)
+    direccion = models.CharField(max_length=500, null=False, blank=False)
+    telefono = models.PositiveIntegerField(null=True)
+    celular = models.PositiveIntegerField(null=False, blank=False)
+    ocupacion = models.CharField(max_length=500, null=False, blank=False)
+    estrato = models.PositiveIntegerField()
+    nombre_del_responsable = models.CharField(verbose_name='Nombre del Responsable (Si Aplica)', max_length=50,
+                                              null=True, blank=True)
+    estado_civil = models.CharField(max_length=20, choices=ESTADOS_CIVILES, null=False, blank=False)
+    numero_de_hijos = models.PositiveIntegerField()
+
+    fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
+    ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
+    registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.nombres} {self.apellidos}"
+
+
+class Consulta(models.Model):
+    """ Model to save appointment description """
+    razon = models.TextField(null=False, blank=False)
+
+    paciente_id = models.ForeignKey(PacienteParticular, null=False, blank=True, on_delete=models.CASCADE,
+                                 related_name='consultas')
+
+    fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
+    ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
+    registrado_por = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE)

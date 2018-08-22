@@ -1,4 +1,4 @@
-""" Model to save labs information """
+""" Model to save labs information
 from django.utils import timezone
 from django.db import models
 
@@ -55,5 +55,5 @@ class Examenes(models.Model):
     fecha = models.DateField(null=True, blank=True)
     nombre_laboratorio = models.CharField(max_length=100, null=True, blank=True)
 
-    laboratory = models.OneToOneField(Laboratory, primary_key=True, on_delete=models.CASCADE,
-                                      related_name='examen_laboratorio')
+    laboratory = models.OneToOneField(Laboratory, primary_key=True, on_delete=models.CASCADE, related_name='examen_laboratorio')
+"""
