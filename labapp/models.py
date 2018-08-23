@@ -35,11 +35,6 @@ class LaboratoryProfile(models.Model):
     class Meta:
         db_table = 'personal_labs'
 
-    def save(self, *args, **kwargs):
-        """ Overwrite to set default lab profile """
-        self.user_id.profile_type = 'p_laboratorio'
-        super(LaboratoryProfile, self).save(*args, **kwargs)
-
 
 class LabExam(models.Model):
     """ Model to register laboratory exam to do on a patient """
@@ -53,7 +48,7 @@ class LabExam(models.Model):
                                        related_name='examenes_de_labs')
 
     manejado_por = models.OneToOneField(LaboratoryProfile, null=True, blank=True, on_delete=models.CASCADE,
-                                     related_name='examenes')
+                                        related_name='examenes')
 
 
 class ExamResults(models.Model):
