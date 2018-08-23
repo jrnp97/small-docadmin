@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 
-from accounts.models import User, ReceptionProfile, LaboratoryProfile, DoctorProfile
+from accounts.models import User, ReceptionProfile, DoctorProfile
+from labapp.models import LaboratoryProfile
 # Register your models here.
 
 

@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.db import models
 
 from .general import Examinacion
-from accounts.models import DoctorProfile
 
 
 class Visiometry(models.Model):
@@ -12,8 +11,6 @@ class Visiometry(models.Model):
 
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificaco = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.PROTECT,
-                                       related_name='formularios_visiometria')
 
     def __str__(self):
         return "Visiometria"
@@ -63,7 +60,8 @@ class AntEnfermedad(models.Model):
 
     observaciones = models.TextField(null=True, blank=True)
 
-    visiometria_id = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='antecedentes_enfermedades')
+    visiometria_id = models.OneToOneField(Visiometry, on_delete=models.CASCADE,
+                                          related_name='antecedentes_enfermedades')
 
 
 class AntUsoLentes(models.Model):
@@ -90,7 +88,8 @@ class AntExamenExterno(models.Model):
     pigmentacion = models.BooleanField(default=False, null=False, blank=True)
     estrabismo = models.BooleanField(default=False, null=False, blank=True)
     observaciones = models.TextField(null=True, blank=True)
-    visiometria_id = models.OneToOneField(Visiometry, on_delete=models.CASCADE, related_name='antecedente_examen_externo')
+    visiometria_id = models.OneToOneField(Visiometry, on_delete=models.CASCADE,
+                                          related_name='antecedente_examen_externo')
 
 
 class Agudeza(models.Model):

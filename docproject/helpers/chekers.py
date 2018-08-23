@@ -5,10 +5,16 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 # Permissions checker
 class CheckerBase(UserPassesTestMixin):
     def handle_no_permission(self):
+        """ Redirect to user dashboard if no't satisfy Test"""
         return redirect('docapp:dashboard')
 
     def test_func(self, **kwargs):
         pass
+
+
+class CheckSuperUser(CheckerBase):
+    def test_func(self):
+        return self.request.user.is_superuser
 
 
 class CheckReceptionist(CheckerBase):

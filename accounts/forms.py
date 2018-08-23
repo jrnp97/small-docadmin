@@ -2,7 +2,8 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 
-from accounts.models import DoctorProfile, LaboratoryProfile, ReceptionProfile, Laboratorio
+from accounts.models import DoctorProfile, ReceptionProfile
+from labapp.models import Laboratorio, LaboratoryProfile
 
 User = get_user_model()
 

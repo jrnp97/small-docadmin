@@ -1,21 +1,18 @@
 from django.db import models
 from django.utils import timezone
 
-from accounts.models import DoctorProfile
-
 from docapp.models import Examinacion
+
 
 class Altura(models.Model):
     examinacion_id = models.OneToOneField(Examinacion, on_delete=models.CASCADE, related_name='altura')
 
     OPTIONS = (('apto', 'Apto'),
-              ('no apto', 'No Apto'))
+               ('no apto', 'No Apto'))
     conclusion = models.CharField(max_length=20, choices=OPTIONS, null=False, blank=False)
 
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.PROTECT,
-                                       related_name='formulario_altura')
 
     def __str__(self):
         return self.examinacion_id.tipo
