@@ -5,5 +5,3 @@ from .receptionist import (dashboard, register_person, register_employ,  update_
 
 from .doctor import (register_occupational, register_audiology, register_visiometry,
                      update_ocupacional, update_audiologia, update_visiometria)
-
-from .laboratory import register_laboratory, update_laboratory

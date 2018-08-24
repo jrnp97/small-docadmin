@@ -1,5 +1,5 @@
 from .general import (Empresa, PacienteEmpresa, AntecedentesLaborales, Riesgos, Accidentes, Examinacion,
-                      PacienteParticular, Consulta)
+                      PacienteParticular, Consulta, SimpleExam)
 
 from .audiology import (Audiology,
                         Ananmesis,
@@ -29,3 +29,5 @@ from .occupational import (Occupational,
                            ExamFisicoToraxPulmones,
                            ColumnaCervical, ColumnaDorsal, ColumnaLumbar,
                            ConclusionIngreso, ConclusionRetiro, ConclusionPeriodico, ConclusionPostIncapacidad)
+
+from .altura import Altura, Questions

@@ -3,7 +3,6 @@ from django.db import models
 from django.utils import timezone
 
 from .general import Examinacion
-from accounts.models import DoctorProfile
 
 
 class Audiology(models.Model):
@@ -12,8 +11,6 @@ class Audiology(models.Model):
 
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.PROTECT,
-                                       related_name='formularios_audiologia')
 
     def __str__(self):
         return "Audiologia"

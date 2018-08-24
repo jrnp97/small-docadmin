@@ -18,7 +18,7 @@ class Empresa(models.Model):
 
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
+    registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='empresas')
 
     def __str__(self):
         return self.nombre
@@ -62,7 +62,7 @@ class PacienteEmpresa(models.Model):
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, null=True, related_name='empleados')
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
+    registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='personal_empresa')
 
     def __str__(self):
         return self.get_full_name()
@@ -107,23 +107,27 @@ class Examinacion(models.Model):
     paciente_id = models.ForeignKey(PacienteEmpresa, on_delete=models.CASCADE, related_name='examinaciones')
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
-    manejado_por = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE)
+    registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='examinaciones')
+    manejador_por = models.OneToOneField(DoctorProfile, null=True, blank=True, on_delete=models.CASCADE,
+                                         related_name='examinaciones')
 
     def __str__(self):
         return self.tipo
 
     def get_process(self):
+        # TODO CHANGE
         examenes_done = [hasattr(self, 'visiometria'), hasattr(self, 'audiologia'),
                          hasattr(self, 'ocupacional'), hasattr(self, 'laboratorio')]
         return examenes_done.count(True) * 25
 
     def finished(self):
+        # TODO CHANGE
         examenes_done = [hasattr(self, 'visiometria'), hasattr(self, 'audiologia'),
                          hasattr(self, 'ocupacional'), hasattr(self, 'laboratorio')]
         return all(examenes_done)
 
     def update_state(self):
+        # TODO CHANGE
         process = self.get_process()
         change = False
         if self.estado == 'pendiente' and process > 0 and process < 100:
@@ -190,6 +194,20 @@ class Accidentes(models.Model):
     registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
 
 
+class SimpleExam(models.Model):
+    """ Model to save custom exams manage inside enterprise"""
+    nombre = models.CharField(max_length=50, null=False, blank=False)
+
+    examinacion_id = models.ForeignKey(Examinacion, on_delete=models.CASCADE, related_name='examenes_internos')
+
+    fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
+    ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
+    registrado_por = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.PROTECT,
+                                       related_name='examenes_internos')
+
+    resultados = models.TextField(default='', null=False, blank=True)
+
+
 # Models to manage simple person information
 class PacienteParticular(models.Model):
     """ Model to save simple person information """
@@ -218,14 +236,13 @@ class PacienteParticular(models.Model):
     celular = models.PositiveIntegerField(null=False, blank=False)
     ocupacion = models.CharField(max_length=500, null=False, blank=False)
     estrato = models.PositiveIntegerField()
-    nombre_del_responsable = models.CharField(verbose_name='Nombre del Responsable (Si Aplica)', max_length=50,
-                                              null=True, blank=True)
+    nombre_del_responsable = models.CharField(max_length=50, null=True, blank=True)
     estado_civil = models.CharField(max_length=20, choices=ESTADOS_CIVILES, null=False, blank=False)
-    numero_de_hijos = models.PositiveIntegerField()
+    numero_de_hijos = models.PositiveIntegerField(default=0)
 
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
+    registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='particulares')
 
     def __str__(self):
         return f"{self.nombres} {self.apellidos}"
@@ -236,8 +253,8 @@ class Consulta(models.Model):
     razon = models.TextField(null=False, blank=False)
 
     paciente_id = models.ForeignKey(PacienteParticular, null=False, blank=True, on_delete=models.CASCADE,
-                                 related_name='consultas')
+                                    related_name='consultas')
 
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE)
+    registrado_por = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE, related_name='consultas')

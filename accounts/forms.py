@@ -2,7 +2,8 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 
-from accounts.models import DoctorProfile, LaboratoryProfile, ReceptionProfile, Laboratorio
+from accounts.models import DoctorProfile, ReceptionProfile
+from labapp.models import Laboratorio, LaboratoryProfile
 
 User = get_user_model()
 
@@ -34,15 +35,15 @@ class BaseUserForm(forms.ModelForm):
             # Save profile now
             try:
                 if instance.profile_type == 'recepcionista':
-                    info = {'user': instance}
+                    info = {'user_id': instance}
                     reception = ReceptionProfile(**info)
                     reception.save()
-                elif instance.profile_type == 'laboratorio':
-                    info = {'user': instance}
+                elif instance.profile_type == 'laboratorio':  # TODO Fix Laboratory user register with inline
+                    info = {'user_id': instance}
                     laboratory = LaboratoryProfile(**info)
                     laboratory.save()
                 elif instance.profile_type == 'doctor':
-                    info = {'user': instance}
+                    info = {'user_id': instance}
                     doctor = DoctorProfile(**info)
                     doctor.save()
             except IntegrityError:

@@ -1,3 +1,4 @@
+"""
 from django import forms
 
 from docapp.models import Laboratory, ExamenSangre, Examenes
@@ -21,3 +22,4 @@ blood_section = forms.inlineformset_factory(parent_model=Laboratory, model=Exame
                                             can_delete=False, fields='__all__')
 
 exams_section = forms.inlineformset_factory(parent_model=Laboratory, model=Examenes, can_delete=True, fields='__all__')
+"""

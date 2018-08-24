@@ -1,43 +1,38 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import UpdateView
-from django.core.urlresolvers import reverse_lazy
 
-from docapp.models import TipoExamen, Occupational, Audiology, Visiometry
+from docapp.models import Occupational, Audiology, Visiometry, Altura
 from docapp.forms import (OcupaForm,
                           ant_familiares_section,
-                          ant_gineco_section,
+                          revision_sistemas_section,
+                          biometria_section,
                           habito_alcohol_section, habito_cigarillo_section, habito_droga_section,
                           habito_general_section,
-                          examen_fisico_general_section,
-                          examen_fisico_ojos_section, examen_fisico_oidos_section, examen_fisico_nariz_section,
-                          examen_fisico_boca_section,
-                          examen_fisico_cuello_section,
-                          examen_fisico_torax_pulmones_section,
-                          examen_fisico_corazon_section,
-                          examen_fisico_abdomen_section,
-                          examen_fisico_genito_unitario_section,
-                          examen_fisico_columna_section,
-                          examen_fisico_extremidades_section,
-                          examen_fisico_neurologico_section,
-                          conclusion_section)
+                          examen_fisico_general_section, examen_fisico_abdomen_section, examen_fisico_boca_section,
+                          examen_fisico_columna_section, examen_fisico_corazon_section, examen_fisico_cuello_section,
+                          examen_fisico_extremidades_section, examen_fisico_genito_unitario_section,
+                          examen_fisico_nariz_section, examen_fisico_neurologico_section, examen_fisico_oidos_section,
+                          examen_fisico_ojos_section, examen_fisico_torax_pulmones_section)
 
 from docapp.forms import (AudioForm,
                           ananmesis_section,
                           ant_familiar_section,
                           ant_otro_section,
-                          exposicion_audifonos_section, exposicion_auto_section, exposicion_moto_section,
+                          exposicion_audifonos_section, exposicion_moto_section, exposicion_auto_section,
                           exposicion_pesada_section,
-                          estado_actual_escucha_ruido_section, estado_actual_escucha_section,
-                          estado_actual_frases_repetidas_section,
                           estado_actual_ruido_molestia_section, estado_actual_volumen_tv_section,
-                          information_section,
-                          otoscopia_section)
+                          estado_actual_frases_repetidas_section, estado_actual_escucha_section,
+                          estado_actual_escucha_ruido_section,
+                          audiometria_section)
 
 from docapp.forms import (VisioForm, sintomas_section, ant_enfermedad_section, ant_uso_lentes_section,
                           ant_extra_exams, agudeza_section, cronomatica_section)
 
-from .chekers import CheckDoctor
-from .customs import FormViewPutExtra, FormsetPostManager, BaseRegisterExamBehavior, BaseExamUpdateBehavior
+from docapp.forms import AlturaForm, question_section
+
+from docproject.helpers.chekers import CheckDoctor
+from docproject.helpers.customs import (FormViewPutExtra, FormsetPostManager, BaseRegisterExamBehavior,
+                                        BaseExamUpdateBehavior)
 
 
 class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
@@ -51,9 +46,10 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
                          {'section_name': 'ant_familiares',
                           'title': 'Antecedentes Familiares',
                           'form': ant_familiares_section},
-                         {'section_name': 'ant_gineco_section',
-                          'title': 'Antecedentes Gineco-Obstetricos',
-                          'form': ant_gineco_section},
+                         # TODO Antecedent gineco-obstetricos put depend sex of pacient
+                         {'section_name': 'revision_sistemas',
+                          'title': 'Revision por Sistemas',
+                          'form': revision_sistemas_section},
                          # Habitos
                          {'section_name': 'habitos_generales',
                           'title': 'Habitos Generales',
@@ -71,6 +67,9 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
                          {'section_name': 'aspecto_general',
                           'title': 'Aspecto General',
                           'form': examen_fisico_general_section},
+                         {'section_name': 'biometria',
+                          'title': 'Biometria',
+                          'form': biometria_section},
                          # # Organos de los sentidos
                          {'section_name': 'org_boca',
                           'title': 'Boca',
@@ -84,7 +83,6 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
                          {'section_name': 'org_ojos',
                           'title': 'Ojos',
                           'form': examen_fisico_ojos_section},
-
                          # # Fin Organos
                          {'section_name': 'exm_cuello',
                           'title': 'Cuello',
@@ -111,9 +109,7 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
                           'title': 'Genito Unitario',
                           'form': examen_fisico_genito_unitario_section},
                          # Fin examen fisico
-                         {'section_name': 'conclusiones',
-                          'title': 'Conclusiones',
-                          'form': conclusion_section}
+                         # TODO Section conclusion process depend examination type
                      ]
                      }
 
@@ -131,9 +127,10 @@ class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior
                          {'section_name': 'ant_familiares',
                           'title': 'Antecedentes Familiares',
                           'form': ant_familiares_section},
-                         {'section_name': 'ant_gineco_section',
-                          'title': 'Antecedentes Gineco-Obstetricos',
-                          'form': ant_gineco_section},
+                         # TODO Antecedent gineco-obstetricos put depend sex of pacient
+                         {'section_name': 'revision_sistemas',
+                          'title': 'Revision por Sistemas',
+                          'form': revision_sistemas_section},
                          # Habitos
                          {'section_name': 'habitos_generales',
                           'title': 'Habitos Generales',
@@ -151,6 +148,9 @@ class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior
                          {'section_name': 'aspecto_general',
                           'title': 'Aspecto General',
                           'form': examen_fisico_general_section},
+                         {'section_name': 'biometria',
+                          'title': 'Biometria',
+                          'form': biometria_section},
                          # # Organos de los sentidos
                          {'section_name': 'org_boca',
                           'title': 'Boca',
@@ -164,7 +164,6 @@ class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior
                          {'section_name': 'org_ojos',
                           'title': 'Ojos',
                           'form': examen_fisico_ojos_section},
-
                          # # Fin Organos
                          {'section_name': 'exm_cuello',
                           'title': 'Cuello',
@@ -191,9 +190,7 @@ class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior
                           'title': 'Genito Unitario',
                           'form': examen_fisico_genito_unitario_section},
                          # Fin examen fisico
-                         {'section_name': 'conclusiones',
-                          'title': 'Conclusiones',
-                          'form': conclusion_section}
+                         # TODO Section conclusion process depend examination type
                      ]
                      }
 
@@ -248,12 +245,9 @@ class RegisterAudiology(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavio
                           'title': '¿Escucha bien cuando hay ruido?',
                           'form': estado_actual_escucha_ruido_section},
                          # End Estado Actual
-                         {'section_name': 'informacion',
-                          'title': 'Informacion',
-                          'form': information_section},
-                         {'section_name': 'otoscopia',
-                          'title': 'Otoscopia',
-                          'form': otoscopia_section},
+                         {'section_name': 'audiometria',
+                          'title': 'Audiometria',
+                          'form': audiometria_section},
                      ]
                      }
 
@@ -307,13 +301,9 @@ class UpdateAudiology(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, F
                           'title': '¿Escucha bien cuando hay ruido?',
                           'form': estado_actual_escucha_ruido_section},
                          # End Estado Actual
-                         {'section_name': 'informacion',
-                          'title': 'Informacion',
-                          'form': information_section},
-                         {'section_name': 'otoscopia',
-                          'title': 'Otoscopia',
-                          'form': otoscopia_section,
-                          'has_files': True},
+                         {'section_name': 'audiometria',
+                          'title': 'Audiometria',
+                          'form': audiometria_section},
                      ]
                      }
 
@@ -394,3 +384,40 @@ class UpdateVisiometry(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, 
 
 
 update_visiometria = UpdateVisiometry.as_view()
+
+
+class RegisterAltura(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager, FormViewPutExtra):
+    model = Altura
+    form_class = AlturaForm
+    template_name = 'docapp/register/exams/altura.html'
+    extra_context = {'exam_name': 'altura',
+                     'parent_object_key': 'altura',
+                     'formsets': [
+                         {'section_name': 'preguntas',
+                          'title': 'Estado',
+                          'form': question_section},
+                     ]
+                     }
+
+
+register_altura = RegisterAltura.as_view()
+
+
+class UpdateAltura(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, FormsetPostManager, UpdateView):
+    model = Altura
+    form_class = AlturaForm
+    template_name = 'docapp/register/exams/altura.html'
+    extra_context = {'exam_name': 'altura',
+                     'parent_object_key': 'altura',
+                     'formsets': [
+                         {'section_name': 'preguntas',
+                          'title': 'Estado',
+                          'form': question_section},
+                     ]
+                     }
+
+
+update_altura = UpdateView.as_view()
+
+# TODO Add simple exam register view
+# TODO Add simple exam update view

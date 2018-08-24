@@ -3,15 +3,12 @@ from django.utils import timezone
 from django.db import models
 
 from .general import Examinacion
-from accounts.models import DoctorProfile
 
 
 class Occupational(models.Model):
     examinacion_id = models.OneToOneField(Examinacion, on_delete=models.CASCADE, related_name='ocupacional')
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.PROTECT,
-                                       related_name='formulario_ocupacional')
 
     def __str__(self):
         return self.examinacion_id.tipo

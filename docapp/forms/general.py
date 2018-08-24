@@ -1,6 +1,7 @@
 from django import forms
 
-from docapp.models import Empresa, Paciente, TipoExamen, AntecedentesLaborales, Riesgos
+from docapp.models import (Empresa, PacienteEmpresa, AntecedentesLaborales, Riesgos, Accidentes, Examinacion,
+                           PacienteParticular, Consulta, SimpleExam)
 
 
 class CompanyForm(forms.ModelForm):
@@ -17,9 +18,12 @@ class CompanyForm(forms.ModelForm):
         return instance
 
 
-class PersonForm(forms.ModelForm):
+""" Formularios para procesos con empresas """
+
+
+class PacienteEmpresaForm(forms.ModelForm):
     class Meta:
-        model = Paciente
+        model = PacienteEmpresa
         fields = ('nombres', 'apellidos', 'identificacion', 'lugar_de_nacimiento', 'fecha_de_nacimiento',
                   'sexo', 'estado_civil', 'numero_de_hijos', 'direccion', 'telefono',
                   'celular', 'ocupacion', 'posicion', 'estrato', 'estudiante_en_entrenamiento',
@@ -27,7 +31,7 @@ class PersonForm(forms.ModelForm):
         exclude = ('registrado_por', 'empresa',)
 
     def save(self, commit=True):
-        instance = super(PersonForm, self).save(commit=False)
+        instance = super(PacienteEmpresaForm, self).save(commit=False)
         instance.registrado_por = self.create_by
         instance.empresa = self.company
         if commit:
@@ -35,9 +39,9 @@ class PersonForm(forms.ModelForm):
         return instance
 
 
-class ExamForm(forms.ModelForm):
+class ExaminacionForm(forms.ModelForm):
     class Meta:
-        model = TipoExamen
+        model = Examinacion
         fields = ('tipo', 'estado',)
         exclude = ('registrado_por', 'paciente',)
 
@@ -55,7 +59,7 @@ class ExamForm(forms.ModelForm):
             delattr(self, 'initial')  # Clean form data
 
     def save(self, commit=True, **kwargs):
-        instance = super(ExamForm, self).save(commit=False)
+        instance = super(ExaminacionForm, self).save(commit=False)
         instance.registrado_por = self.create_by
         instance.paciente = self.person
         if commit:
@@ -63,14 +67,14 @@ class ExamForm(forms.ModelForm):
         return instance
 
 
-class AntecedentForm(forms.ModelForm):
+class AntLaboralesForm(forms.ModelForm):
     class Meta:
         model = AntecedentesLaborales
         fields = ('nombre_empresa', 'ocupacion', 'tiempo', 'uso_epp',)
         exclude = ('registrado_por', 'persona',)
 
     def save(self, commit=True):
-        instance = super(AntecedentForm, self).save(commit=False)
+        instance = super(AntLaboralesForm, self).save(commit=False)
         instance.registrado_por = self.create_by
         instance.persona = self.person
         if commit:
@@ -78,7 +82,7 @@ class AntecedentForm(forms.ModelForm):
         return instance
 
 
-class AntHazardForm(forms.ModelForm):
+class AntLabRiesgosForm(forms.ModelForm):
     class Meta:
         model = Riesgos
         fields = ('fisico', 'fisico', 'quimico',
@@ -88,4 +92,82 @@ class AntHazardForm(forms.ModelForm):
 
 
 hazards_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLaborales, model=Riesgos,
-                                                    form=AntHazardForm, can_delete=False, extra=1, max_num=1)
+                                                    form=AntLabRiesgosForm, can_delete=False, extra=1, max_num=1)
+
+
+class AccidenteForm(forms.ModelForm):
+    class Meta:
+        model = Accidentes
+        fields = '__all__'
+        exclude = ('empresa',)
+
+
+accident_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLaborales, model=Accidentes,
+                                                     form=AccidenteForm, can_delete=True)
+
+""" Formularios para procesos con consultas particulares """
+
+
+class ParticularForm(forms.ModelForm):
+    class Meta:
+        model = PacienteParticular
+        fields = ('nombres', 'apellidos', 'identificacion', 'lugar_de_nacimiento', 'fecha_de_nacimiento',
+                  'sexo', 'estado_civil', 'numero_de_hijos', 'direccion', 'telefono',
+                  'celular', 'ocupacion', 'estrato', )
+        exclude = ('registrado_por',)
+
+    def save(self, commit=True):
+        instance = super(ParticularForm, self).save(commit=False)
+        instance.registrado_por = self.create_by
+        if commit:
+            instance.save()
+        return instance
+
+
+# TODO Cuando una recepcionista genere una consulta se creará la instancia, simplemente.
+class ConsultaForm(forms.ModelForm):
+    class Meta:
+        model = Consulta
+        fields = ('razon',)
+        exclude = ('registrado_por',)
+
+    def save(self, commit=True):
+        instance = super(ConsultaForm, self).save(commit=False)
+        instance.registrado_por = self.create_by
+        if commit:
+            instance.save()
+        return instance
+
+
+class RegisterSingleExamForm(forms.ModelForm):
+    class Meta:
+        model = SimpleExam
+        fields = ('nombre',)
+        exclude = ('registrado_por', 'resultados',)
+
+    def save(self, commit=True):
+        instance = super(RegisterSingleExamForm, self).save(commit=False)
+        instance.registrado_por = self.create_by
+        if commit:
+            instance.save()
+        return instance
+
+
+reception_exam_formset = forms.modelformset_factory(model=SimpleExam, can_delete=True, form=RegisterSingleExamForm)
+
+
+class UpdateSimpleExamForm(forms.ModelForm):
+    class Meta:
+        model = SimpleExam
+        fields = ('nombre', 'resultados', )
+        exclude = ('registrado_por', )
+
+    def clean_nombre(self):
+        return self.initial['nombre']
+
+    def save(self, commit=True):
+        instance = super(UpdateSimpleExamForm, self).save(commit=False)
+        instance.registrado_por = self.create_by
+        if commit:
+            instance.save()
+        return instance

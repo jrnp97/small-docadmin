@@ -1,11 +1,10 @@
 """ Models general, only manage user roles and similar models to performance and manage dashboard """
 from django.db import models
-from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    """ Base User Class on SM-Laboral only can have 2 roles """
+    """ Base User Class on SM-Laboral only can have 3 roles """
     DOCTOR = 'doctor'
     RECP = 'receptionista'
     LAB = 'p_laboratorio'
@@ -50,38 +49,7 @@ class DoctorProfile(models.Model):
 class ReceptionProfile(models.Model):
     """ Model to save receptionist personal """
     user_id = models.OneToOneField(User, null=False, blank=False, on_delete=models.CASCADE, primary_key=True,
-                                related_name='reception_profile')
+                                   related_name='reception_profile')
 
     class Meta:
         db_table = 'sm_recepcionistas'
-
-
-class Laboratorio(models.Model):
-    """ Model to describe laboratory binding with sm """
-    nombre = models.CharField(max_length=100, null=False, blank=False)
-    direccion = models.CharField(max_length=100, null=False, blank=False)
-    email_contacto = models.EmailField()
-
-    fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
-    ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(ReceptionProfile, null=False, blank=False,
-                                       related_name='laboratorios_registrados')
-
-    class Meta:
-        db_table = "laboratorios"
-
-
-class LaboratoryProfile(models.Model):
-    user_id = models.OneToOneField(User, null=False, blank=False, on_delete=models.CASCADE, primary_key=True,
-                                   related_name='laboratory_profile')
-    laboratorio_id = models.ForeignKey(Laboratorio, null=False, blank=False, on_delete=models.CASCADE,
-                                       related_name='personal_lab')
-    is_admin = models.BooleanField(default=False, null=False, blank=True)
-
-    class Meta:
-        db_table = 'personal_labs'
-
-    def save(self, *args, **kwargs):
-        """ Overwrite to set default lab profile """
-        self.user_id.profile_type = 'p_laboratorio'
-        super(LaboratoryProfile, self).save(*args, **kwargs)
