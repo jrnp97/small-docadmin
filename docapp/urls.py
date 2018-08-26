@@ -36,8 +36,3 @@ urlpatterns = [
     url(r'^audiology/(?P<pk>[0-9]+)/$', views.update_audiologia, name='update_audiologia'),
     url(r'^visiometry/(?P<pk>[0-9]+)/$', views.update_visiometria, name='update_visiometria'),
 ]
-
-""" 
-    url(r'^register/(?P<exam_id>[0-9]+)/laboratory/$', views.register_laboratory, name='register_laboratory'),
-    url(r'^laboratory/(?P<pk>[0-9]+)/$', views.update_laboratory, name='update_laboratory'),
-"""

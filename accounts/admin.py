@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 
-from accounts.models import User, ReceptionProfile, LaboratoryProfile, DoctorProfile
+from accounts.models import User, ReceptionProfile, DoctorProfile
+from labapp.models import LaboratoryProfile
 # Register your models here.
 
 
@@ -17,19 +18,19 @@ class UserAdmin(admin.ModelAdmin):
         # Save profile now
         try:
             if obj.is_superuser:
-                info = {'user': obj}
+                info = {'user_id': obj}
                 ReceptionProfile(**info).save()
                 # Administrator only can be receptionist profile
-            elif obj.profile_type == 'receptionist':
-                info = {'user': obj}
+            elif obj.profile_type == 'receptionista':
+                info = {'user_id': obj}
                 reception = ReceptionProfile(**info)
                 reception.save()
-            elif obj.profile_type == 'laboratory':
-                info = {'user': obj}
+            elif obj.profile_type == 'p_laboratorio':  # TODO Fix Laboratory user register with stack inline
+                info = {'user_id': obj}
                 laboratory = LaboratoryProfile(**info)
                 laboratory.save()
             elif obj.profile_type == 'doctor':
-                info = {'user': obj}
+                info = {'user_id': obj}
                 doctor = DoctorProfile(**info)
                 # Save doctor
                 doctor.save()

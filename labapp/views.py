@@ -1,21 +1,18 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
+
+
+
+"""from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import UpdateView
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
-
-"""
-from docapp.models import Laboratory
-from docapp.forms import LabForm, blood_section, exams_section
-
-from .chekers import CheckLaboratory
-from .customs import FormsetPostManager, FormViewPutExtra, BaseRegisterExamBehavior, BaseExamUpdateBehavior
 
 
 class RegisterLaboratory(LoginRequiredMixin, CheckLaboratory, BaseRegisterExamBehavior, FormsetPostManager,
                          FormViewPutExtra):
     model = Laboratory
     form_class = LabForm
-    template_name = 'docapp/register/exam_register.html'
+    template_name = 'docapp/register/exams/laboratory.html'
     extra_context = {'exam_name': 'laboratorio',
                      'parent_object_key': 'laboratory',
                      'formsets': [

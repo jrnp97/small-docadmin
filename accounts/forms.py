@@ -1,9 +1,9 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, ReadOnlyPasswordHashWidget
 
-from accounts.models import DoctorProfile, LaboratoryProfile, ReceptionProfile
+from accounts.models import DoctorProfile, ReceptionProfile
+from labapp.models import Laboratorio, LaboratoryProfile
 
 User = get_user_model()
 
@@ -15,7 +15,8 @@ class BaseUserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'profile_type')
+        fields = ('username', 'email', 'first_name', 'last_name')
+        exclude = ('profile_type', )
 
     def clean_password2(self):
         # Check if both password match
@@ -33,16 +34,16 @@ class BaseUserForm(forms.ModelForm):
             instance.save()
             # Save profile now
             try:
-                if instance.profile_type == 'receptionist':
-                    info = {'user': instance}
+                if instance.profile_type == 'recepcionista':
+                    info = {'user_id': instance}
                     reception = ReceptionProfile(**info)
                     reception.save()
-                elif instance.profile_type == 'laboratory':
-                    info = {'user': instance}
+                elif instance.profile_type == 'laboratorio':  # TODO Fix Laboratory user register with inline
+                    info = {'user_id': instance}
                     laboratory = LaboratoryProfile(**info)
                     laboratory.save()
                 elif instance.profile_type == 'doctor':
-                    info = {'user': instance}
+                    info = {'user_id': instance}
                     doctor = DoctorProfile(**info)
                     doctor.save()
             except IntegrityError:
@@ -57,8 +58,10 @@ class BaseUserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'password',)
+        exclude = ('profile_type', )
 
     def clean_password(self):
+        """ To change password need required to administrator """
         # Regardless of what the user provides, return the initial value.
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
@@ -73,160 +76,56 @@ class BaseUserUpdateForm(forms.ModelForm):
         return instance
 
 
-"""
-# Profile creation forms
+# Create Forms
 class DoctorCreateForm(BaseUserForm):
-    # Form to register doctor 
-    general = forms.BooleanField(initial=False, label='General', widget=forms.CheckboxInput, required=False)
-    visiometry = forms.BooleanField(initial=False, label='Visiometro', widget=forms.CheckboxInput, required=False)
-    audiometry = forms.BooleanField(initial=False, label='Audiometro', widget=forms.CheckboxInput, required=False)
-    audiology = forms.BooleanField(initial=False, label='Audiologo', widget=forms.CheckboxInput, required=False)
 
     def save(self, commit=True):
         instance = super(DoctorCreateForm, self).save(commit=False)
-        # Set doctor profile
-        instance.profile_type = 'doctor'
-
-        # Make doctorprofile information
-        extra_content = {'general': self.cleaned_data.get('general'),
-                         'visiometry': self.cleaned_data.get('visiometry'),
-                         'audiometry': self.cleaned_data.get('audiometry'),
-                         'audiology': self.cleaned_data.get('audiology')}
-        if commit:
-            # Save user
-            instance.save()
-            # Save doctor now
-            try:
-                # Add user to information
-                extra_content.update({'user': instance})
-                doctor = DoctorProfile(**extra_content)
-                # Save doctor
-                doctor.save()
-            except IntegrityError:
-                # Delete user
-                instance.delete()
-                raise forms.ValidationError(message="Unable to save doctor profile, check information",
-                                            code='invalid')
-        return instance
+        instance.profile_type = 'doctor'  # Set doctor profile
+        super(DoctorCreateForm, self).save()  # Now save user
 
 
 class RecCreateForm(BaseUserForm):
-    # Form to register Receptionist profile
+    """ Form to register Receptionist profile """
 
     def save(self, commit=True):
         instance = super(RecCreateForm, self).save(commit=False)
-        # Set receptionist profile
-        instance.profile_type = 'receptionist'
-        if commit:
-            # Save user
-            instance.save()
-            # Save receptionist profile now
-            try:
-                ReceptionProfile.objects.create(user=instance)
-            except IntegrityError:
-                # Delete user
-                instance.delete()
-                raise forms.ValidationError(message="Unable to save receptionist profile, check information",
-                                            code='invalid')
-        return instance
+        instance.profile_type = 'receptionista'  # Set receptionist profile
+        super(RecCreateForm, self).save()  # Now save user
 
 
 class LabCreateForm(BaseUserForm):
-    # Form to register Laboratory profile
+    """ Form to register Laboratory profile """
 
     def save(self, commit=True):
         instance = super(LabCreateForm, self).save(commit=False)
-        # Set receptionist profile
-        instance.profile_type = 'laboratory'
-        if commit:
-            # Save user
-            instance.save()
-            # Save receptionist profile now
-            try:
-                LaboratoryProfile.objects.create(user=instance)
-            except IntegrityError:
-                # Delete user
-                instance.delete()
-                raise forms.ValidationError(message="Unable to save receptionist profile, check information",
-                                            code='invalid')
-        return instance
+        instance.profile_type = 'laboratorio' # Set laboratory profile
+        super(LabCreateForm, self).save()  # Now save user
 
 
 # Profile update forms
 class DoctorUpdateForm(BaseUserUpdateForm):
-    # Form to update doctor profile
-    general = forms.BooleanField(initial=False, label='General', widget=forms.CheckboxInput, required=False)
-    visiometry = forms.BooleanField(initial=False, label='Visiometro', widget=forms.CheckboxInput, required=False)
-    audiometry = forms.BooleanField(initial=False, label='Audiometro', widget=forms.CheckboxInput, required=False)
-    audiology = forms.BooleanField(initial=False, label='Audiologo', widget=forms.CheckboxInput, required=False)
-
-    def save(self, commit=True):
-        instance = super(DoctorUpdateForm, self).save(commit=False)
-        # Set doctor profile
-        instance.profile_type = 'doctor'
-        # Make doctorprofile information
-        extra_content = {'general': self.cleaned_data.get('general'),
-                         'visiometry': self.cleaned_data.get('visiometry'),
-                         'audiometry': self.cleaned_data.get('audiometry'),
-                         'audiology': self.cleaned_data.get('audiology')}
-        if commit:
-            # Save user
-            instance.save()
-            # Save doctor now
-            try:
-                # Add user to information
-                extra_content.update({'user': instance})
-                doctor = DoctorProfile(**extra_content)
-                # Save doctor
-                doctor.save()
-            except IntegrityError:
-                # Delete user
-                instance.delete()
-                raise forms.ValidationError(message="Unable to save doctor profile, check information",
-                                            code='invalid')
-        return instance
+    """ Form to update doctor profile if required modify something """
 
 
 class RecUpdateForm(BaseUserUpdateForm):
-
-    def save(self, commit=True):
-        instance = super(RecUpdateForm, self).save(commit=False)
-        # Set receptionist profile
-        instance.profile_type = 'receptionist'
-        if commit:
-            # Save user
-            instance.save()
-            # Save receptionist profile now
-            try:
-                extra_content = {'user': instance}
-                receptionist = ReceptionProfile(**extra_content)
-                receptionist.save()
-            except IntegrityError:
-                # Delete user
-                instance.delete()
-                raise forms.ValidationError(message="Unable to save receptionist profile, check information",
-                                            code='invalid')
-        return instance
+    """ Form to update receptionist profile if required modify something """
 
 
 class LabUpdateForm(BaseUserUpdateForm):
+    """ Form to update laboratory profile if required modify something """
+
+
+class LaboratoryCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Laboratorio
+        fields = ('nombre', 'direccion', 'email_contacto',)
+        exclude = ('registrado_por', 'ultima_vez_modificado')
 
     def save(self, commit=True):
-        instance = super(LabUpdateForm, self).save(commit=False)
-        # Set receptionist profile
-        instance.profile_type = 'laboratory'
+        instance = super(LaboratoryCreateForm, self).save(commit=False)
+        instance.registrado_por = self.create_by
         if commit:
-            # Save user
             instance.save()
-            # Save receptionist profile now
-            try:
-                extra_content = {'user': instance}
-                laboratory = LaboratoryProfile(**extra_content)
-                laboratory.save()
-            except IntegrityError:
-                # Delete user
-                instance.delete()
-                raise forms.ValidationError(message="Unable to save receptionist profile, check information",
-                                            code='invalid')
         return instance
-"""

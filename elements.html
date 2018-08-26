@@ -1,0 +1,127 @@
+
+<!-- LABEL -->
+<label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
+       for="{{ field.id_for_label }}">
+	{{ field.label }}
+</label>
+
+<!-- SELECT -->
+{% if field.field.widget.input_type == 'select' %}
+<select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
+        name="{{ field.html_name }}"
+        id="{{ field.auto_id }}"
+        size="1">
+    {% for option in field.field.choices %}
+        <option value="{{ option.0 }}" 
+		{% if field.value == option.0 %} selected {% endif %}>
+		{{ option.1 }}
+	</option>
+    {% endfor %}
+</select>
+{% endif %}
+
+
+<!-- DATETIME -->
+{% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %}
+<input type="date"
+       class="form-control {% if field.errors %} label-danger-outline {% endif %}"
+       name="{{ field.html_name }}"
+       id="{{ field.auto_id }}"
+       {% if field.value %}  value="{{ field.value|date:"Y-m-d" }}" {% endif %}
+       {% if field.field.widget.is_required %} required="" {% endif %}/>
+{% endif %}
+
+
+<!-- CHECKBOX -->
+{% if field.field.widget.input_type == 'checkbox' %}
+<input type="checkbox" class="form-check-input" name="{{ field.html_name }}"
+       id="{{ field.auto_id }}" {% if form.initial %} checked {% endif %}/>
+{% endif %}
+
+
+<!-- TEXTAREA -->
+{% if not field.field.widget.input_type %}
+<textarea class="form-control" name="{{ field.html_name }}" rows="5" id="{{ field.auto_id }}">{% if field.value %} {{ field.value }} {% endif %}</textarea>
+{% endif %}
+
+
+<!-- INPUT (TEXT, NUMBER) -->
+{% if field.field.widget.input_type == 'text' or field.field.widget.input_type == 'number' %}
+<input type="{{ field.field.widget.input_type }}"
+       class="form-control {% if field.errors %} label-danger-outline {% endif %}"
+       name="{{ field.html_name }}"
+       id="{{ field.auto_id }}"
+       placeholder="Ingrese {{ field.label }}"
+        {% if field.value %}  value="{{ field.value }}" {% endif %}
+        {% if field.field.widget.is_required %} required="" {% endif %}/>
+{% endif %}
+
+<!-- HIDDEN -->
+{% for field in form %}
+    {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
+{% endfor %}
+
+<!-- Errors -->
+{% if field.errors %}
+<div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	<span aria-hidden="true">×</span>
+    </button>
+    {% for error in field.errors %}
+        <i class="fa fa-exclamation-circle"></i>
+        <strong>Error!</strong>
+        {{ error|escape }}
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Section Bodies -->
+<section class="{{ formsets.[].section_name }}">
+    {{ formsets.[].form.management_form }}
+    <div class="panel panel-bd lobidisable">
+        <div class="panel-heading">
+            <div class="btn-group"><h2>{{ formsets.[].title }}</h2></div>
+        </div>
+
+        <div class="panel-body">
+            <!-- Body -->
+            {% for form in formsets.0.form.forms %}
+                <!-- Hidden Inputs -->
+                {% for field in form %}
+                    {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
+                {% endfor %}
+            {% endfor %}
+            <!-- End body -->
+        </div>
+    </div>
+</section>
+
+
+
+Funcionalidad que extraiga informacion de twitter <--> OLIMPICA
+
+Magolazo <--> 
+
+
+{% if not field.field.widget.input_type %}
+<label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
+       for="{{ field.id_for_label }}" rows=3>
+	{{ field.label }}
+</label>
+
+<textarea class="form-control" name="{{ field.html_name }}" rows="5" id="{{ field.auto_id }}"
+	  {% if field.value %} value="{{ field.value }}" {% endif %}></textarea>
+
+{% if field.errors %}
+<div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	<span aria-hidden="true">×</span>
+    </button>
+    {% for error in field.errors %}
+        <i class="fa fa-exclamation-circle"></i>
+        <strong>Error!</strong>
+        {{ error|escape }}
+    {% endfor %}
+</div>
+{% endif %}
+{% endif %}

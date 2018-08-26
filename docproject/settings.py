@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'docapp',
     'accounts',
     'crispy_forms',
+    'labapp',
 ]
 
 MIDDLEWARE = [

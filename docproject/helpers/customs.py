@@ -1,5 +1,5 @@
 from django.shortcuts import Http404, redirect
-from django.views.generic import ListView, FormView
+from django.views.generic import FormView
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib import messages
 from django.db import transaction, IntegrityError
@@ -7,7 +7,7 @@ from django.core.exceptions import SuspiciousOperation, ObjectDoesNotExist
 from django.forms.models import BaseInlineFormSet
 from django.core.urlresolvers import reverse_lazy
 
-from docapp.models import TipoExamen
+from docapp.models import Examinacion
 
 
 class FormViewPutExtra(FormView, SingleObjectMixin):
@@ -156,7 +156,7 @@ class FormsetPostManager(object):
 # Register exams
 class BaseRegisterExamBehavior:
     pk_url_kwarg = 'exam_id'
-    model_to_filter = TipoExamen
+    model_to_filter = Examinacion
     context_object_2_name = 'exam'
     success_url = reverse_lazy('docapp:exam_list')
 
@@ -174,7 +174,7 @@ class BaseRegisterExamBehavior:
     def get(self, request, *args, **kwargs):
         exam_id = kwargs.get('exam_id')
         try:
-            exam = TipoExamen.objects.get(pk=exam_id)
+            exam = Examinacion.objects.get(pk=exam_id)
         except ObjectDoesNotExist:
             pass
         else:

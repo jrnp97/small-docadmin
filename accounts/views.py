@@ -1,14 +1,13 @@
-from django.shortcuts import redirect
-from django.forms import model_to_dict
 from django.views.generic import FormView, UpdateView, DeleteView, DetailView, ListView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import SuspiciousOperation, ImproperlyConfigured
 
+from docproject.helpers import CheckSuperUser
 from accounts.forms import (BaseUserForm, BaseUserUpdateForm)
-from accounts.models import User, DoctorProfile, ReceptionProfile, LaboratoryProfile
+from accounts.models import User
 
 
 # Create your views here.
@@ -20,17 +19,6 @@ class Login(LoginView):
 
 login = Login.as_view()
 logout = LogoutView.as_view()
-
-
-# Check permissions user
-class CheckSuperUser(UserPassesTestMixin):
-    def handle_no_permission(self):
-        """ Redirect to user dashboard if no't satisfy Test"""
-        return redirect('docapp:dashboard')
-
-    def test_func(self):
-        """ Check if user is superuser """
-        return self.request.user.is_superuser
 
 
 class RegisterPersonal(LoginRequiredMixin, CheckSuperUser, FormView):

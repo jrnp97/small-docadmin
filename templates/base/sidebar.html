@@ -37,7 +37,7 @@
                     </ul>
                 </li>
             {% endif %}
-            {% if request.user.profile_type == 'receptionist' or request.user.is_superuser %}
+            {% if request.user.profile_type == 'receptionista' or request.user.is_superuser %}
                 <!-- Enterprise options -->
                 <li class="treeview">
                     <a href="#">
@@ -77,11 +77,11 @@
                     </ul>
                 </li>
             {% endif %}
-            {% if request.user.profile_type == 'laboratory' %}
+            {% if request.user.profile_type == 'p_laboratorio' %}
                 <!-- Laboratorio -->
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa flask"></i><span>Laboratorio</span>
+                        <i class="fa fa-flask"></i><span>Laboratorio</span>
                         <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
