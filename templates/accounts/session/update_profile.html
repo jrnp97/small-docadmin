@@ -1,32 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load crispy_forms_tags %}
-    <meta charset="UTF-8">
-    <title>Update Profile</title>
-</head>
-<body>
+{% extends 'base/base_dashboard.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
 
-<hr>
-{% if messages %}
-    <ul>
-        {% for message in messages %}
-            <li>{{ message|escape }}</li>
-        {% endfor %}
-    </ul>
-    <hr>
-{% endif %}
+{% block title %} Registro | Personal {% endblock %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <hr>
-    <button type="submit">Registrar</button>
-    {% if request.META.HTTP_REFERER %}
-        <a href="{{ request.META.HTTP_REFERER }}">Cancelar</a>
-    {% else %}
-        <a href="{% url 'accounts:show_profile' user_id=request.user.id %}">Cancelar</a>
-    {% endif %}
-</form>
-</body>
-</html>
+
+{% block content_header %}
+    <div class="header-icon">
+        <i class="pe-7s-note2"></i>
+    </div>
+    <div class="header-title">
+        <h1>Actualizar Informacion</h1>
+        <small>Ingrese informacion correspondiente</small>
+    </div>
+{% endblock %}
+
+{% block content_main %}
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd">
+
+            {% if user.is_superuser %}
+                <div class="panel-heading">
+                    <div class="btn-group">
+                        <a class="btn btn-primary" href="{% url 'accounts:user_list' %}"> <i class="fa fa-list"></i>
+                            Lista Empleados</a>
+                    </div>
+                </div>
+            {% endif %}
+
+
+                <div class="panel-body">
+                    <form class="col-sm-12" method="POST">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            {% if not forloop.counter|divisibleby:"2" %}
+                                <div class="row">
+                            {% endif %}
+
+                        <div class="col-sm-6 form-group">
+                            <label class="label {% if field.errors %} label-danger {% else %} label-primary {% endif %}"
+                                   for="{{ field.name }}">{{ field.label }}</label>
+
+                            {% if field.field.widget.input_type == 'select' %}
+                                <!-- Select input -->
+                                <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
+                                        name="{{ field.name }}"
+                                        id="{{ field.name }}"
+                                        size="1">
+                                    {% for option in field.field.choices %}
+                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% elif field.field.widget.input_type == 'checkbox' %}
+                                {{ field }}
+                            {% else %}
+                                <input type="{{ field.field.widget.input_type }}"
+                                       class="{% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %} datepicker {% endif %}
+                                           form-control {% if field.errors %} label-danger-outline {% endif %}"
+                                       name="{{ field.name }}"
+                                       id="{{ field.name }}" placeholder="Ingrese {{ field.label }}"
+                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
+                                        {% if field.field.widget.is_required %}  required="" {% endif %}/>
+                            {% endif %}
+
+                            {% if field.errors %}
+                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert"
+                                            aria-label="Close"><span
+                                            aria-hidden="true">×</span></button>
+                                    {% for error in field.errors %}
+                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
+                                        {{ error|escape }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {% if forloop.counter|divisibleby:"2" %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <div class="col-sm-12 reset-button">
+                            <hr>
+                            <!--a href="#" class="btn btn-warning">Reset</a-->
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

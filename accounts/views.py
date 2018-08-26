@@ -1,9 +1,9 @@
-from django.views.generic import FormView, UpdateView, DeleteView, DetailView, ListView
+from django.views.generic import FormView, UpdateView, DeleteView, DetailView, ListView, TemplateView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import SuspiciousOperation, ImproperlyConfigured
+from django.views.generic.detail import SingleObjectMixin
 
 from docproject.helpers import CheckSuperUser
 from accounts.forms import (BaseUserForm, BaseUserUpdateForm)
@@ -36,7 +36,7 @@ class RegisterPersonal(LoginRequiredMixin, CheckSuperUser, FormView):
 register_personal = RegisterPersonal.as_view()
 
 
-class UpdatePersonal(LoginRequiredMixin, CheckSuperUser, UpdateView):
+class UpdatePersonal(LoginRequiredMixin, UpdateView):
     """ View to update doctor profile """
     pk_url_kwarg = 'user_id'
     model = User
@@ -74,16 +74,9 @@ class DetailPersonal(LoginRequiredMixin, CheckSuperUser, DetailView):
 detail_personal = DetailPersonal.as_view()
 
 
-class DetailProfile(LoginRequiredMixin, DetailView):
-    pk_url_kwarg = 'user_id'
+class DetailProfile(LoginRequiredMixin, TemplateView):
     model = User
     template_name = 'accounts/session/show_profile.html'
-
-    def get(self, request, *args, **kwargs):
-        if request.user.id == int(kwargs.get('user_id')):
-            return super(DetailProfile, self).get(request, *args, **kwargs)
-        else:
-            raise SuspiciousOperation(message="Invalid Request")
 
 
 show_profile = DetailProfile.as_view()
@@ -94,29 +87,15 @@ class UpdateProfile(LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'user_id'
     model = User
     template_name = 'accounts/session/update_profile.html'
-    form_class = None
+    form_class = BaseUserUpdateForm
     success_url = reverse_lazy('docapp:dashboard')
 
     def form_valid(self, form):
         messages.success(request=self.request, message="Laboratory Profile Update Successfully")
         return super(UpdateProfile, self).form_valid(form)
 
-    def get(self, request, *args, **kwargs):
-        if request.user.id == int(kwargs.get('user_id')):
-            return super(UpdateProfile, self).get(request, *args, **kwargs)
-        else:
-            raise SuspiciousOperation(message="Invalid request")
-
-    def get_form_class(self):
-        """ Overwriting function to set correct form class depend of profile_type """
-        user = self.get_object()
-        # Check user integrity
-        if user.is_superuser and user.profile_type is not None:
-            raise ImproperlyConfigured(
-                "User information is bad configure"
-            )
-        self.form_class = BaseUserUpdateForm
-        return super(UpdateProfile, self).get_form_class()
+    def get_object(self, **kwargs):
+        return self.request.user
 
 
 update_profile = UpdateProfile.as_view()
