@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from accounts.models import ReceptionProfile, DoctorProfile
+from labapp.models import Laboratorio
 
 User = get_user_model()
 
@@ -102,6 +103,7 @@ class Examinacion(models.Model):
     )
     estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente', null=False, blank=False)
 
+    laboratorio_id = models.ForeignKey(Laboratorio, on_delete=models.CASCADE, related_name='examinaciones')
     paciente_id = models.ForeignKey(PacienteEmpresa, on_delete=models.CASCADE, related_name='examinaciones')
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
@@ -164,7 +166,7 @@ class Riesgos(models.Model):
     psicologico = models.BooleanField(default=False, null=False, blank=False)
     locativo = models.BooleanField(default=False, null=False, blank=False)
 
-    empresa_id = models.OneToOneField(AntecedentesLaborales, on_delete=models.CASCADE, related_name='riesgos')
+    antecedente_id = models.OneToOneField(AntecedentesLaborales, on_delete=models.CASCADE, related_name='riesgos')
 
     def __str__(self):
         return self.get_number_hazard()
@@ -253,7 +255,7 @@ class Consulta(models.Model):
         ('finalizado', 'Finalizado'),
     )
     estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente', null=False, blank=False)
-    razon = models.TextField(null=False, blank=False)
+    razon = models.TextField(default='', null=False, blank=False)
     paciente_id = models.ForeignKey(PacienteParticular, null=False, blank=True, on_delete=models.CASCADE,
                                     related_name='consultas')
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)

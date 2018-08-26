@@ -4,7 +4,7 @@ from docapp import views
 urlpatterns = [
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     # Company urls
-    url(r'^company/$', views.list_company, name='company_list'),
+    url(r'^company/$', views.list_company, name='list_company'),
     url(r'^company/(?P<company_id>[0-9]+)/$', views.detail_company, name='detail_company'),
     url(r'^register/company/$', views.register_company, name='register_company'),
     url(r'^update/company/(?P<company_id>[0-9]+)/$', views.update_company, name='update_company'),
@@ -17,6 +17,12 @@ urlpatterns = [
     url(r'^register/person/(?P<company_id>[0-9]+)/$', views.register_employ_from_company,
         name='register_employ_from_company'),
     url(r'^update/person/(?P<person_id>[0-9]+)/$', views.update_employ, name='update_employ'),
+
+    # Particular urls
+    url(r'^patient/$', views.list_simple_patient, name='list_simple_patient'),
+    url(r'^patient/(?P<pk>[0-9]+)/$', views.detail_patient, name='detail_patient'),
+    url(r'^register/patient/$', views.register_simple_patient, name='register_simple_patient'),
+    url(r'^update/patient/(?P<pk>[0-9]+)/$', views.update_simple_patient, name='update_simple_patient'),
 
     # Antecedent urls
     url(r'^antecedent/(?P<person_id>[0-9])/$', views.list_employ_antecedents, name='list_employ_antecedents'),

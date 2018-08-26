@@ -93,14 +93,14 @@
                                         <td>{{ company }}</td>
                                         <td>
                                             <!-- Register Link -->
-                                            <a href="{% url 'docapp:register_employ' company_id=company.id %}">
+                                            <a href="{% url 'docapp:register_employ_from_company' company_id=company.id %}">
                                                 <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                                                         data-placement="left" title="" data-original-title="Registrar">
                                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                                 </button>
                                             </a>
                                             <!-- List Link -->
-                                            <a href="{% url 'docapp:filter_person_list' company_id=company.id %}">
+                                            <a href="{% url 'docapp:list_employ_company' company_id=company.id %}">
                                                 <button class="btn btn-primary btn-xs" data-toggle="tooltip"
                                                         data-placement="left" title="" data-original-title="Ver lista">
                                                     <i class="fa fa-list-alt" aria-hidden="true"></i>
@@ -122,14 +122,6 @@
                                                     <i class="fa fa-edit" aria-hidden="true"></i>
                                                 </button>
                                             </a>
-                                            <!-- Delete Link
-                                            <a href="#">
-                                                <button class="btn btn-danger btn-xs" data-toggle="tooltip"
-                                                        data-placement="right" title="" data-original-title="Borrar">
-                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-
-                                                </button>
-                                            </a>-->
                                         </td>
                                     </tr>
                                 {% endfor %}
