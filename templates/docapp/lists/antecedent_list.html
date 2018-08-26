@@ -17,7 +17,7 @@
                                 </span>
             </div>
         </form>
-        <h1>Antecedentes de {{ person }}</h1>
+        <h1>Antecedentes de {{ paciente }}</h1>
         <small>Lista de Antecedentes</small>
     </div>
 {% endblock %}
@@ -28,7 +28,8 @@
             <div class="panel panel-bd lobidisable">
                 <div class="panel-heading">
                     <div class="btn-group">
-                        <a class="btn btn-success" href="{% url 'docapp:register_antecedent' person_id=person.id %}"> <i
+                        <a class="btn btn-success"
+                           href="{% url 'docapp:register_employ_antecedent' person_id=paciente.id %}"> <i
                                 class="fa fa-plus"></i>
                             Antecedente
                         </a>
@@ -75,7 +76,7 @@
                         </div>
 
                     </div>
-                    {% if antecedent_list %}
+                    {% if paciente.antecedentes.all %}
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover text-center">
                                 <thead>
@@ -85,32 +86,24 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for antecedent in antecedent_list %}
+                                {% for antecedent in paciente.antecedentes.all %}
                                     <tr>
                                         <td>{{ antecedent.company }}</td>
                                         <td>
                                             <!-- Detail Link -->
-                                            <a href="{% url 'docapp:detail_antecedent' antecedent_id=antecedent.id %}">
+                                            <a href="{% url 'docapp:detail_employ_antecedent' antecedent_id=antecedent.id %}">
                                                 <button class="btn btn-primary btn-xs" data-toggle="tooltip"
                                                         data-placement="left" title="" data-original-title="Ver">
                                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                                 </button>
                                             </a>
                                             <!-- Update Link -->
-                                            <a href="{% url 'docapp:update_antecedent' antecedent_id=antecedent.id %}">
+                                            <a href="{% url 'docapp:update_employ_antecedent' antecedent_id=antecedent.id %}">
                                                 <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                                                         data-placement="left" title="" data-original-title="Editar">
                                                     <i class="fa fa-edit" aria-hidden="true"></i>
                                                 </button>
                                             </a>
-                                            <!-- Delete Link
-                                            <a href="#">
-                                                <button class="btn btn-danger btn-xs" data-toggle="tooltip"
-                                                        data-placement="right" title="" data-original-title="Borrar">
-                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-
-                                                </button>
-                                            </a>-->
                                         </td>
                                     </tr>
                                 {% endfor %}
