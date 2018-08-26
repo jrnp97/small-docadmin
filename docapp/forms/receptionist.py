@@ -54,14 +54,18 @@ class PacienteParticularForm(forms.ModelForm):
 
 # Examination Forms
 class ExaminacionCreateForm(forms.ModelForm):
-    altura = forms.CheckboxInput()  # Select if altura exam will do
-    audiologia = forms.CheckboxInput()  # Select if audiologia exam will do
-    visiometria = forms.CheckboxInput()  # Select if audiology exam will do
+    altura = forms.BooleanField(label='Examen de Altura')  # Select if altura exam will do
+    audiologia = forms.BooleanField(label='Examen de Audiologia')  # Select if audiologia exam will do
+    visiometria = forms.BooleanField(label='Examen de Visiometria')  # Select if audiology exam will do
 
     class Meta:
         model = Examinacion
         fields = '__all__'
-        exclude = ('registrado_por', 'paciente', 'estado')
+        exclude = ('registrado_por', 'paciente_id', 'estado', 'manejador_por')
+        labels = {
+            'tipo': 'Tipo de Examinación',
+            'laboratorio_id': 'Seleccione Laboratorio',
+        }
 
     def save(self, commit=True, **kwargs):
         instance = super(ExaminacionCreateForm, self).save(commit=False)
@@ -73,9 +77,10 @@ class ExaminacionCreateForm(forms.ModelForm):
 
 
 simple_exam_inlineformset = forms.inlineformset_factory(parent_model=Examinacion, model=SimpleExam, can_delete=True,
-                                                        fields='__all__')
+                                                        fields='__all__', exclude=('registrado_por', 'resultados'))
 
-lab_exam_inlineformset = forms.modelformset_factory(model=LabExam, can_delete=True, fields='__all__')
+lab_exam_inlineformset = forms.modelformset_factory(model=LabExam, can_delete=True, fields='__all__',
+                                                    exclude=('registrado_por', 'manejado_por', 'laboratorio_id  '))
 
 
 # Appointment Forms (Receptionist only send a request and a register must be create)
@@ -100,5 +105,3 @@ hazards_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLab
 
 accident_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLaborales, model=Accidentes,
                                                      can_delete=True, fields='__all__')
-
-

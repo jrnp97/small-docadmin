@@ -372,7 +372,6 @@ class UpdateParticular(CheckReceptionist, LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('docapp:list_simple_patient')
 
     def form_valid(self, form):
-        person = self.get_object()
         form.create_by = self.request.user.reception_profile
         instance = form.save()
         if instance:
@@ -385,7 +384,7 @@ update_simple_patient = UpdateParticular.as_view()
 
 class ListParticular(CheckUser, LoginRequiredMixin, ListView):
     model = PacienteParticular
-    template_name = 'docapp/lists/simple_patients.html'
+    template_name = 'docapp/lists/simple_patient.html'
     context_object_name = 'patient_list'
 
 
