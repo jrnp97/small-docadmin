@@ -1,7 +1,9 @@
-from .receptionist import (dashboard, register_person, register_employ,  update_person, detail_person,
-                           person_list, filter_person_list, register_company, update_company, detail_company,
-                           company_list, register_antecedent, update_antecedent, detail_antecedent,
-                           person_antecedent_list, register_exam, exam_list)
+from .receptionist import (dashboard, register_company, update_company, detail_company, list_company,
+                           register_employ_from_company, register_employ_without_company, update_employ, detail_employ,
+                           list_independent_employ, list_employ_company,
+                           register_employ_antecedent, update_employ_antecedent, list_employ_antecedents,
+                           detail_employ_antecedent,
+                           register_employ_examination, list_examination)
 
 from .doctor import (register_occupational, register_audiology, register_visiometry,
                      update_ocupacional, update_audiologia, update_visiometria)

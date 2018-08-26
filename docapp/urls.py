@@ -4,28 +4,33 @@ from docapp import views
 urlpatterns = [
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     # Company urls
-    url(r'^company/$', views.company_list, name='company_list'),
+    url(r'^company/$', views.list_company, name='company_list'),
     url(r'^company/(?P<company_id>[0-9]+)/$', views.detail_company, name='detail_company'),
     url(r'^register/company/$', views.register_company, name='register_company'),
     url(r'^update/company/(?P<company_id>[0-9]+)/$', views.update_company, name='update_company'),
-    url(r'^employs/company/(?P<company_id>[0-9])+/$', views.filter_person_list, name='filter_person_list'),
+    url(r'^employs/company/(?P<company_id>[0-9])+/$', views.list_employ_company, name='list_employ_company'),
 
-    # Person urls
-    url(r'^person/$', views.person_list, name='person_list'),
-    url(r'^person/(?P<person_id>[0-9]+)/$', views.detail_person, name='detail_person'),
-    url(r'^register/person/$', views.register_person, name='register_person'),
-    url(r'^register/person/(?P<company_id>[0-9]+)/$', views.register_employ, name='register_employ'),
-    url(r'^update/person/(?P<person_id>[0-9]+)/$', views.update_person, name='update_person'),
+    # Employ urls
+    url(r'^person/$', views.list_independent_employ, name='list_independent_employ'),
+    url(r'^person/(?P<person_id>[0-9]+)/$', views.detail_employ, name='detail_employ'),
+    url(r'^register/person/$', views.register_employ_without_company, name='register_employ_without_company'),
+    url(r'^register/person/(?P<company_id>[0-9]+)/$', views.register_employ_from_company,
+        name='register_employ_from_company'),
+    url(r'^update/person/(?P<person_id>[0-9]+)/$', views.update_employ, name='update_employ'),
 
     # Antecedent urls
-    url(r'^antecedent/(?P<person_id>[0-9])/$', views.person_antecedent_list, name='person_antecedent_list'),
-    url(r'^antecedent/detail/(?P<antecedent_id>[0-9]+)/$', views.detail_antecedent, name='detail_antecedent'),
-    url(r'^register/antecedent/(?P<person_id>[0-9]+)/$', views.register_antecedent, name='register_antecedent'),
-    url(r'^update/antecedent/(?P<antecedent_id>[0-9]+)/$', views.update_antecedent, name='update_antecedent'),
+    url(r'^antecedent/(?P<person_id>[0-9])/$', views.list_employ_antecedents, name='list_employ_antecedents'),
+    url(r'^antecedent/detail/(?P<antecedent_id>[0-9]+)/$', views.detail_employ_antecedent,
+        name='detail_employ_antecedent'),
+    url(r'^register/antecedent/(?P<person_id>[0-9]+)/$', views.register_employ_antecedent,
+        name='register_employ_antecedent'),
+    url(r'^update/antecedent/(?P<antecedent_id>[0-9]+)/$', views.update_employ_antecedent,
+        name='update_employ_antecedent'),
 
-    # Exam urls
-    url(r'^register/exam/(?P<person_id>[0-9]+)/$', views.register_exam, name='register_exam'),
-    url(r'^exams/$', views.exam_list, name='exam_list'),
+    # Examination urls
+    url(r'^register/exam/(?P<person_id>[0-9]+)/$', views.register_employ_examination,
+        name='register_employ_examination'),
+    url(r'^examination/$', views.list_examination, name='list_examination'),
 
     # Registro de examanes
     url(r'^register/(?P<exam_id>[0-9]+)/occupational/$', views.register_occupational, name='register_occupational'),

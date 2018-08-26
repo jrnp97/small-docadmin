@@ -9,10 +9,11 @@ User = get_user_model()
 
 # Models to manage company employs
 class Empresa(models.Model):
+    """ Model to save company information """
     nombre = models.CharField(max_length=300, null=False, blank=False, unique=True)
     nit = models.PositiveIntegerField(verbose_name='NIT')
     direccion = models.CharField(max_length=500, null=False, blank=False)
-    telefono = models.PositiveIntegerField(null=True)
+    telefono = models.PositiveIntegerField(default=0)
     celular = models.PositiveIntegerField(null=False, blank=False)
     correo_contacto = models.EmailField(null=False, blank=False)
 
@@ -25,7 +26,7 @@ class Empresa(models.Model):
 
 
 class PacienteEmpresa(models.Model):
-    """ Model to save ''employ'' information """
+    """ Model to save company employ information """
     SEXOS = (
         ('masculino', 'Masculino'),
         ('femenino', 'Femenino')
@@ -48,13 +49,13 @@ class PacienteEmpresa(models.Model):
     fondo_pensiones = models.CharField(max_length=50, null=False, blank=False)
     sexo = models.CharField(max_length=15, choices=SEXOS, null=False, blank=False)
     estado_civil = models.CharField(max_length=20, choices=ESTADOS_CIVILES, null=False, blank=False)
-    numero_de_hijos = models.PositiveIntegerField()
+    numero_de_hijos = models.PositiveIntegerField(default=0)
     direccion = models.CharField(max_length=500, null=False, blank=False)
-    telefono = models.PositiveIntegerField(null=True)
+    telefono = models.PositiveIntegerField(default=0)
     celular = models.PositiveIntegerField(null=False, blank=False)
     ocupacion = models.CharField(max_length=500, null=False, blank=False)
     posicion = models.CharField(max_length=500, null=False, blank=False)
-    estrato = models.PositiveIntegerField()
+    estrato = models.PositiveIntegerField(null=False)
     estudiante_en_entrenamiento = models.BooleanField(default=False)
     aprendiz_sena = models.BooleanField(default=False)
     numero_patronal = models.PositiveIntegerField(null=False, blank=False)
@@ -65,9 +66,6 @@ class PacienteEmpresa(models.Model):
     registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='personal_empresa')
 
     def __str__(self):
-        return self.get_full_name()
-
-    def get_full_name(self):
         return f"{self.nombres} {self.apellidos}"
 
     def get_antecedents(self):
@@ -78,7 +76,7 @@ class PacienteEmpresa(models.Model):
             return None
 
     def get_exams(self):
-        exams = self.examenes.all()
+        exams = self.examinaciones.all()
         if len(exams) > 0:
             return exams
         else:
@@ -86,7 +84,7 @@ class PacienteEmpresa(models.Model):
 
 
 class Examinacion(models.Model):
-    """ Model to register a process over a pacient """
+    """ Model to register a process over a employ company """
     TIPOS = (
         ('ingreso', 'Ingreso'),
         ('periodico', 'Periodico'),
@@ -99,10 +97,10 @@ class Examinacion(models.Model):
     ESTADOS = (
         ('pendiente', 'Pendiente'),
         ('iniciado', 'Iniciado'),
-        ('problemas', 'En Problema'),
+        ('en problemas', 'En Problema'),
         ('finalizado', 'Finalizado'),
     )
-    estado = models.CharField(max_length=20, choices=ESTADOS, null=False, blank=False)
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente', null=False, blank=False)
 
     paciente_id = models.ForeignKey(PacienteEmpresa, on_delete=models.CASCADE, related_name='examinaciones')
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
@@ -130,7 +128,7 @@ class Examinacion(models.Model):
         # TODO CHANGE
         process = self.get_process()
         change = False
-        if self.estado == 'pendiente' and process > 0 and process < 100:
+        if self.estado == 'pendiente' and 0 < process < 100:
             self.estado = 'iniciado'
             change = True
         elif self.estado == 'iniciado' and process == 100:
@@ -157,6 +155,7 @@ class AntecedentesLaborales(models.Model):
 
 
 class Riesgos(models.Model):
+    """ Model binding with AntecedentesLaborales to define hazards """
     fisico = models.BooleanField(default=False, null=False, blank=False)
     quimico = models.BooleanField(default=False, null=False, blank=False)
     mecanico = models.BooleanField(default=False, null=False, blank=False)
@@ -180,7 +179,7 @@ class Riesgos(models.Model):
 
 
 class Accidentes(models.Model):
-    """ Model to register accidentos of a previous work """
+    """ Model to register accidentos of a previous work this could be n formsets """
     tipo = models.CharField(max_length=200, null=False, blank=False)
     secuelas = models.TextField(null=False, blank=False)
     atendido = models.BooleanField(default=False, null=False, blank=False)
@@ -195,11 +194,9 @@ class Accidentes(models.Model):
 
 
 class SimpleExam(models.Model):
-    """ Model to save custom exams manage inside enterprise"""
+    """ Model to save custom exams manage inside enterprise """
     nombre = models.CharField(max_length=50, null=False, blank=False)
-
     examinacion_id = models.ForeignKey(Examinacion, on_delete=models.CASCADE, related_name='examenes_internos')
-
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     registrado_por = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.PROTECT,
@@ -232,10 +229,10 @@ class PacienteParticular(models.Model):
     fondo_pensiones = models.CharField(max_length=50, null=False, blank=False)
     sexo = models.CharField(max_length=15, choices=SEXOS, null=False, blank=False)
     direccion = models.CharField(max_length=500, null=False, blank=False)
-    telefono = models.PositiveIntegerField(null=True)
+    telefono = models.PositiveIntegerField(default=0)
     celular = models.PositiveIntegerField(null=False, blank=False)
     ocupacion = models.CharField(max_length=500, null=False, blank=False)
-    estrato = models.PositiveIntegerField()
+    estrato = models.PositiveIntegerField(null=False)
     nombre_del_responsable = models.CharField(max_length=50, null=True, blank=True)
     estado_civil = models.CharField(max_length=20, choices=ESTADOS_CIVILES, null=False, blank=False)
     numero_de_hijos = models.PositiveIntegerField(default=0)
@@ -250,11 +247,15 @@ class PacienteParticular(models.Model):
 
 class Consulta(models.Model):
     """ Model to save appointment description """
+    ESTADOS = (
+        ('pendiente', 'Pendiente'),
+        ('iniciado', 'Iniciado'),
+        ('finalizado', 'Finalizado'),
+    )
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente', null=False, blank=False)
     razon = models.TextField(null=False, blank=False)
-
     paciente_id = models.ForeignKey(PacienteParticular, null=False, blank=True, on_delete=models.CASCADE,
                                     related_name='consultas')
-
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     registrado_por = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE, related_name='consultas')
