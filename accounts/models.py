@@ -16,7 +16,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=30, null=False, blank=False)
     last_name = models.CharField(max_length=30, null=False, blank=False)
     profile_type = models.CharField(max_length=20, choices=PROFILE_TYPE, null=True, blank=True)
-    avatar = models.ImageField(upload_to='avatars/user_owner', null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatars/user_owner', null=True, blank=True,  default="avatars/default.png")
 
     class Meta(AbstractUser.Meta):
         db_table = 'auth_user'

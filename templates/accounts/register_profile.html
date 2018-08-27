@@ -30,7 +30,7 @@
 
 
                 <div class="panel-body">
-                    <form class="col-sm-12" method="POST">
+                    <form class="col-sm-12" method="POST" >
                         {% csrf_token %}
                         {% for field in form %}
                             {% if not forloop.counter|divisibleby:"2" %}
