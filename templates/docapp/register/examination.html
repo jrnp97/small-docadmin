@@ -114,7 +114,8 @@
                         <div id="{{ formsets.1.form.prefix }}">
                             {% for form in formsets.1.form.forms %}
                                 <!-- Render text and checkbox fields -->
-                                <div id="{{ formsets.1.form.prefix }}-{{ forloop.counter0 }}">
+                                <div id="{{ formsets.1.form.prefix }}-{{ forloop.counter0 }}" {% if forloop.last %}
+                                     class="last_form" {% endif %}>
                                     {% for field in form %}
                                         {% if field.field.widget.input_type == 'text' %}
                                             <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
@@ -150,8 +151,33 @@
     <script type="application/javascript">
 
         function clean_formset(prefix) {
-            let parent = $('div#'+prefix);
-            // TODO re-sort all number of .form_insert elements
+            let parent = $('div#' + prefix);
+
+            /* Reset div's  -- Check if is necessary
+            let minimun = parseInt(parent.children('div.last_form').attr('id').match(/\d+/)[0]);
+
+            let new_elements = [];
+            parent.children('div.form_insert').each(function (index, item) {
+                let new_number = minimun + (index + 1);
+
+                let new_text = prefix + '-'+ new_number; // New prefix
+                let prev_text = new RegExp($(item).attr('id'), 'g');
+
+                // console.log("Prev element -> " + prev_text);
+                // console.log("New element -> " + new_text);
+
+                let new_element = $(item).prop('outerHTML').replace(prev_text, new_text);
+                new_elements.push(new_element);
+            });
+
+            parent.children('div.form_insert').remove(); // Remove old elements
+
+            new_elements.forEach(function (item) {
+                $(item).insertAfter(parent.children('div').last());
+            }); */
+
+            $("input[name='" + prefix + "-TOTAL_FORMS']").val($(parent).children('div').length);  // Update total forms
+
         }
 
         function add_one_more(prefix) {
@@ -163,7 +189,7 @@
             let last_normal_form_reference = parent_div.children('div.last_form');  // Get last formset load normally
 
             let new_id = last_normal_form_reference.attr('id').replace(prev_text_regex, new_text);  // Make new id
-            $("<br id='br_"+ new_id +"'/><div id='" + new_id + "' class='form_insert'></div>").insertAfter(parent_div.children('div').last());
+            $("<br id='br_" + new_id + "'/><div id='" + new_id + "' class='form_insert'></div>").insertAfter(parent_div.children('div').last());
 
             // Update total forms
             parent_div.children(total_forms_selector).val(prev_value + 1);
@@ -188,13 +214,14 @@
 
         function add_more_btn(formsets_selectors) {
             formsets_selectors.forEach(function (item) {
-                let id = 'add_' + $(item).attr('id');
+                let item_id = $(item).attr('id')
+                let id = 'add_' + item_id;
                 $(item).append(
                     "<span id='" + id + "'class='pull-right'><i class='hvr-buzz-out fa fa-plus-square fa-2x'></i></span><br />"
                 );
                 // Handle Click Event
                 $('span#' + id).click(function () {
-                    add_one_more($(item).attr('id'));
+                    add_one_more(item_id);
                 });
             });
         }
