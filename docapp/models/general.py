@@ -65,6 +65,8 @@ class PacienteEmpresa(models.Model):
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='personal_empresa')
+    avatar = models.ImageField(upload_to='avatars/patients_company', null=True, blank=True)
+
 
     def __str__(self):
         return f"{self.nombres} {self.apellidos}"
@@ -242,6 +244,7 @@ class PacienteParticular(models.Model):
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='particulares')
+    avatar = models.ImageField(upload_to='avatars/patients_particular', null=True, blank=True, default="media/avatars/default.png")
 
     def __str__(self):
         return f"{self.nombres} {self.apellidos}"

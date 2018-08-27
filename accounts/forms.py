@@ -57,8 +57,8 @@ class BaseUserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'password',)
-        exclude = ('profile_type', )
+        fields = ('username', 'email', 'first_name', 'last_name', 'avatar', 'password')
+        exclude = ('profile_type',)
 
     def clean_password(self):
         """ To change password need required to administrator """
