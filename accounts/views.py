@@ -74,9 +74,12 @@ class DetailPersonal(LoginRequiredMixin, CheckSuperUser, DetailView):
 detail_personal = DetailPersonal.as_view()
 
 
-class DetailProfile(LoginRequiredMixin, TemplateView):
+class DetailProfile(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'accounts/session/show_profile.html'
+
+    def get_object(self, **kwargs):
+        return self.request.user
 
 
 show_profile = DetailProfile.as_view()
