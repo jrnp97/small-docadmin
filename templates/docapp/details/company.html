@@ -21,7 +21,7 @@
         <small>Detalles de la empresa</small>
         <ol class="breadcrumb hidden-xs">
             <li>
-                <a href="{% url 'docapp:company_list' %}" class="active">
+                <a href="{% url 'docapp:list_company' %}" class="active">
                     <i class="pe-7s-home"></i>
                     Lista Empresas</a>
             </li>
@@ -93,7 +93,7 @@
                             </table>
                             <hr>
                             <a class="btn btn-success pull-right"
-                               href="{% url 'docapp:filter_person_list' company_id=company.id %}"><i
+                               href="{% url 'docapp:list_employ_company' company_id=company.id %}"><i
                                     class="fa fa-plus"></i>
                                 Ver más
                             </a>

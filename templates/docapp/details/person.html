@@ -16,15 +16,8 @@
                                 </span>
             </div>
         </form>
-        <h1>{{ person.get_full_name }}</h1>
+        <h1>{{ person }}</h1>
         <small>Detalles del paciente</small>
-        <ol class="breadcrumb hidden-xs">
-            <li>
-                <a href="{% url 'docapp:person_list' %}" class="active">
-                    <i class="pe-7s-home"></i>
-                    Lista Empleados</a>
-            </li>
-        </ol>
     </div>
 {% endblock %}
 
@@ -38,7 +31,7 @@
                         <div class="col-sm-12 text-center">
                             {% if request.user.reception_profile %}
                                 <span class="pull-right">
-                                <a href="{% url 'docapp:update_person' person_id=person.id %}">
+                                <a href="{% url 'docapp:update_employ' person_id=person.id %}">
                                                 <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                                                         data-placement="left" title="" data-original-title="Editar">
                                                     <i class="fa fa-edit" aria-hidden="true"></i>
@@ -46,7 +39,7 @@
                                             </a>
                             </span>
                             {% endif %}
-                            <h1>{{ person.get_full_name|upper }}</h1>
+                            <h1>{{ person|upper }}</h1>
                         </div>
                     </div>
                     <hr>
@@ -95,7 +88,7 @@
                                         <td>{{ ant.company }}</td>
                                         <td>{{ ant.accidents.all.count }}</td>
                                         <td>
-                                            <a href="{% url 'docapp:detail_antecedent' antecedent_id=ant.id %}">
+                                            <a href="{% url 'docapp:detail_employ_antecedent' antecedent_id=ant.id %}">
                                                 Ver detalles
                                             </a>
                                         </td>
@@ -108,7 +101,7 @@
                             </table>
                             <hr>
                             <a class="btn btn-success pull-right"
-                               href="{% url 'docapp:person_antecedent_list' person_id=person.id %}"><i
+                               href="{% url 'docapp:list_employ_antecedents' person_id=person.id %}"><i
                                     class="fa fa-plus"></i>
                                 Ver más
                             </a>

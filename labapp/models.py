@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 
 from accounts.models import ReceptionProfile
-from docapp.models import Examinacion
 
 User = get_user_model()
 
@@ -40,13 +39,10 @@ class LabExam(models.Model):
     """ Model to register laboratory exam to do on a patient """
     nombre = models.CharField(max_length=50, null=False, blank=False)
 
-    examination_id = models.ForeignKey(Examinacion, null=False, blank=False, on_delete=models.CASCADE,
-                                       related_name='examenes_de_laboratorios')
     laboratorio_id = models.ForeignKey(Laboratorio, null=False, blank=False, on_delete=models.CASCADE,
                                        related_name='procesos')
     registrado_por = models.ForeignKey(ReceptionProfile, null=False, blank=False, on_delete=models.CASCADE,
                                        related_name='examenes_de_labs')
-
     manejado_por = models.OneToOneField(LaboratoryProfile, null=True, blank=True, on_delete=models.CASCADE,
                                         related_name='examenes')
 

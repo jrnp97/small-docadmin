@@ -20,7 +20,7 @@
         <small>Detalles del antecedente</small>
         <ol class="breadcrumb hidden-xs">
             <li>
-                <a href="{% url 'docapp:person_antecedent_list' person_id=antecedent.person.id %}" class="active">
+                <a href="{% url 'docapp:list_employ_antecedents' person_id=antecedent.person.id %}" class="active">
                     <i class="pe-7s-home"></i>
                     Lista Antecedentes</a>
             </li>
@@ -38,7 +38,7 @@
                         <div class="col-sm-12 text-center">
                             {% if request.user.reception_profile %}
                                 <span class="pull-right">
-                                <a href="{% url 'docapp:update_antecedent' antecedent_id=antecedent.id %}">
+                                <a href="{% url 'docapp:update_employ_antecedent' antecedent_id=antecedent.id %}">
                                                 <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                                                         data-placement="left" title="" data-original-title="Editar">
                                                     <i class="fa fa-edit" aria-hidden="true"></i>

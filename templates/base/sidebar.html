@@ -48,7 +48,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="{% url 'docapp:register_company' %}">Registrar</a></li>
-                        <li><a href="{% url 'docapp:company_list' %}">Listar</a></li>
+                        <li><a href="{% url 'docapp:list_company' %}">Listar</a></li>
                     </ul>
                 </li>
                 <!-- Employees options -->
@@ -60,8 +60,8 @@
                                 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{% url 'docapp:register_person' %}">Registrar</a></li>
-                        <li><a href="{% url 'docapp:person_list' %}">Lista</a></li>
+                        <li><a href="{% url 'docapp:register_employ_without_company' %}">Registrar</a></li>
+                        <li><a href="{% url 'docapp:list_independent_employ' %}">Lista</a></li>
                     </ul>
                 </li>
                 <!-- Examenes -->
@@ -73,7 +73,7 @@
                                 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{% url 'docapp:exam_list' %}">Lista</a></li>
+                        <li><a href="{% url 'docapp:list_examination' %}">Lista</a></li>
                     </ul>
                 </li>
             {% endif %}
@@ -88,7 +88,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#">Ver resultados</a></li>
-                        <li><a href="{% url 'docapp:exam_list' %}">Guardar resultados</a></li>
+                        <li><a href="{% url 'docapp:list_examination' %}">Guardar resultados</a></li>
                     </ul>
                 </li>
             {% endif %}
@@ -102,21 +102,7 @@
                                 </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{% url 'docapp:exam_list' %}">Listar</a></li>
-                    </ul>
-                </li>
-
-                <!-- Reportes -->
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-user-md"></i><span>Reporte</span>
-                        <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="#">Generar Reporte</a></li>
-                        <li><a href="#">Ver Reportes</a></li>
+                        <li><a href="{% url 'docapp:list_examination' %}">Listar</a></li>
                     </ul>
                 </li>
             {% endif %}

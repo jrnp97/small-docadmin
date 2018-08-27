@@ -107,7 +107,7 @@
                                     <tr>
                                         <td> {{ exam.tipo }} </td>
                                         <td> {{ exam.paciente }}
-                                            <a href="{% url 'docapp:detail_person' person_id=exam.paciente.id %}">
+                                            <a href="{% url 'docapp:detail_employ' person_id=exam.paciente.id %}">
                                                 <button class="btn btn-primary btn-xs" data-toggle="tooltip"
                                                         data-placement="left" title="" data-original-title="Ver">
                                                     <i class="fa fa-eye" aria-hidden="true"></i>
@@ -172,8 +172,9 @@
                                         {% endif %}
 
                                         {% if request.user.laboratory_profile %}
+                                            <!-- TODO put urls from labapp -->
                                             <td>
-                                                <a href="{% url 'docapp:register_laboratory' exam_id=exam.id %}">
+                                                <a href="#">
                                                     <button class="btn btn-primary label-success-outline">
                                                         Registrar Datos
                                                     </button>

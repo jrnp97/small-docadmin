@@ -55,7 +55,7 @@ class UpdateLaboratory(LoginRequiredMixin, CheckLaboratory, BaseExamUpdateBehavi
                           'form': exams_section}
                      ]
                      }
-    template_name = 'docapp/register/exam_register.html'
+    template_name = 'docapp/register/TODO Make labs templates'
 
     def form_valid(self, form):
         # Overwrite form_valid to add missing information
