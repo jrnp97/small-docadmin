@@ -60,10 +60,13 @@
                         <!-- Render select and checkbox fields -->
                         {% for field in form %}
                             {% if field.field.widget.input_type == 'select' %}
-                                <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}" name="{{ field.html_name }}" id="{{ field.auto_id }}" size="1">
+                                <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
+                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
+                                        name="{{ field.html_name }}" id="{{ field.auto_id }}" size="1">
                                     {% for option in field.field.choices %}
-                                        <option value="{{ option.0 }}"{% if field.value == option.0 %} selected {% endif %}>{{ option.1 }}</option>
+                                        <option value="{{ option.0 }}"{% if field.value == option.0 %}
+                                                selected {% endif %}>{{ option.1 }}</option>
                                     {% endfor %}
                                 </select>
                             {% elif field.field.widget.input_type == 'checkbox' %}
@@ -79,24 +82,29 @@
                         <small>ej. electrocardiograma</small>
                         <hr>
                         <div id="{{ formsets.0.form.prefix }}">
-                        {% for form in formsets.0.form.forms %}
-                            <!-- Render text and checkbox fields -->
-                            <div id="{{ formsets.0.form.prefix }}_{{ forloop.counter0 }}">
-                            {% for field in form %}
-                                {% if field.field.widget.input_type == 'text' %}
-                                    <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    <input type="text" class="form-check-input" name="{{ field.html_name }}" id="{{ field.auto_id }}" placeholder="Ingrese {{ field.label }}"{% if field.value %}  value="{{ field.value }}" {% endif %} {% if field.field.widget.is_required %} required {% endif %}/>
-                                {% elif field.field.widget.input_type == 'checkbox' %}
-                                    <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
-                                           for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    <input type="checkbox" class="form-check-input" name="{{ field.html_name }}"
-                                           id="{{ field.auto_id }}" {% if field.initial %} checked {% endif %}/>
-                                {% endif %}
+                            {% for form in formsets.0.form.forms %}
+                                <!-- Render text and checkbox fields -->
+                                <div id="{{ formsets.0.form.prefix }}-{{ forloop.counter0 }}" {% if forloop.last %}
+                                     class="last_form" {% endif %}>
+                                    {% for field in form %}
+                                        {% if field.field.widget.input_type == 'text' %}
+                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
+                                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            <input type="text" class="form-control" name="{{ field.html_name }}"
+                                                   id="{{ field.auto_id }}" placeholder="Ingrese {{ field.label }}"
+                                                    {% if field.value %}  value="{{ field.value }}" {% endif %}
+                                                    {% if field.field.widget.is_required %} required {% endif %}/>
+                                        {% elif field.field.widget.input_type == 'checkbox' %}
+                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
+                                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            <input type="checkbox" class="form-check-input" name="{{ field.html_name }}"
+                                                   id="{{ field.auto_id }}" {% if field.initial %} checked {% endif %}/>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <br>
                             {% endfor %}
-                            </div>
-                            <br>
-                        {% endfor %}
-                        {{ formsets.0.form.management_form }}
+                            {{ formsets.0.form.management_form }}
                         </div>
 
                         <!-- Lab exams formsets -->
@@ -104,27 +112,27 @@
                         <h2>Examenes de laboratorio</h2>
                         <hr>
                         <div id="{{ formsets.1.form.prefix }}">
-                        {% for form in formsets.1.form.forms %}
-                            <!-- Render text and checkbox fields -->
-                            <div id="{{ formsets.1.form.prefix }}_{{ forloop.counter0 }}">
-                            {% for field in form %}
-                                {% if field.field.widget.input_type == 'text' %}
-                                    <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
-                                           for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    <input type="text" class="form-check-input" name="{{ field.html_name }}"
-                                           id="{{ field.auto_id }}" placeholder="Ingrese {{ field.label }}"
-                                            {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                            {% if field.field.widget.is_required %} required {% endif %}/>
-                                {% elif field.field.widget.input_type == 'checkbox' %}
-                                    <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
-                                           for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    <input type="checkbox" class="form-check-input" name="{{ field.html_name }}"
-                                           id="{{ field.auto_id }}" {% if field.initial %} checked {% endif %}/>
-                                {% endif %}
+                            {% for form in formsets.1.form.forms %}
+                                <!-- Render text and checkbox fields -->
+                                <div id="{{ formsets.1.form.prefix }}-{{ forloop.counter0 }}">
+                                    {% for field in form %}
+                                        {% if field.field.widget.input_type == 'text' %}
+                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
+                                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            <input type="text" class="form-control" name="{{ field.html_name }}"
+                                                   id="{{ field.auto_id }}" placeholder="Ingrese {{ field.label }}"
+                                                    {% if field.value %}  value="{{ field.value }}" {% endif %}
+                                                    {% if field.field.widget.is_required %} required {% endif %}/>
+                                        {% elif field.field.widget.input_type == 'checkbox' %}
+                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
+                                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                            <input type="checkbox" class="form-check-input" name="{{ field.html_name }}"
+                                                   id="{{ field.auto_id }}" {% if field.initial %} checked {% endif %}/>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
                             {% endfor %}
-                            </div>
-                        {% endfor %}
-                        {{ formsets.1.form.management_form }}
+                            {{ formsets.1.form.management_form }}
                         </div>
                         <div class="col-sm-12 reset-button">
                             <hr>
@@ -140,11 +148,60 @@
 {% block scripts %}
     {{ block.super }}
     <script type="application/javascript">
-    // Script to manage formset
-    $('#{{ formsets.0.form.prefix }}').append(
-        <button id="add_{{ formsets.0.form.prefix }}"></button>;
-    );
-        // Formset element name --{{ formsets.0.form.prefix }}-numero_elemento-name_del_campo
-        // Formset element id -- id_{{ formsets.1.form.prefix }}-numero_elemento-id_del_campo
+
+        function clean_formset(prefix) {
+            let parent = $('div#'+prefix);
+            // TODO re-sort all number of .form_insert elements
+        }
+
+        function add_one_more(prefix) {
+            let parent_div = $('div#' + prefix);
+            let total_forms_selector = "input[name='" + prefix + "-TOTAL_FORMS']";
+            let prev_value = parseInt(parent_div.children(total_forms_selector).val());
+            let new_text = prefix + '-' + prev_value.toString();
+            let prev_text_regex = new RegExp(prefix + '-\\d+', 'g');
+            let last_normal_form_reference = parent_div.children('div.last_form');  // Get last formset load normally
+
+            let new_id = last_normal_form_reference.attr('id').replace(prev_text_regex, new_text);  // Make new id
+            $("<br id='br_"+ new_id +"'/><div id='" + new_id + "' class='form_insert'></div>").insertAfter(parent_div.children('div').last());
+
+            // Update total forms
+            parent_div.children(total_forms_selector).val(prev_value + 1);
+
+            let new_element = parent_div.children('div#' + new_id);
+            // Create del buttom
+            let del_id = 'del_' + new_id;
+            new_element.append("<button class='btn btn-xs btn-danger pull-right' id='" + del_id + "'>Borrar</button>");
+            $('button#' + del_id).click(function () {
+                $('div#' + new_id).remove();
+                $('br#br_' + new_id).remove();
+                clean_formset(prefix);
+            });
+            // End create del buttom
+
+            // Fill new element (inputs, labels)
+            last_normal_form_reference.children().each(function () {
+                let element = $(this).prop('outerHTML');
+                new_element.append(element.replace(prev_text_regex, new_text));
+            });
+        }
+
+        function add_more_btn(formsets_selectors) {
+            formsets_selectors.forEach(function (item) {
+                let id = 'add_' + $(item).attr('id');
+                $(item).append(
+                    "<span id='" + id + "'class='pull-right'><i class='hvr-buzz-out fa fa-plus-square fa-2x'></i></span><br />"
+                );
+                // Handle Click Event
+                $('span#' + id).click(function () {
+                    add_one_more($(item).attr('id'));
+                });
+            });
+        }
+
+        // Script to manage formset
+        $(document).ready(function () {
+            add_more_btn(['div#{{ formsets.0.form.prefix }}', 'div#{{ formsets.1.form.prefix }}']);  // Add + buttons
+        });
     </script>
 {% endblock %}
