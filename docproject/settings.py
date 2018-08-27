@@ -81,8 +81,12 @@ WSGI_APPLICATION = 'docproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd8f32trukgb3hb',
+        'USER': 'aayxkbnncjrudr',
+        'PASSWORD': '7416ea8c650feb1a9428576e64ae6572d5b5f8cefa15f99cacf3f3bfd4bc561c',
+        'HOST': 'ec2-54-221-221-153.compute-1.amazonaws.com',
+        'PORT': 5432,
     }
 }
 
