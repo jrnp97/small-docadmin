@@ -54,30 +54,30 @@ class PacienteParticularForm(forms.ModelForm):
 
 # Examination Forms
 class ExaminacionCreateForm(forms.ModelForm):
-    altura = forms.BooleanField(label='Examen de Altura')  # Select if altura exam will do
-    audiologia = forms.BooleanField(label='Examen de Audiologia')  # Select if audiologia exam will do
-    visiometria = forms.BooleanField(label='Examen de Visiometria')  # Select if audiology exam will do
-
     class Meta:
         model = Examinacion
-        fields = '__all__'
+        fields = ('tipo', 'laboratorio_id', 'do_exam_altura', 'do_exam_audiologia', 'do_exam_visiometria', )
         exclude = ('registrado_por', 'paciente_id', 'estado', 'manejador_por')
         labels = {
             'tipo': 'Tipo de Examinación',
             'laboratorio_id': 'Seleccione Laboratorio',
+            'do_exam_altura': 'Examen de Altura',
+            'do_exam_audiologia': 'Examen de Audiologia',
+            'do_exam_visiometria': 'Examen de Visiometria'
         }
 
-    def save(self, commit=True, **kwargs):
+    def save(self, commit=True):
         instance = super(ExaminacionCreateForm, self).save(commit=False)
         instance.registrado_por = self.create_by
-        instance.paciente = self.person
+        instance.paciente_id = self.person
         if commit:
             instance.save()
         return instance
 
 
-simple_exam_inlineformset = forms.inlineformset_factory(parent_model=Examinacion, model=SimpleExam, can_delete=True,
-                                                        fields='__all__', exclude=('registrado_por', 'resultados'))
+simple_exam_inlineformset = forms.inlineformset_factory(parent_model=Examinacion, model=SimpleExam, extra=1,
+                                                        can_delete=True, fields='__all__',
+                                                        exclude=('registrado_por', 'resultados'))
 
 lab_exam_inlineformset = forms.modelformset_factory(model=LabExam, can_delete=True, fields='__all__',
                                                     exclude=('registrado_por', 'manejado_por', 'laboratorio_id  '))

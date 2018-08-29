@@ -6,6 +6,7 @@ from django.db import transaction, IntegrityError
 from django.core.exceptions import SuspiciousOperation, ObjectDoesNotExist
 from django.forms.models import BaseInlineFormSet
 from django.core.urlresolvers import reverse_lazy
+from django.db.models import ForeignKey
 
 from docapp.models import Examinacion
 
@@ -83,6 +84,9 @@ class FormsetPostManager(object):
                 messages.error(self.request, message=f"Error, Guardando {key} datos mal ingresados")
             temp.append(val)
 
+        # Check parent form
+        val = not parent_form.is_valid()
+        temp.append(val)
         if any(temp):
             # Update formsets information (append errors and data)
             return self.form_invalid(form=parent_form)
@@ -105,19 +109,34 @@ class FormsetPostManager(object):
         parent_name = self.extra_context.get('parent_object_key')
         for formset in formsets_simple.values():
             temp = []
+            delete_parent_name = None
             for form in formset:
                 if len(form.cleaned_data) > 0:
                     form.cleaned_data.pop('DELETE', None)  # Clean formset data
                     data = form.cleaned_data.copy()
-                    data.update({parent_name: object_parent})
+                    if data.get(parent_name):
+                        data.update({parent_name: object_parent})
+                        delete_parent_name = parent_name
                     if hasattr(formset.model, 'registrado_por'):
                         # Extract related name from relationship
-                        alias = formset.model.create_by.field.related_model.user.field.cached_col.alias
+                        alias = formset.model.registrado_por.field.related_model.user_id.field.related_query_name()
                         data.update({'registrado_por': getattr(self.request.user, alias)})
+                    # Get other relationship fields on parent
+                    fields = None or [field for field in formset.model._meta.local_fields if
+                                      field.name in data.keys() and isinstance(field, ForeignKey) and data.get(
+                                          field.name) is None]
+                    if fields:
+                        # Get parent information -- Assuming that all fields have the same parent
+                        delete_parent_name = fields[0].name
+                        object_parent = parent_form.cleaned_data.get(delete_parent_name)
+                        for field in fields:  # Look value in parent_form
+                            data.update({field.name: object_parent})
+
                     temp.append(formset.model(**data))
             try:
                 with transaction.atomic():
-                    formset.model.objects.filter(**{parent_name: object_parent}).delete()
+                    if delete_parent_name:
+                        formset.model.objects.filter(**{delete_parent_name: object_parent}).delete()
                     formset.model.objects.bulk_create(temp)
             except IntegrityError:
                 messages.error(self.request, message="Error guardando informacion, revise")

@@ -319,7 +319,7 @@ class RegisterEmployExamination(CheckReceptionist, LoginRequiredMixin, FormsetPo
     context_object_2_name = 'person'
     success_url = reverse_lazy('docapp:list_examination')
     template_name = 'docapp/register/examination.html'
-    extra_context = {'parent_object_key': 'examination_id',
+    extra_context = {'parent_object_key': 'examinacion_id',
                      'formsets': [
                          {'section_name': 'inter_exam',
                           'title': 'Examenes Internos',
@@ -330,6 +330,15 @@ class RegisterEmployExamination(CheckReceptionist, LoginRequiredMixin, FormsetPo
                      ]
                      }
 
+    def _custom_save(self, form):
+        person = self.get_object()
+        form.create_by = self.request.user.reception_profile
+        form.person = person
+        instance = form.save()
+        if instance:
+            person_name = person.__str__()
+            messages.success(self.request, message=f"Antecedente de {person_name} register exitosamente")
+        return instance
 
 register_employ_examination = RegisterEmployExamination.as_view()
 
