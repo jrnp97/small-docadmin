@@ -30,7 +30,7 @@
                     <div class="btn-group"><!-- Empty --></div>
                 </div>
                 <div class="panel-body">
-                    <form class="col-sm-12" method="POST">
+                    <form class="col-sm-12" method="POST"  enctype="multipart/form-data">
                         {% csrf_token %}
 
                         {% for field in form %}
