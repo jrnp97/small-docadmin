@@ -254,7 +254,7 @@ class RegisterLab(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, Cr
     model = Laboratorio
     fields = ('nombre', 'direccion', 'email_contacto',)
     template_name = 'labapp/register/laboratory.html'
-    success_url = reverse_lazy('docapp:dashboard')
+    success_url = reverse_lazy('docapp:list_lab')
     success_message = 'Laboratorio Registrado Existosamente'
 
     def form_valid(self, form):
@@ -279,7 +279,7 @@ update_lab = UpdateLab.as_view()
 
 class ListLab(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, ListView):
     model = Laboratorio
-    template_name = 'labapp/list/laboratory.html'
+    template_name = 'labapp/list/laboratory1.html'
 
 
 list_lab = ListLab.as_view()
