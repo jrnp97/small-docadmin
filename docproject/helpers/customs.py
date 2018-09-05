@@ -7,7 +7,6 @@ from django.core.exceptions import SuspiciousOperation, ObjectDoesNotExist
 from django.forms.models import BaseInlineFormSet
 from django.core.urlresolvers import reverse_lazy
 from django.db.models import ForeignKey
-
 from docapp.models import Examinacion
 
 
@@ -263,3 +262,21 @@ class BaseExamUpdateBehavior:
         if temp:
             kwargs.update({'formsets': temp})  # Update kwargs
         return super(BaseExamUpdateBehavior, self).get_context_data(**kwargs)
+
+
+# Validate Correct Profile
+class ValidateCorrectProfile(SingleObjectMixin):
+    """ Class to validate if a user consult have profile specify """
+    profile_model = None
+    profile_related_field = None
+
+    def get_object(self, queryset=None):
+        assert self.profile_model and self.profile_related_field, ValueError(
+            "Error specify profile_model and profile_related_model")
+        obj = super(ValidateCorrectProfile, self).get_object(queryset=queryset)
+        try:
+            self.profile_model.objects.get(**{self.profile_related_field: obj})
+        except ObjectDoesNotExist:
+            raise SuspiciousOperation("You are trying do something bad")
+        else:
+            return obj

@@ -51,6 +51,19 @@
                         <li><a href="{% url 'docapp:list_company' %}">Listar</a></li>
                     </ul>
                 </li>
+                <!-- Laboratorios -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-flask"></i><span>Laboratorios</span>
+                        <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{% url 'docapp:list_lab' %}">Lista</a></li>
+                        <li><a href="{% url 'docapp:register_lab' %}">Registrar</a></li>
+                    </ul>
+                </li>
                 <!-- Employees options -->
                 <li class="treeview">
                     <a href="#">

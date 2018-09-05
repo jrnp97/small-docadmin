@@ -89,7 +89,7 @@
                                     <th>Celular</th>
                                     <th>Sexo</th>
                                     <th>Examinacion</th>
-                                    <th>Antecedentes</th>
+                                    {% if request.user.doctor_profile %}<th>Antecedentes</th>{% endif %}
                                     <th>Opciones</th>
                                 </tr>
                                 </thead>
@@ -110,7 +110,7 @@
                                                 </button>
                                             </a>
                                         </td>
-                                        <td>
+                                        {% if request.user.doctor_profile %}<td>
                                             <!-- Register Link -->
                                             <a href="{% url 'docapp:register_employ_antecedent' person_id=person.id %}">
                                                 <button class="btn btn-warning btn-xs" data-toggle="tooltip"
@@ -125,7 +125,7 @@
                                                     <i class="fa fa-list-alt" aria-hidden="true"></i>
                                                 </button>
                                             </a>
-                                        </td>
+                                        </td>{% endif %}
                                         <td>
                                             <!-- Detail Link -->
                                             <a href="{% url 'docapp:detail_employ' person_id=person.id %}">
