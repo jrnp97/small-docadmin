@@ -88,22 +88,22 @@ class PacienteEmpresa(models.Model):
 
 class Examinacion(models.Model):
     """ Model to register a process over a employ company """
-    TIPOS = (
-        ('ingreso', 'Ingreso'),
-        ('periodico', 'Periodico'),
-        ('retiro', 'Retiro'),
-        ('reubicacion', 'Re-Ubicacion'),
-        ('post-incapacidad', 'Post-Incapacidad')
-    )
+    TIPOS = (('ingreso', 'Ingreso'),
+             ('periodico', 'Periodico'),
+             ('retiro', 'Retiro'),
+             ('reubicacion', 'Re-Ubicacion'),
+             ('post-incapacidad', 'Post-Incapacidad'))
     tipo = models.CharField(max_length=20, choices=TIPOS, null=False, blank=False)
 
-    ESTADOS = (
-        ('pendiente', 'Pendiente'),
-        ('iniciado', 'Iniciado'),
-        ('en problemas', 'En Problema'),
-        ('finalizado', 'Finalizado'),
-    )
+    ESTADOS = (('pendiente', 'Pendiente'),
+               ('iniciado', 'Iniciado'),
+               ('en problemas', 'En Problema'),
+               ('finalizado', 'Finalizado'),)
     estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente', null=False, blank=False)
+
+    do_exam_altura = models.BooleanField(default=False, null=False, blank=True)
+    do_exam_audiologia = models.BooleanField(default=False, null=False, blank=True)
+    do_exam_visiometria = models.BooleanField(default=False, null=False, blank=True)
 
     laboratorio_id = models.ForeignKey(Laboratorio, on_delete=models.CASCADE, related_name='examinaciones')
     paciente_id = models.ForeignKey(PacienteEmpresa, on_delete=models.CASCADE, related_name='examinaciones')
@@ -203,7 +203,7 @@ class SimpleExam(models.Model):
     examinacion_id = models.ForeignKey(Examinacion, on_delete=models.CASCADE, related_name='examenes_internos')
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(DoctorProfile, null=False, blank=False, on_delete=models.PROTECT,
+    registrado_por = models.ForeignKey(ReceptionProfile, null=False, blank=False, on_delete=models.PROTECT,
                                        related_name='examenes_internos')
 
     resultados = models.TextField(default='', null=False, blank=True)

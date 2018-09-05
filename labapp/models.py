@@ -22,6 +22,9 @@ class Laboratorio(models.Model):
     class Meta:
         db_table = "laboratorios"
 
+    def __str__(self):
+        return self.nombre
+
 
 class LaboratoryProfile(models.Model):
     """ Model to save laoratory employs """
@@ -34,17 +37,23 @@ class LaboratoryProfile(models.Model):
     class Meta:
         db_table = 'personal_labs'
 
+    def __str__(self):
+        return self.user_id
+
 
 class LabExam(models.Model):
     """ Model to register laboratory exam to do on a patient """
     nombre = models.CharField(max_length=50, null=False, blank=False)
 
-    laboratorio_id = models.ForeignKey(Laboratorio, null=False, blank=False, on_delete=models.CASCADE,
+    laboratorio_id = models.ForeignKey(Laboratorio, null=True, blank=True, on_delete=models.CASCADE,
                                        related_name='procesos')
     registrado_por = models.ForeignKey(ReceptionProfile, null=False, blank=False, on_delete=models.CASCADE,
                                        related_name='examenes_de_labs')
     manejado_por = models.OneToOneField(LaboratoryProfile, null=True, blank=True, on_delete=models.CASCADE,
                                         related_name='examenes')
+
+    def __str__(self):
+        return self.nombre
 
 
 class ExamResults(models.Model):
