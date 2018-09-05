@@ -2,6 +2,16 @@
 {% load static %}
 {% block title %} Registro Antecedentes {% endblock %}
 
+{% block styles %}
+    {{ block.super }}
+    <style type="text/css">
+        .label-custom {
+            background-color: #009688;
+            border: 2px solid #3a95e4a6;
+        }
+    </style>
+{% endblock %}
+
 {% block content_header %}
     <div class="header-icon">
         <i class="pe-7s-box1"></i>
@@ -89,21 +99,19 @@
                         {% endfor %}
                         <hr>
                         <!-- Section riesgos -->
-                    {% for formset in formsets %}
-                        <section class="{{ formset.section_name }}">
-
+                        <section class="{{ formsets.0.section_name }}">
                         <span class="pull-left">
                             <small><b>Seleccione los riesgos presentados</b></small>
                         </span><br>
-                            {{ formset.form.management_form }}
-                            {% for hazard in formset.form.forms %}
+                            {{ formsets.0.form.management_form }}
+                            {% for hazard in formsets.0.form.forms %}
                                 <ul>
                                     {% for form in hazard %}
                                         <li class="m-t-20" style="list-style-type: none">
                                             <input name="{{ form.html_name }}"
                                                    id="{{ form.auto_id }}"
                                                    type="checkbox"
-                                            {% if form.initial %} checked {% endif %}>
+                                                    {% if form.initial %} checked {% endif %}>
                                             <label for="{{ form.id_for_label }}"
                                                    class="label {% if form.errors %} label-danger {% else %} label-primary {% endif %}">
                                                 {{ form.label }}
@@ -113,18 +121,29 @@
                                     {% endfor %}
                                 </ul>
                             {% endfor %}
-
-                            {% if formset.form.non_form_errors %}
+                            {% if formsets.0.form.non_form_errors %}
                                 <hr>
-                                {% for error in accident_formset.non_form_errors %}
+                                {% for error in accident_formsets.0.non_form_errors %}
                                     {{ error|escape }}
                                 {% endfor %}
                             {% endif %}
-
                         </section>
-                        {{ break }}
-                    {% endfor %}
                         <!-- Future -->
+                        <section class="{{ formsets.1.section_name }}">
+                        <h2>Accidentes</h2>
+                        <span class="pull-left">
+                            <small><b>Registre Accidentes del trabajo</b></small>
+                        </span><hr>
+                            <div id="{{ formsets.1.form.prefix }}">
+                                {% for form in formsets.1.form.forms %}
+                                    <div id="{{ form.prefix }}-{{ forloop.counter0 }}" {% if forloop.last %}
+                                         class="last_form" {% endif %}>
+                                        {% include 'includes/vertical_form.html' with form=form %}
+                                    </div>
+                                {% endfor %}
+                                {{ formsets.1.form.management_form }}
+                            </div>
+                        </section>
                         <!-- TODO put Accidents formset (use jquery-fromsets pluging if wish) -->
                         <div class="col-sm-12 reset-button">
                             <hr>
@@ -135,5 +154,13 @@
             </div>
         </div>
     </div>
+
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'js/formsetManager.js' %}"></script>
+    <script type="application/javascript">
+        $('div#{{ formsets.1.form.prefix }}').formsetManager();
+    </script>
 
 {% endblock %}

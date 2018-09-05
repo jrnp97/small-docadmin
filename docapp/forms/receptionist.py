@@ -104,4 +104,4 @@ hazards_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLab
                                                     max_num=1, can_delete=False, fields='__all__')
 
 accident_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLaborales, model=Accidentes,
-                                                     can_delete=True, fields='__all__')
+                                                     can_delete=True, fields='__all__', extra=1)

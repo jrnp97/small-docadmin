@@ -1,22 +1,26 @@
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
-from django.views.generic import FormView, ListView, UpdateView, DetailView, TemplateView
+from django.views.generic import FormView, ListView, UpdateView, DetailView, TemplateView, CreateView
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_POST
 from django.http import Http404, HttpResponseRedirect
 
 from docapp.forms import (CompanyForm, PacienteEmpresaForm, PacienteParticularForm,
-                          ExaminacionCreateForm, lab_exam_inlineformset, simple_exam_inlineformset,
-                          AntLaboralesForm, hazards_inlineformset, accident_inlineformset)
+                          ExaminacionCreateForm, lab_exam_inlineformset, simple_exam_inlineformset)
+from labapp.forms import BaseLabUserCreateForm
+from accounts.forms import BaseUserUpdateForm
 
-from docapp.models import (Empresa, PacienteEmpresa, PacienteParticular, Examinacion, AntecedentesLaborales, Riesgos,
-                           Accidentes, Consulta)
+from docapp.models import (Empresa, PacienteEmpresa, PacienteParticular, Examinacion, Consulta)
+from labapp.models import Laboratorio, LaboratoryProfile
+from accounts.models import User
 
 from docproject.helpers.chekers import CheckReceptionist, CheckUser, CheckRecOrDoc
-from docproject.helpers.customs import FormViewPutExtra, FormsetPostManager
+from docproject.helpers.customs import FormViewPutExtra, FormsetPostManager, ValidateCorrectProfile
 
 
 # Create your views here.
@@ -199,117 +203,6 @@ detail_employ = DetailEmploy.as_view()
 
 # End views general to employs (with company or without company)
 
-
-# Process employ antecedent
-class RegisterEmployAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManager, FormViewPutExtra):
-    pk_url_kwarg = 'person_id'
-    form_class = AntLaboralesForm
-    model = AntecedentesLaborales
-    template_name = 'docapp/register/antecedent.html'
-    success_url = reverse_lazy('docapp:dashboard')
-    model_to_filter = PacienteEmpresa
-    context_object_2_name = 'person'
-    extra_context = {'exam_name': 'Antecedente',
-                     'parent_object_key': 'antecedente_id',
-                     'formsets': [
-                         {'section_name': 'riesgos',
-                          'title': 'Riesgos',
-                          'form': hazards_inlineformset},
-                         {'section_name': 'accidentes',
-                          'title': 'Accidentes',
-                          'form': accident_inlineformset}
-                     ]
-                     }
-
-    def _custom_save(self, form):
-        person = self.get_object()
-        form.create_by = self.request.user.reception_profile
-        form.person = person
-        instance = form.save()
-        if instance:
-            person_name = person.get_full_name()
-            messages.success(self.request, message=f"Antecedente de {person_name} register exitosamente")
-        return instance
-
-
-register_employ_antecedent = RegisterEmployAntecedent.as_view()
-
-
-class UpdateEmployAntecedent(CheckReceptionist, LoginRequiredMixin, FormsetPostManager, UpdateView):
-    pk_url_kwarg = 'antecedent_id'
-    context_object_name = 'antecedent'
-    model = AntecedentesLaborales
-    form_class = AntLaboralesForm
-    template_name = 'docapp/register/antecedent.html'
-    success_url = reverse_lazy('docapp:dashboard')
-    extra_context = {'parent_object_key': 'antecedente_id',
-                     'formsets': [
-                         {'section_name': 'riesgos',
-                          'title': 'Riesgos',
-                          'form': hazards_inlineformset},
-                         {'section_name': 'accidentes',
-                          'title': 'Accidentes',
-                          'form': accident_inlineformset}
-                     ]
-                     }
-
-    def form_valid(self, form):
-        """ Overwrite form_valid to add missing information"""
-        antecedent = self.get_object()
-        form.create_by = self.request.user.reception_profile
-        form.person = antecedent.person
-        return super(UpdateEmployAntecedent, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        """ Overwrite get_context_data method to append formset necessary"""
-        antecedent = self.get_object()
-        try:
-            data = Riesgos.objects.get(work=antecedent)
-            dict_data = vars(data)
-            # Delete unneeded info
-            dict_data.pop('_state', None)
-            dict_data.pop('id', None)
-            hazard_initial_data = [dict_data]
-        except ObjectDoesNotExist:
-            hazard_initial_data = []
-        # TODO add get information from accidents
-        self.extra_context = {'parent_object_key': 'antecedente_id',
-                              'formsets': [
-                                  {'section_name': 'riesgos',
-                                   'title': 'Riesgos',
-                                   'form': hazards_inlineformset(initial=hazard_initial_data)}
-                              ]
-                              }
-        kwargs.update(self.extra_context)
-        return super(UpdateEmployAntecedent, self).get_context_data(**kwargs)
-
-
-update_employ_antecedent = UpdateEmployAntecedent.as_view()
-
-
-class ListEmployAntecedents(CheckReceptionist, LoginRequiredMixin, DetailView):
-    pk_url_kwarg = 'person_id'
-    context_object_name = 'paciente'
-    model = PacienteEmpresa
-    template_name = 'docapp/lists/antecedent_list.html'
-
-
-list_employ_antecedents = ListEmployAntecedents.as_view()
-
-
-class DetailEmployAntecedent(CheckReceptionist, LoginRequiredMixin, DetailView):
-    pk_url_kwarg = 'antecedent_id'
-    model = AntecedentesLaborales
-    context_object_name = 'antecedent'
-    template_name = 'docapp/details/antecedent.html'
-
-
-detail_employ_antecedent = DetailEmployAntecedent.as_view()
-
-
-# End employ antecedent
-
-
 # Process Employ Examinations
 class RegisterEmployExamination(CheckReceptionist, LoginRequiredMixin, FormsetPostManager, FormViewPutExtra):
     pk_url_kwarg = 'person_id'
@@ -340,6 +233,7 @@ class RegisterEmployExamination(CheckReceptionist, LoginRequiredMixin, FormsetPo
             messages.success(self.request, message=f"Antecedente de {person_name} register exitosamente")
         return instance
 
+
 register_employ_examination = RegisterEmployExamination.as_view()
 
 
@@ -353,6 +247,77 @@ list_examination = ListExamination.as_view()
 
 
 # End process examinations
+
+
+# Process Laboratory
+class RegisterLab(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, CreateView):
+    model = Laboratorio
+    fields = ('nombre', 'direccion', 'email_contacto',)
+    template_name = 'labapp/register/laboratory.html'
+    success_url = reverse_lazy('docapp:dashboard')
+    success_message = 'Laboratorio Registrado Existosamente'
+
+    def form_valid(self, form):
+        form.instance.registrado_por = self.request.user.reception_profile  # Add exclude field registrado_por
+        return super(RegisterLab, self).form_valid(form=form)
+
+
+register_lab = RegisterLab.as_view()
+
+
+class UpdateLab(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, UpdateView):
+    pk_url_kwarg = 'lab_id'
+    model = Laboratorio
+    fields = ('nombre', 'direccion', 'email_contacto',)
+    template_name = 'labapp/register/laboratory.html'
+    success_url = reverse_lazy('docapp:dashboard')
+    success_message = 'Laboratorio Actualizado Exitosamente'
+
+
+update_lab = UpdateLab.as_view()
+
+
+class ListLab(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, ListView):
+    model = Laboratorio
+    template_name = 'labapp/list/laboratory.html'
+
+
+list_lab = ListLab.as_view()
+
+
+class RegisterLabAdmin(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, FormViewPutExtra):
+    pk_url_kwarg = 'lab_id'
+    form_class = BaseLabUserCreateForm
+    model = User
+    template_name = 'labapp/register/lab_user.html'
+    success_url = reverse_lazy('docapp:dashboard')
+    success_message = 'Administrador de laboratorio registrado existosamente'
+    model_to_filter = Laboratorio
+
+    def form_valid(self, form):
+        lab = self.get_object()
+        if form.is_valid():
+            form.save(**{'is_admin': True, 'laboratorio_id': lab})
+            return super(RegisterLabAdmin, self).form_valid(form=form)
+        else:
+            return super(RegisterLabAdmin, self).form_invalid(form=form)
+
+
+register_lab_admin = RegisterLabAdmin.as_view()
+
+
+class UpdateLabAdmin(LoginRequiredMixin, CheckReceptionist, ValidateCorrectProfile, SuccessMessageMixin, UpdateView):
+    model = User
+    form_class = BaseUserUpdateForm
+    template_name = 'labapp/register/lab_user.html'
+    success_url = reverse_lazy('docapp:dashboard')
+    success_message = 'Administrador de laboratorio actualizado existosamente'
+    profile_model = LaboratoryProfile
+    profile_related_field = 'user_id'
+
+
+update_lab_admin = UpdateLabAdmin.as_view()
+# End process laboratory
 
 
 # Process particular

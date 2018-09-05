@@ -1,7 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, DetailView
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse_lazy
 
-from docapp.models import Occupational, Audiology, Visiometry, Altura
+from docapp.models import (PacienteEmpresa, Occupational, Audiology, Visiometry, Altura, AntecedentesLaborales, Riesgos,
+                           Accidentes)
 from docapp.forms import (OcupaForm,
                           ant_familiares_section,
                           revision_sistemas_section,
@@ -26,7 +29,8 @@ from docapp.forms import (AudioForm,
                           audiometria_section)
 
 from docapp.forms import (VisioForm, sintomas_section, ant_enfermedad_section, ant_uso_lentes_section,
-                          ant_extra_exams, agudeza_section, cronomatica_section)
+                          ant_extra_exams, agudeza_section, cronomatica_section,
+                          AntLaboralesForm, hazards_inlineformset, accident_inlineformset)
 
 from docapp.forms import AlturaForm, question_section
 
@@ -421,3 +425,112 @@ update_altura = UpdateView.as_view()
 
 # TODO Add simple exam register view
 # TODO Add simple exam update view
+
+
+# Process employ antecedent
+class RegisterEmployAntecedent(CheckDoctor, LoginRequiredMixin, FormsetPostManager, FormViewPutExtra):
+    pk_url_kwarg = 'person_id'
+    form_class = AntLaboralesForm
+    model = AntecedentesLaborales
+    template_name = 'docapp/register/antecedent.html'
+    success_url = reverse_lazy('docapp:dashboard')
+    model_to_filter = PacienteEmpresa
+    context_object_2_name = 'person'
+    extra_context = {'exam_name': 'Antecedente',
+                     'parent_object_key': 'antecedente_id',
+                     'formsets': [
+                         {'section_name': 'riesgos',
+                          'title': 'Riesgos',
+                          'form': hazards_inlineformset},
+                         {'section_name': 'accidentes',
+                          'title': 'Accidentes',
+                          'form': accident_inlineformset}
+                     ]
+                     }
+
+    def _custom_save(self, form):
+        person = self.get_object()
+        form.create_by = self.request.user.reception_profile
+        form.person = person
+        instance = form.save()
+        if instance:
+            person_name = person.get_full_name()
+            messages.success(self.request, message=f"Antecedente de {person_name} register exitosamente")
+        return instance
+
+
+register_employ_antecedent = RegisterEmployAntecedent.as_view()
+
+
+class UpdateEmployAntecedent(CheckDoctor, LoginRequiredMixin, FormsetPostManager, UpdateView):
+    pk_url_kwarg = 'antecedent_id'
+    context_object_name = 'antecedent'
+    model = AntecedentesLaborales
+    form_class = AntLaboralesForm
+    template_name = 'docapp/register/antecedent.html'
+    success_url = reverse_lazy('docapp:dashboard')
+    extra_context = {'parent_object_key': 'antecedente_id',
+                     'formsets': [
+                         {'section_name': 'riesgos',
+                          'title': 'Riesgos',
+                          'form': hazards_inlineformset},
+                         {'section_name': 'accidentes',
+                          'title': 'Accidentes',
+                          'form': accident_inlineformset}
+                     ]
+                     }
+
+    def form_valid(self, form):
+        """ Overwrite form_valid to add missing information"""
+        antecedent = self.get_object()
+        form.create_by = self.request.user.reception_profile
+        form.person = antecedent.person
+        return super(UpdateEmployAntecedent, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        """ Overwrite get_context_data method to append formset necessary"""
+        antecedent = self.get_object()
+        try:
+            data = Riesgos.objects.get(work=antecedent)
+            dict_data = vars(data)
+            # Delete unneeded info
+            dict_data.pop('_state', None)
+            dict_data.pop('id', None)
+            hazard_initial_data = [dict_data]
+        except ObjectDoesNotExist:
+            hazard_initial_data = []
+        # TODO add get information from accidents
+        self.extra_context = {'parent_object_key': 'antecedente_id',
+                              'formsets': [
+                                  {'section_name': 'riesgos',
+                                   'title': 'Riesgos',
+                                   'form': hazards_inlineformset(initial=hazard_initial_data)}
+                              ]
+                              }
+        kwargs.update(self.extra_context)
+        return super(UpdateEmployAntecedent, self).get_context_data(**kwargs)
+
+
+update_employ_antecedent = UpdateEmployAntecedent.as_view()
+
+
+class ListEmployAntecedents(CheckDoctor, LoginRequiredMixin, DetailView):
+    pk_url_kwarg = 'person_id'
+    context_object_name = 'paciente'
+    model = PacienteEmpresa
+    template_name = 'docapp/lists/antecedent_list.html'
+
+
+list_employ_antecedents = ListEmployAntecedents.as_view()
+
+
+class DetailEmployAntecedent(CheckDoctor, LoginRequiredMixin, DetailView):
+    pk_url_kwarg = 'antecedent_id'
+    model = AntecedentesLaborales
+    context_object_name = 'antecedent'
+    template_name = 'docapp/details/antecedent.html'
+
+
+detail_employ_antecedent = DetailEmployAntecedent.as_view()
+# End employ antecedent
+

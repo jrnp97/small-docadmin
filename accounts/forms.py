@@ -38,10 +38,6 @@ class BaseUserForm(forms.ModelForm):
                     info = {'user_id': instance}
                     reception = ReceptionProfile(**info)
                     reception.save()
-                elif instance.profile_type == 'laboratorio':  # TODO Fix Laboratory user register with inline
-                    info = {'user_id': instance}
-                    laboratory = LaboratoryProfile(**info)
-                    laboratory.save()
                 elif instance.profile_type == 'doctor':
                     info = {'user_id': instance}
                     doctor = DoctorProfile(**info)
@@ -94,15 +90,6 @@ class RecCreateForm(BaseUserForm):
         super(RecCreateForm, self).save()  # Now save user
 
 
-class LabCreateForm(BaseUserForm):
-    """ Form to register Laboratory profile """
-
-    def save(self, commit=True):
-        instance = super(LabCreateForm, self).save(commit=False)
-        instance.profile_type = 'laboratorio' # Set laboratory profile
-        super(LabCreateForm, self).save()  # Now save user
-
-
 # Profile update forms
 class DoctorUpdateForm(BaseUserUpdateForm):
     """ Form to update doctor profile if required modify something """
@@ -110,22 +97,3 @@ class DoctorUpdateForm(BaseUserUpdateForm):
 
 class RecUpdateForm(BaseUserUpdateForm):
     """ Form to update receptionist profile if required modify something """
-
-
-class LabUpdateForm(BaseUserUpdateForm):
-    """ Form to update laboratory profile if required modify something """
-
-
-class LaboratoryCreateForm(forms.ModelForm):
-
-    class Meta:
-        model = Laboratorio
-        fields = ('nombre', 'direccion', 'email_contacto',)
-        exclude = ('registrado_por', 'ultima_vez_modificado')
-
-    def save(self, commit=True):
-        instance = super(LaboratoryCreateForm, self).save(commit=False)
-        instance.registrado_por = self.create_by
-        if commit:
-            instance.save()
-        return instance
