@@ -56,16 +56,6 @@
                                 </div>
                             </div>
                             <div class="col-sm-4 col-xs-12">
-                                <!--div class="dataTables_length">
-                                    <a class="btn btn-default buttons-copy btn-sm" tabindex="0">
-                                        <span>Copy</span></a>
-                                    <a class="btn btn-default buttons-csv buttons-html5 btn-sm"
-                                       tabindex="0"><span>CSV</span></a>
-                                    <a class="btn btn-default buttons-excel buttons-html5 btn-sm" tabindex="0"><span>Excel</span></a>
-                                    <a class="btn btn-default buttons-pdf buttons-html5 btn-sm"
-                                       tabindex="0"><span>PDF</span></a>
-                                    <a class="btn btn-default buttons-print btn-sm" tabindex="0"><span>Print</span></a>
-                                </div-->
                             </div>
                             <div class="col-sm-4 col-xs-12">
                                 <div class="dataTables_length">
@@ -93,11 +83,8 @@
                                     <th>Fecha de Creación</th>
                                     <th>Estado</th>
                                     <th>Progreso</th>
-                                    {% if request.user.doctor_profile %}
-                                        <th>Examenes</th>
-                                    {% endif %}
-                                    {% if request.user.laboratory_profile %}
-                                        <th>Laboratorio</th>
+                                    {% if request.user.doctor_profile or request.user.laboratory_profile %}
+                                        <th>Acciones</th>
                                     {% endif %}
                                 </tr>
                                 </thead>
@@ -126,14 +113,14 @@
                                         </td>
                                         <td> {{ exam.fecha_de_creacion }} </td>
                                         <td> {{ exam.estado }}
-                                            <!--{% if request.user.doctor_profile %}
+                                            {% comment %}{% if request.user.doctor_profile %}
                                             <a href="">
                                                 <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                                                         data-placement="left" title="" data-original-title="Editar">
                                                     <i class="fa fa-edit" aria-hidden="true"></i>
                                                 </button>
                                             </a>
-                                            {% endif %} -->
+                                            {% endif %} {% endcomment %}
                                         </td>
                                         <td>
                                             <div class="progress progress-lg">
@@ -149,36 +136,22 @@
                                             </div>
                                         </td>
 
-                                        {% if request.user.doctor_profile %}
+                                        {% if request.user.doctor_profile or request.user.laboratory_profile %}
                                             <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{% url 'docapp:register_occupational' exam_id=exam.id %}">
-                                                            Ocupacional
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{% url 'docapp:register_audiology' exam_id=exam.id %}">
-                                                            Audilogia
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{% url 'docapp:register_visiometry' exam_id=exam.id %}">
-                                                            Visiometria
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        {% endif %}
-
-                                        {% if request.user.laboratory_profile %}
-                                            <!-- TODO put urls from labapp -->
-                                            <td>
-                                                <a href="#">
-                                                    <button class="btn btn-primary label-success-outline">
-                                                        Registrar Datos
-                                                    </button>
-                                                </a>
+                                                {% if request.path == '/examination/' %}
+                                                    <a href="{% url 'docapp:take_a_exam' exam_id=exam.id %}">Tomar</a>
+                                                {% elif request.path == '/my/examinations/' %}
+                                                    <ul style="list-style: none;">
+                                                        <li>
+                                                            <a href="{% url 'docapp:detail_examination' exam_id=exam.id %}">Registrar
+                                                                Resultados</a></li>
+                                                        {% if request.user.doctor_profile %}
+                                                            <li>
+                                                                <a href="{% url 'docapp:register_employ_antecedent' person_id=exam.paciente_id_id %}">Registrar
+                                                                    Antecedentes</a></li>
+                                                        {% endif %}
+                                                    </ul>
+                                                {% endif %}
                                             </td>
                                         {% endif %}
 

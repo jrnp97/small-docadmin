@@ -202,9 +202,8 @@ class DetailEmploy(CheckRecOrDoc, LoginRequiredMixin, DetailView):
 
 
 detail_employ = DetailEmploy.as_view()
-
-
 # End views general to employs (with company or without company)
+
 
 # Process Employ Examinations
 class RegisterEmployExamination(CheckReceptionist, LoginRequiredMixin, FormsetPostManager, FormViewPutExtra):
@@ -244,6 +243,12 @@ class ListExamination(LoginRequiredMixin, CheckUser, ListView):
     model = Examinacion
     context_object_name = 'exam_list'
     template_name = 'docapp/lists/exam_list.html'
+
+    def get_queryset(self):
+        if hasattr(self.request.user, 'doctor_profile'):
+            return self.model.objects.exclude(manejador_por=self.request.user.doctor_profile)
+        else:
+            return super(ListExamination, self).get_queryset()
 
 
 list_examination = ListExamination.as_view()

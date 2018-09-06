@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Examinacion</title>
+</head>
+<body>
+<h1>Proceso #{{ exam.id }}</h1>
+<h2>Paciente: {{ exam.paciente_id }}</h2>
+<hr>
+<h3>Examenes normales a realizar</h3>
+
+<ul>
+
+    {% if exam.do_exam_altura %}
+        <li><a href="#">Altura No disponible por el momento</a></li>{% endif %}
+
+    {% if exam.do_exam_audiologia %}
+        <li><a href="{% url 'docapp:register_audiology' exam_id=exam.id %}">Registrar Resultados Audiologia</a></li>
+    {% endif %}
+
+    {% if exam.do_exam_visiometria %}
+        <li><a href="{% url 'docapp:register_visiometry' exam_id=exam.id %}">Registrar Resultados Visiometria</a></li>
+    {% endif %}
+
+</ul>
+
+<hr>
+<h3>Examenes simples a realizar</h3>
+{% if exam.examenes_internos.all %}
+    <ul>
+        {% for examen in exam.examenes_internos.all %}
+            <li><a href="#">Registrar resultados de {{ examen.nombre }}</a></li>
+            {% comment %} TODO View to register simple_exam {% endcomment %}
+        {% endfor %}
+    </ul>
+{% endif %}
+<hr>
+<a href="{% url 'docapp:register_occupational' exam_id=exam.id %}">Registrar Resumen del proceso</a>
+<hr>
+<a href="#">Terminar examinacion</a>
+
+</body>
+</html>

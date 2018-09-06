@@ -12,3 +12,5 @@ from .doctor import (register_occupational, register_audiology, register_visiome
                      register_employ_antecedent, update_employ_antecedent, list_employ_antecedents,
                      detail_employ_antecedent,
                      )
+
+from .general import detail_examination, own_examinations, take_a_exam
