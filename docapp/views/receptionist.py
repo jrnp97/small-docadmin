@@ -1,7 +1,10 @@
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.utils import IntegrityError
 from django.shortcuts import redirect
-from django.views.generic import FormView, ListView, UpdateView, DetailView, TemplateView, CreateView
+from django.views.generic import FormView, ListView, UpdateView, DetailView, TemplateView, CreateView, View
+from django.views.generic.detail import SingleObjectMixin
 from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -254,7 +257,7 @@ class RegisterLab(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, Cr
     model = Laboratorio
     fields = ('nombre', 'direccion', 'email_contacto',)
     template_name = 'labapp/register/laboratory.html'
-    success_url = reverse_lazy('docapp:dashboard')
+    success_url = reverse_lazy('docapp:list_lab')
     success_message = 'Laboratorio Registrado Existosamente'
 
     def form_valid(self, form):
@@ -268,9 +271,9 @@ register_lab = RegisterLab.as_view()
 class UpdateLab(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, UpdateView):
     pk_url_kwarg = 'lab_id'
     model = Laboratorio
-    fields = ('nombre', 'direccion', 'email_contacto',)
+    fields = ('nombre', 'direccion', 'email_contacto', 'is_active', )
     template_name = 'labapp/register/laboratory.html'
-    success_url = reverse_lazy('docapp:dashboard')
+    success_url = reverse_lazy('docapp:list_lab')
     success_message = 'Laboratorio Actualizado Exitosamente'
 
 
@@ -283,6 +286,33 @@ class ListLab(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, ListVi
 
 
 list_lab = ListLab.as_view()
+
+
+class DeactivateLab(LoginRequiredMixin, CheckReceptionist, SingleObjectMixin, TemplateView):
+    object = None
+    pk_url_kwarg = 'lab_id'
+    model = Laboratorio
+    template_name = 'labapp/deactivate_object.html'
+    redirect_url = reverse_lazy('docapp:list_lab')
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        kwargs.update({'redirect_url': self.redirect_url})
+        return super(DeactivateLab, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        lab = self.get_object()
+        lab.is_active = False
+        try:
+            lab.save()
+        except IntegrityError:
+            messages.error(message='Laboratorio No Desactivado', request=request)
+        else:
+            messages.success(message='Laboratorio Desactivado Exitosamente', request=request)
+        return HttpResponseRedirect(reverse('docapp:list_lab'))
+
+
+deactivate_lab = DeactivateLab.as_view()
 
 
 class RegisterLabAdmin(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, FormViewPutExtra):
@@ -317,6 +347,8 @@ class UpdateLabAdmin(LoginRequiredMixin, CheckReceptionist, ValidateCorrectProfi
 
 
 update_lab_admin = UpdateLabAdmin.as_view()
+
+
 # End process laboratory
 
 

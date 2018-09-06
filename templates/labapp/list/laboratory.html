@@ -12,7 +12,9 @@
         {% for object in object_list %}
             <li>{{ object }}
                 <a href="{% url 'docapp:update_lab' lab_id=object.id %}">Actualizar</a>
+                <a href="{% url 'docapp:deactivate_lab' lab_id=object.id %}">Desactivar</a>
                 <a href="{% url 'docapp:register_lab_admin' lab_id=object.id %}">Registrar Administrador</a>
+            <small>Activo: <b>{{ object.is_active }}</b></small>
             </li>
         {% endfor %}
     </ul>
