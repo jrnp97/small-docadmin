@@ -145,7 +145,7 @@ class RegisterEmployWithoutCompany(CheckReceptionist, LoginRequiredMixin, FormVi
     form_class = PacienteEmpresaForm
     model = PacienteEmpresa
     template_name = 'docapp/register/employ.html'
-    success_url = reverse_lazy('docapp:list_company')
+    success_url = reverse_lazy('docapp:list_independent_employ')
 
     def form_valid(self, form):
         form.company = None
