@@ -3,7 +3,7 @@ from django import forms
 
 from docapp.models import (Empresa, PacienteEmpresa, PacienteParticular, Examinacion, SimpleExam, AntecedentesLaborales,
                            Riesgos, Accidentes)
-from labapp.models import LabExam
+from labapp.models import LabExam, Laboratorio
 
 
 # Company Forms
@@ -56,7 +56,7 @@ class PacienteParticularForm(forms.ModelForm):
 class ExaminacionCreateForm(forms.ModelForm):
     class Meta:
         model = Examinacion
-        fields = ('tipo', 'laboratorio_id', 'do_exam_altura', 'do_exam_audiologia', 'do_exam_visiometria', )
+        fields = ('tipo', 'laboratorio_id', 'do_exam_altura', 'do_exam_audiologia', 'do_exam_visiometria',)
         exclude = ('registrado_por', 'paciente_id', 'estado', 'manejador_por')
         labels = {
             'tipo': 'Tipo de Examinación',
@@ -79,8 +79,9 @@ simple_exam_inlineformset = forms.inlineformset_factory(parent_model=Examinacion
                                                         can_delete=True, fields='__all__',
                                                         exclude=('registrado_por', 'resultados'))
 
-lab_exam_inlineformset = forms.modelformset_factory(model=LabExam, can_delete=True, fields='__all__',
-                                                    exclude=('registrado_por', 'manejado_por', 'laboratorio_id  '))
+lab_exam_inlineformset = forms.inlineformset_factory(parent_model=Laboratorio, model=LabExam,
+                                                     can_delete=True, fields='__all__', extra=1,
+                                                     exclude=('registrado_por', 'manejado_por', 'laboratorio_id  '))
 
 
 # Appointment Forms (Receptionist only send a request and a register must be create)

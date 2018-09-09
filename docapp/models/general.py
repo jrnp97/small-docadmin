@@ -110,7 +110,7 @@ class Examinacion(models.Model):
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='examinaciones')
-    manejador_por = models.OneToOneField(DoctorProfile, null=True, blank=True, on_delete=models.CASCADE,
+    manejador_por = models.ForeignKey(DoctorProfile, null=True, blank=True, on_delete=models.CASCADE,
                                          related_name='examinaciones')
 
     def __str__(self):
