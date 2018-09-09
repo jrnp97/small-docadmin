@@ -104,5 +104,5 @@ class AntLaboralesForm(forms.ModelForm):
 hazards_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLaborales, model=Riesgos, extra=1,
                                                     max_num=1, can_delete=False, fields='__all__')
 
-accident_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLaborales, model=Accidentes,
-                                                     can_delete=True, fields='__all__', extra=1)
+accident_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLaborales, model=Accidentes, extra=1,
+                                                     can_delete=True, fields='__all__', exclude=('registrado_por',))

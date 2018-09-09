@@ -17,7 +17,7 @@
     <tbody>
     {% for antecedent in paciente.antecedentes.all %}
         <tr>
-            <td>{{ antecedent.company }}</td>
+            <td>{{ antecedent.nombre_empresa }}</td>
             <td>
                 <!-- Detail Link -->
                 <a href="{% url 'docapp:detail_employ_antecedent' antecedent_id=antecedent.id %}">

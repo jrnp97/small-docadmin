@@ -5,7 +5,8 @@ from .receptionist import (dashboard,
                            register_employ_examination, list_examination,
                            register_simple_patient, update_simple_patient, detail_patient, list_simple_patient,
                            make_consulta, list_consults,
-                           register_lab, update_lab, deactivate_lab, list_lab, register_lab_admin, update_lab_admin)
+                           register_lab, update_lab, deactivate_lab, list_lab, register_lab_admin, update_lab_admin,
+                           list_admin_lab)
 
 from .doctor import (register_occupational, register_audiology, register_visiometry,
                      update_ocupacional, update_audiologia, update_visiometria,

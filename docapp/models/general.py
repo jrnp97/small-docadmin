@@ -65,8 +65,8 @@ class PacienteEmpresa(models.Model):
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='personal_empresa')
-    avatar = models.ImageField(upload_to='avatars/patients_company', null=True, blank=True,  default="avatars/default.png")
-
+    avatar = models.ImageField(upload_to='avatars/patients_company', null=True, blank=True,
+                               default="avatars/default.png")
 
     def __str__(self):
         return f"{self.nombres} {self.apellidos}"
@@ -111,7 +111,7 @@ class Examinacion(models.Model):
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='examinaciones')
     manejador_por = models.ForeignKey(DoctorProfile, null=True, blank=True, on_delete=models.CASCADE,
-                                         related_name='examinaciones')
+                                      related_name='examinaciones')
 
     def __str__(self):
         return self.tipo
@@ -179,6 +179,11 @@ class Riesgos(models.Model):
         return str(hazards.count(True))
 
     def get_label_hazards(self):
+        data = vars(self)
+        data.pop('_state', None)
+        data.pop('id')
+        data.pop('antecedente_id_id', None)
+        data.pop('_antecedente_id_cache', None)
         return ", ".join([key for key, val in vars(self).items() if val])
 
 
@@ -194,7 +199,7 @@ class Accidentes(models.Model):
     antecedente_id = models.ForeignKey(AntecedentesLaborales, on_delete=models.CASCADE, related_name='accidentes')
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE)
+    registrado_por = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE)
 
 
 class SimpleExam(models.Model):
@@ -244,7 +249,8 @@ class PacienteParticular(models.Model):
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     registrado_por = models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='particulares')
-    avatar = models.ImageField(upload_to='avatars/patients_particular', null=True, blank=True, default="avatars/default.png")
+    avatar = models.ImageField(upload_to='avatars/patients_particular', null=True, blank=True,
+                               default="avatars/default.png")
 
     def __str__(self):
         return f"{self.nombres} {self.apellidos}"

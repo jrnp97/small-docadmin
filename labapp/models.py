@@ -39,7 +39,7 @@ class LaboratoryProfile(models.Model):
         db_table = 'personal_labs'
 
     def __str__(self):
-        return self.user_id
+        return self.user_id.__str__()
 
 
 class LabExam(models.Model):

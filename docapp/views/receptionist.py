@@ -325,7 +325,7 @@ class RegisterLabAdmin(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixi
     form_class = BaseLabUserCreateForm
     model = User
     template_name = 'labapp/register/lab_user.html'
-    success_url = reverse_lazy('docapp:dashboard')
+    success_url = reverse_lazy('docapp:list_lab')
     success_message = 'Administrador de laboratorio registrado existosamente'
     model_to_filter = Laboratorio
 
@@ -345,7 +345,7 @@ class UpdateLabAdmin(LoginRequiredMixin, CheckReceptionist, ValidateCorrectProfi
     model = User
     form_class = BaseUserUpdateForm
     template_name = 'labapp/register/lab_user.html'
-    success_url = reverse_lazy('docapp:dashboard')
+    success_url = reverse_lazy('docapp:list_lab')
     success_message = 'Administrador de laboratorio actualizado existosamente'
     profile_model = LaboratoryProfile
     profile_related_field = 'user_id'
@@ -353,6 +353,18 @@ class UpdateLabAdmin(LoginRequiredMixin, CheckReceptionist, ValidateCorrectProfi
 
 update_lab_admin = UpdateLabAdmin.as_view()
 
+
+class ListLabAdmin(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, DetailView):
+    model = Laboratorio
+    template_name = 'labapp/list/admins.html'
+    context_object_name = 'lab'
+
+    def get_context_data(self, **kwargs):
+        lab = self.get_object()
+        kwargs.update({'admin_lab_list': lab.personal_lab.all().filter(is_admin=True)})
+        return super(ListLabAdmin, self).get_context_data(**kwargs)
+
+list_admin_lab = ListLabAdmin.as_view()
 
 # End process laboratory
 
