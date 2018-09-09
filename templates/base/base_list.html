@@ -1,0 +1,116 @@
+{% extends 'base/base_dashboard.html' %}
+{% load static %}
+{% block title %} {% endblock %}
+
+
+{% block content_header %}
+    <div class="header-icon">
+        <i class="pe-7s-box1"></i>
+    </div>
+    <div class="header-title">
+        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
+            <div class="input-group">
+                <input name="q" class="form-control" placeholder="Search..." type="text">
+                <span class="input-group-btn">
+                                    <button type="submit" name="search" id="search-btn" class="btn"><i
+                                            class="fa fa-search"></i></button>
+                                </span>
+            </div>
+        </form>
+        <h1>{% block page_title %}{% endblock %}</h1>
+        <small>{% block small_message %}{% endblock %}</small>
+    </div>
+{% endblock %}
+
+{% block content_main %}
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="btn-group">
+                    {% block add_btn %}
+                        <a class="btn btn-success" href="{% block add_link %}{% endblock %}"> <i
+                                class="fa fa-plus"></i>{% block add_link_label %}{% endblock %}</a>
+                    {% endblock %}
+                </div>
+            </div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-sm alert-{{ message.level_tag }} alert-dismissible col-sm-12 m-t-20"
+                         role="alert">
+                        <div class="text-center">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                    aria-hidden="true">×</span></button>
+                            <i class="fa fa-exclamation-circle"></i>
+                            <strong>{{ message.level_tag|capfirst }}!</strong> {{ message|escape }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <hr>
+        <!-- DataTable Header -->
+        <div class="row">
+            <!-- Content show filter -->
+            <div class="col-sm-4 col-xs-12">
+                <div class="dataTables_length">
+                    <label>Mostrar
+                        <select name="example_length">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select> por pagina</label>
+                </div>
+            </div>
+            <!-- Export Options -->
+            <div class="col-sm-4 col-xs-12">
+                <div class="dataTables_length">
+                    <a disabled="" class="btn btn-default buttons-copy btn-sm" tabindex="0"><span>Copy</span></a>
+                    <a disabled="" class="btn btn-default buttons-csv buttons-html5 btn-sm"
+                       tabindex="0"><span>CSV</span></a>
+                    <a disabled="" class="btn btn-default buttons-excel buttons-html5 btn-sm"
+                       tabindex="0"><span>Excel</span></a>
+                    <a disabled="" class="btn btn-default buttons-pdf buttons-html5 btn-sm"
+                       tabindex="0"><span>PDF</span></a>
+                    <a disabled="" class="btn btn-default buttons-print btn-sm" tabindex="0"><span>Print</span></a>
+                </div>
+            </div>
+            <!-- Search filter -->
+            <div class="col-sm-4 col-xs-12">
+                <div class="dataTables_length">
+                    <div class="input-group custom-search-form">
+                        <input type="search" class="form-control" placeholder="search..">
+                        <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button"><span
+                                class="glyphicon glyphicon-search"></span></button>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- DataTable Body -->
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center">
+                    {% block datatable_body %} {% endblock %}
+                </table>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="page-nation text-right">
+                <ul class="pagination pagination-large">
+                    <li class="disabled"><span>«</span></li>
+                    <li class="active"><span>1</span></li>
+                    <li><a href="#">2</a></li>
+                    <li class="disabled"><span>...</span></li>
+                    <li>
+                    <li><a rel="next" href="#">Next</a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+

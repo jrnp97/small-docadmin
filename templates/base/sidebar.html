@@ -79,7 +79,8 @@
                 </li>
             {% endif %}
 
-            {% if request.user.profile_type == 'p_laboratorio' or request.user.profile_type == 'doctor' or request.user.profile_type == 'receptionista' %}
+            {% if request.user.profile_type == 'p_laboratorio' or request.user.profile_type == 'doctor' or request.user.profile_type == 'receptionista' or request.user.is_superuser%}
+                <!-- Examinations-->
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-flask"></i><span>Examinaciones</span>

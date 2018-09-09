@@ -1,0 +1,11 @@
+<div id="{{ formset.form.prefix }}">
+
+    {% for form in formset.form.forms %}
+        <div id="{{ formset.form.prefix }}-{{ forloop.counter0 }}" {% if forloop.last %}
+             class="last_form" {% endif %}>
+            {% include 'includes/simple_register_form.html' with large=1 form=form %}
+        </div>
+        <br>
+    {% endfor %}
+    {{ formset.form.management_form }}
+</div>

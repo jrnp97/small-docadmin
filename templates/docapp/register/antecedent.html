@@ -2,16 +2,6 @@
 {% load static %}
 {% block title %} Registro Antecedentes {% endblock %}
 
-{% block styles %}
-    {{ block.super }}
-    <style type="text/css">
-        .label-custom {
-            background-color: #009688;
-            border: 2px solid #3a95e4a6;
-        }
-    </style>
-{% endblock %}
-
 {% block content_header %}
     <div class="header-icon">
         <i class="pe-7s-box1"></i>
@@ -48,55 +38,7 @@
                     <form class="col-sm-12" method="POST">
                         {% csrf_token %}
                         <!-- General -->
-                        {% for field in form %}
-                            {% if not forloop.counter|divisibleby:"2" %}
-                                <div class="row">
-                            {% endif %}
-
-                        <div class="col-sm-6 form-group">
-                            <label class="label {% if field.errors %} label-danger {% else %} label-primary {% endif %}"
-                                   for="{{ field.name }}">{{ field.label }}</label>
-
-                            {% if field.field.widget.input_type == 'select' %}
-                                <!-- Select input -->
-                                <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                        name="{{ field.html_name }}"
-                                        id="{{ field.name }}"
-                                        size="1">
-                                    {% for option in field.field.choices %}
-                                        <option value="{{ option.0 }}" {% if field.value == option.0 %}
-                                                selected {% endif %}>{{ option.1 }}</option>
-                                    {% endfor %}
-                                </select>
-                            {% elif field.field.widget.input_type == 'checkbox' %}
-                                {{ field }}
-                            {% else %}
-                                <input type="{{ field.field.widget.input_type }}"
-                                       class="{% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %} datepicker {% endif %}
-                                           form-control {% if field.errors %} label-danger-outline {% endif %}"
-                                       name="{{ field.html_name }}"
-                                       id="{{ field.name }}" placeholder="Ingrese {{ field.label }}"
-                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                        {% if field.field.widget.is_required %}  required="" {% endif %}/>
-                            {% endif %}
-
-                            {% if field.errors %}
-                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
-                                    <button type="button" class="close" data-dismiss="alert"
-                                            aria-label="Close"><span
-                                            aria-hidden="true">×</span></button>
-                                    {% for error in field.errors %}
-                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                        {{ error|escape }}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-
-                            {% if forloop.counter|divisibleby:"2" %}
-                                </div>
-                            {% endif %}
-                        </div>
-                        {% endfor %}
+                        {% include 'includes/simple_register_form.html' with form=form %}
                         <hr>
                         <!-- Section riesgos -->
                         <section class="{{ formsets.0.section_name }}">
@@ -104,47 +46,18 @@
                             <small><b>Seleccione los riesgos presentados</b></small>
                         </span><br>
                             {{ formsets.0.form.management_form }}
-                            {% for hazard in formsets.0.form.forms %}
-                                <ul>
-                                    {% for form in hazard %}
-                                        <li class="m-t-20" style="list-style-type: none">
-                                            <input name="{{ form.html_name }}"
-                                                   id="{{ form.auto_id }}"
-                                                   type="checkbox"
-                                                    {% if form.initial %} checked {% endif %}>
-                                            <label for="{{ form.id_for_label }}"
-                                                   class="label {% if form.errors %} label-danger {% else %} label-primary {% endif %}">
-                                                {{ form.label }}
-                                            </label>
-
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endfor %}
-                            {% if formsets.0.form.non_form_errors %}
-                                <hr>
-                                {% for error in accident_formsets.0.non_form_errors %}
-                                    {{ error|escape }}
-                                {% endfor %}
-                            {% endif %}
+                            {% include 'includes/ordered_checkbox_with_textarea.html' with form=formsets.0.form.forms.0 %}
                         </section>
                         <!-- Future -->
+
                         <section class="{{ formsets.1.section_name }}">
-                        <h2>Accidentes</h2>
-                        <span class="pull-left">
+                            <h2>Accidentes</h2>
+                            <span class="pull-left">
                             <small><b>Registre Accidentes del trabajo</b></small>
-                        </span><hr>
-                            <div id="{{ formsets.1.form.prefix }}">
-                                {% for form in formsets.1.form.forms %}
-                                    <div id="{{ form.prefix }}-{{ forloop.counter0 }}" {% if forloop.last %}
-                                         class="last_form" {% endif %}>
-                                        {% include 'includes/vertical_form.html' with form=form %}
-                                    </div>
-                                {% endfor %}
-                                {{ formsets.1.form.management_form }}
-                            </div>
+                        </span>
+                            <hr>
+                            {% include 'includes/formset_structure.html' with formset=formsets.1 %}
                         </section>
-                        <!-- TODO put Accidents formset (use jquery-fromsets pluging if wish) -->
                         <div class="col-sm-12 reset-button">
                             <hr>
                             <button type="submit" class="btn btn-success">Guardar</button>

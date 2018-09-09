@@ -1,25 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>List</title>
-</head>
-<body>
-<a href="{% url 'docapp:register_lab' %}">Registrar Laboratorio</a>
-<hr>
-{% if object_list %}
-    <ul>
-        {% for object in object_list %}
-            <li>{{ object }}
-                <a href="{% url 'docapp:update_lab' lab_id=object.id %}">Actualizar</a>
-                <a href="{% url 'docapp:deactivate_lab' lab_id=object.id %}">Desactivar</a>
-                <a href="{% url 'docapp:register_lab_admin' lab_id=object.id %}">Registrar Administrador</a>
-            <small>Activo: <b>{{ object.is_active }}</b></small>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <h1>No se encuentra ningun lab registrado</h1>
-{% endif %}
-</body>
-</html>
+{% extends 'base/base_list.html' %}
+{% load static %}
+{% block title %} Lista Empleados {% endblock %}
+
+{% block page_title %}Empresas {% endblock %}
+{% block small_message %} Lista de Empresas {% endblock %}
+{% block add_link %} {% url 'docapp:register_lab' %} {% endblock %}
+{% block add_link_label %} Laboratorio {% endblock %}
+
+
+{% block datatable_body %}
+    <thead>
+    <tr>
+        <th>Nombre</th>
+        <th>Administradores</th>
+        <th>Opciones</th>
+        <th>Estado</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+        <tr>
+            <td>{{ object }}</td>
+            <td>
+                <!-- Register Link -->
+                <a href="{% url 'docapp:register_lab_admin' lab_id=object.id %}">
+                    <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                            data-placement="left" title="" data-original-title="Registrar">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                </a>
+                <!-- List Link -->
+                <a href="{% url 'docapp:list_admin_lab' pk=object.id %}">
+                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
+                            data-placement="left" title="" data-original-title="Ver lista">
+                        <i class="fa fa-list-alt" aria-hidden="true"></i>
+                    </button>
+                </a>
+            </td>
+            <td>
+                <!-- Detail Link -->
+                <a href="#">  {% comment %} TODO view and template to show laboratoriy profile {% endcomment %}
+                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
+                            data-placement="left" title="" data-original-title="Ver">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                </a>
+                <!-- Update Link -->
+                <a href="{% url 'docapp:update_lab' lab_id=object.id %}">
+                    <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                            data-placement="left" title="" data-original-title="Editar">
+                        <i class="fa fa-edit" aria-hidden="true"></i>
+                    </button>
+                </a>
+                <!-- Deactivate Link -->
+                <a href="{% url 'docapp:deactivate_lab' lab_id=object.id %}">
+                    <button class="btn btn-danger btn-xs" data-toggle="tooltip"
+                            data-placement="right" title="" data-original-title="Borrar">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+
+                    </button>
+                </a>
+            </td>
+            <td>{% if object.is_active %} <span class="label label-success">Activo</span> {% else %} <span class="label label-danger">Desactivado</span> {% endif %}</td>
+        </tr>
+    {% empty %}
+        <h1>No se encuentra ningun laboratorio registrado</h1>
+    {% endfor %}
+    </tbody>
+{% endblock %}
