@@ -13,10 +13,14 @@ class BaseUserForm(forms.ModelForm):
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirme Contraseña', widget=forms.PasswordInput)
 
+    def __init__(self, **kwargs):
+        super(BaseUserForm, self).__init__(**kwargs)
+        if self.fields.get('profile_type'):
+            self.fields['profile_type'].choices.remove(('p_laboratorio', 'Personal de Laboratorio'))  # Delete p_lab option
+
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name')
-        exclude = ('profile_type', )
+        fields = ('username', 'email', 'first_name', 'last_name', 'profile_type',)
 
     def clean_password2(self):
         # Check if both password match
@@ -25,6 +29,13 @@ class BaseUserForm(forms.ModelForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Las Constraseñas no coinciden")
         return password2
+
+    def clean_profile_type(self):
+        """ If some expert action send p_laboratorio key across http params invalid it"""
+        p_profile = self.cleaned_data.get('profile_type')
+        if p_profile == 'p_laboratorio':
+            raise forms.ValidationError("Opcion Seleccionada no valida")
+        return p_profile
 
     def save(self, commit=True):
         instance = super(BaseUserForm, self).save(commit=False)
@@ -53,7 +64,7 @@ class BaseUserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'avatar', 'password')
+        fields = ('username', 'email', 'first_name', 'last_name', 'avatar', 'password', 'is_active', )
         exclude = ('profile_type',)
 
     def clean_password(self):
@@ -74,7 +85,6 @@ class BaseUserUpdateForm(forms.ModelForm):
 
 # Create Forms
 class DoctorCreateForm(BaseUserForm):
-
     def save(self, commit=True):
         instance = super(DoctorCreateForm, self).save(commit=False)
         instance.profile_type = 'doctor'  # Set doctor profile

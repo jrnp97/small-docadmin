@@ -72,7 +72,7 @@
                     <hr>
                     <h2>Antecedentes</h2>
                     <div class="table-responsive m-b-20">
-                        {% if person.antecedents.all %}
+                        {% if person.antecedentes.all %}
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
@@ -83,10 +83,10 @@
                                 </thead>
 
                                 <tbody>
-                                {% for ant in person.antecedents.all %}
+                                {% for ant in person.antecedentes.all %}
                                     <tr>
-                                        <td>{{ ant.company }}</td>
-                                        <td>{{ ant.accidents.all.count }}</td>
+                                        <td>{{ ant.nombre_empresa }}</td>
+                                        <td>{{ ant.accidentes.all.count }}</td>
                                         <td>
                                             <a href="{% url 'docapp:detail_employ_antecedent' antecedent_id=ant.id %}">
                                                 Ver detalles

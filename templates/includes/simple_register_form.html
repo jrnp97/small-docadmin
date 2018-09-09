@@ -29,7 +29,7 @@
     </div>
 {% endif %}
 
-{% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
+{% if forloop.counter|divisibleby:"2" or forloop.last %}</div>{% endif %}
 {% endfor %}
 {% for field in form %}
     {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}

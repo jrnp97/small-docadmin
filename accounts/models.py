@@ -36,6 +36,9 @@ class User(AbstractUser):
         else:
             return super(User, self).delete(using=using, keep_parents=keep_parents)
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 # Define user roles
 class DoctorProfile(models.Model):
