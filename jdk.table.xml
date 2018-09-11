@@ -1,0 +1,248 @@
+<application>
+  <component name="ProjectJdkTable">
+    <jdk version="2">
+      <name value="Python 3.6 (PA)" />
+      <type value="Python SDK" />
+      <version value="Python 3.6.5" />
+      <homePath value="$USER_HOME$/.virtualenvs/PA/bin/python" />
+      <roots>
+        <classPath>
+          <root type="composite">
+            <root url="file:///usr/lib/python3.6" type="simple" />
+            <root url="file:///usr/lib/python3.6/lib-dynload" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/PA/lib/python3.6/site-packages" type="simple" />
+            <root url="jar://$USER_HOME$/.virtualenvs/PA/lib/python3.6/site-packages/setuptools-39.0.1-py3.6.egg!/" type="simple" />
+            <root url="file://$USER_HOME$/.PyCharm2018.1/system/python_stubs/1780586579" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.6" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.5" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.4" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/2and3" type="simple" />
+          </root>
+        </classPath>
+        <sourcePath>
+          <root type="composite" />
+        </sourcePath>
+      </roots>
+      <additional ASSOCIATED_PROJECT_PATH="$USER_HOME$/PycharmProjects/PA" />
+    </jdk>
+    <jdk version="2">
+      <name value="Python 3.6 (env)" />
+      <type value="Python SDK" />
+      <version value="Python 3.6.5" />
+      <homePath value="$USER_HOME$/.virtualenvs/env/bin/python" />
+      <roots>
+        <classPath>
+          <root type="composite">
+            <root url="file://$USER_HOME$/.virtualenvs/env/lib/python3.6" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/env/lib/python3.6/lib-dynload" type="simple" />
+            <root url="file:///usr/lib/python3.6" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/env/lib/python3.6/site-packages" type="simple" />
+            <root url="file://$USER_HOME$/.PyCharm2018.1/system/python_stubs/1183666389" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.6" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.5" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.4" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/2and3" type="simple" />
+          </root>
+        </classPath>
+        <sourcePath>
+          <root type="composite" />
+        </sourcePath>
+      </roots>
+      <additional ASSOCIATED_PROJECT_PATH="$USER_HOME$/Tutorial" />
+    </jdk>
+    <jdk version="2">
+      <name value="Python 3.6 (lsv)" />
+      <type value="Python SDK" />
+      <version value="Python 3.6.5" />
+      <homePath value="$USER_HOME$/.virtualenvs/lsv/bin/python" />
+      <roots>
+        <classPath>
+          <root type="composite">
+            <root url="file:///usr/lib/python3.6" type="simple" />
+            <root url="file:///usr/lib/python3.6/lib-dynload" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/lsv/lib/python3.6/site-packages" type="simple" />
+            <root url="jar://$USER_HOME$/.virtualenvs/lsv/lib/python3.6/site-packages/setuptools-39.0.1-py3.6.egg!/" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/lsv/lib/python3.6/site-packages/pip-9.0.3-py3.6.egg" type="simple" />
+            <root url="file://$USER_HOME$/.PyCharm2018.1/system/python_stubs/472708275" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.6" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.5" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.4" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/2and3" type="simple" />
+          </root>
+        </classPath>
+        <sourcePath>
+          <root type="composite" />
+        </sourcePath>
+      </roots>
+      <additional ASSOCIATED_PROJECT_PATH="$USER_HOME$/workspace/lsv" />
+    </jdk>
+    <jdk version="2">
+      <name value="Python 3.6 (Exchange)" />
+      <type value="Python SDK" />
+      <version value="Python 3.6.5" />
+      <homePath value="$USER_HOME$/.virtualenvs/Exchange/bin/python" />
+      <roots>
+        <classPath>
+          <root type="composite">
+            <root url="file:///usr/lib/python3.6" type="simple" />
+            <root url="file:///usr/lib/python3.6/lib-dynload" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/Exchange/lib/python3.6/site-packages" type="simple" />
+            <root url="jar://$USER_HOME$/.virtualenvs/Exchange/lib/python3.6/site-packages/setuptools-39.0.1-py3.6.egg!/" type="simple" />
+            <root url="file://$USER_HOME$/.PyCharm2018.1/system/python_stubs/935704577" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.6" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.5" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.4" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/2and3" type="simple" />
+          </root>
+        </classPath>
+        <sourcePath>
+          <root type="composite" />
+        </sourcePath>
+      </roots>
+      <additional ASSOCIATED_PROJECT_PATH="$USER_HOME$/Exchange" />
+    </jdk>
+    <jdk version="2">
+      <name value="Python 3.6 (Celery_Django)" />
+      <type value="Python SDK" />
+      <version value="Python 3.6.5" />
+      <homePath value="$USER_HOME$/.virtualenvs/Celery_Django/bin/python" />
+      <roots>
+        <classPath>
+          <root type="composite">
+            <root url="file:///usr/lib/python3.6" type="simple" />
+            <root url="file:///usr/lib/python3.6/lib-dynload" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/Celery_Django/lib/python3.6/site-packages" type="simple" />
+            <root url="jar://$USER_HOME$/.virtualenvs/Celery_Django/lib/python3.6/site-packages/setuptools-39.0.1-py3.6.egg!/" type="simple" />
+            <root url="file://$USER_HOME$/.PyCharm2018.1/system/python_stubs/887614666" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.6" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.5" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.4" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/2and3" type="simple" />
+          </root>
+        </classPath>
+        <sourcePath>
+          <root type="composite" />
+        </sourcePath>
+      </roots>
+      <additional ASSOCIATED_PROJECT_PATH="$USER_HOME$/email-microservices/Celery_Django" />
+    </jdk>
+    <jdk version="2">
+      <name value="Python 3.6 (Django_Celery)" />
+      <type value="Python SDK" />
+      <version value="Python 3.6.5" />
+      <homePath value="$USER_HOME$/.virtualenvs/Django_Celery/bin/python" />
+      <roots>
+        <classPath>
+          <root type="composite">
+            <root url="file:///usr/lib/python3.6" type="simple" />
+            <root url="file:///usr/lib/python3.6/lib-dynload" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/Django_Celery/lib/python3.6/site-packages" type="simple" />
+            <root url="jar://$USER_HOME$/.virtualenvs/Django_Celery/lib/python3.6/site-packages/setuptools-39.0.1-py3.6.egg!/" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/Django_Celery/lib/python3.6/site-packages/pip-9.0.3-py3.6.egg" type="simple" />
+            <root url="file://$USER_HOME$/.PyCharm2018.1/system/python_stubs/278336284" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.6" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.5" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.4" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/2and3" type="simple" />
+          </root>
+        </classPath>
+        <sourcePath>
+          <root type="composite" />
+        </sourcePath>
+      </roots>
+      <additional ASSOCIATED_PROJECT_PATH="$USER_HOME$/email-microservices/Django_Celery" />
+    </jdk>
+    <jdk version="2">
+      <name value="Python 3.6 (school)" />
+      <type value="Python SDK" />
+      <version value="Python 3.6.6" />
+      <homePath value="$USER_HOME$/.virtualenvs/school/bin/python" />
+      <roots>
+        <classPath>
+          <root type="composite">
+            <root url="file:///usr/lib/python3.6" type="simple" />
+            <root url="file:///usr/lib/python3.6/lib-dynload" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/school/lib/python3.6/site-packages" type="simple" />
+            <root url="jar://$USER_HOME$/.virtualenvs/school/lib/python3.6/site-packages/setuptools-39.0.1-py3.6.egg!/" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/school/lib/python3.6/site-packages/pip-9.0.3-py3.6.egg" type="simple" />
+            <root url="file://$USER_HOME$/.PyCharm2018.1/system/python_stubs/-29518224" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.6" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.5" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.4" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/2and3" type="simple" />
+          </root>
+        </classPath>
+        <sourcePath>
+          <root type="composite" />
+        </sourcePath>
+      </roots>
+      <additional ASSOCIATED_PROJECT_PATH="$USER_HOME$/Tathan/school" />
+    </jdk>
+    <jdk version="2">
+      <name value="Python 3.6 (WebsiteLSV)" />
+      <type value="Python SDK" />
+      <version value="Python 3.6.6" />
+      <homePath value="$USER_HOME$/.virtualenvs/WebsiteLSV/bin/python" />
+      <roots>
+        <classPath>
+          <root type="composite">
+            <root url="file:///usr/lib/python3.6" type="simple" />
+            <root url="file:///usr/lib/python3.6/lib-dynload" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/WebsiteLSV/lib/python3.6/site-packages" type="simple" />
+            <root url="jar://$USER_HOME$/.virtualenvs/WebsiteLSV/lib/python3.6/site-packages/setuptools-39.0.1-py3.6.egg!/" type="simple" />
+            <root url="file://$USER_HOME$/.virtualenvs/WebsiteLSV/lib/python3.6/site-packages/pip-9.0.3-py3.6.egg" type="simple" />
+            <root url="file://$USER_HOME$/.PyCharm2018.1/system/python_stubs/907181072" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.6" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.5" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.4" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3.3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/3" type="simple" />
+            <root url="file://$APPLICATION_HOME_DIR$/helpers/typeshed/third_party/2and3" type="simple" />
+          </root>
+        </classPath>
+        <sourcePath>
+          <root type="composite" />
+        </sourcePath>
+      </roots>
+      <additional ASSOCIATED_PROJECT_PATH="$USER_HOME$/Tathan/WebsiteLSV" />
+    </jdk>
+  </component>
+</application>
