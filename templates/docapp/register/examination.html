@@ -2,16 +2,6 @@
 
 {% block title %} Registro Empleado {% endblock %}
 
-{% block styles %}
-    {{ block.super }}
-    <style type="text/css">
-        .label-custom {
-            background-color: #009688;
-            border: 2px solid #3a95e4a6;
-        }
-    </style>
-{% endblock %}
-
 {% block content_header %}
     <div class="header-icon">
         <i class="pe-7s-box1"></i>
@@ -49,171 +39,19 @@
 
                     <form class="col-sm-12" method="POST">
                         {% csrf_token %}
-                        {% if form.non_field_errors %}
-                            <ul>
-                                {% for error in form.non_field_errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
                         <!-- Main form -->
-                        <!-- Render select and checkbox fields -->
-                        {% for field in form %}
-                            {% if field.field.widget.input_type == 'select' %}
-                                <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
-                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                        name="{{ field.html_name }}" id="{{ field.auto_id }}" size="1">
-                                    {% for option in field.field.choices %}
-                                        <option value="{{ option.0 }}"{% if field.value == option.0 %}
-                                                selected {% endif %}>{{ option.1 }}</option>
-                                    {% endfor %}
-                                </select>
-                                {% if field.errors %}
-                                    <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
-                                        <button type="button" class="close" data-dismiss="alert"
-                                                aria-label="Close"><span
-                                                aria-hidden="true">×</span></button>
-                                        {% for error in field.errors %}
-                                            <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                            {{ error|escape }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            {% elif field.field.widget.input_type == 'checkbox' %}
-                                <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
-                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                <input type="checkbox" class="form-check-input" name="{{ field.html_name }}"
-                                       id="{{ field.auto_id }}" {% if field.initial %} checked {% endif %}/>
-                                {% if field.errors %}
-                                    <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
-                                        <button type="button" class="close" data-dismiss="alert"
-                                                aria-label="Close"><span
-                                                aria-hidden="true">×</span></button>
-                                        {% for error in field.errors %}
-                                            <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                            {{ error|escape }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                        {% for field in form %}
-                            {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                        {% endfor %}
+                        {% include 'includes/simple_register_form.html' with form=form %}
                         <!-- Exams intern formset -->
                         <hr>
                         <h2>Examenes internos</h2>
                         <small>ej. electrocardiograma</small>
                         <hr>
-                        <div id="{{ formsets.0.form.prefix }}">
-                            {% for form in formsets.0.form.forms %}
-                                <!-- Render text and checkbox fields -->
-                                <div id="{{ formsets.0.form.prefix }}-{{ forloop.counter0 }}" {% if forloop.last %}
-                                     class="last_form" {% endif %}>
-                                    {% for field in form %}
-                                        {% if field.field.widget.input_type == 'text' %}
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
-                                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                            <input type="text" class="form-control" name="{{ field.html_name }}"
-                                                   id="{{ field.auto_id }}" placeholder="Ingrese {{ field.label }}"
-                                                    {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                    {% if field.field.widget.is_required %} required {% endif %}/>
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        {% elif field.field.widget.input_type == 'checkbox' %}
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
-                                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                            <input type="checkbox" class="form-check-input" name="{{ field.html_name }}"
-                                                   id="{{ field.auto_id }}" {% if field.initial %} checked {% endif %}/>
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% for field in form %}
-                                        {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                                    {% endfor %}
-                                </div>
-                                <br>
-                            {% endfor %}
-                            {{ formsets.0.form.management_form }}
-                        </div>
-
+                        {% include 'includes/formset_structure.html' with formset=formsets.0 %}
                         <!-- Lab exams formsets -->
                         <hr>
                         <h2>Examenes de laboratorio</h2>
                         <hr>
-                        <div id="{{ formsets.1.form.prefix }}">
-                            {% for form in formsets.1.form.forms %}
-                                <!-- Render text and checkbox fields -->
-                                <div id="{{ formsets.1.form.prefix }}-{{ forloop.counter0 }}" {% if forloop.last %}
-                                     class="last_form" {% endif %}>
-                                    {% for field in form %}
-                                        {% if field.field.widget.input_type == 'text' %}
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
-                                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                            <input type="text" class="form-control" name="{{ field.html_name }}"
-                                                   id="{{ field.auto_id }}" placeholder="Ingrese {{ field.label }}"
-                                                    {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                    {% if field.field.widget.is_required %} required {% endif %}/>
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        {% elif field.field.widget.input_type == 'checkbox' %}
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom {% endif %}"
-                                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                            <input type="checkbox" class="form-check-input" name="{{ field.html_name }}"
-                                                   id="{{ field.auto_id }}" {% if field.initial %} checked {% endif %}/>
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% for field in form %}
-                                        {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                                    {% endfor %}
-                                </div>
-                            {% endfor %}
-                            {{ formsets.1.form.management_form }}
-                        </div>
+                        {% include 'includes/formset_structure.html' with formset=formsets.1 %}
                         <div class="col-sm-12 reset-button">
                             <hr>
                             <button type="submit" class="btn btn-success">Guardar</button>
@@ -231,30 +69,6 @@
 
         function clean_formset(prefix) {
             let parent = $('div#' + prefix);
-
-            /* Reset div's  -- Check if is necessary
-            let minimun = parseInt(parent.children('div.last_form').attr('id').match(/\d+/)[0]);
-
-            let new_elements = [];
-            parent.children('div.form_insert').each(function (index, item) {
-                let new_number = minimun + (index + 1);
-
-                let new_text = prefix + '-'+ new_number; // New prefix
-                let prev_text = new RegExp($(item).attr('id'), 'g');
-
-                // console.log("Prev element -> " + prev_text);
-                // console.log("New element -> " + new_text);
-
-                let new_element = $(item).prop('outerHTML').replace(prev_text, new_text);
-                new_elements.push(new_element);
-            });
-
-            parent.children('div.form_insert').remove(); // Remove old elements
-
-            new_elements.forEach(function (item) {
-                $(item).insertAfter(parent.children('div').last());
-            }); */
-
             $("input[name='" + prefix + "-TOTAL_FORMS']").val($(parent).children('div').length);  // Update total forms
 
         }

@@ -77,16 +77,22 @@
                         <li><a href="{% url 'docapp:list_independent_employ' %}">Lista</a></li>
                     </ul>
                 </li>
-                <!-- Examenes -->
+            {% endif %}
+
+            {% if request.user.profile_type == 'p_laboratorio' or request.user.profile_type == 'doctor' or request.user.profile_type == 'receptionista' or request.user.is_superuser%}
+                <!-- Examinations-->
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-check-square-o"></i><span>Examenes</span>
+                        <i class="fa fa-flask"></i><span>Examinaciones</span>
                         <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="{% url 'docapp:list_examination' %}">Lista</a></li>
+                        {% if request.user.profile_type == 'p_laboratorio' or request.user.profile_type == 'doctor' %}
+                            <li><a href="{% url 'docapp:own_examinations' %}">Pendientes</a></li>
+                        {% endif %}
                     </ul>
                 </li>
             {% endif %}

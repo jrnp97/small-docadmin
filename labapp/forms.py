@@ -7,6 +7,10 @@ from labapp.models import Laboratorio, LaboratoryProfile
 
 
 class BaseLabUserCreateForm(BaseUserForm):
+
+    class Meta(BaseUserForm.Meta):
+        exclude = ('profile_type', )
+
     def save(self, commit=True, **info):
         instance = super(BaseUserForm, self).save(commit=False)
         # Set clean password to user to save

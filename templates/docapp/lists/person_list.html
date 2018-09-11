@@ -1,169 +1,84 @@
-{% extends 'base/base_dashboard.html' %}
+{% extends 'base/base_list.html' %}
 {% load static %}
 {% block title %} Lista Personas {% endblock %}
 
+{% block page_title %}Personas Independientes{% endblock %}
+{% block small_message %} Lista de personas independientes {% endblock %}
+{% block add_link %} {% url 'docapp:register_employ_without_company' %} {% endblock %}
+{% block add_link_label %} Persona {% endblock %}
 
-{% block content_header %}
-    <div class="header-icon">
-        <i class="pe-7s-box1"></i>
-    </div>
-    <div class="header-title">
-        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
-            <div class="input-group">
-                <input name="q" class="form-control" placeholder="Search..." type="text">
-                <span class="input-group-btn">
-                                    <button type="submit" name="search" id="search-btn" class="btn"><i
-                                            class="fa fa-search"></i></button>
-                                </span>
-            </div>
-        </form>
-        <h1>Personas Independientes</h1>
-        <small>Lista de personas independientes</small>
-    </div>
-{% endblock %}
-
-{% block content_main %}
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-bd lobidisable">
-                <div class="panel-heading">
-                    <div class="btn-group">
-                        <a class="btn btn-success" href="{% url 'docapp:register_employ_without_company' %}"><i
-                                class="fa fa-plus"></i>
-                            Persona
-                        </a>
-                    </div>
-                </div>
-                {% if messages %}
-                    <div class="text-center">
-                        {% for message in messages %}
-                            <div class="alert alert-sm alert-{{ message.level_tag }} alert-dismissible m-t-20"
-                                 role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                        aria-hidden="true">×</span></button>
-                                <i class="fa fa-exclamation-circle"></i>
-                                <strong>{{ message.level_tag|capfirst }}!</strong> {{ message|escape }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="panel-header">
-                            <div class="col-sm-4 col-xs-12">
-                                <div class="dataTables_length">
-                                    <label>Mostrar
-                                        <select name="example_length">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select> Empleados por pagina</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-12"> <!-- Empty --> </div>
-                            <div class="col-sm-4 col-xs-12">
-                                <div class="dataTables_length">
-                                    <div class="input-group custom-search-form">
-                                        <input type="search" class="form-control" placeholder="search..">
-                                        <span class="input-group-btn">
-                                                                  <button class="btn btn-primary" type="button">
-                                                                      <span class="glyphicon glyphicon-search"></span>
-                                                                  </button>
-                                                              </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% if person_list %}
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover text-center">
-                                <thead>
-                                <tr>
-                                    <th>Identificacion</th>
-                                    <th>Nombre</th>
-                                    <th>Apellido</th>
-                                    <th>Telefono</th>
-                                    <th>Celular</th>
-                                    <th>Sexo</th>
-                                    <th>Empresa</th>
-                                    <th>Examinacion</th>
-                                    <th>Antecedentes</th>
-                                    <th>Opciones</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for person in person_list %}
-                                    <tr>
-                                        <td>{{ person.identificacion }}</td>
-                                        <td>{{ person.nombres }}</td>
-                                        <td>{{ person.apellidos }}</td>
-                                        <td>{{ person.telefono }}</td>
-                                        <td>{{ person.celular }}</td>
-                                        <td>{{ person.sexo }}</td>
-                                        <td>{% if person.empresa %} {{ person.empresa }} {% else %} No
-                                            presenta {% endif %}</td>
-                                        <td>
-                                            <a href="{% url 'docapp:register_employ_examination' person_id=person.id %}">
-                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                                                        data-placement="left" title="" data-original-title="Iniciar">
-                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                                                </button>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <!-- Register Link -->
-                                            <a href="{% url 'docapp:register_employ_antecedent' person_id=person.id %}">
-                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                                                        data-placement="left" title="" data-original-title="Registrar">
-                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                                                </button>
-                                            </a>
-                                            <!-- List Link -->
-                                            <a href="{% url 'docapp:list_employ_antecedents' person_id=person.id %}">
-                                                <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                                                        data-placement="left" title="" data-original-title="Ver lista">
-                                                    <i class="fa fa-list-alt" aria-hidden="true"></i>
-                                                </button>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <!-- Detail Link -->
-                                            <a href="{% url 'docapp:detail_employ' person_id=person.id %}">
-                                                <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                                                        data-placement="left" title="" data-original-title="Ver">
-                                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                                </button>
-                                            </a>
-                                            <!-- Update Link -->
-                                            <a href="{% url 'docapp:update_employ' person_id=person.id %}">
-                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                                                        data-placement="left" title="" data-original-title="Editar">
-                                                    <i class="fa fa-edit" aria-hidden="true"></i>
-                                                </button>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="page-nation text-right">
-                            <ul class="pagination pagination-large">
-                                <li class="disabled"><span>«</span></li>
-                                <li class="active"><span>1</span></li>
-                                <li><a href="#">2</a></li>
-                                <li class="disabled"><span>...</span></li>
-                                <li>
-                                <li><a rel="next" href="#">Next</a></li>
-                            </ul>
-                        </div>
-                    {% else %}
-                        <h2> No se encuentran empleados registrados</h2>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
+{% block datatable_body %}
+    <thead>
+    <tr>
+        <th>Identificacion</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Telefono</th>
+        <th>Celular</th>
+        <th>Sexo</th>
+        <th>Empresa</th>
+        <th>Examinacion</th>
+        {% if request.user.doctor_profile %}
+            <th>Antecedentes</th>{% endif %}
+        <th>Opciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for person in person_list %}
+        <tr>
+            <td>{{ person.identificacion }}</td>
+            <td>{{ person.nombres }}</td>
+            <td>{{ person.apellidos }}</td>
+            <td>{{ person.telefono }}</td>
+            <td>{{ person.celular }}</td>
+            <td>{{ person.sexo }}</td>
+            <td>{% if person.empresa %} {{ person.empresa }} {% else %} No
+                presenta {% endif %}</td>
+            <td>
+                <a href="{% url 'docapp:register_employ_examination' person_id=person.id %}">
+                    <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                            data-placement="left" title="" data-original-title="Iniciar">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                </a>
+            </td>
+            {% if request.user.doctor_profile %}
+                <td>
+                    <!-- Register Link -->
+                    <a href="{% url 'docapp:register_employ_antecedent' person_id=person.id %}">
+                        <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                data-placement="left" title="" data-original-title="Registrar">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                    <!-- List Link -->
+                    <a href="{% url 'docapp:list_employ_antecedents' person_id=person.id %}">
+                        <button class="btn btn-primary btn-xs" data-toggle="tooltip"
+                                data-placement="left" title="" data-original-title="Ver lista">
+                            <i class="fa fa-list-alt" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                </td>
+            {% endif %}
+            <td>
+                <!-- Detail Link -->
+                <a href="{% url 'docapp:detail_employ' person_id=person.id %}">
+                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
+                            data-placement="left" title="" data-original-title="Ver">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                </a>
+                <!-- Update Link -->
+                <a href="{% url 'docapp:update_employ' person_id=person.id %}">
+                    <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                            data-placement="left" title="" data-original-title="Editar">
+                        <i class="fa fa-edit" aria-hidden="true"></i>
+                    </button>
+                </a>
+            </td>
+        </tr>
+    {% empty %}
+        <h2>No se han registrado personal independiente</h2>
+    {% endfor %}
+    </tbody>
 {% endblock %}

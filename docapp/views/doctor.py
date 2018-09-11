@@ -1,7 +1,9 @@
+from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import UpdateView, DetailView
+from django.views.generic import UpdateView, DetailView, TemplateView
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse_lazy
+from django.contrib import messages
 
 from docapp.models import (PacienteEmpresa, Occupational, Audiology, Visiometry, Altura, AntecedentesLaborales, Riesgos,
                            Accidentes)
@@ -50,7 +52,7 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
                          {'section_name': 'ant_familiares',
                           'title': 'Antecedentes Familiares',
                           'form': ant_familiares_section},
-                         # TODO Antecedent gineco-obstetricos put depend sex of pacient
+                         None,  # TODO Antecedent gineco-obstetricos put depend sex of pacient
                          {'section_name': 'revision_sistemas',
                           'title': 'Revision por Sistemas',
                           'form': revision_sistemas_section},
@@ -113,9 +115,14 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
                           'title': 'Genito Unitario',
                           'form': examen_fisico_genito_unitario_section},
                          # Fin examen fisico
-                         # TODO Section conclusion process depend examination type
+                         None  # TODO Section conclusion process depend examination type
                      ]
                      }
+
+    def get_context_data(self, **kwargs):
+        examination_patient = self.get_object().paciente_id
+        # TODO insert formsets required to case
+        return super(RegisterOccupational, self).get_context_data(**kwargs)
 
 
 register_occupational = RegisterOccupational.as_view()
@@ -423,6 +430,7 @@ class UpdateAltura(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, Form
 
 update_altura = UpdateView.as_view()
 
+
 # TODO Add simple exam register view
 # TODO Add simple exam update view
 
@@ -450,11 +458,11 @@ class RegisterEmployAntecedent(CheckDoctor, LoginRequiredMixin, FormsetPostManag
 
     def _custom_save(self, form):
         person = self.get_object()
-        form.create_by = self.request.user.reception_profile
+        form.create_by = self.request.user.doctor_profile
         form.person = person
         instance = form.save()
         if instance:
-            person_name = person.get_full_name()
+            person_name = person.__str__()
             messages.success(self.request, message=f"Antecedente de {person_name} register exitosamente")
         return instance
 
@@ -483,15 +491,15 @@ class UpdateEmployAntecedent(CheckDoctor, LoginRequiredMixin, FormsetPostManager
     def form_valid(self, form):
         """ Overwrite form_valid to add missing information"""
         antecedent = self.get_object()
-        form.create_by = self.request.user.reception_profile
-        form.person = antecedent.person
+        form.create_by = self.request.user.doctor_profile
+        form.person = antecedent.persona
         return super(UpdateEmployAntecedent, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         """ Overwrite get_context_data method to append formset necessary"""
         antecedent = self.get_object()
         try:
-            data = Riesgos.objects.get(work=antecedent)
+            data = Riesgos.objects.get(antecedente_id=antecedent)
             dict_data = vars(data)
             # Delete unneeded info
             dict_data.pop('_state', None)
@@ -499,12 +507,30 @@ class UpdateEmployAntecedent(CheckDoctor, LoginRequiredMixin, FormsetPostManager
             hazard_initial_data = [dict_data]
         except ObjectDoesNotExist:
             hazard_initial_data = []
-        # TODO add get information from accidents
+        try:
+            data = Accidentes.objects.filter(antecedente_id=antecedent)
+            accident_initial_data = []
+            for element in data:
+                dict_data = vars(element)
+                # Delete unneeded info
+                dict_data.pop('_state', None)
+                dict_data.pop('id', None)
+                accident_initial_data.append(dict_data)
+        except ObjectDoesNotExist:
+            accident_initial_data = []
+
+        accident_formset = forms.inlineformset_factory(parent_model=AntecedentesLaborales, model=Accidentes,
+                                                       extra=len(accident_initial_data), can_delete=True,
+                                                       fields='__all__', exclude=('registrado_por',))
+
         self.extra_context = {'parent_object_key': 'antecedente_id',
                               'formsets': [
                                   {'section_name': 'riesgos',
                                    'title': 'Riesgos',
-                                   'form': hazards_inlineformset(initial=hazard_initial_data)}
+                                   'form': hazards_inlineformset(initial=hazard_initial_data)},
+                                  {'section_name': 'accidentes',
+                                   'title': 'Accidentes',
+                                   'form': accident_formset(initial=accident_initial_data)}
                               ]
                               }
         kwargs.update(self.extra_context)
@@ -533,4 +559,3 @@ class DetailEmployAntecedent(CheckDoctor, LoginRequiredMixin, DetailView):
 
 detail_employ_antecedent = DetailEmployAntecedent.as_view()
 # End employ antecedent
-

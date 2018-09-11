@@ -24,11 +24,10 @@ logout = LogoutView.as_view()
 class RegisterPersonal(LoginRequiredMixin, CheckSuperUser, FormView):
     form_class = BaseUserForm
     template_name = 'accounts/register_profile.html'
-    success_url = reverse_lazy('accounts:register_personal')
+    success_url = reverse_lazy('accounts:user_list')
 
     def form_valid(self, form):
-        instance = form.save()
-        if instance:
+        if form.save():
             messages.success(request=self.request, message="User created successfully")
         return super(RegisterPersonal, self).form_valid(form)
 

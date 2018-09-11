@@ -17,11 +17,11 @@ from docapp.models import (Occupational,
 class OcupaForm(forms.ModelForm):
     class Meta:
         model = Occupational
-        exclude = ('ultima_vez_modificado', 'tipo_examen', )
+        exclude = ('ultima_vez_modificado', 'examinacion_id', )
 
     def save(self, commit=True):
         instance = super(OcupaForm, self).save(commit=False)
-        instance.tipo_examen = self.exam_type
+        instance.examinacion_id = self.exam_type
         if commit:
             instance.save()
         return instance

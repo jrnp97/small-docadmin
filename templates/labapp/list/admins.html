@@ -1,0 +1,54 @@
+{% extends 'base/base_list.html' %}
+{% load static %}
+{% block title %} Lista Lab Admin {% endblock %}
+
+{% block page_title %}Administradores de {{ lab }} {% endblock %}
+{% block small_message %} Lista de usuarios administradores del laboratorio {{ lab }} {% endblock %}
+{% block add_link %} {% url 'docapp:register_lab_admin' lab_id=lab.id %} {% endblock %}
+{% block add_link_label %} Administrador {% endblock %}
+
+
+{% block datatable_body %}
+    <thead>
+    <tr>
+        <th>Nombre</th>
+        <th>Opciones</th>
+        <th>Estado</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in admin_lab_list %}
+        <tr>
+            <td>{{ object }}</td>
+            <td>
+                <!-- Detail Link -->
+                <a href="#">  {% comment %} TODO view and template to show personal lab profile {% endcomment %}
+                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
+                            data-placement="left" title="" data-original-title="Ver">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                </a>
+                <!-- Update Link -->
+                <a href="{% url 'docapp:update_lab_admin' pk=object.user_id.id %}">
+                    <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                            data-placement="left" title="" data-original-title="Editar">
+                        <i class="fa fa-edit" aria-hidden="true"></i>
+                    </button>
+                </a>
+                <!-- Deactivate Link -->
+                <a href="#"> {% comment %} TODO view and template to show deactivate lab profile {% endcomment %}
+                    <button class="btn btn-danger btn-xs" data-toggle="tooltip"
+                            data-placement="right" title="" data-original-title="Borrar">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+
+                    </button>
+                </a>
+            </td>
+            <td>{% if object.user_id.is_active %} <span class="label label-success">Activo</span> {% else %}<span class="label label-danger">Desactivado</span> {% endif %}</td>
+
+        </tr>
+    {% empty %}
+        <h1>No se encuentra ningun laboratorio registrado</h1>
+    {% endfor %}
+    </tbody>
+{% endblock %}

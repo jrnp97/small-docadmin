@@ -4,32 +4,33 @@
 
 {% block page_title %}Empresas {% endblock %}
 {% block small_message %} Lista de Empresas {% endblock %}
-{% block add_link %} {% url 'docapp:register_company' %} {% endblock %}
-{% block add_link_label %} Empresa {% endblock %}
+{% block add_link %} {% url 'docapp:register_lab' %} {% endblock %}
+{% block add_link_label %} Laboratorio {% endblock %}
 
 
 {% block datatable_body %}
     <thead>
     <tr>
         <th>Nombre</th>
-        <th>Empleados</th>
+        <th>Administradores</th>
         <th>Opciones</th>
+        <th>Estado</th>
     </tr>
     </thead>
     <tbody>
-    {% for company in company_list %}
+    {% for object in object_list %}
         <tr>
-            <td>{{ company }}</td>
+            <td>{{ object }}</td>
             <td>
                 <!-- Register Link -->
-                <a href="{% url 'docapp:register_employ_from_company' company_id=company.id %}">
+                <a href="{% url 'docapp:register_lab_admin' lab_id=object.id %}">
                     <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                             data-placement="left" title="" data-original-title="Registrar">
                         <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
                 </a>
                 <!-- List Link -->
-                <a href="{% url 'docapp:list_employ_company' company_id=company.id %}">
+                <a href="{% url 'docapp:list_admin_lab' pk=object.id %}">
                     <button class="btn btn-primary btn-xs" data-toggle="tooltip"
                             data-placement="left" title="" data-original-title="Ver lista">
                         <i class="fa fa-list-alt" aria-hidden="true"></i>
@@ -38,24 +39,32 @@
             </td>
             <td>
                 <!-- Detail Link -->
-                <a href="{% url 'docapp:detail_company' company_id=company.id %}">
+                <a href="#">  {% comment %} TODO view and template to show laboratoriy profile {% endcomment %}
                     <button class="btn btn-primary btn-xs" data-toggle="tooltip"
                             data-placement="left" title="" data-original-title="Ver">
                         <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                 </a>
                 <!-- Update Link -->
-                <a href="{% url 'docapp:update_company' company_id=company.id %}">
+                <a href="{% url 'docapp:update_lab' lab_id=object.id %}">
                     <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                             data-placement="left" title="" data-original-title="Editar">
                         <i class="fa fa-edit" aria-hidden="true"></i>
                     </button>
                 </a>
+                <!-- Deactivate Link -->
+                <a href="{% url 'docapp:deactivate_lab' lab_id=object.id %}">
+                    <button class="btn btn-danger btn-xs" data-toggle="tooltip"
+                            data-placement="right" title="" data-original-title="Borrar">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+
+                    </button>
+                </a>
             </td>
+            <td>{% if object.is_active %} <span class="label label-success">Activo</span> {% else %} <span class="label label-danger">Desactivado</span> {% endif %}</td>
         </tr>
     {% empty %}
-        <h2>No se han registrado companies</h2>
+        <h1>No se encuentra ningun laboratorio registrado</h1>
     {% endfor %}
     </tbody>
 {% endblock %}
-
