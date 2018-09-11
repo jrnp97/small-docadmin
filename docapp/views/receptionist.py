@@ -287,7 +287,7 @@ update_lab = UpdateLab.as_view()
 
 class ListLab(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, ListView):
     model = Laboratorio
-    template_name = 'labapp/list/laboratory.html'
+    template_name = 'labapp/list/laboratory1.html'
 
 
 list_lab = ListLab.as_view()
