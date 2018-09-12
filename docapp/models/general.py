@@ -7,23 +7,28 @@ from labapp.models import Laboratorio
 
 User = get_user_model()
 
-class Eps (models.Model):
-    eps = models.CharField(max_length=50, null= False, blank=False)
+
+class Eps(models.Model):
+    eps = models.CharField(max_length=50, null=False, blank=False)
 
     def __str__(self):
         return self.eps
 
-class Afp (models.Model):
-    afp= models.CharField(max_length=50, null=False, blank=False)
+
+class Afp(models.Model):
+    afp = models.CharField(max_length=50, null=False, blank=False)
 
     def __str__(self):
         return self.afp
+
 
 class Arl(models.Model):
     arl = models.CharField(max_length=50, null=False, blank=False)
 
     def __str__(self):
         return self.arl
+
+
 # Models to manage company employs
 class Empresa(models.Model):
     """ Model to save company information """
@@ -57,11 +62,11 @@ class PacienteEmpresa(models.Model):
     )
 
     ESTRATOS = (
-        ('1','1'),
-        ('2','2'),
-        ('3','3'),
-        ('4','4'),
-        ('5','5'),
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
     )
 
     nombres = models.CharField(max_length=300, null=False, blank=False)
@@ -80,7 +85,7 @@ class PacienteEmpresa(models.Model):
     celular = models.PositiveIntegerField(null=False, blank=False)
     ocupacion = models.CharField(max_length=500, null=False, blank=False)
     posicion = models.CharField(max_length=500, null=False, blank=False)
-    estrato =models.CharField(max_length=20, choices=ESTRATOS, null=False, blank=False)
+    estrato = models.CharField(max_length=20, choices=ESTRATOS, null=False, blank=False)
     estudiante_en_entrenamiento = models.BooleanField(default=False)
     aprendiz_sena = models.BooleanField(default=False)
     numero_patronal = models.PositiveIntegerField(null=False, blank=False)

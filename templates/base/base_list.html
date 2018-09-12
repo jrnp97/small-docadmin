@@ -49,68 +49,24 @@
             {% endif %}
         </div>
         <hr>
-        <!-- DataTable Header -->
-        <div class="row">
-            <!-- Content show filter -->
-            <div class="col-sm-4 col-xs-12">
-                <div class="dataTables_length">
-                    <label>Mostrar
-                        <select name="example_length">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select> por pagina</label>
-                </div>
-            </div>
-            <!-- Export Options -->
-            <div class="col-sm-4 col-xs-12">
-                <div class="dataTables_length">
-                    <a disabled="" class="btn btn-default buttons-copy btn-sm" tabindex="0"><span>Copy</span></a>
-                    <a disabled="" class="btn btn-default buttons-csv buttons-html5 btn-sm"
-                       tabindex="0"><span>CSV</span></a>
-                    <a disabled="" class="btn btn-default buttons-excel buttons-html5 btn-sm"
-                       tabindex="0"><span>Excel</span></a>
-                    <a disabled="" class="btn btn-default buttons-pdf buttons-html5 btn-sm"
-                       tabindex="0"><span>PDF</span></a>
-                    <a disabled="" class="btn btn-default buttons-print btn-sm" tabindex="0"><span>Print</span></a>
-                </div>
-            </div>
-            <!-- Search filter -->
-            <div class="col-sm-4 col-xs-12">
-                <div class="dataTables_length">
-                    <div class="input-group custom-search-form">
-                        <input type="search" class="form-control" placeholder="search..">
-                        <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button"><span
-                                class="glyphicon glyphicon-search"></span></button>
-                    </span>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!-- DataTable Body -->
         <div class="row">
             <div class="table-responsive">
-                <table class="table table-bordered table-hover text-center">
+                <table class="table table-bordered table-hover text-center" id="TableMain">
                     {% block datatable_body %} {% endblock %}
                 </table>
             </div>
 
         </div>
-        <div class="row">
-            <div class="page-nation text-right">
-                <ul class="pagination pagination-large">
-                    <li class="disabled"><span>«</span></li>
-                    <li class="active"><span>1</span></li>
-                    <li><a href="#">2</a></li>
-                    <li class="disabled"><span>...</span></li>
-                    <li>
-                    <li><a rel="next" href="#">Next</a></li>
-                </ul>
-            </div>
-        </div>
 
     </div>
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $('#TableMain').DataTable({})
+        });
+    </script>
 {% endblock %}
 
