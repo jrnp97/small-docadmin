@@ -8,6 +8,27 @@ from labapp.models import Laboratorio
 User = get_user_model()
 
 
+class Eps(models.Model):
+    eps = models.CharField(max_length=50, null=False, blank=False)
+
+    def __str__(self):
+        return self.eps
+
+
+class Afp(models.Model):
+    afp = models.CharField(max_length=50, null=False, blank=False)
+
+    def __str__(self):
+        return self.afp
+
+
+class Arl(models.Model):
+    arl = models.CharField(max_length=50, null=False, blank=False)
+
+    def __str__(self):
+        return self.arl
+
+
 # Models to manage company employs
 class Empresa(models.Model):
     """ Model to save company information """
@@ -40,14 +61,22 @@ class PacienteEmpresa(models.Model):
         ('union libre', 'Union Libre')
     )
 
+    ESTRATOS = (
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
+    )
+
     nombres = models.CharField(max_length=300, null=False, blank=False)
     apellidos = models.CharField(max_length=300, null=False, blank=False)
     identificacion = models.PositiveIntegerField(unique=True)
     lugar_de_nacimiento = models.CharField(max_length=500, null=False, blank=False)
     fecha_de_nacimiento = models.DateField(null=False, blank=False)
-    eps = models.CharField(verbose_name='EPS', max_length=50, null=False, blank=False)
-    arl = models.CharField(verbose_name='ARL', max_length=50, null=False, blank=False)
-    fondo_pensiones = models.CharField(max_length=50, null=False, blank=False)
+    eps = models.ForeignKey(Eps, on_delete=models.CASCADE, null=True)
+    arl = models.ForeignKey(Arl, on_delete=models.CASCADE, null=True)
+    fondo_pensiones = models.ForeignKey(Afp, on_delete=models.CASCADE, null=True)
     sexo = models.CharField(max_length=15, choices=SEXOS, null=False, blank=False)
     estado_civil = models.CharField(max_length=20, choices=ESTADOS_CIVILES, null=False, blank=False)
     numero_de_hijos = models.PositiveIntegerField(default=0)
@@ -56,7 +85,7 @@ class PacienteEmpresa(models.Model):
     celular = models.PositiveIntegerField(null=False, blank=False)
     ocupacion = models.CharField(max_length=500, null=False, blank=False)
     posicion = models.CharField(max_length=500, null=False, blank=False)
-    estrato = models.PositiveIntegerField(null=False)
+    estrato = models.CharField(max_length=20, choices=ESTRATOS, null=False, blank=False)
     estudiante_en_entrenamiento = models.BooleanField(default=False)
     aprendiz_sena = models.BooleanField(default=False)
     numero_patronal = models.PositiveIntegerField(null=False, blank=False)

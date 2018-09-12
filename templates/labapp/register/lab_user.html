@@ -1,4 +1,6 @@
 {% extends 'base/base_dashboard.html' %}
+
+
 {% block title %} Registro Personal Lab {% endblock %}
 
 {% block content_header %}
@@ -15,7 +17,9 @@
                                 </span>
             </div>
         </form>
+
         <h1>Registro Usuario Laboratorio</h1>
+
         <small>Ingrese informacion correspondiente</small>
     </div>
 {% endblock %}
@@ -23,6 +27,7 @@
 {% block content_main %}
 
     <div class="row">
+
         <div class="col-sm-12">
 
             <div class="panel panel-bd">
@@ -38,6 +43,7 @@
                     <form class="col-sm-12" method="POST">
                         {% csrf_token %}
                         {% include 'includes/simple_register_form.html' with form=form %}
+
                         <div class="col-sm-12 reset-button">
                             <hr>
                             <button type="submit" class="btn btn-success">Guardar</button>
@@ -48,5 +54,6 @@
             </div>
         </div>
     </div>
+
 
 {% endblock %}

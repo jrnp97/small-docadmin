@@ -12,7 +12,7 @@ class RegisterLaboratory(LoginRequiredMixin, CheckLaboratory, BaseRegisterExamBe
                          FormViewPutExtra):
     model = Laboratory
     form_class = LabForm
-    template_name = 'docapp/register/exams/laboratory.html'
+    template_name = 'docapp/register/exams/laboratory1.html'
     extra_context = {'exam_name': 'laboratorio',
                      'parent_object_key': 'laboratory',
                      'formsets': [
