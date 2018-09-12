@@ -14,10 +14,11 @@ class Laboratorio(models.Model):
     direccion = models.CharField(max_length=100, null=False, blank=False)
     email_contacto = models.EmailField()
 
+    is_active = models.BooleanField(default=True, null=False, blank=True)
+
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(ReceptionProfile, null=False, blank=False,
-                                       related_name='laboratorios')
+    registrado_por = models.ForeignKey(ReceptionProfile, null=False, blank=False, related_name='laboratorios')
 
     class Meta:
         db_table = "laboratorios"
@@ -38,7 +39,7 @@ class LaboratoryProfile(models.Model):
         db_table = 'personal_labs'
 
     def __str__(self):
-        return self.user_id
+        return self.user_id.__str__()
 
 
 class LabExam(models.Model):

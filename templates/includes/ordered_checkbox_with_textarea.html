@@ -1,0 +1,24 @@
+<div class="row">
+    <ol>
+        {% for field in form %}
+            {% if field.field.widget.input_type == 'checkbox' %}
+                <div class="{% if col_size %}col-sm-4{% endif %} form-group">
+                    <li>{% include 'includes/fields/input_checkbox.html' %}</li>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </ol>
+</div>
+<hr>
+<div class="row">
+    {% for field in form %}
+        {% if not field.field.widget.input_type %}
+            <div class="form-group {% if col_size %}col-sm-6{% endif %}">
+                {% include 'includes/fields/textarea.html' with field=field area_row=3 %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% for field in form %}
+    {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
+{% endfor %}

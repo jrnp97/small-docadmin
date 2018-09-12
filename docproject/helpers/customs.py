@@ -69,6 +69,10 @@ class FormsetPostManager(object):
                 formsets_simple.update({formset.get('section_name'): value(self.request.POST)})
 
         temp = []
+        # Check parent form
+        val = not parent_form.is_valid()
+        temp.append(val)
+
         # Check simple formset
         for key, formset in formsets_simple.items():
             val = not formset.is_valid()
@@ -83,11 +87,8 @@ class FormsetPostManager(object):
                 messages.error(self.request, message=f"Error, Guardando {key} datos mal ingresados")
             temp.append(val)
 
-        # Check parent form
-        val = not parent_form.is_valid()
-        temp.append(val)
         if any(temp):
-            # Update formsets information (append errors and data)
+            # TODO Put inside request formsets information (append errors and data)
             return self.form_invalid(form=parent_form)
 
         object_parent = None
@@ -95,8 +96,7 @@ class FormsetPostManager(object):
             """ Used only on Register Case """
             object_parent = self._custom_save(form=parent_form)
             if not object_parent:
-                # Update formsets information (append errors and data)
-                self.extra_context = formsets_simple.update(formsets_with_files)
+                # TODO Put inside request formsets information (append errors and data)
                 return self.form_invalid(form=parent_form)
 
         response = super(FormsetPostManager, self).post(request, *args, **kwargs)
@@ -111,27 +111,31 @@ class FormsetPostManager(object):
             delete_parent_name = None
             for form in formset:
                 if len(form.cleaned_data) > 0:
-                    form.cleaned_data.pop('DELETE', None)  # Clean formset data
-                    data = form.cleaned_data.copy()
-                    if data.get(parent_name):
-                        data.update({parent_name: object_parent})
-                        delete_parent_name = parent_name
-                    if hasattr(formset.model, 'registrado_por'):
-                        # Extract related name from relationship
-                        alias = formset.model.registrado_por.field.related_model.user_id.field.related_query_name()
-                        data.update({'registrado_por': getattr(self.request.user, alias)})
-                    # Get other relationship fields on parent
-                    fields = None or [field for field in formset.model._meta.local_fields if
-                                      field.name in data.keys() and isinstance(field, ForeignKey) and data.get(
-                                          field.name) is None]
-                    if fields:
-                        # Get parent information -- Assuming that all fields have the same parent
-                        delete_parent_name = fields[0].name
-                        object_parent = parent_form.cleaned_data.get(delete_parent_name)
-                        for field in fields:  # Look value in parent_form
-                            data.update({field.name: object_parent})
+                    if not form.cleaned_data.pop('DELETE', None):
+                        data = form.cleaned_data.copy()
+                        if data.get(parent_name):
+                            data.update({parent_name: object_parent})
+                            delete_parent_name = parent_name
+                        if hasattr(formset.model, 'registrado_por'):
+                            # Extract related name from relationship
+                            alias = formset.model.registrado_por.field.related_model.user_id.field.related_query_name()
+                            data.update({'registrado_por': getattr(self.request.user, alias)})
+                        # Get all parent relations required on formset
+                        parent_fields = set([field.name for field in object_parent._meta.get_fields()])
+                        form_fields = set(form.cleaned_data.keys())
+                        # Clean id's
+                        try:
+                            parent_fields.remove('id')
+                            form_fields.remove('id')
+                        except KeyError:
+                            pass
 
-                    temp.append(formset.model(**data))
+                        fields = form_fields.intersection(parent_fields) or None
+                        if fields:
+                            for field in iter(fields):
+                                # Set value of field and insert to data suppose that field is a relationship
+                                data.update({field: getattr(object_parent, field)})
+                        temp.append(formset.model(**data))
             try:
                 with transaction.atomic():
                     if delete_parent_name:

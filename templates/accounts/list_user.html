@@ -1,155 +1,69 @@
-{% extends 'base/base_dashboard.html' %}
-{% load static %}
-{% load crispy_forms_tags %}
+{% extends 'base/base_list.html' %}
 
-{% block title %} Lista | Usuarios {% endblock %}
+{% block title %} Lista Usuarios {% endblock %}
 
+{% block page_title %}Lista de Usuarios {% endblock %}
+{% block small_message %} Lista de usuarios registrados en el sistema {% endblock %}
+{% block add_link %} {% url 'accounts:register_personal' %}{% endblock %}
+{% block add_link_label %} Empleado {% endblock %}
 
-{% block content_header %}
-    <div class="header-icon">
-        <i class="pe-7s-note2"></i>
-    </div>
-    <div class="header-title">
-        <h1>Lista Usuarios</h1>
-        <small>Lista de usuarios registrados</small>
-    </div>
-{% endblock %}
+{% block datatable_body %}
+<thead>
+<tr>
+    <th>Nombre de usuario</th>
+    <th>Nombres</th>
+    <th>Apellidos</th>
+    <th>Correo Electronico</th>
+    <th>Rol</th>
+    <th>Estado</th>
+    <th>Opciones</th>
+</tr>
+</thead>
+<tbody>
+{% for user in user_list %}
+    <tr>
+        <td>{{ user.username }}</td>
+        <td>{{ user.first_name }}</td>
+        <td>{{ user.last_name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.profile_type }}</td>
+        <td>
+            {% if user.is_active %}
+                <span class="label-success label label-default">Activo</span>
+            {% else %}
+                <span class="label-danger label label-default">Desactivado</span>
+            {% endif %}
+        </td>
+        <td>
+            <!-- Detail Link -->
+            <a href="{% url 'accounts:detail_personal' user_id=user.id %}">
+                <button class="btn btn-primary btn-xs" data-toggle="tooltip"
+                        data-placement="left" title="" data-original-title="Ver">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
+            </a>
+            <!-- Update Link -->
+            <a href="{% url 'accounts:update_personal' user_id=user.id %}">
+                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                        data-placement="left" title="" data-original-title="Editar">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
 
-{% block content_main %}
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-bd lobidisable">
-                <div class="panel-heading">
-                    <div class="btn-group">
-                        <a class="btn btn-success" href="{% url 'accounts:register_personal' %}"> <i class="fa fa-plus"></i>
-                            Empleado
-                        </a>
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <!-- header -->
-                    <div class="row">
-                        <div class="panel-header">
-                            <div class="col-sm-4 col-xs-12">
-                                <div class="dataTables_length">
-                                    <label>Mostrar
-                                        <select name="example_length">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select> Personal por pagina</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-12">
-                                <div class="dataTables_length">
-                                    <a class="btn btn-default buttons-copy btn-sm" tabindex="0">
-                                        <span>Copy</span></a>
-                                    <a class="btn btn-default buttons-csv buttons-html5 btn-sm"
-                                       tabindex="0"><span>CSV</span></a>
-                                    <a class="btn btn-default buttons-excel buttons-html5 btn-sm" tabindex="0"><span>Excel</span></a>
-                                    <a class="btn btn-default buttons-pdf buttons-html5 btn-sm"
-                                       tabindex="0"><span>PDF</span></a>
-                                    <a class="btn btn-default buttons-print btn-sm" tabindex="0"><span>Print</span></a>
+                </button>
+            </a>
+            <!-- Delete Link -->
+            <a href="{% url 'accounts:delete_personal' user_id=user.id %}">
+                <button class="btn btn-danger btn-xs" data-toggle="tooltip"
+                        data-placement="right" title="" data-original-title="Borrar">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
 
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-12">
-                                <div class="dataTables_length">
-                                    <div class="input-group custom-search-form">
-                                        <input type="search" class="form-control" placeholder="search..">
-                                        <span class="input-group-btn">
-                                                                  <button class="btn btn-primary" type="button">
-                                                                      <span class="glyphicon glyphicon-search"></span>
-                                                                  </button>
-                                                              </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                </button>
+            </a>
+        </td>
 
-                    </div>
-                    <!-- content -->
-                    {% if user_list %}
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover text-center">
-                                <thead class="success">
-                                <tr>
-                                    <th>Nombre de usuario</th>
-                                    <th>Nombres</th>
-                                    <th>Apellidos</th>
-                                    <th>Correo Electronico</th>
-                                    <th>Rol</th>
-                                    <th>Estado</th>
-                                    <th>Opciones</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                {% for user in user_list %}
-                                    <tr>
-                                        <td>{{ user.username }}</td>
-                                        <td>{{ user.first_name }}</td>
-                                        <td>{{ user.last_name }}</td>
-                                        <td>{{ user.email }}</td>
-                                        <td>{{ user.profile_type }}</td>
-                                        <td>
-                                            {% if user.is_active %}
-                                                <span class="label-success label label-default">Activo</span>
-                                            {% else %}
-                                                <span class="label-danger label label-default">Desactivado</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <!-- Detail Link -->
-                                            <a href="{% url 'accounts:detail_personal' user_id=user.id %}">
-                                                <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                                                        data-placement="left" title="" data-original-title="Ver">
-                                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                                </button>
-                                            </a>
-                                            <!-- Update Link -->
-                                            <a href="{% url 'accounts:update_personal' user_id=user.id %}">
-                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                                                        data-placement="left" title="" data-original-title="Editar">
-                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
-
-                                                </button>
-                                            </a>
-                                            <!-- Delete Link -->
-                                            <a href="{% url 'accounts:delete_personal' user_id=user.id %}">
-                                                <button class="btn btn-danger btn-xs" data-toggle="tooltip"
-                                                        data-placement="right" title="" data-original-title="Borrar">
-                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-
-                                                </button>
-                                            </a>
-                                        </td>
-
-                                    </tr>
-                                {% endfor %}
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="page-nation text-right">
-                            <ul class="pagination pagination-large">
-                                <li class="disabled"><span>«</span></li>
-                                <li class="active"><span>1</span></li>
-                                <li><a href="#">2</a></li>
-                                <li class="disabled"><span>...</span></li>
-                                <li>
-                                </li>
-                                <li><a rel="next" href="#">Next</a></li>
-                            </ul>
-                        </div>
-                    {% else %}
-                        <h2>No se han registrado usuarios</h2>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
+    </tr>
+{% empty %}
+    <h2>No se han registrado usuarios</h2>
+{% endfor %}
+</tbody>
 
 {% endblock %}
-

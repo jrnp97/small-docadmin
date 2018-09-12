@@ -37,6 +37,9 @@ urlpatterns = [
     url(r'^register/exam/(?P<person_id>[0-9]+)/$', views.register_employ_examination,
         name='register_employ_examination'),
     url(r'^examination/$', views.list_examination, name='list_examination'),
+    url(r'^examination/(?P<exam_id>[0-9]+)/$', views.detail_examination, name='detail_examination'),
+    url(r'^take/examination/(?P<exam_id>[0-9]+)/$', views.take_a_exam, name='take_a_exam'),
+    url(r'^my/examinations/$', views.own_examinations, name='own_examinations'),
 
     # Registro de examanes
     url(r'^register/(?P<exam_id>[0-9]+)/occupational/$', views.register_occupational, name='register_occupational'),
@@ -48,10 +51,11 @@ urlpatterns = [
     url(r'^visiometry/(?P<pk>[0-9]+)/$', views.update_visiometria, name='update_visiometria'),
 
     # Lab urls
-
     url(r'^labs/$', views.list_lab, name='list_lab'),
+    url(r'^lab/(?P<pk>[0-9]+)/admin/$', views.list_admin_lab, name='list_admin_lab'),
     url(r'^register/lab/$', views.register_lab, name='register_lab'),
     url(r'^update/lab/(?P<lab_id>[0-9])/$', views.update_lab, name='update_lab'),
+    url(r'^deactivate/lab/(?P<lab_id>[0-9])/$', views.deactivate_lab, name='deactivate_lab'),
     url(r'^register/lab/(?P<lab_id>[0-9]+)/admin/$', views.register_lab_admin, name='register_lab_admin'),
     url(r'^update/lab/admin/(?P<pk>[0-9]+)/$', views.update_lab_admin, name='update_lab_admin'),
 

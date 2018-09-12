@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tomar</title>
+</head>
+<body>
+{% if object %}
+    <form method="POST" action="{% url 'docapp:take_a_exam' exam_id=object.id %}">
+    {%  csrf_token %}
+        <h1>Realmente Quieres Tomar el proceso #{{ object.id }}?</h1>
+        <hr>
+        <div class="form-group">
+            <button class="btn/btn-primary" type="submit">Tomar</button>
+            <a href="{{ redirect_url }}">Cancelar</a>
+        </div>
+    </form>
+{% else %}
+    <h1>You don't must be here</h1>
+{% endif %}
+</body>
+</html>
