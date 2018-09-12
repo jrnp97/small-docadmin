@@ -33,45 +33,44 @@
                         <li><a href="{% url 'accounts:user_list' %}">Lista Empleados</a></li>
                     </ul>
                 </li>
+            {% endif %}
 
-                {% if request.user.profile_type == 'receptionista' %}
-                    <!-- Enterprise options -->
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-building"></i><span>Empresas</span>
-                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="{% url 'docapp:register_company' %}">Registrar</a></li>
-                            <li><a href="{% url 'docapp:list_company' %}">Listar</a></li>
-                        </ul>
-                    </li>
+            {% if request.user.profile_type == 'receptionista' %}
+                <!-- Enterprise options -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-building"></i><span>Empresas</span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{% url 'docapp:list_company' %}">Lista</a></li>
+                        <li><a href="{% url 'docapp:register_company' %}">Registrar</a></li>
+                    </ul>
+                </li>
 
-                    <!-- Lab options -->
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-flask"></i><span>Laboratorios</span>
-                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="{% url 'docapp:list_lab' %}">Lista</a></li>
-                            <li><a href="{% url 'docapp:register_lab' %}">Registrar</a></li>
-                        </ul>
-                    </li>
+                <!-- Lab options -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-flask"></i><span>Laboratorios</span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{% url 'docapp:list_lab' %}">Lista</a></li>
+                        <li><a href="{% url 'docapp:register_lab' %}">Registrar</a></li>
+                    </ul>
+                </li>
 
-                    <!-- Independent Employees options -->
-                    <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-user"></i><span>Independientes</span>
-                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="{% url 'docapp:register_employ_without_company' %}">Registrar</a></li>
-                            <li><a href="{% url 'docapp:list_independent_employ' %}">Lista</a></li>
-                        </ul>
-                    </li>
-                {% endif %}
-
+                <!-- Independent Employees options -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-user"></i><span>Independientes</span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{% url 'docapp:list_independent_employ' %}">Lista</a></li>
+                        <li><a href="{% url 'docapp:register_employ_without_company' %}">Registrar</a></li>
+                    </ul>
+                </li>
             {% endif %}
 
 
@@ -86,8 +85,10 @@
                         <li>
                             {% if request.user.profile_type == 'p_laboratorio' %}
                                 <a href="{% url 'labapp:list_examination_todo' %}">Disponibles</a>
-                            {% elif request.user.profile_type == 'doctor' or request.user.profile_type == 'receptionista' %}
+                            {% elif request.user.profile_type == 'doctor' %}
                                 <a href="{% url 'docapp:list_examination' %}">Pendientes</a>
+                            {% elif request.user.profile_type == 'receptionista' %}
+                                <a href="{% url 'docapp:list_examination' %}">Lista</a>
                             {% endif %}
                         </li>
                         {% if request.user.profile_type == 'p_laboratorio' %}
