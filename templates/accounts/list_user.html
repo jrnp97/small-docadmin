@@ -8,62 +8,60 @@
 {% block add_link_label %} Empleado {% endblock %}
 
 {% block datatable_body %}
-<thead>
-<tr>
-    <th>Nombre de usuario</th>
-    <th>Nombres</th>
-    <th>Apellidos</th>
-    <th>Correo Electronico</th>
-    <th>Rol</th>
-    <th>Estado</th>
-    <th>Opciones</th>
-</tr>
-</thead>
-<tbody>
-{% for user in user_list %}
+    <thead>
     <tr>
-        <td>{{ user.username }}</td>
-        <td>{{ user.first_name }}</td>
-        <td>{{ user.last_name }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.profile_type }}</td>
-        <td>
-            {% if user.is_active %}
-                <span class="label-success label label-default">Activo</span>
-            {% else %}
-                <span class="label-danger label label-default">Desactivado</span>
-            {% endif %}
-        </td>
-        <td>
-            <!-- Detail Link -->
-            <a href="{% url 'accounts:detail_personal' user_id=user.id %}">
-                <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                        data-placement="left" title="" data-original-title="Ver">
-                    <i class="fa fa-eye" aria-hidden="true"></i>
-                </button>
-            </a>
-            <!-- Update Link -->
-            <a href="{% url 'accounts:update_personal' user_id=user.id %}">
-                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                        data-placement="left" title="" data-original-title="Editar">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
-
-                </button>
-            </a>
-            <!-- Delete Link -->
-            <a href="{% url 'accounts:delete_personal' user_id=user.id %}">
-                <button class="btn btn-danger btn-xs" data-toggle="tooltip"
-                        data-placement="right" title="" data-original-title="Borrar">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-
-                </button>
-            </a>
-        </td>
-
+        <th>Nombre de usuario</th>
+        <th>Nombres</th>
+        <th>Apellidos</th>
+        <th>Correo Electronico</th>
+        <th>Rol</th>
+        <th>Estado</th>
+        <th>Opciones</th>
     </tr>
-{% empty %}
-    <h2>No se han registrado usuarios</h2>
-{% endfor %}
-</tbody>
+    </thead>
+    <tbody>
+    {% for user in user_list %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.profile_type }}</td>
+            <td>
+                {% if user.is_active %}
+                    <span class="label-success label label-default">Activo</span>
+                {% else %}
+                    <span class="label-danger label label-default">Desactivado</span>
+                {% endif %}
+            </td>
+            <td>
+                <!-- Detail Link -->
+                <a href="{% url 'accounts:detail_personal' user_id=user.id %}">
+                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
+                            data-placement="left" title="" data-original-title="Ver">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                </a>
+                <!-- Update Link -->
+                <a href="{% url 'accounts:update_personal' user_id=user.id %}">
+                    <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                            data-placement="left" title="" data-original-title="Editar">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+
+                    </button>
+                </a>
+                <!-- Delete Link -->
+                <a href="{% url 'accounts:delete_personal' user_id=user.id %}">
+                    <button class="btn btn-danger btn-xs" data-toggle="tooltip"
+                            data-placement="right" title="" data-original-title="Borrar">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+
+                    </button>
+                </a>
+            </td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
 
 {% endblock %}

@@ -38,8 +38,8 @@ urlpatterns = [
         name='register_employ_examination'),
     url(r'^examination/$', views.list_examination, name='list_examination'),
     url(r'^examination/(?P<exam_id>[0-9]+)/$', views.detail_examination, name='detail_examination'),
-    url(r'^take/examination/(?P<exam_id>[0-9]+)/$', views.take_a_exam, name='take_a_exam'),
-    url(r'^my/examinations/$', views.own_examinations, name='own_examinations'),
+    url(r'^take/examination/(?P<exam_id>[0-9]+)/$', views.take_a_exam, name='doctor_take_a_exam'),
+    url(r'^my/examinations/$', views.own_examinations, name='doctor_own_examinations'),
 
     # Registro de examanes
     url(r'^register/(?P<exam_id>[0-9]+)/occupational/$', views.register_occupational, name='register_occupational'),

@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('docapp.urls', namespace='docapp')),
     url(r'', include('accounts.urls', namespace='accounts')),
+    url(r'^labapp/', include('labapp.urls', namespace='labapp')),
 ]
 
 if settings.DEBUG:
