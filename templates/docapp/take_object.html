@@ -1,22 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Tomar</title>
-</head>
-<body>
-{% if object %}
-    <form method="POST" action="{% url 'docapp:take_a_exam' exam_id=object.id %}">
-    {%  csrf_token %}
-        <h1>Realmente Quieres Tomar el proceso #{{ object.id }}?</h1>
-        <hr>
-        <div class="form-group">
-            <button class="btn/btn-primary" type="submit">Tomar</button>
-            <a href="{{ redirect_url }}">Cancelar</a>
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+            <h1 class="modal-title">Asignacion Pacientes</h1>
         </div>
-    </form>
-{% else %}
-    <h1>You don't must be here</h1>
-{% endif %}
-</body>
-</html>
+        <div class="modal-body">
+            {% if object %}
+                <form method="POST" action="{% url 'docapp:take_a_exam' exam_id=object.id %}">
+                    {% csrf_token %}
+                    <h1>Realmente Quieres Tomar el proceso #{{ object.id }}?</h1>
+                    <hr>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type = "submit">Tomar Paciente</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            {% else %}
+                <h1>You don't must be here</h1>
+            {% endif %}
+        </div>
+    </div>

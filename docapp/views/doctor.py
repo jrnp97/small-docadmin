@@ -327,6 +327,7 @@ class RegisterVisiometry(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavi
     model = Visiometry
     form_class = VisioForm
     template_name = 'docapp/register/exams/visiometry.html'
+    success_url = reverse_lazy('docapp:list_examination')
     extra_context = {'exam_name': 'visiometria',
                      'parent_object_key': 'visiometria',
                      'formsets': [
