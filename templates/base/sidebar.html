@@ -20,6 +20,8 @@
             <li class="active">
                 <a href="{% url 'docapp:dashboard' %}"><i class="fa fa-hospital-o"></i><span>Dashboard</span>
                 </a>
+                <a href="#" data-toggle="modal" data-target="#myModal3"><i class="fa fa-search"></i><span>Consultar</span>
+                </a>
             </li>
             {% if request.user.is_superuser %}
                 <!-- Personal options -->
@@ -128,4 +130,5 @@
         </ul>
     </div> <!-- /.sidebar -->
 </aside>
+{% include 'docapp/modals/search.html' %}
 
