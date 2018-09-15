@@ -2,48 +2,85 @@
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                 aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title">Asignacion Pacientes</h1>
+        <h1 class="modal-title">Proceso #{{ exam.id }}</h1>
     </div>
     <div class="modal-body">
-        <h1>Proceso #{{ exam.id }}</h1>
-        <h2>Paciente: {{ exam.paciente_id }}</h2>
-        <hr>
-        <h3>Examenes normales a realizar</h3>
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>Paciente: {{ exam.paciente_id }}</h2>
+                <p><b>Identificacion: </b>{{ exam.paciente_id.identificacion }}</p>
+                <p><b>Tipo de examinacion:</b> {{ exam.tipo }} </p>
+                <small><span class="label label-warning-outline">No registrado</span> <span
+                        class="label label-success-outline">Registrado</span></small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Examenes comunes a realizar</h3>
+                <ul>
+                    {% if exam.do_exam_altura %}
+                        <li>
+                        <span class="label {% if exam.altura %} label-success-outline {% else %} label-warning-outline {% endif %}">
+                            <a href="{% url 'docapp:register_altura' exam_id=exam.id %}">Registrar Resultados Altura</a>
+                        </span>
+                        </li>
+                    {% endif %}
+                    {% if exam.do_exam_audiologia %}
 
-        <ul>
+                        <li>
+                        <span class="label {% if exam.audiologia %} label-success-outline {% else %} label-warning-outline {% endif %}">
+                            <a href="{% url 'docapp:register_audiology' exam_id=exam.id %}">Registrar Resultados Audiologia</a>
+                        </span>
+                        </li>
+                    {% endif %}
+                    {% if exam.do_exam_visiometria %}
 
-            {% if exam.do_exam_altura %}
-                <li><a href="{% url 'docapp:register_altura' exam_id=exam.id %}">Registrar Resultados Altura</a></li>
-            {% endif %}
+                        <li>
+                        <span class="label {% if exam.visiometria %} label-success-outline {% else %} label-warning-outline {% endif %}">
+                            <a href="{% url 'docapp:register_visiometry' exam_id=exam.id %}">Registrar Resultados Visiometria</a>
+                        </span>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
 
-            {% if exam.do_exam_audiologia %}
-                <li><a href="{% url 'docapp:register_audiology' exam_id=exam.id %}">Registrar Resultados Audiologia</a>
-                </li>
-            {% endif %}
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Examenes internos a realizar</h3>
+                {% if exam.examenes_internos.all %}
+                    <ul>
+                        {% for examen in exam.examenes_internos.all %}
+                            <li>
+                        <span class="label {% if examen.resultados != '' %} label-success-outline {% else %} label-warning-outline {% endif %}">
+                                <a href="{% url 'docapp:register_simple_exam' pk=examen.id %}">Registrar resultados
+                                de {{ examen.nombre }}</a>
+                        </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <span class="pull-right">
+                    <a href="{% url 'docapp:register_occupational' exam_id=exam.id %}">
+                    <button class="btn btn-primary">Registrar Resumen del proceso <i
+                            class="fa fa-drivers-license-o"></i></button></a>
+                </span>
+            </div>
+        </div>
+        <hr class="divider">
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="#">
+                    <button class="btn btn-primary">Terminar Examinación <i class="fa fa-send"></i></button>
+                </a>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
 
-            {% if exam.do_exam_visiometria %}
-                <li><a href="{% url 'docapp:register_visiometry' exam_id=exam.id %}">Registrar Resultados
-                    Visiometria</a></li>
-            {% endif %}
-
-        </ul>
-
-        <hr>
-        <h3>Examenes simples a realizar</h3>
-        {% if exam.examenes_internos.all %}
-            <ul>
-                {% for examen in exam.examenes_internos.all %}
-                    <li><a href="{% url 'docapp:register_simple_exam' pk=examen.id %}">Registrar resultados de {{ examen.nombre }}</a></li>
-                    {% comment %} TODO View to register simple_exam {% endcomment %}
-                {% endfor %}
-            </ul>
-        {% endif %}
-        <hr>
-        <a href="{% url 'docapp:register_occupational' exam_id=exam.id %}">Registrar Resumen del proceso</a>
-        <hr>
-
-        <button class="btn btn-primary" href="#">Terminar Examinación</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
     </div>
 </div>
 </div>

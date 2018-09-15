@@ -12,6 +12,7 @@
     <thead>
     <tr>
         <th>Nombre</th>
+        <th># Empleados</th>
         <th>Empleados</th>
         <th>Opciones</th>
     </tr>
@@ -20,36 +21,25 @@
     {% for company in company_list %}
         <tr>
             <td>{{ company }}</td>
-            <td>
-                <!-- Register Link -->
+            <td>{{ company.empleados.all|length }}</td>
+            <td> {# Employees option #}
                 <a href="{% url 'docapp:register_employ_from_company' company_id=company.id %}">
-                    <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                            data-placement="left" title="" data-original-title="Registrar">
-                        <i class="fa fa-pencil" aria-hidden="true"></i>
-                    </button>
+                    <button class="btn btn-warning btn-xs" data-toggle="tooltip">
+                        Registro <i class="fa fa-pencil" aria-hidden="true"></i></button>
                 </a>
-                <!-- List Link -->
                 <a href="{% url 'docapp:list_employ_company' company_id=company.id %}">
-                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                            data-placement="left" title="" data-original-title="Ver lista">
-                        <i class="fa fa-list-alt" aria-hidden="true"></i>
-                    </button>
+                    <button class="btn btn-primary btn-xs" data-toggle="tooltip">
+                        <i class="fa fa-list-alt" aria-hidden="true"></i> Lista</button>
                 </a>
             </td>
-            <td>
-                <!-- Detail Link -->
+            <td> {# Company option #}
                 <a href="{% url 'docapp:detail_company' company_id=company.id %}">
-                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                            data-placement="left" title="" data-original-title="Ver">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
+                    <button class="btn btn-primary btn-xs" data-toggle="tooltip">
+                        Ver <i class="fa fa-eye" aria-hidden="true"></i></button>
                 </a>
-                <!-- Update Link -->
                 <a href="{% url 'docapp:update_company' company_id=company.id %}">
-                    <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                            data-placement="left" title="" data-original-title="Editar">
-                        <i class="fa fa-edit" aria-hidden="true"></i>
-                    </button>
+                    <button class="btn btn-warning btn-xs" data-toggle="tooltip">
+                        <i class="fa fa-edit" aria-hidden="true"></i> Editar</button>
                 </a>
             </td>
         </tr>

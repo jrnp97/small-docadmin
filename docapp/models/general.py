@@ -149,10 +149,22 @@ class Examinacion(models.Model):
         return self.tipo
 
     def get_process(self):
-        # TODO CHANGE
-        examenes_done = [hasattr(self, 'visiometria'), hasattr(self, 'audiologia'),
-                         hasattr(self, 'ocupacional'), hasattr(self, 'laboratorio')]
-        return examenes_done.count(True) * 25
+        normal_exams = [hasattr(self, 'ocupacional')]
+        if self.do_exam_altura:
+            normal_exams.append(hasattr(self, 'altura'))
+        if self.do_exam_audiologia:
+            normal_exams.append(hasattr(self, 'audiologia'))
+        if self.do_exam_visiometria:
+            normal_exams.append(hasattr(self, 'visiometria'))
+
+        inter_exams = []
+        for inter in self.examenes_internos.all():
+            if inter.resultados != '':
+                inter_exams.append(True)
+
+        percentage = float(100)/(len(self.examenes_internos.all()) + len(normal_exams))
+
+        return float("{:.2f}".format((len(inter_exams) + normal_exams.count(True)) * percentage))
 
     def finished(self):
         # TODO CHANGE

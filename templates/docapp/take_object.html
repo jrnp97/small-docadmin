@@ -8,7 +8,7 @@
             {% if object %}
                 <form method="POST" action="{% url 'docapp:doctor_take_a_exam' exam_id=object.id %}">
                     {% csrf_token %}
-                    <h1>Realmente Quieres Tomar el proceso #{{ object.id }}?</h1>
+                    <h2>¿Realmente Quieres Tomar el proceso #{{ object.id }}?</h2>
                     <hr>
                     <div class="form-group">
                         <button class="btn btn-primary" type = "submit">Tomar Proceso</button>

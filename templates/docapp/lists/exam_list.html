@@ -52,16 +52,7 @@
                 {% endif %}
             </td>
             <td> {{ exam.fecha_de_creacion }} </td>
-            <td> {{ exam.estado }}
-                {% comment %}{% if request.user.doctor_profile %}
-                                            <a href="">
-                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                                                        data-placement="left" title="" data-original-title="Editar">
-                                                    <i class="fa fa-edit" aria-hidden="true"></i>
-                                                </button>
-                                            </a>
-                                            {% endif %} {% endcomment %}
-            </td>
+            <td> {{ exam.estado }} </td>
             <td>
                 <div class="progress progress-lg">
                     <div class="progress-bar
@@ -79,23 +70,16 @@
             {% if request.user.doctor_profile or request.user.laboratory_profile %}
                 <td>
                     {% if request.path == '/examination/' %}
-                        <a href="{% url 'docapp:doctor_take_a_exam' exam_id=exam.id %}">
-                            <button type="button" class="btn btn-success">
-                                Tomar Examinacion
-                            </button>
-                        </a>
+
+                        <button type="button" class="btn btn-success" data-toggle="modal"
+                                href="{% url 'docapp:doctor_take_a_exam' exam_id=exam.id %}"
+                                data-target="#take_process">Tomar Examinacion
+                        </button>
                     {% elif request.path == '/my/examinations/' %}
-                        <ul style="list-style: none;">
-                            <li>
-
-                                <button type="button" class="btn btn-success" data-toggle="modal"
-                                        href="{% url 'docapp:detail_examination' exam_id=exam.id %}"
-                                        data-target="#myModal1">Registar Resultados
-                                </button>
-
-                            </li>
-
-                        </ul>
+                        <button type="button" class="btn btn-success" data-toggle="modal"
+                                href="{% url 'docapp:detail_examination' exam_id=exam.id %}"
+                                data-target="#register_result">Registar Resultados
+                        </button>
                     {% endif %}
                 </td>
             {% endif %}

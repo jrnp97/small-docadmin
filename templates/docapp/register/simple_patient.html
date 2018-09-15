@@ -1,0 +1,37 @@
+{% extends 'base/base_dashboard.html' %}
+
+{% block title %} Registro Paciente {% endblock %}
+
+{% block content_header %}
+    <div class="header-icon">
+        <i class="pe-7s-box1"></i>
+    </div>
+    <div class="header-title">
+        <h1>Registro Paciente Particular</h1>
+        <small>Ingrese informacion correspondiente</small>
+    </div>
+{% endblock %}
+
+{% block content_main %}
+    <div class="row">
+        <!-- Form controls -->
+        <div class="col-sm-12">
+            <div class="panel panel-bd">
+                <div class="panel-heading">
+                    <div class="btn-group">Registro</div>
+                </div>
+                <div class="panel-body">
+                    <form class="col-sm-12" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% include 'includes/simple_register_form.html' with form=form %}
+                        <div class="col-sm-12 reset-button">
+                            <hr>
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
