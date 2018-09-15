@@ -12,11 +12,11 @@ from docapp.models import (Audiology,
 class AudioForm(forms.ModelForm):
     class Meta:
         model = Audiology
-        exclude = ('ultima_vez_modificado', 'tipo_examen', )
+        exclude = ('ultima_vez_modificado', 'examinacion_id',)
 
     def save(self, commit=True):
         instance = super(AudioForm, self).save(commit=False)
-        instance.tipo_examen = self.exam_type
+        instance.examinacion_id = self.exam_type
         if commit:
             instance.save()
         return instance

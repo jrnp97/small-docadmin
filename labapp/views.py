@@ -1,69 +1,46 @@
-from django.shortcuts import redirect
-
-
-
-"""from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import UpdateView
-from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic import FormView, ListView, TemplateView
 from django.core.urlresolvers import reverse_lazy
 
+from docproject.helpers.chekers import CheckLaboratory
 
-class RegisterLaboratory(LoginRequiredMixin, CheckLaboratory, BaseRegisterExamBehavior, FormsetPostManager,
-                         FormViewPutExtra):
-    model = Laboratory
-    form_class = LabForm
-    template_name = 'docapp/register/exams/laboratory1.html'
-    extra_context = {'exam_name': 'laboratorio',
-                     'parent_object_key': 'laboratory',
-                     'formsets': [
-                         {'section_name': 'blood',
-                          'title': 'Examen de Sangre',
-                          'form': blood_section},
-                         {'section_name': 'exams',
-                          'title': 'Examenes',
-                          'form': exams_section}
-                     ]
-                     }
-
-    def _custom_save(self, form):
-        exam_type = self.get_object()
-        form.create_by = self.request.user.laboratory_profile
-        form.exam_type = exam_type
-        instance = form.save()
-        if instance:
-            messages.success(self.request, message=f"Examen de {self.extra_context.get('exam_name')}"
-                                                   f" del proceso #{exam_type.id} "
-                                                   f"registrado exitosamente")
-        return instance
+from labapp.forms import BaseLabUserCreateForm
+from docapp.models import Examinacion
 
 
-register_laboratory = RegisterLaboratory.as_view()
+class RegisterPersonal(LoginRequiredMixin, CheckLaboratory, SuccessMessageMixin, FormView):
+    form_class = BaseLabUserCreateForm
+    success_url = reverse_lazy('docapp:dashboard')
+    success_message = 'Personal de laboratorio registrado exitosamente'
 
 
-class UpdateLaboratory(LoginRequiredMixin, CheckLaboratory, BaseExamUpdateBehavior, FormsetPostManager, UpdateView):
-    model = Laboratory
-    form_class = LabForm
-    success_url = reverse_lazy('docapp:exam_list')
-    extra_context = {'exam_name': 'laboratorio',
-                     'parent_object_key': 'laboratory',
-                     'formsets': [
-                         {'section_name': 'blood',
-                          'title': 'Examen de Sangre',
-                          'form': blood_section},
-                         {'section_name': 'exams',
-                          'title': 'Examenes',
-                          'form': exams_section}
-                     ]
-                     }
-    template_name = 'docapp/register/TODO Make labs templates'
-
-    def form_valid(self, form):
-        # Overwrite form_valid to add missing information
-        object_saved = self.get_object()
-        form.create_by = self.request.user.laboratory_profile
-        form.exam_type = object_saved.exam_type
-        return super(BaseExamUpdateBehavior, self).form_valid(form)
+register_personal = RegisterPersonal.as_view()
 
 
-update_laboratory = UpdateLaboratory.as_view()
-"""
+class ListExaminationWithouLab(LoginRequiredMixin, CheckLaboratory, ListView):
+    model = Examinacion
+    template_name = 'docapp/lists/exam_list.html'
+
+    def get_queryset(self):
+        # queryset = Examinacion.objects.filter(laboratorio_id=None)
+        user_lab = self.request.user.laboratory_profile.laboratorio_id
+        return self.model._default_manager.filter(laboratorio_id=user_lab)
+
+
+list_examination_todo = ListExaminationWithouLab.as_view()
+
+
+# Viws to process a examination process
+class ListOwnExams(LoginRequiredMixin, CheckLaboratory, TemplateView):
+    template_name = 'docapp/lists/exam_list.html'
+
+    def get_context_data(self, **kwargs):
+        exams = None
+        if hasattr(self.request.user.laboratory_profile, 'examinaciones'):
+            exams = self.request.user.laboratory_profile.examinaciones.all()
+        kwargs.update({'exam_list': exams})
+        return super(ListOwnExams, self).get_context_data(**kwargs)
+
+
+lab_own_examinations = ListOwnExams.as_view()

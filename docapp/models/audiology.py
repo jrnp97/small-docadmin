@@ -181,7 +181,7 @@ class Audiometria(models.Model):
     otoscopia_ojo_derecho = models.CharField(max_length=10, choices=ESTADO, default='normal', null=False, blank=False)
     observaciones_otoscopia = models.TextField()
 
-    resultados_oidos = models.ImageField(upload_to='otoscopia/%Y/%m/%d/')
+    resultados_oidos = models.ImageField(upload_to='otoscopia/%Y/%m/%d/', null=True, blank=True)
 
     interpretaciones_oido_derecho = models.TextField(null=False, blank=False)
     interpretaciones_oido_izquierdo = models.TextField(null=False, blank=False)

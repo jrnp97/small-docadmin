@@ -3,7 +3,7 @@
     {% for form in formset.form.forms %}
         <div id="{{ formset.form.prefix }}-{{ forloop.counter0 }}" {% if forloop.last %}
              class="last_form" {% endif %}>
-            <h4>Accidente #{{ forloop.counter }}</h4>
+{#            <h4>Accidente #{{ forloop.counter }}</h4>#}
             {% include 'includes/simple_register_form.html' with large=1 form=form %}
         </div>
         <hr>

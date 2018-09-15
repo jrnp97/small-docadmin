@@ -36,6 +36,8 @@ from docapp.forms.doctor.occupational import (OcupaForm,
 
 from docapp.forms.doctor.altura import AlturaForm, question_section
 
+from docapp.forms.doctor.simple_exam import SimpleExamForm
+
 from .receptionist import (CompanyForm, PacienteEmpresaForm, PacienteParticularForm,
                            ExaminacionCreateForm, lab_exam_inlineformset, simple_exam_inlineformset,
                            AntLaboralesForm, hazards_inlineformset, accident_inlineformset)

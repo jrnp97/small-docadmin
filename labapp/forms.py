@@ -15,7 +15,7 @@ class BaseLabUserCreateForm(BaseUserForm):
         instance = super(BaseUserForm, self).save(commit=False)
         # Set clean password to user to save
         instance.password = self.cleaned_data.get('password2')
-        instance.profile_type = 'laboratorio'  # Set laboratory profile
+        instance.profile_type = 'p_laboratorio'  # Set laboratory profile
         if commit:
             instance.save()
             # Save profile now

@@ -6,12 +6,12 @@
         </div>
         <div class="modal-body">
             {% if object %}
-                <form method="POST" action="{% url 'docapp:take_a_exam' exam_id=object.id %}">
+                <form method="POST" action="{% url 'docapp:doctor_take_a_exam' exam_id=object.id %}">
                     {% csrf_token %}
                     <h1>Realmente Quieres Tomar el proceso #{{ object.id }}?</h1>
                     <hr>
                     <div class="form-group">
-                        <button class="btn btn-primary" type = "submit">Tomar Paciente</button>
+                        <button class="btn btn-primary" type = "submit">Tomar Proceso</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </form>

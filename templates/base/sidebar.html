@@ -28,107 +28,82 @@
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-user-circle-o"></i><span>Recursos Humanos</span>
-                        <span class="pull-right-container">
-                                            <i class="fa fa-angle-left pull-right"></i>
-                                        </span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="{% url 'accounts:register_personal' %}">Añadir Empleado</a></li>
                         <li><a href="{% url 'accounts:user_list' %}">Lista Empleados</a></li>
-
                     </ul>
                 </li>
             {% endif %}
-            {% if request.user.profile_type == 'receptionista' or request.user.is_superuser %}
+
+            {% if request.user.profile_type == 'receptionista' %}
                 <!-- Enterprise options -->
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-building"></i><span>Empresas</span>
-                        <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
                     <ul class="treeview-menu">
+                        <li><a href="{% url 'docapp:list_company' %}">Lista</a></li>
                         <li><a href="{% url 'docapp:register_company' %}">Registrar</a></li>
-                        <li><a href="{% url 'docapp:list_company' %}">Listar</a></li>
                     </ul>
                 </li>
-                <!-- Laboratorios -->
+
+                <!-- Lab options -->
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-flask"></i><span>Laboratorios</span>
-                        <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="{% url 'docapp:list_lab' %}">Lista</a></li>
                         <li><a href="{% url 'docapp:register_lab' %}">Registrar</a></li>
                     </ul>
                 </li>
-                <!-- Employees options -->
+
+                <!-- Independent Employees options -->
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-user"></i><span>Independientes</span>
-                        <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{% url 'docapp:register_employ_without_company' %}">Registrar</a></li>
                         <li><a href="{% url 'docapp:list_independent_employ' %}">Lista</a></li>
+                        <li><a href="{% url 'docapp:register_employ_without_company' %}">Registrar</a></li>
                     </ul>
                 </li>
             {% endif %}
 
-            {% if request.user.profile_type == 'p_laboratorio' or request.user.profile_type == 'doctor' or request.user.profile_type == 'receptionista' or request.user.is_superuser%}
+
+            {% if request.user.profile_type %}
                 <!-- Examinations-->
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-flask"></i><span>Examinaciones</span>
-                        <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{% url 'docapp:list_examination' %}">Lista</a></li>
-                        {% if request.user.profile_type == 'p_laboratorio' or request.user.profile_type == 'doctor' %}
-                            <li><a href="{% url 'docapp:own_examinations' %}">Pendientes</a></li>
+                        <li>
+                            {% if request.user.profile_type == 'p_laboratorio' %}
+                                <a href="{% url 'labapp:list_examination_todo' %}">Disponibles</a>
+                            {% elif request.user.profile_type == 'doctor' %}
+                                <a href="{% url 'docapp:list_examination' %}">Sin Asignar</a>
+                            {% elif request.user.profile_type == 'receptionista' %}
+                                <a href="{% url 'docapp:list_examination' %}">Lista</a>
+                            {% endif %}
+                        </li>
+                        {% if request.user.profile_type == 'p_laboratorio' %}
+                            <li><a href="{% url 'labapp:lab_own_examinations' %}">Pendientes</a></li>
+                        {% elif request.user.profile_type == 'doctor' %}
+                            <li><a href="{% url 'docapp:doctor_own_examinations' %}">Pendientes</a></li>
                         {% endif %}
                     </ul>
                 </li>
             {% endif %}
-            {% if request.user.profile_type == 'p_laboratorio' %}
-                <!-- Laboratorio -->
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-flask"></i><span>Laboratorio</span>
-                        <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="#">Ver resultados</a></li>
-                        <li><a href="{% url 'docapp:list_examination' %}">Guardar resultados</a></li>
-                    </ul>
-                </li>
-            {% endif %}
-            {% if request.user.profile_type == 'doctor' %}
-                <!-- Registrar examenes -->
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-user-md"></i><span>Registro Examenes</span>
-                        <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{% url 'docapp:list_examination' %}">Listar</a></li>
-                    </ul>
-                </li>
-            {% endif %}
+
         </ul>
-    </div> <!-- /.sidebar -->
+    </div>
 </aside>
 {% include 'docapp/modals/search.html' %}
 
