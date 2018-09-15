@@ -62,11 +62,12 @@ class FormsetPostManager(object):
 
         for formset in self.extra_context.get('formsets'):
             """ Validating if value is a InlineFormSet and don't have initial data """
-            value = formset.get('form')
-            if formset.get('has_files'):
-                formsets_with_files.update({formset.get('section_name'): value(self.request.POST, self.request.FILES)})
-            else:
-                formsets_simple.update({formset.get('section_name'): value(self.request.POST)})
+            if formset:
+                value = formset.get('form')
+                if formset.get('has_files'):
+                    formsets_with_files.update({formset.get('section_name'): value(self.request.POST, self.request.FILES)})
+                else:
+                    formsets_simple.update({formset.get('section_name'): value(self.request.POST)})
 
         temp = []
         # Check parent form
@@ -180,7 +181,7 @@ class BaseRegisterExamBehavior:
     pk_url_kwarg = 'exam_id'
     model_to_filter = Examinacion
     context_object_2_name = 'exam'
-    success_url = reverse_lazy('docapp:exam_list')
+    success_url = reverse_lazy('docapp:list_examination')
 
     def _custom_save(self, form):
         exam_type = self.get_object()
@@ -200,7 +201,7 @@ class BaseRegisterExamBehavior:
         except ObjectDoesNotExist:
             pass
         else:
-            child_name = self.extra_context.get('parent_object_key')
+            child_name = self.extra_context.get('child_name')
             if hasattr(exam, child_name):
                 messages.info(request,
                               message=f"Los resultados de {self.extra_context.get('exam_name')} estan registrados"
@@ -213,13 +214,13 @@ class BaseRegisterExamBehavior:
 
 # Update exams
 class BaseExamUpdateBehavior:
-    success_url = reverse_lazy('docapp:exam_list')
+    success_url = reverse_lazy('docapp:list_examination')
 
     def form_valid(self, form):
         """ Overwrite form_valid to add missing information"""
         object_saved = self.get_object()
         form.create_by = self.request.user.doctor_profile
-        form.exam_type = object_saved.tipo_examen
+        form.exam_type = object_saved.examinacion_id
         return super(BaseExamUpdateBehavior, self).form_valid(form)
 
     def get_context_data(self, **kwargs):

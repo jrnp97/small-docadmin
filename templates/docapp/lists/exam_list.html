@@ -33,12 +33,12 @@
                     </button>
                 </a>
                 {% if request.user.doctor_profile %}
-                <a href="{% url 'docapp:register_employ_antecedent' person_id=exam.paciente_id_id %}">
-                    <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                            data-placement="left" title="" data-original-title="Registar Antecedentes">
-                        <i class="fa fa-edit" aria-hidden="true"></i>
-                    </button>
-                </a>
+                    <a href="{% url 'docapp:register_employ_antecedent' person_id=exam.paciente_id_id %}">
+                        <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                data-placement="left" title="" data-original-title="Registar Antecedentes">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </button>
+                    </a>
                 {% endif %}
             </td>
             <td> {{ exam.registrado_por.user_id }}
@@ -79,12 +79,19 @@
             {% if request.user.doctor_profile or request.user.laboratory_profile %}
                 <td>
                     {% if request.path == '/examination/' %}
-                        <button type="button" class="btn btn-success" data-toggle="modal" href="{% url 'docapp:take_a_exam' exam_id=exam.id %}" data-target="#myModal">Tomar Paciente</button>
+                        <a href="{% url 'docapp:doctor_take_a_exam' exam_id=exam.id %}">
+                            <button type="button" class="btn btn-success">
+                                Tomar Examinacion
+                            </button>
+                        </a>
                     {% elif request.path == '/my/examinations/' %}
                         <ul style="list-style: none;">
                             <li>
 
-                                <button type="button" class="btn btn-success" data-toggle="modal" href="{% url 'docapp:detail_examination' exam_id=exam.id %}" data-target="#myModal1">Registar Resultados</button>
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                        href="{% url 'docapp:detail_examination' exam_id=exam.id %}"
+                                        data-target="#myModal1">Registar Resultados
+                                </button>
 
                             </li>
 
@@ -97,8 +104,8 @@
     {% endfor %}
     </tbody>
 
-{% include 'docapp/modals/takepatient.html' %}
-{% include 'docapp/modals/registerresult.html' %}
+    {% include 'docapp/modals/takepatient.html' %}
+    {% include 'docapp/modals/registerresult.html' %}
 
 
 {% endblock %}

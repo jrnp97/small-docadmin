@@ -45,10 +45,14 @@ urlpatterns = [
     url(r'^register/(?P<exam_id>[0-9]+)/occupational/$', views.register_occupational, name='register_occupational'),
     url(r'^register/(?P<exam_id>[0-9]+)/audiology/$', views.register_audiology, name='register_audiology'),
     url(r'^register/(?P<exam_id>[0-9]+)/visiometry/$', views.register_visiometry, name='register_visiometry'),
+    url(r'^register/(?P<exam_id>[0-9]+)/altura/$', views.register_altura, name='register_altura'),
+
     # Update exams
     url(r'^occupational/(?P<pk>[0-9]+)/$', views.update_ocupacional, name='update_ocupacional'),
     url(r'^audiology/(?P<pk>[0-9]+)/$', views.update_audiologia, name='update_audiologia'),
     url(r'^visiometry/(?P<pk>[0-9]+)/$', views.update_visiometria, name='update_visiometria'),
+    url(r'^altura/(?P<pk>[0-9]+)/$', views.update_altura, name='update_altura'),
+    url(r'^simple_exam/(?P<pk>[0-9]+)/$', views.register_simple_exam, name='register_simple_exam'),
 
     # Lab urls
     url(r'^labs/$', views.list_lab, name='list_lab'),

@@ -8,25 +8,25 @@ from labapp.models import Laboratorio
 User = get_user_model()
 
 
-class Eps(models.Model):
-    eps = models.CharField(max_length=50, null=False, blank=False)
-
-    def __str__(self):
-        return self.eps
-
-
-class Afp(models.Model):
-    afp = models.CharField(max_length=50, null=False, blank=False)
-
-    def __str__(self):
-        return self.afp
-
-
-class Arl(models.Model):
-    arl = models.CharField(max_length=50, null=False, blank=False)
-
-    def __str__(self):
-        return self.arl
+# class Eps(models.Model):
+#     eps = models.CharField(max_length=50, null=False, blank=False)
+#
+#     def __str__(self):
+#         return self.eps
+#
+#
+# class Afp(models.Model):
+#     afp = models.CharField(max_length=50, null=False, blank=False)
+#
+#     def __str__(self):
+#         return self.afp
+#
+#
+# class Arl(models.Model):
+#     arl = models.CharField(max_length=50, null=False, blank=False)
+#
+#     def __str__(self):
+#         return self.arl
 
 
 # Models to manage company employs
@@ -74,9 +74,12 @@ class PacienteEmpresa(models.Model):
     identificacion = models.PositiveIntegerField(unique=True)
     lugar_de_nacimiento = models.CharField(max_length=500, null=False, blank=False)
     fecha_de_nacimiento = models.DateField(null=False, blank=False)
-    eps = models.ForeignKey(Eps, on_delete=models.CASCADE, null=True)
-    arl = models.ForeignKey(Arl, on_delete=models.CASCADE, null=True)
-    fondo_pensiones = models.ForeignKey(Afp, on_delete=models.CASCADE, null=True)
+    # eps = models.ForeignKey(Eps, on_delete=models.CASCADE, null=True)
+    # arl = models.ForeignKey(Arl, on_delete=models.CASCADE, null=True)
+    # fondo_pensiones = models.ForeignKey(Afp, on_delete=models.CASCADE, null=True)
+    eps = models.CharField(max_length=100)
+    arl = models.CharField(max_length=100)
+    fondo_pensiones = models.CharField(max_length=100, null=True, blank=True)
     sexo = models.CharField(max_length=15, choices=SEXOS, null=False, blank=False)
     estado_civil = models.CharField(max_length=20, choices=ESTADOS_CIVILES, null=False, blank=False)
     numero_de_hijos = models.PositiveIntegerField(default=0)
@@ -239,7 +242,6 @@ class SimpleExam(models.Model):
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     registrado_por = models.ForeignKey(ReceptionProfile, null=False, blank=False, on_delete=models.PROTECT,
                                        related_name='examenes_internos')
-
     resultados = models.TextField(default='', null=False, blank=True)
 
 

@@ -1,14 +1,15 @@
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import UpdateView, DetailView, TemplateView
-from django.core.exceptions import ObjectDoesNotExist
+from django.views.generic import UpdateView, DetailView, TemplateView, CreateView
+from django.core.exceptions import ObjectDoesNotExist, SuspiciousOperation
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 
 from docapp.models import (PacienteEmpresa, Occupational, Audiology, Visiometry, Altura, AntecedentesLaborales, Riesgos,
-                           Accidentes)
+                           Accidentes, SimpleExam)
 from docapp.forms import (OcupaForm,
                           ant_familiares_section,
+                          ant_gineco_section,
                           revision_sistemas_section,
                           biometria_section,
                           habito_alcohol_section, habito_cigarillo_section, habito_droga_section,
@@ -17,7 +18,11 @@ from docapp.forms import (OcupaForm,
                           examen_fisico_columna_section, examen_fisico_corazon_section, examen_fisico_cuello_section,
                           examen_fisico_extremidades_section, examen_fisico_genito_unitario_section,
                           examen_fisico_nariz_section, examen_fisico_neurologico_section, examen_fisico_oidos_section,
-                          examen_fisico_ojos_section, examen_fisico_torax_pulmones_section)
+                          examen_fisico_ojos_section, examen_fisico_torax_pulmones_section,
+                          conclusion_ingreso_section,
+                          conclusion_periodico_section,
+                          conclusion_post_incapacidad_section,
+                          conclusion_retiro_section)
 
 from docapp.forms import (AudioForm,
                           ananmesis_section,
@@ -34,7 +39,7 @@ from docapp.forms import (VisioForm, sintomas_section, ant_enfermedad_section, a
                           ant_extra_exams, agudeza_section, cronomatica_section,
                           AntLaboralesForm, hazards_inlineformset, accident_inlineformset)
 
-from docapp.forms import AlturaForm, question_section
+from docapp.forms import AlturaForm, question_section, SimpleExamForm
 
 from docproject.helpers.chekers import CheckDoctor
 from docproject.helpers.customs import (FormViewPutExtra, FormsetPostManager, BaseRegisterExamBehavior,
@@ -47,12 +52,13 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
     form_class = OcupaForm
     template_name = 'docapp/register/exams/occupational.html'
     extra_context = {'exam_name': 'ocupacional',
-                     'parent_object_key': 'ocupacional',
+                     'parent_object_key': 'ocupacional_id',
+                     'child_name': 'ocupacional',
                      'formsets': [
                          {'section_name': 'ant_familiares',
                           'title': 'Antecedentes Familiares',
                           'form': ant_familiares_section},
-                         None,  # TODO Antecedent gineco-obstetricos put depend sex of pacient
+                         None,
                          {'section_name': 'revision_sistemas',
                           'title': 'Revision por Sistemas',
                           'form': revision_sistemas_section},
@@ -115,13 +121,33 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
                           'title': 'Genito Unitario',
                           'form': examen_fisico_genito_unitario_section},
                          # Fin examen fisico
-                         None  # TODO Section conclusion process depend examination type
+                         None
                      ]
                      }
 
     def get_context_data(self, **kwargs):
+        examination = self.get_object()
         examination_patient = self.get_object().paciente_id
-        # TODO insert formsets required to case
+        if examination_patient.sexo == 'femenino':
+            self.extra_context['formsets'][1] = {'section_name': 'ant_gineco',
+                                                 'title': 'Antecedentes Gineco-Obstricos',
+                                                 'form': ant_gineco_section}
+        conclusion_section = {'section_name': 'conclusion',
+                              'title': 'Conclusion',
+                              'form': None}
+        if examination.tipo == 'ingreso':
+            conclusion_section.update({'form': conclusion_ingreso_section})
+        elif examination.tipo == 'periodico':
+            conclusion_section.update({'form': conclusion_periodico_section})
+        elif examination.tipo == 'retiro' or examination.tipo == 'reubicacion':
+            conclusion_section.update({'form': conclusion_retiro_section})
+        elif examination.tipo == 'post-incapacidad':
+            conclusion_section.update({'form': conclusion_post_incapacidad_section})
+        else:
+            raise SuspiciousOperation("Contact Admin")
+
+        self.extra_context['formsets'][21] = conclusion_section
+
         return super(RegisterOccupational, self).get_context_data(**kwargs)
 
 
@@ -133,7 +159,7 @@ class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior
     form_class = OcupaForm
     template_name = 'docapp/register/exams/occupational.html'
     extra_context = {'exam_name': 'ocupacional',
-                     'parent_object_key': 'ocupacional',
+                     'parent_object_key': 'ocupacional_id',
                      'formsets': [
                          {'section_name': 'ant_familiares',
                           'title': 'Antecedentes Familiares',
@@ -205,6 +231,9 @@ class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior
                      ]
                      }
 
+    def get_context_data(self, **kwargs):
+        return super(UpdateOccupational, self).get_context_data(**kwargs)
+
 
 update_ocupacional = UpdateOccupational.as_view()
 
@@ -215,7 +244,8 @@ class RegisterAudiology(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavio
     form_class = AudioForm
     template_name = 'docapp/register/exams/audilogy.html'
     extra_context = {'exam_name': 'audiologia',
-                     'parent_object_key': 'audiologia',
+                     'parent_object_key': 'audiologia_id',
+                     'child_name': 'audiologia',
                      'formsets': [
                          {'section_name': 'ananmesis',
                           'title': 'Ananmesis',
@@ -271,7 +301,7 @@ class UpdateAudiology(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, F
     form_class = AudioForm
     template_name = 'docapp/register/exams/audilogy.html'
     extra_context = {'exam_name': 'audiologia',
-                     'parent_object_key': 'audiologia',
+                     'parent_object_key': 'audiologia_id',
                      'formsets': [
                          {'section_name': 'ananmesis',
                           'title': 'Ananmesis',
@@ -329,28 +359,24 @@ class RegisterVisiometry(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavi
     template_name = 'docapp/register/exams/visiometry.html'
     success_url = reverse_lazy('docapp:list_examination')
     extra_context = {'exam_name': 'visiometria',
-                     'parent_object_key': 'visiometria',
+                     'parent_object_key': 'visiometria_id',
+                     'child_name': 'visiometria',
                      'formsets': [
                          {'section_name': 'sintomas',
                           'title': 'Sintomas',
                           'form': sintomas_section},
-
                          {'section_name': 'ant_enfermedad',
                           'title': 'Antecedentes de Enfermedades',
                           'form': ant_enfermedad_section},
-
                          {'section_name': 'ant_uso_lentes',
                           'title': 'Antecedentes de Uso de Lentes',
                           'form': ant_uso_lentes_section},
-
                          {'section_name': 'ant_extra_exams',
                           'title': 'Antecedentes de Examenes',
                           'form': ant_extra_exams},
-
                          {'section_name': 'agudeza',
                           'title': 'Agudeza',
                           'form': agudeza_section},
-
                          {'section_name': 'cronomatica',
                           'title': 'Cronomatica',
                           'form': cronomatica_section}
@@ -366,7 +392,7 @@ class UpdateVisiometry(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, 
     form_class = VisioForm
     template_name = 'docapp/register/exams/visiometry.html'
     extra_context = {'exam_name': 'visiometria',
-                     'parent_object_key': 'visiometria',
+                     'parent_object_key': 'visiometria_id',
                      'formsets': [
                          {'section_name': 'sintomas',
                           'title': 'Sintomas',
@@ -403,7 +429,8 @@ class RegisterAltura(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, 
     form_class = AlturaForm
     template_name = 'docapp/register/exams/altura.html'
     extra_context = {'exam_name': 'altura',
-                     'parent_object_key': 'altura',
+                     'parent_object_key': 'altura_id',
+                     'child_name': 'altura',
                      'formsets': [
                          {'section_name': 'preguntas',
                           'title': 'Estado',
@@ -420,7 +447,7 @@ class UpdateAltura(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, Form
     form_class = AlturaForm
     template_name = 'docapp/register/exams/altura.html'
     extra_context = {'exam_name': 'altura',
-                     'parent_object_key': 'altura',
+                     'parent_object_key': 'altura_id',
                      'formsets': [
                          {'section_name': 'preguntas',
                           'title': 'Estado',
@@ -429,11 +456,17 @@ class UpdateAltura(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior, Form
                      }
 
 
-update_altura = UpdateView.as_view()
+update_altura = UpdateAltura.as_view()
 
 
-# TODO Add simple exam register view
-# TODO Add simple exam update view
+class RegisterSimpleExam(LoginRequiredMixin, CheckDoctor, UpdateView):
+    model = SimpleExam
+    form_class = SimpleExamForm
+    template_name = 'docapp/register/exams/simple.html'
+    success_url = reverse_lazy('docapp:list_examination')
+
+
+register_simple_exam = RegisterSimpleExam.as_view()
 
 
 # Process employ antecedent

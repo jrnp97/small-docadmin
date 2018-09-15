@@ -68,6 +68,7 @@
     <script type="application/javascript">
 
         function clean_formset(prefix) {
+
             let parent = $('div#' + prefix);
             $("input[name='" + prefix + "-TOTAL_FORMS']").val($(parent).children('div').length);  // Update total forms
 

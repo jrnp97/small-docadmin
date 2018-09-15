@@ -53,9 +53,6 @@
         </div>
     </div>
 
-    <div class="row">
-
-    </div>
     <!-- Antecedentes Familiares - Personales -->
     <section class="{{ formsets.0.section_name }}">
         {{ formsets.0.form.management_form }}
@@ -244,153 +241,151 @@
     </section>
     <!-- End Habitos -->
     <!-- Examen Fisico -->
-    <section class="examen_fisico">
-        <div class="panel panel-bd lobidisable">
-            <div class="panel-heading">
-                <div class="btn-group"><h2>Examen Fisico</h2></div>
-            </div>
-            <div class="panel-body">
-                <small><b>Nota: Por favor seleccionar los que presenten estado anormal de lo contrario no
-                    seleccionar.</b></small>
-                <hr>
-                <!-- Aspecto general -->
-                <section class="panel panel-bd lobidisable" id="{{ formsets.7.section_name }}">
-                    <div class="panel-heading">
-                        <div class="btn-group"><h3 class="text-center">{{ formsets.7.title }}</h3></div>
-                    </div>
-                    <div class="panel-body">
-                        {{ formsets.7.form.management_form }}
-                        {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 form=formsets.7.form.forms.0 %}
-                    </div>
-                </section>
-                <!-- biometria -->
-                <section class="panel panel-bd lobidisable" id="{{ formsets.8.section_name }}">
-                    <div class="panel-heading">
-                        <div class="btn-group"><h3 class="text-center">{{ formsets.8.title }}</h3></div>
-                    </div>
-                    <div class="panel-body">
-                        {{ formsets.8.form.management_form }}
-                        {% include 'includes/simple_register_form.html' with form=formsets.8.form.forms.0 %}
-                    </div>
-                </section>
-                <hr>
-                <section class="panel panel-bd lobidisable" id="organos">
-                    <div class="panel-heading">
-                        <div class="btn-group"><h3 class="text-center">Organos</h3></div>
-                    </div>
-                    <div class="panel-body">
+    <hr>
+    <h1>Examen Fisico</h1>
+    <small><b>Nota: Por favor seleccionar los que presenten estado anormal de lo contrario no
+        seleccionar.</b></small>
+    <hr>
 
-                        <section class="panel panel-bd lobidisable" id="sentidos">
-                            <div class="panel-heading">
-                                <div class="panel-title"><h4>Sentidos</h4></div>
-                            </div>
-                            <div class="panel-body">
-                                <div style="padding: 1em 1em 1em 1em;">
-                                    <div class="row colored">
-                                        <div class="col-sm-12 {{ formsets.9.section_name }} ">
-                                            <h4 class="text-center">{{ formsets.9.title }}</h4>
-                                            {{ formsets.9.form.management_form }}
-                                            {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.9.form.forms.0 %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12 {{ formsets.10.section_name }}">
-                                            <h4 class="text-center">{{ formsets.10.title }}</h4>
-                                            {{ formsets.10.form.management_form }}
-                                            {% include 'includes/ordered_checkbox_with_textarea.html' with  col_size=1 non_resize=1 form=formsets.10.form.forms.0 %}
-                                        </div>
-                                    </div>
-                                    <div class="row colored">
-                                        <div class="col-sm-12 {{ formsets.11.section_name }}">
-                                            <h4 class="text-center">{{ formsets.11.title }}</h4>
-                                            {{ formsets.11.form.management_form }}
-                                            {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.11.form.forms.0 %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12 {{ formsets.12.section_name }}">
-                                            <h4 class="text-center">{{ formsets.12.title }}</h4>
-                                            {{ formsets.12.form.management_form }}
-                                            {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.12.form.forms.0 %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <section class="panel panel-bd lobidisable" id="otros_sentidos">
-                            <div class="panel-heading">
-                                <div class="panel-title"><h4>Otros</h4></div>
-                            </div>
-                            <div class="panel-body">
-                                <div style="padding: 1em 1em 1em 1em;">
-                                    <div class="row colored">
-                                        <div class="col-sm-12 {{ formsets.13.section_name }}">
-                                            <h4 class="text-center">{{ formsets.13.title }}</h4>
-                                            {{ formsets.13.form.management_form }}
-                                            {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.13.form.forms.0 %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12 {{ formsets.14.section_name }}">
-                                            <h4 class="text-center">{{ formsets.14.title }}</h4>
-                                            {{ formsets.14.form.management_form }}
-                                            {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.14.form.forms.0 %}
-                                        </div>
-                                    </div>
-                                    <div class="row colored">
-                                        <div class="col-sm-12 {{ formsets.15.section_name }}">
-                                            <h4 class="text-center">{{ formsets.15.title }}</h4>
-                                            {{ formsets.15.form.management_form }}
-                                            {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.15.form.forms.0 %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12 {{ formsets.16.section_name }}">
-                                            <h4 class="text-center">{{ formsets.16.title }}</h4>
-                                            {{ formsets.16.form.management_form }}
-                                            {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.16.form.forms.0 %}
-                                        </div>
-                                    </div>
-                                    <div class="row colored">
-                                        <div class="col-sm-12 {{ formsets.17.section_name }}">
-                                            <h4 class="text-center">{{ formsets.17.title }}</h4>
-                                            {{ formsets.17.form.management_form }}
-                                            {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.17.form.forms.0 %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12 {{ formsets.18.section_name }}">
-                                            <h4 class="text-center">{{ formsets.18.title }}</h4>
-                                            {{ formsets.18.form.management_form }}
-                                            {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.18.form.forms.0 %}
-                                        </div>
-                                    </div>
-                                    <div class="row colored">
-                                        <div class="col-sm-12 {{ formsets.19.section_name }}">
-                                            <h4 class="text-center">{{ formsets.19.title }}</h4>
-                                            {{ formsets.19.form.management_form }}
-                                            {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.19.form.forms.0 %}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12 {{ formsets.20.section_name }}">
-                                            <h4 class="text-center">{{ formsets.20.title }}</h4>
-                                            {{ formsets.20.form.management_form }}
-                                            {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.20.form.forms.0 %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                </section>
-                <!-- End body -->
+    <!-- Aspecto general -->
+    <section class="panel panel-bd lobidisable" id="{{ formsets.7.section_name }}">
+        <div class="panel-heading">
+            <div class="btn-group"><h3 class="text-center">{{ formsets.7.title }}</h3></div>
+        </div>
+        <div class="panel-body">
+            {{ formsets.7.form.management_form }}
+            {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 form=formsets.7.form.forms.0 %}
+        </div>
+    </section>
+    <!-- biometria -->
+    <section class="panel panel-bd lobidisable" id="{{ formsets.8.section_name }}">
+        <div class="panel-heading">
+            <div class="btn-group"><h3 class="text-center">{{ formsets.8.title }}</h3></div>
+        </div>
+        <div class="panel-body">
+            {{ formsets.8.form.management_form }}
+            {% include 'includes/simple_register_form.html' with form=formsets.8.form.forms.0 %}
+        </div>
+    </section>
+    <hr>
+    <h2>Organos</h2>
+    <hr>
+    <section class="panel panel-bd lobidisable" id="sentidos">
+        <div class="panel-heading">
+            <div class="panel-title"><h4>Sentidos</h4></div>
+        </div>
+        <div class="panel-body">
+            <div style="padding: 1em 1em 1em 1em;">
+                <div class="row colored">
+                    <div class="col-sm-12 {{ formsets.9.section_name }} ">
+                        <h4 class="text-center">{{ formsets.9.title }}</h4>
+                        {{ formsets.9.form.management_form }}
+                        {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.9.form.forms.0 %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 {{ formsets.10.section_name }}">
+                        <h4 class="text-center">{{ formsets.10.title }}</h4>
+                        {{ formsets.10.form.management_form }}
+                        {% include 'includes/ordered_checkbox_with_textarea.html' with  col_size=1 non_resize=1 form=formsets.10.form.forms.0 %}
+                    </div>
+                </div>
+                <div class="row colored">
+                    <div class="col-sm-12 {{ formsets.11.section_name }}">
+                        <h4 class="text-center">{{ formsets.11.title }}</h4>
+                        {{ formsets.11.form.management_form }}
+                        {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.11.form.forms.0 %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 {{ formsets.12.section_name }}">
+                        <h4 class="text-center">{{ formsets.12.title }}</h4>
+                        {{ formsets.12.form.management_form }}
+                        {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.12.form.forms.0 %}
+                    </div>
+                </div>
             </div>
         </div>
     </section>
+    <section class="panel panel-bd lobidisable" id="otros_sentidos">
+        <div class="panel-heading">
+            <div class="panel-title"><h4>Otros</h4></div>
+        </div>
+        <div class="panel-body">
+            <div style="padding: 1em 1em 1em 1em;">
+                <div class="row colored">
+                    <div class="col-sm-12 {{ formsets.13.section_name }}">
+                        <h4 class="text-center">{{ formsets.13.title }}</h4>
+                        {{ formsets.13.form.management_form }}
+                        {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.13.form.forms.0 %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 {{ formsets.14.section_name }}">
+                        <h4 class="text-center">{{ formsets.14.title }}</h4>
+                        {{ formsets.14.form.management_form }}
+                        {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.14.form.forms.0 %}
+                    </div>
+                </div>
+                <div class="row colored">
+                    <div class="col-sm-12 {{ formsets.15.section_name }}">
+                        <h4 class="text-center">{{ formsets.15.title }}</h4>
+                        {{ formsets.15.form.management_form }}
+                        {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.15.form.forms.0 %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 {{ formsets.16.section_name }}">
+                        <h4 class="text-center">{{ formsets.16.title }}</h4>
+                        {{ formsets.16.form.management_form }}
+                        {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.16.form.forms.0 %}
+                    </div>
+                </div>
+                <div class="row colored">
+                    <div class="col-sm-12 {{ formsets.17.section_name }}">
+                        <h4 class="text-center">{{ formsets.17.title }}</h4>
+                        {{ formsets.17.form.management_form }}
+                        {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.17.form.forms.0 %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 {{ formsets.18.section_name }}">
+                        <h4 class="text-center">{{ formsets.18.title }}</h4>
+                        {{ formsets.18.form.management_form }}
+                        {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.18.form.forms.0 %}
+                    </div>
+                </div>
+                <div class="row colored">
+                    <div class="col-sm-12 {{ formsets.19.section_name }}">
+                        <h4 class="text-center">{{ formsets.19.title }}</h4>
+                        {{ formsets.19.form.management_form }}
+                        {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.19.form.forms.0 %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 {{ formsets.20.section_name }}">
+                        <h4 class="text-center">{{ formsets.20.title }}</h4>
+                        {{ formsets.20.form.management_form }}
+                        {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.20.form.forms.0 %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End body -->
     <!-- End Examen Fisico -->
     {% if formsets.21 %}
-        <section class="{{ formets.21.section.name }}"></section>
+        <section class="{{ formsets.21.section_name }}">
+            {{ formsets.21.form.management_form }}
+            <div class="panel panel-bd lobidisable">
+                <div class="panel-heading">
+                    <div class="btn-group"><h2>{{ formsets.21.title }}</h2></div>
+                </div>
+                <div class="panel-body">
+                    {% include 'includes/examination_simple_form.html' with form=formsets.21.form.forms.0 %}
+                </div>
+            </div>
+        </section>
     {% endif %}
 
 
