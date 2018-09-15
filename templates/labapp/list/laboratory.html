@@ -63,8 +63,6 @@
             </td>
             <td>{% if object.is_active %} <span class="label label-success">Activo</span> {% else %} <span class="label label-danger">Desactivado</span> {% endif %}</td>
         </tr>
-    {% empty %}
-        <h1>No se encuentra ningun laboratorio registrado</h1>
     {% endfor %}
     </tbody>
 {% endblock %}
