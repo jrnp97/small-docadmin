@@ -1,108 +1,158 @@
-<div class="modal-content">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title">Proceso #{{ exam.id }}</h1>
+<div class="row">
+    <div class="col-sm-12">
+        <h2>Paciente: {{ exam.paciente_id }}</h2>
+        <p><b>Proceso:</b> {{ exam.id }}</p>
+        <p><b>Identificacion: </b>{{ exam.paciente_id.identificacion }}</p>
+        <p><b>Tipo de examinacion:</b> {{ exam.tipo }} </p>
+        <small><span class="label label-warning-outline">No registrado</span> <span
+                class="label label-success-outline">Registrado</span></small>
     </div>
-    <div class="modal-body">
-        <div class="row">
-            <div class="col-sm-12">
-                <h2>Paciente: {{ exam.paciente_id }}</h2>
-                <p><b>Identificacion: </b>{{ exam.paciente_id.identificacion }}</p>
-                <p><b>Tipo de examinacion:</b> {{ exam.tipo }} </p>
-                <small><span class="label label-warning-outline">No registrado</span> <span
-                        class="label label-success-outline">Registrado</span></small>
+</div>
+{% if request.user.doctor_profile %}
+    <div class="row">
+        <div class="col-sm-12"><h2>Porcentaje del proceso</h2></div>
+        <div class="col-sm-12">
+            <div class="progress progress-lg" style="max-width: none">
+                <div {% if exam.get_doctor_process > 0 %}
+                    class="progress-bar progress-bar-striped active progress-bar-success"
+                    style="width: {{ exam.get_doctor_process }}%"
+                {% else %}
+                    class="progress-bar  progress-bar-striped active progress-bar-danger" style="width: 100%"
+                {% endif %}
+                    role="progressbar" aria-valuenow="{{ exam.get_doctor_process }}" aria-valuemin="0"
+                    aria-valuemax="100">
+                    {{ exam.get_doctor_process }}% Realizado
+                </div>
             </div>
         </div>
-        {% if request.user.doctor_profile %}
-            {# Common Exams #}
-            <div class="row">
-                <div class="col-sm-12">
-                    <h3>Examenes comunes a realizar</h3>
-                    <ul>
-                        {% if exam.do_exam_altura %}
-                            <li>
+    </div>
+    {# Common Exams #}
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>Examenes comunes a realizar</h3>
+            <ul>
+                {% if exam.do_exam_altura %}
+                    <li>
                         <span class="label {% if exam.altura %} label-success-outline {% else %} label-warning-outline {% endif %}">
                             <a href="{% url 'docapp:register_altura' exam_id=exam.id %}">Registrar Resultados Altura</a>
                         </span>
-                            </li>
-                        {% endif %}
-                        {% if exam.do_exam_audiologia %}
+                    </li>
+                {% endif %}
+                {% if exam.do_exam_audiologia %}
 
-                            <li>
+                    <li>
                         <span class="label {% if exam.audiologia %} label-success-outline {% else %} label-warning-outline {% endif %}">
                             <a href="{% url 'docapp:register_audiology' exam_id=exam.id %}">Registrar Resultados Audiologia</a>
                         </span>
-                            </li>
-                        {% endif %}
-                        {% if exam.do_exam_visiometria %}
+                    </li>
+                {% endif %}
+                {% if exam.do_exam_visiometria %}
 
-                            <li>
+                    <li>
                         <span class="label {% if exam.visiometria %} label-success-outline {% else %} label-warning-outline {% endif %}">
                             <a href="{% url 'docapp:register_visiometry' exam_id=exam.id %}">Registrar Resultados Visiometria</a>
                         </span>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-            {# Inter Exams #}
-            <div class="row">
-                <div class="col-sm-12">
-                    <h3>Examenes internos a realizar</h3>
-                    {% if exam.examenes_internos.all %}
-                        <ul>
-                            {% for examen in exam.examenes_internos.all %}
-                                <li class="m-t-20">
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    {# Inter Exams #}
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>Examenes internos a realizar</h3>
+            {% if exam.examenes_internos.all %}
+                <ul>
+                    {% for examen in exam.examenes_internos.all %}
+                        <li class="m-t-20">
                         <span class="label {% if examen.resultados != '' %} label-success-outline {% else %} label-warning-outline {% endif %}">
                                 <a href="{% url 'docapp:register_simple_exam' pk=examen.id %}">Registrar resultados
                                 de {{ examen.nombre }}</a>
                         </span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-            </div>
-            {# Done process #}
-            <div class="row">
-                <div class="col-sm-12">
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+    {# Done process #}
+    <div class="row">
+        <div class="col-sm-12">
                 <span class="pull-right">
                     <a href="{% url 'docapp:register_occupational' exam_id=exam.id %}">
                     <button class="btn btn-primary">Registrar Resumen del proceso <i
                             class="fa fa-drivers-license-o"></i></button></a>
                 </span>
+        </div>
+    </div>
+{% elif request.user.laboratory_profile %}
+    <div class="row">
+        <div class="col-sm-12"><h2>Porcentaje del proceso</h2></div>
+        <div class="col-sm-12">
+            <div class="progress progress-lg" style="max-width: none">
+                <div {% if exam.get_lab_process > 0 %}
+                    class="progress-bar progress-bar-striped active progress-bar-success"
+                    style="width: {{ exam.get_lab_process }}%"
+                {% else %}
+                    class="progress-bar  progress-bar-striped active progress-bar-danger" style="width: 100%"
+                {% endif %}
+                    role="progressbar" aria-valuenow="80" aria-valuemin="0"
+                    aria-valuemax="100">
+                    {{ exam.get_lab_process }}% Realizado
                 </div>
             </div>
-        {% elif request.user.laboratory_profile %}
-            <div class="row">
-                <div class="col-sm-12">
-                    <h3>Examenes de laboratorios a realizar</h3>
-                    {% if exam.examenes_laboratorios.all %}
-                        <ul>
-                            {% for examen in exam.examenes_laboratorios.all %}
-                                <li class="m-t-20">
+        </div>
+    </div>
+    {# Examenes de laboratorio #}
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>Examenes de laboratorios a realizar</h3>
+            {% if exam.examenes_laboratorios.all %}
+                <ul>
+                    {% for examen in exam.examenes_laboratorios.all %}
+                        <li class="m-t-20">
                         <span class="label {% if examen.resultados.all %} label-success-outline {% else %} label-warning-outline {% endif %}">
                                 <a href="{% url 'labapp:register_lab_exam_result' pk=examen.id %}">Registrar resultados
                                 de {{ examen.nombre }}</a>
                         </span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% elif request.user.reception_profile %}
+    <div class="row">
+        <div class="col-sm-12"><h2>Porcentaje del proceso</h2></div>
+        <div class="col-sm-12">
+            <label for="doc_process">Doctor</label>
+            <div class="progress progress-lg" id="doc_process" style="max-width: none">
+                <div {% if exam.get_doctor_process > 0 %}
+                    class="progress-bar progress-bar-striped active progress-bar-success"
+                    style="width: {{ exam.get_doctor_process }}%"
+                {% else %}
+                    class="progress-bar  progress-bar-striped active progress-bar-danger" style="width: 100%"
+                {% endif %}
+                    role="progressbar" aria-valuenow="{{ exam.get_doctor_process }}" aria-valuemin="0"
+                    aria-valuemax="100">
+                    {{ exam.get_doctor_process }}% Realizado
                 </div>
             </div>
-        {% endif %}
-
-        <hr class="divider">
-        <div class="row">
-            <div class="col-sm-12">
-                <a href="#">
-                    <button class="btn btn-primary">Terminar Examinación <i class="fa fa-send"></i></button>
-                </a>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+        </div>
+        <div class="col-sm-12">
+            <label for="lab_process">Laboratorio</label>
+            <div class="progress progress-lg" id="lab_process" style="max-width: none">
+                <div {% if exam.get_lab_process > 0 %}
+                    class="progress-bar progress-bar-striped active progress-bar-success"
+                    style="width: {{ exam.get_lab_process }}%"
+                {% else %}
+                    class="progress-bar  progress-bar-striped active progress-bar-danger" style="width: 100%"
+                {% endif %}
+                    role="progressbar" aria-valuenow="80" aria-valuemin="0"
+                    aria-valuemax="100">
+                    {{ exam.get_lab_process }}% Realizado
+                </div>
             </div>
         </div>
-
     </div>
-</div>
+{% endif %}

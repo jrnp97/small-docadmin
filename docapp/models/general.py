@@ -148,7 +148,7 @@ class Examinacion(models.Model):
     def __str__(self):
         return self.tipo
 
-    def get_process(self):
+    def get_doctor_process(self):
         normal_exams = [hasattr(self, 'ocupacional')]
         if self.do_exam_altura:
             normal_exams.append(hasattr(self, 'altura'))
@@ -166,12 +166,26 @@ class Examinacion(models.Model):
 
         return float("{:.2f}".format((len(inter_exams) + normal_exams.count(True)) * percentage))
 
+    def get_lab_process(self):
+        exams = self.examenes_laboratorios.all()
+        if exams:
+            lab_exams = []
+            for exam in exams:
+                if exam.resultados.all():
+                    lab_exams.append(True)
+
+            percentage = float(100) / len(exams)
+
+            return float("{:.2f}".format(len(lab_exams) * percentage))
+        else:
+            return 0.0
+
     def finished(self):
-        return self.get_process == 100.0
+        return self.get_doctor_process() == 100.0 and self.get_lab_process() == 100.0
 
     def update_state(self):
         # TODO CHANGE
-        process = self.get_process()
+        process = self.get_doctor_process() or self.get_lab_process()
         change = False
         if self.estado == 'pendiente' and 0 < process < 100:
             self.estado = 'iniciado'

@@ -1,22 +1,14 @@
-<div class="modal-content">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title">Asignacion Pacientes</h1>
-    </div>
-    <div class="modal-body">
-        {% if object %}
-            <form method="POST" action="{% url 'docapp:doctor_take_a_exam' exam_id=object.id %}">
-                {% csrf_token %}
-                <h2>¿Realmente Quieres Tomar el proceso #{{ object.id }}?</h2>
-                <hr>
-                <div class="form-group">
-                    <button class="btn btn-primary" type="submit">Tomar Proceso</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-            </form>
-        {% else %}
-            <h1>You don't must be here</h1>
-        {% endif %}
-    </div>
+<div class="modal-body">
+    {% if object %}
+        <form method="POST" action="{% url 'docapp:doctor_take_a_exam' exam_id=object.id %}">
+            {% csrf_token %}
+            <h2>¿Realmente Quieres Tomar el proceso #{{ object.id }}?</h2>
+            <hr>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">Tomar Proceso <i class="fa fa-send"></i></button>
+            </div>
+        </form>
+    {% else %}
+        <h1>You don't must be here</h1>
+    {% endif %}
 </div>
