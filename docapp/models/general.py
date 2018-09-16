@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from accounts.models import ReceptionProfile, DoctorProfile
-from labapp.models import Laboratorio
+# from labapp.models import Laboratorio
 
 User = get_user_model()
 
@@ -137,7 +137,7 @@ class Examinacion(models.Model):
     do_exam_audiologia = models.BooleanField(default=False, null=False, blank=True)
     do_exam_visiometria = models.BooleanField(default=False, null=False, blank=True)
 
-    laboratorio_id = models.ForeignKey(Laboratorio, on_delete=models.CASCADE, related_name='examinaciones')
+    # laboratorio_id = models.ForeignKey(Laboratorio, on_delete=models.CASCADE, related_name='examinaciones')
     paciente_id = models.ForeignKey(PacienteEmpresa, on_delete=models.CASCADE, related_name='examinaciones')
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
@@ -167,10 +167,7 @@ class Examinacion(models.Model):
         return float("{:.2f}".format((len(inter_exams) + normal_exams.count(True)) * percentage))
 
     def finished(self):
-        # TODO CHANGE
-        examenes_done = [hasattr(self, 'visiometria'), hasattr(self, 'audiologia'),
-                         hasattr(self, 'ocupacional'), hasattr(self, 'laboratorio')]
-        return all(examenes_done)
+        return self.get_process == 100.0
 
     def update_state(self):
         # TODO CHANGE

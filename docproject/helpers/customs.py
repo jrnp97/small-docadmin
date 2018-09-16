@@ -122,12 +122,17 @@ class FormsetPostManager(object):
                             alias = formset.model.registrado_por.field.related_model.user_id.field.related_query_name()
                             data.update({'registrado_por': getattr(self.request.user, alias)})
                         # Get all parent relations required on formset
-                        parent_fields = set([field.name for field in object_parent._meta.get_fields()])
-                        form_fields = set(form.cleaned_data.keys())
+                        # parent_fields = set([field.name for field in object_parent._meta.get_fields()])
+                        parent_fields = set(parent_form.cleaned_data.keys())
+                        form_fields = set([field.name for field in formset.model._meta.get_fields()])
                         # Clean id's
                         try:
-                            parent_fields.remove('id')
                             form_fields.remove('id')
+                        except KeyError:
+                            pass
+
+                        try:
+                            parent_fields.remove('id')
                         except KeyError:
                             pass
 
@@ -135,7 +140,7 @@ class FormsetPostManager(object):
                         if fields:
                             for field in iter(fields):
                                 # Set value of field and insert to data suppose that field is a relationship
-                                data.update({field: getattr(object_parent, field)})
+                                data.update({field: parent_form.cleaned_data.get(field).first()})
                         temp.append(formset.model(**data))
             try:
                 with transaction.atomic():

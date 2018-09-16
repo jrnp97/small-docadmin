@@ -14,63 +14,86 @@
                         class="label label-success-outline">Registrado</span></small>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <h3>Examenes comunes a realizar</h3>
-                <ul>
-                    {% if exam.do_exam_altura %}
-                        <li>
+        {% if request.user.doctor_profile %}
+            {# Common Exams #}
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Examenes comunes a realizar</h3>
+                    <ul>
+                        {% if exam.do_exam_altura %}
+                            <li>
                         <span class="label {% if exam.altura %} label-success-outline {% else %} label-warning-outline {% endif %}">
                             <a href="{% url 'docapp:register_altura' exam_id=exam.id %}">Registrar Resultados Altura</a>
                         </span>
-                        </li>
-                    {% endif %}
-                    {% if exam.do_exam_audiologia %}
+                            </li>
+                        {% endif %}
+                        {% if exam.do_exam_audiologia %}
 
-                        <li>
+                            <li>
                         <span class="label {% if exam.audiologia %} label-success-outline {% else %} label-warning-outline {% endif %}">
                             <a href="{% url 'docapp:register_audiology' exam_id=exam.id %}">Registrar Resultados Audiologia</a>
                         </span>
-                        </li>
-                    {% endif %}
-                    {% if exam.do_exam_visiometria %}
+                            </li>
+                        {% endif %}
+                        {% if exam.do_exam_visiometria %}
 
-                        <li>
+                            <li>
                         <span class="label {% if exam.visiometria %} label-success-outline {% else %} label-warning-outline {% endif %}">
                             <a href="{% url 'docapp:register_visiometry' exam_id=exam.id %}">Registrar Resultados Visiometria</a>
                         </span>
-                        </li>
-                    {% endif %}
-                </ul>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-12">
-                <h3>Examenes internos a realizar</h3>
-                {% if exam.examenes_internos.all %}
-                    <ul>
-                        {% for examen in exam.examenes_internos.all %}
-                            <li>
+            {# Inter Exams #}
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Examenes internos a realizar</h3>
+                    {% if exam.examenes_internos.all %}
+                        <ul>
+                            {% for examen in exam.examenes_internos.all %}
+                                <li class="m-t-20">
                         <span class="label {% if examen.resultados != '' %} label-success-outline {% else %} label-warning-outline {% endif %}">
                                 <a href="{% url 'docapp:register_simple_exam' pk=examen.id %}">Registrar resultados
                                 de {{ examen.nombre }}</a>
                         </span>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
+            {# Done process #}
+            <div class="row">
+                <div class="col-sm-12">
                 <span class="pull-right">
                     <a href="{% url 'docapp:register_occupational' exam_id=exam.id %}">
                     <button class="btn btn-primary">Registrar Resumen del proceso <i
                             class="fa fa-drivers-license-o"></i></button></a>
                 </span>
+                </div>
             </div>
-        </div>
+        {% elif request.user.laboratory_profile %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Examenes de laboratorios a realizar</h3>
+                    {% if exam.examenes_laboratorios.all %}
+                        <ul>
+                            {% for examen in exam.examenes_laboratorios.all %}
+                                <li class="m-t-20">
+                        <span class="label {% if examen.resultados.all %} label-success-outline {% else %} label-warning-outline {% endif %}">
+                                <a href="{% url 'labapp:register_lab_exam_result' pk=examen.id %}">Registrar resultados
+                                de {{ examen.nombre }}</a>
+                        </span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
         <hr class="divider">
         <div class="row">
             <div class="col-sm-12">
@@ -82,5 +105,4 @@
         </div>
 
     </div>
-</div>
 </div>

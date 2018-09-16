@@ -3,7 +3,7 @@
 {# - field #}
 <label class="label {% if field.errors %}label-danger{% else %}label-custom{% endif %}"
        for="{{ field.id_for_label }}">{{ field.label }}</label>
-<select class="form-control {% if field.errors %}label-danger-outline{% endif %}" name="{{ field.html_name }}"
+<select class="selectpicker form-control {% if field.errors %}label-danger-outline{% endif %}" data-show-subtext="true" data-live-search="true" name="{{ field.html_name }}"
         id="{{ field.auto_id }}" size="1">
     {% for option in field.field.choices %}
         <option value="{{ option.0 }}" {% if field.value == option.0 %} selected {% endif %}>

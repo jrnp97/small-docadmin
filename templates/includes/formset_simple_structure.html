@@ -1,0 +1,8 @@
+<div id="{{ formset.prefix }}">
+    {{ formset.management_form }}
+    {% for form in formset.forms %}
+        <div id="{{ formset.prefix }}-{{ forloop.counter0 }}" class="row {% if forloop.last %} last_form {% endif %}">
+            {% include 'includes/inline_formset.html' with  form=form %}
+        </div>
+    {% endfor %}
+</div>

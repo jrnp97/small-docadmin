@@ -26,6 +26,7 @@
         <tr>
             <td> {{ exam.tipo }} </td>
             <td> {{ exam.paciente_id }}
+                <br>
                 <a href="{% url 'docapp:detail_employ' person_id=exam.paciente_id_id %}">
                     <button class="btn btn-primary btn-xs" data-toggle="tooltip"
                             data-placement="left" title="" data-original-title="Ver">
@@ -35,7 +36,7 @@
                 {% if request.user.doctor_profile %}
                     <a href="{% url 'docapp:register_employ_antecedent' person_id=exam.paciente_id_id %}">
                         <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                                data-placement="left" title="" data-original-title="Registar Antecedentes">
+                                data-placement="left" title="" data-original-title="Registrar Antecedentes">
                             <i class="fa fa-edit" aria-hidden="true"></i>
                         </button>
                     </a>
@@ -67,7 +68,7 @@
                 </div>
             </td>
 
-            {% if request.user.doctor_profile or request.user.laboratory_profile %}
+            {% if request.user.doctor_profile %}
                 <td>
                     {% if request.path == '/examination/' %}
 
@@ -76,6 +77,20 @@
                                 data-target="#take_process">Tomar Examinacion
                         </button>
                     {% elif request.path == '/my/examinations/' %}
+                        <button type="button" class="btn btn-success" data-toggle="modal"
+                                href="{% url 'docapp:detail_examination' exam_id=exam.id %}"
+                                data-target="#register_result">Registar Resultados
+                        </button>
+                    {% endif %}
+                </td>
+            {% elif request.user.laboratory_profile %}
+                <td>
+                    {% if request.path == '/labapp/list/examinations/' %}
+                        <button type="button" class="btn btn-success" data-toggle="modal"
+                                href="{% url 'labapp:lab_take_a_exam' exam_id=exam.id %}"
+                                data-target="#take_process">Tomar Examinacion
+                        </button>
+                    {% elif request.path == '/labapp/my/examinations/' %}
                         <button type="button" class="btn btn-success" data-toggle="modal"
                                 href="{% url 'docapp:detail_examination' exam_id=exam.id %}"
                                 data-target="#register_result">Registar Resultados
