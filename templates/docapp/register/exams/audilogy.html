@@ -1,1048 +1,178 @@
-{% extends 'base/base_dashboard.html' %}
+{% extends 'base/base_examination.html' %}
 
-{% block title %} Procesos | Examenes {% endblock %}
+{% block title %} Examinacion | Audiologia {% endblock %}
 
-{% block content_header %}
-    <div class="header-icon">
-        <i class="pe-7s-box1"></i>
-    </div>
-    <div class="header-title">
-        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
-            <div class="input-group">
-                <input name="q" class="form-control" placeholder="Search..." type="text">
-                <span class="input-group-btn">
-                                    <button type="submit" name="search" id="search-btn" class="btn"><i
-                                            class="fa fa-search"></i></button>
-                                </span>
-            </div>
-        </form>
-        <h1>Registro Examen {{ exam_name|capfirst }}</h1>
-        <small>Ingrese Resultados del proceso #{{ exam.id }}</small>
-        <ol class="breadcrumb hidden-xs">
-            <li>
-                <a href="{% url 'docapp:list_examination' %}" class="active">
-                    <i class="pe-7s-home"></i>
-                    Lista Examenes</a>
-            </li>
-        </ol>
-    </div>
-{% endblock %}
-
-{% block content_main %}
-    {% if messages %}
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                {% for message in messages %}
-                    <div class="alert alert-sm alert-{{ message.level_tag }} alert-dismissible m-t-20"
-                         role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                aria-hidden="true">×</span></button>
-                        <i class="fa fa-exclamation-circle"></i>
-                        <strong>{{ message.level_tag|capfirst }}!</strong> {{ message|escape }}
-                    </div>
-                {% endfor %}
+{% block form_body %}
+    {# Ananmensis #}
+    <section class="panel panel-bd lobidisable" id="{{ formsets.0.section_name }}">
+        {{ formsets.0.form.management_form }}
+        <div class="panel-heading">
+            <div class="btn-group"><h2>{{ formsets.0.title }}</h2></div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    {% include 'includes/examination_simple_form.html' with form=formsets.0.form.forms.0 %}
+                </div>
             </div>
         </div>
-    {% endif %}
-    <div class="row">
-        <div class="col-sm-12">
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+    </section>
 
+    {# Antecedentes Familiares #}
+    <section class="panel panel-bd lobidisable" id="{{ formsets.1.section_name }}">
+        {{ formsets.1.form.management_form }}
+        <div class="panel-heading">
+            <div class="btn-group"><h2>{{ formsets.1.title }}</h2></div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.1.form.forms.0 %}
+                </div>
+            </div>
+        </div>
+    </section>
+    {# Otros Antecedentes #}
+    <section class="panel panel-bd lobidisable" id="{{ formsets.2.section_name }}">
+        {{ formsets.2.form.management_form }}
+        <div class="panel-heading">
+            <div class="btn-group"><h2>{{ formsets.2.title }}</h2></div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 non_resize=1 form=formsets.2.form.forms.0 %}
+                </div>
+            </div>
+        </div>
+    </section>
 
-                <!-- Ananmensis -->
-                <section class="panel panel-bd lobidisable" id="{{ formsets.0.section_name }}">
-                    {{ formsets.0.form.management_form }}
-                    <div class="panel-heading">
-                        <div class="btn-group"><h2>{{ formsets.0.title }}</h2></div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            {% for field in formsets.0.form.forms.0 %}
-                                {% if field.field.widget.input_type == 'select' %}
-                                    <div class="col-sm-4">
-                                        <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
-                                               for="{{ field.id_for_label }}">
-                                            {{ field.label }}
-                                        </label>
-                                        <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                                name="{{ field.html_name }}"
-                                                id="{{ field.auto_id }}"
-                                                size="1">
-                                            {% for option in field.field.choices %}
-                                                <option value="{{ option.0 }}"
-                                                        {% if field.value == option.0 %}
-                                                        selected {% endif %}>
-                                                    {{ option.1 }}
-                                                </option>
-                                            {% endfor %}
-                                        </select>
-                                        {% if field.errors %}
-                                            <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                 role="alert">
-                                                <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close"><span
-                                                        aria-hidden="true">×</span></button>
-                                                {% for error in field.errors %}
-                                                    <i class="fa fa-exclamation-circle"></i>
-                                                    <strong>Error!</strong>
-                                                    {{ error|escape }}
-                                                {% endfor %}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-                                {% if not field.field.widget.input_type %}
-                                    <!-- TextArea options -->
-                                    <div class="form-group col-sm-4">
-                                        <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                               for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                        <textarea class="form-control" name="{{ field.html_name }}" rows="2"
-                                                  id="{{ field.auto_id }}">{% if field.value %}
-                                            {{ field.value }} {% endif %}</textarea>
-                                    </div>
-                                    {% if field.errors %}
-                                        <!-- Display errors -->
-                                        <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                             role="alert">
-                                            <button type="button" class="close" data-dismiss="alert"
-                                                    aria-label="Close"><span
-                                                    aria-hidden="true">×</span></button>
-                                            {% for error in field.errors %}
-                                                <i class="fa fa-exclamation-circle"></i>
-                                                <strong>Error!</strong>
-                                                {{ error|escape }}
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                {% endif %}
-
-                                {% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %}
-                                    <!-- Date options -->
-                                    <div class="col-sm-4 form-group">
-                                        <div class="form-group">
-                                            <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                            <input type="date"
-                                                   class="form-control {% if field.errors %} label-danger-outline {% endif %}"
-                                                   name="{{ field.html_name }}"
-                                                   id="{{ field.auto_id }}"
-                                                    {% if field.value %}
-                                                   value="{{ field.value|date:"Y-m-d" }}" {% endif %}
-                                                    {% if field.field.widget.is_required %}
-                                                   required="" {% endif %}/>
-                                        </div>
-                                        {% if field.errors %}
-                                            <!-- Display errors -->
-                                            <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                 role="alert">
-                                                <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close"><span
-                                                        aria-hidden="true">×</span></button>
-                                                {% for error in field.errors %}
-                                                    <i class="fa fa-exclamation-circle"></i>
-                                                    <strong>Error!</strong>
-                                                    {{ error|escape }}
-                                                {% endfor %}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                        {% for field in formsets.0.form.forms.0 %}
-                            {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                        {% endfor %}
-                    </div>
-                </section>
-                <!-- End Ananmensis -->
-                <!-- Antecedentes Familiares -->
-                <section class="panel panel-bd lobidisable" id="{{ formsets.1.section_name }}">
-                    {{ formsets.1.form.management_form }}
-                    <div class="panel-heading">
-                        <div class="btn-group"><h2>{{ formsets.1.title }}</h2></div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <!-- Body -->
-                            <!-- Checkbox options -->
-                            <div class="row">
-                                <ol>
-                                    {% for field in formsets.1.form.forms.0 %}
-                                        {% if field.field.widget.input_type == 'checkbox' %}
-                                            <div class="col-sm-4 form-group">
-                                                <li>
-                                                    <div class="form-group">
-                                                        <input type="checkbox" class="form-check-input"
-                                                               name="{{ field.html_name }}"
-                                                               id="{{ field.auto_id }}"
-                                                                {% if field.initial %} checked {% endif %}/>
-                                                        <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
-                                                               for="{{ field.id_for_label }}">
-                                                            {{ field.label }}
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                                <!-- Display errors -->
-                                                {% if field.errors %}
-                                                    <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                         role="alert">
-                                                        <button type="button" class="close" data-dismiss="alert"
-                                                                aria-label="Close"><span
-                                                                aria-hidden="true">×</span></button>
-                                                        {% for error in field.errors %}
-                                                            <i class="fa fa-exclamation-circle"></i>
-                                                            <strong>Error!</strong>
-                                                            {{ error|escape }}
-                                                        {% endfor %}
-                                                    </div>
-                                                {% endif %}
-                                            </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                </ol>
-                            </div>
-                            <hr>
-                            <!-- TextArea options -->
-                            <div class="row">
-                                {% for field in formsets.1.form.forms.0 %}
-                                    {% if not field.field.widget.input_type %}
-                                        <div class="form-group col-sm-6">
-                                            <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                            <textarea class="form-control" name="{{ field.html_name }}" rows="5"
-                                                      id="{{ field.auto_id }}">{% if field.value %}
-                                                {{ field.value }}{% endif %}</textarea>
-                                        </div>
-                                        <!-- Display errors -->
-                                        {% if field.errors %}
-                                            <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                 role="alert">
-                                                <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close"><span
-                                                        aria-hidden="true">×</span></button>
-                                                {% for error in field.errors %}
-                                                    <i class="fa fa-exclamation-circle"></i>
-                                                    <strong>Error!</strong>
-                                                    {{ error|escape }}
-                                                {% endfor %}
-                                            </div>
-                                        {% endif %}
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            <!-- Hidden Inputs -->
-                            {% for field in formsets.1.form.forms.0 %}
-                                {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                            {% endfor %}
-                            <!-- End body -->
-                        </div>
-                    </div>
-                </section>
-                <!-- End Antecedentes Familiares -->
-                <!-- Otros Antecedentes -->
-                <section class="panel panel-bd lobidisable" id="{{ formsets.2.section_name }}">
-                    {{ formsets.2.form.management_form }}
-                    <div class="panel-heading">
-                        <div class="btn-group"><h2>{{ formsets.2.title }}</h2></div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <!-- Body -->
-                            <!-- Checkbox options -->
-                            <div class="row">
-                                <ol>
-                                    {% for field in formsets.2.form.forms.0 %}
-                                        {% if field.field.widget.input_type == 'checkbox' %}
-                                            <div class="col-sm-4 form-group">
-                                                <li>
-                                                    <div class="form-group">
-                                                        <input type="checkbox" class="form-check-input"
-                                                               name="{{ field.html_name }}"
-                                                               id="{{ field.auto_id }}"
-                                                                {% if field.initial %} checked {% endif %}/>
-                                                        <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
-                                                               for="{{ field.id_for_label }}">
-                                                            {{ field.label }}
-                                                        </label>
-
-                                                    </div>
-                                                </li>
-                                                <!-- Display errors -->
-                                                {% if field.errors %}
-                                                    <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                         role="alert">
-                                                        <button type="button" class="close" data-dismiss="alert"
-                                                                aria-label="Close"><span
-                                                                aria-hidden="true">×</span></button>
-                                                        {% for error in field.errors %}
-                                                            <i class="fa fa-exclamation-circle"></i>
-                                                            <strong>Error!</strong>
-                                                            {{ error|escape }}
-                                                        {% endfor %}
-                                                    </div>
-                                                {% endif %}
-                                            </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                </ol>
-                            </div>
-                            <hr>
-                            <!-- TextArea options -->
-                            <div class="row">
-                                {% for field in formsets.2.form.forms.0 %}
-                                    {% if not field.field.widget.input_type %}
-                                        <div class="form-group col-sm-6">
-                                            <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                            <textarea class="form-control" name="{{ field.html_name }}" rows="5"
-                                                      id="{{ field.auto_id }}">{% if field.value %}
-                                                {{ field.value }}{% endif %}</textarea>
-                                        </div>
-                                        <!-- Display errors -->
-                                        {% if field.errors %}
-                                            <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                 role="alert">
-                                                <button type="button" class="close" data-dismiss="alert"
-                                                        aria-label="Close"><span
-                                                        aria-hidden="true">×</span></button>
-                                                {% for error in field.errors %}
-                                                    <i class="fa fa-exclamation-circle"></i>
-                                                    <strong>Error!</strong>
-                                                    {{ error|escape }}
-                                                {% endfor %}
-                                            </div>
-                                        {% endif %}
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            <!-- Hidden Inputs -->
-                            {% for field in formsets.2.form.forms.0 %}
-                                {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                            {% endfor %}
-                            <!-- End body -->
-                        </div>
-                    </div>
-                </section>
-                <!-- End Otros Antecedentes -->
-                <!-- Exposiciones -->
-                <section class="panel panel-bd lobidisable" id="exposiciones">
-                    <div class="panel-heading">
-                        <div class="btn-group"><h2>Exposiciones</h2></div>
-                    </div>
-                    <div class="panel-body">
-                        <!-- Audifonos -->
-                        <section id="{{ formsets.3.section_name }}">
-                            {{ formsets.3.form.management_form }}
-                            <h3>{{ formsets.3.title }}</h3>
-                            <hr>
-                            <div class="row">
-                                {% for field in formsets.3.form.forms.0 %}
-                                    {% if field.field.widget.input_type == 'select' %}
-                                        <div class="col-sm-2">
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
-                                                   for="{{ field.id_for_label }}">
-                                                {{ field.label }}
-                                            </label>
-                                            <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                                    name="{{ field.html_name }}"
-                                                    id="{{ field.auto_id }}"
-                                                    size="1">
-                                                {% for option in field.field.choices %}
-                                                    <option value="{{ option.0 }}"
-                                                            {% if field.value == option.0 %}
-                                                            selected {% endif %}>
-                                                        {{ option.1 }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                    {% if field.field.widget.input_type == 'number' %}
-                                        <div class="col-sm-2 form-group">
-                                            <div class="form-group">
-                                                <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <input type="number" class="form-control"
-                                                       name="{{ field.html_name }}"
-                                                       id="{{ field.auto_id }}"
-                                                       placeholder="Ingrese {{ field.label }}"
-                                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                        {% if field.field.widget.is_required %}
-                                                       required="" {% endif %}/>
-                                            </div>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            {% for field in formsets.3.form.forms.0 %}
-                                {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                            {% endfor %}
-                        </section>
-                        <hr>
-                        <!-- Moto -->
-                        <section id="{{ formsets.4.section_name }}">
-                            {{ formsets.4.form.management_form }}
-                            <h3>{{ formsets.4.title }}</h3>
-                            <hr>
-                            <div class="row">
-                                {% for field in formsets.4.form.forms.0 %}
-                                    {% if field.field.widget.input_type == 'select' %}
-                                        <div class="col-sm-2">
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
-                                                   for="{{ field.id_for_label }}">
-                                                {{ field.label }}
-                                            </label>
-                                            <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                                    name="{{ field.html_name }}"
-                                                    id="{{ field.auto_id }}"
-                                                    size="1">
-                                                {% for option in field.field.choices %}
-                                                    <option value="{{ option.0 }}"
-                                                            {% if field.value == option.0 %}
-                                                            selected {% endif %}>
-                                                        {{ option.1 }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                    {% if field.field.widget.input_type == 'number' %}
-                                        <div class="col-sm-2 form-group">
-                                            <div class="form-group">
-                                                <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <input type="number" class="form-control"
-                                                       name="{{ field.html_name }}"
-                                                       id="{{ field.auto_id }}"
-                                                       placeholder="Ingrese {{ field.label }}"
-                                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                        {% if field.field.widget.is_required %}
-                                                       required="" {% endif %}/>
-                                            </div>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            {% for field in formsets.4.form.forms.0 %}
-                                {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                            {% endfor %}
-                        </section>
-                        <hr>
-                        <!-- Auto -->
-                        <section id="{{ formsets.5.section_name }}">
-                            {{ formsets.5.form.management_form }}
-                            <h3>{{ formsets.5.title }}</h3>
-                            <hr>
-                            <div class="row">
-                                {% for field in formsets.5.form.forms.0 %}
-                                    {% if field.field.widget.input_type == 'select' %}
-                                        <div class="col-sm-2">
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
-                                                   for="{{ field.id_for_label }}">
-                                                {{ field.label }}
-                                            </label>
-                                            <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                                    name="{{ field.html_name }}"
-                                                    id="{{ field.auto_id }}"
-                                                    size="1">
-                                                {% for option in field.field.choices %}
-                                                    <option value="{{ option.0 }}"
-                                                            {% if field.value == option.0 %}
-                                                            selected {% endif %}>
-                                                        {{ option.1 }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                    {% if field.field.widget.input_type == 'number' %}
-                                        <div class="col-sm-2 form-group">
-                                            <div class="form-group">
-                                                <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <input type="number" class="form-control"
-                                                       name="{{ field.html_name }}"
-                                                       id="{{ field.auto_id }}"
-                                                       placeholder="Ingrese {{ field.label }}"
-                                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                        {% if field.field.widget.is_required %}
-                                                       required="" {% endif %}/>
-                                            </div>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            {% for field in formsets.5.form.forms.0 %}
-                                {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                            {% endfor %}
-                        </section>
-                        <hr>
-                        <!-- Pesada -->
-                        <section id="{{ formsets.6.section_name }}">
-                            {{ formsets.6.form.management_form }}
-                            <h3>{{ formsets.6.title }}</h3>
-                            <hr>
-                            <div class="row">
-                                {% for field in formsets.6.form.forms.0 %}
-                                    {% if field.field.widget.input_type == 'select' %}
-                                        <div class="col-sm-2">
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
-                                                   for="{{ field.id_for_label }}">
-                                                {{ field.label }}
-                                            </label>
-                                            <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                                    name="{{ field.html_name }}"
-                                                    id="{{ field.auto_id }}"
-                                                    size="1">
-                                                {% for option in field.field.choices %}
-                                                    <option value="{{ option.0 }}"
-                                                            {% if field.value == option.0 %}
-                                                            selected {% endif %}>
-                                                        {{ option.1 }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                    {% if field.field.widget.input_type == 'number' %}
-                                        <div class="col-sm-2 form-group">
-                                            <div class="form-group">
-                                                <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <input type="number" class="form-control"
-                                                       name="{{ field.html_name }}"
-                                                       id="{{ field.auto_id }}"
-                                                       placeholder="Ingrese {{ field.label }}"
-                                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                        {% if field.field.widget.is_required %}
-                                                       required="" {% endif %}/>
-                                            </div>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            {% for field in formsets.6.form.forms.0 %}
-                                {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                            {% endfor %}
-                        </section>
-                    </div>
-                </section>
-                <!-- End Exposiciones -->
-                <!-- Estado Actual -->
-                <section class="panel panel-bd lobidisable" id="estado_actual">
-                    <div class="panel-heading">
-                        <div class="btn-group"><h2>Estado Actual</h2></div>
-                    </div>
-                    <div class="panel-body">
-                        <section id="{{ formsets.7.section_name }}">
-                            {{ formsets.7.form.management_form }}
-                            <h3>{{ formsets.7.title }}</h3>
-                            <hr>
-                            <div class="row">
-                                {% for field in formsets.7.form.forms.0 %}
-                                    {% if field.field.widget.input_type == 'select' %}
-                                        <div class="col-sm-2">
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
-                                                   for="{{ field.id_for_label }}">
-                                                {{ field.label }}
-                                            </label>
-                                            <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                                    name="{{ field.html_name }}"
-                                                    id="{{ field.auto_id }}"
-                                                    size="1">
-                                                {% for option in field.field.choices %}
-                                                    <option value="{{ option.0 }}"
-                                                            {% if field.value == option.0 %}
-                                                            selected {% endif %}>
-                                                        {{ option.1 }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                    {% if field.field.widget.input_type == 'number' %}
-                                        <div class="col-sm-2 form-group">
-                                            <div class="form-group">
-                                                <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <input type="number" class="form-control"
-                                                       name="{{ field.html_name }}"
-                                                       id="{{ field.auto_id }}"
-                                                       placeholder="Ingrese {{ field.label }}"
-                                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                        {% if field.field.widget.is_required %}
-                                                       required="" {% endif %}/>
-                                            </div>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            {% for field in formsets.7.form.forms.0 %}
-                                {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                            {% endfor %}
-                        </section>
-                        <section id="{{ formsets.8.section_name }}">
-                            {{ formsets.8.form.management_form }}
-                            <h3>{{ formsets.8.title }}</h3>
-                            <hr>
-                            <div class="row">
-                                {% for field in formsets.8.form.forms.0 %}
-                                    {% if field.field.widget.input_type == 'select' %}
-                                        <div class="col-sm-2">
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
-                                                   for="{{ field.id_for_label }}">
-                                                {{ field.label }}
-                                            </label>
-                                            <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                                    name="{{ field.html_name }}"
-                                                    id="{{ field.auto_id }}"
-                                                    size="1">
-                                                {% for option in field.field.choices %}
-                                                    <option value="{{ option.0 }}"
-                                                            {% if field.value == option.0 %}
-                                                            selected {% endif %}>
-                                                        {{ option.1 }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                    {% if field.field.widget.input_type == 'number' %}
-                                        <div class="col-sm-2 form-group">
-                                            <div class="form-group">
-                                                <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <input type="number" class="form-control"
-                                                       name="{{ field.html_name }}"
-                                                       id="{{ field.auto_id }}"
-                                                       placeholder="Ingrese {{ field.label }}"
-                                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                        {% if field.field.widget.is_required %}
-                                                       required="" {% endif %}/>
-                                            </div>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            {% for field in formsets.8.form.forms.0 %}
-                                {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                            {% endfor %}
-                        </section>
-                        <section id="{{ formsets.9.section_name }}">
-                            {{ formsets.9.form.management_form }}
-                            <h3>{{ formsets.9.title }}</h3>
-                            <hr>
-                            <div class="row">
-                                {% for field in formsets.9.form.forms.0 %}
-                                    {% if field.field.widget.input_type == 'select' %}
-                                        <div class="col-sm-2">
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
-                                                   for="{{ field.id_for_label }}">
-                                                {{ field.label }}
-                                            </label>
-                                            <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                                    name="{{ field.html_name }}"
-                                                    id="{{ field.auto_id }}"
-                                                    size="1">
-                                                {% for option in field.field.choices %}
-                                                    <option value="{{ option.0 }}"
-                                                            {% if field.value == option.0 %}
-                                                            selected {% endif %}>
-                                                        {{ option.1 }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                    {% if field.field.widget.input_type == 'number' %}
-                                        <div class="col-sm-2 form-group">
-                                            <div class="form-group">
-                                                <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <input type="number" class="form-control"
-                                                       name="{{ field.html_name }}"
-                                                       id="{{ field.auto_id }}"
-                                                       placeholder="Ingrese {{ field.label }}"
-                                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                        {% if field.field.widget.is_required %}
-                                                       required="" {% endif %}/>
-                                            </div>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            {% for field in formsets.9.form.forms.0 %}
-                                {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                            {% endfor %}
-                        </section>
-                        <section id="{{ formsets.10.section_name }}">
-                            {{ formsets.10.form.management_form }}
-                            <h3>{{ formsets.10.title }}</h3>
-                            <hr>
-                            <div class="row">
-                                {% for field in formsets.10.form.forms.0 %}
-                                    {% if field.field.widget.input_type == 'select' %}
-                                        <div class="col-sm-2">
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
-                                                   for="{{ field.id_for_label }}">
-                                                {{ field.label }}
-                                            </label>
-                                            <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                                    name="{{ field.html_name }}"
-                                                    id="{{ field.auto_id }}"
-                                                    size="1">
-                                                {% for option in field.field.choices %}
-                                                    <option value="{{ option.0 }}"
-                                                            {% if field.value == option.0 %}
-                                                            selected {% endif %}>
-                                                        {{ option.1 }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                    {% if field.field.widget.input_type == 'number' %}
-                                        <div class="col-sm-2 form-group">
-                                            <div class="form-group">
-                                                <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <input type="number" class="form-control"
-                                                       name="{{ field.html_name }}"
-                                                       id="{{ field.auto_id }}"
-                                                       placeholder="Ingrese {{ field.label }}"
-                                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                        {% if field.field.widget.is_required %}
-                                                       required="" {% endif %}/>
-                                            </div>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            {% for field in formsets.10.form.forms.0 %}
-                                {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                            {% endfor %}
-                        </section>
-                        <section id="{{ formsets.11.section_name }}">
-                            {{ formsets.11.form.management_form }}
-                            <h3>{{ formsets.11.title }}</h3>
-                            <hr>
-                            <div class="row">
-                                {% for field in formsets.11.form.forms.0 %}
-                                    {% if field.field.widget.input_type == 'select' %}
-                                        <div class="col-sm-2">
-                                            <label class="label {% if field.errors %} label-danger {% else %}  label-custom  {% endif %}"
-                                                   for="{{ field.id_for_label }}">
-                                                {{ field.label }}
-                                            </label>
-                                            <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                                    name="{{ field.html_name }}"
-                                                    id="{{ field.auto_id }}"
-                                                    size="1">
-                                                {% for option in field.field.choices %}
-                                                    <option value="{{ option.0 }}"
-                                                            {% if field.value == option.0 %}
-                                                            selected {% endif %}>
-                                                        {{ option.1 }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                    {% if field.field.widget.input_type == 'number' %}
-                                        <div class="col-sm-2 form-group">
-                                            <div class="form-group">
-                                                <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                                <input type="number" class="form-control"
-                                                       name="{{ field.html_name }}"
-                                                       id="{{ field.auto_id }}"
-                                                       placeholder="Ingrese {{ field.label }}"
-                                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                        {% if field.field.widget.is_required %}
-                                                       required="" {% endif %}/>
-                                            </div>
-                                            <!-- Display errors -->
-                                            {% if field.errors %}
-                                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                                     role="alert">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-label="Close"><span
-                                                            aria-hidden="true">×</span></button>
-                                                    {% for error in field.errors %}
-                                                        <i class="fa fa-exclamation-circle"></i>
-                                                        <strong>Error!</strong>
-                                                        {{ error|escape }}
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            {% for field in formsets.11.form.forms.0 %}
-                                {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                            {% endfor %}
-                        </section>
-                    </div>
-                </section>
-                <!-- End Estado Actual -->
-                <!-- Informacion -->
-                <section class="panel panel-bd lobidisable" id="{{ formsets.12.section_name }}">
-                    {{ formsets.12.form.management_form }}
-                    <div class="panel-heading">
-                        <div class="btn-group"><h2>{{ formsets.12.title }}</h2></div>
-                    </div>
-                    <div class="panel-body">
-                        {% include 'includes/formset_structure.html' with formset=formsets.12 %}
-                    </div>
-                </section>
-                <!-- End Informacion -->
-                <!-- form general -->
-                {% include 'includes/simple_register_form.html' with form=form %}
+    {# Exposiciones #}
+    <section class="panel panel-bd lobidisable" id="exposiciones">
+        <div class="panel-heading">
+            <div class="btn-group"><h2>Exposiciones</h2></div>
+        </div>
+        <div class="panel-body">
+            <!-- Audifonos -->
+            <section id="{{ formsets.3.section_name }}">
+                {{ formsets.3.form.management_form }}
+                <h3>{{ formsets.3.title }}</h3>
                 <hr>
-                <span class="pull-right">
-                    <button class="btn btn-success" type="submit">Guardar</button>
-                </span>
-            </form>
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% include 'includes/examination_simple_form.html' with very_small=1 form=formsets.3.form.forms.0 %}
+                    </div>
+                </div>
+            </section>
+            <hr>
+            <!-- Moto -->
+            <section id="{{ formsets.4.section_name }}">
+                {{ formsets.4.form.management_form }}
+                <h3>{{ formsets.4.title }}</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% include 'includes/examination_simple_form.html' with very_small=1 form=formsets.4.form.forms.0 %}
+                    </div>
+                </div>
+            </section>
+            <hr>
+            <!-- Auto -->
+            <section id="{{ formsets.5.section_name }}">
+                {{ formsets.5.form.management_form }}
+                <h3>{{ formsets.5.title }}</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% include 'includes/examination_simple_form.html' with very_small=1 form=formsets.5.form.forms.0 %}
+                    </div>
+                </div>
+            </section>
+            <hr>
+            <!-- Pesada -->
+            <section id="{{ formsets.6.section_name }}">
+                {{ formsets.6.form.management_form }}
+                <h3>{{ formsets.6.title }}</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% include 'includes/examination_simple_form.html' with very_small=1 form=formsets.6.form.forms.0 %}
+                    </div>
+                </div>
+            </section>
         </div>
-    </div>
+    </section>
+
+    {# Estado Actual #}
+    <section class="panel panel-bd lobidisable" id="estado_actual">
+        <div class="panel-heading">
+            <div class="btn-group"><h2>Estado Actual</h2></div>
+        </div>
+        <div class="panel-body">
+            <section id="{{ formsets.7.section_name }}">
+                {{ formsets.7.form.management_form }}
+                <h3>{{ formsets.7.title }}</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% include 'includes/examination_simple_form.html' with very_small=1 form=formsets.7.form.forms.0 %}
+                    </div>
+                </div>
+            </section>
+            <section id="{{ formsets.8.section_name }}">
+                {{ formsets.8.form.management_form }}
+                <h3>{{ formsets.8.title }}</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% include 'includes/examination_simple_form.html' with very_small=1 form=formsets.8.form.forms.0 %}
+                    </div>
+                </div>
+            </section>
+            <section id="{{ formsets.9.section_name }}">
+                {{ formsets.9.form.management_form }}
+                <h3>{{ formsets.9.title }}</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% include 'includes/examination_simple_form.html' with very_small=1 form=formsets.9.form.forms.0 %}
+                    </div>
+                </div>
+            </section>
+            <section id="{{ formsets.10.section_name }}">
+                {{ formsets.10.form.management_form }}
+                <h3>{{ formsets.10.title }}</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% include 'includes/examination_simple_form.html' with very_small=1 form=formsets.10.form.forms.0 %}
+                    </div>
+                </div>
+            </section>
+            <section id="{{ formsets.11.section_name }}">
+                {{ formsets.11.form.management_form }}
+                <h3>{{ formsets.11.title }}</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% include 'includes/examination_simple_form.html' with very_small=1 form=formsets.11.form.forms.0 %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    {# Informacion #}
+    <section class="panel panel-bd lobidisable" id="{{ formsets.12.section_name }}">
+        {{ formsets.12.form.management_form }}
+        <div class="panel-heading">
+            <div class="btn-group"><h2>{{ formsets.12.title }}</h2></div>
+        </div>
+        <div class="panel-body">
+            {% include 'includes/formset_structure.html' with formset=formsets.12 %}
+        </div>
+    </section>
+
+    {# form general #}
+    {% include 'includes/simple_register_form.html' with form=form %}
 {% endblock %}

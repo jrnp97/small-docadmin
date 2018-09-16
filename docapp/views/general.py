@@ -32,7 +32,7 @@ class DoctorTakeAExam(LoginRequiredMixin, CheckDoctor, SingleObjectMixin, Templa
     pk_url_kwarg = 'exam_id'
     model = Examinacion
     template_name = 'docapp/take_object.html'
-    redirect_url = reverse_lazy('docapp:list_examination')
+    redirect_url = reverse_lazy('docapp:doctor_own_examinations')
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -48,7 +48,7 @@ class DoctorTakeAExam(LoginRequiredMixin, CheckDoctor, SingleObjectMixin, Templa
             messages.error(message='Examinacion NO Asignada', request=request)
         else:
             messages.success(message='Examinacion Asignada Exitosamente', request=request)
-        return HttpResponseRedirect(reverse('docapp:list_examination'))
+        return HttpResponseRedirect(reverse('docapp:doctor_own_examinations'))
 
 
 take_a_exam = DoctorTakeAExam.as_view()

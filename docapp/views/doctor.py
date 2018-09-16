@@ -127,7 +127,7 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
 
     def get_context_data(self, **kwargs):
         examination = self.get_object()
-        examination_patient = self.get_object().paciente_id
+        examination_patient = examination.paciente_id
         if examination_patient.sexo == 'femenino':
             self.extra_context['formsets'][1] = {'section_name': 'ant_gineco',
                                                  'title': 'Antecedentes Gineco-Obstricos',
@@ -164,7 +164,7 @@ class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior
                          {'section_name': 'ant_familiares',
                           'title': 'Antecedentes Familiares',
                           'form': ant_familiares_section},
-                         # TODO Antecedent gineco-obstetricos put depend sex of pacient
+                         None,
                          {'section_name': 'revision_sistemas',
                           'title': 'Revision por Sistemas',
                           'form': revision_sistemas_section},
@@ -227,11 +227,32 @@ class UpdateOccupational(LoginRequiredMixin, CheckDoctor, BaseExamUpdateBehavior
                           'title': 'Genito Unitario',
                           'form': examen_fisico_genito_unitario_section},
                          # Fin examen fisico
-                         # TODO Section conclusion process depend examination type
+                         None
                      ]
                      }
 
     def get_context_data(self, **kwargs):
+        examination = self.get_object().examinacion_id
+        examination_patient = examination.paciente_id
+        if examination_patient.sexo == 'femenino':
+            self.extra_context['formsets'][1] = {'section_name': 'ant_gineco',
+                                                 'title': 'Antecedentes Gineco-Obstricos',
+                                                 'form': ant_gineco_section}
+        conclusion_section = {'section_name': 'conclusion',
+                              'title': 'Conclusion',
+                              'form': None}
+        if examination.tipo == 'ingreso':
+            conclusion_section.update({'form': conclusion_ingreso_section})
+        elif examination.tipo == 'periodico':
+            conclusion_section.update({'form': conclusion_periodico_section})
+        elif examination.tipo == 'retiro' or examination.tipo == 'reubicacion':
+            conclusion_section.update({'form': conclusion_retiro_section})
+        elif examination.tipo == 'post-incapacidad':
+            conclusion_section.update({'form': conclusion_post_incapacidad_section})
+        else:
+            raise SuspiciousOperation("Contact Admin")
+
+        self.extra_context['formsets'][21] = conclusion_section
         return super(UpdateOccupational, self).get_context_data(**kwargs)
 
 
@@ -357,7 +378,7 @@ class RegisterVisiometry(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavi
     model = Visiometry
     form_class = VisioForm
     template_name = 'docapp/register/exams/visiometry.html'
-    success_url = reverse_lazy('docapp:list_examination')
+    success_url = reverse_lazy('docapp:doctor_own_examinations')
     extra_context = {'exam_name': 'visiometria',
                      'parent_object_key': 'visiometria_id',
                      'child_name': 'visiometria',
@@ -463,7 +484,7 @@ class RegisterSimpleExam(LoginRequiredMixin, CheckDoctor, UpdateView):
     model = SimpleExam
     form_class = SimpleExamForm
     template_name = 'docapp/register/exams/simple.html'
-    success_url = reverse_lazy('docapp:list_examination')
+    success_url = reverse_lazy('docapp:doctor_own_examinations')
 
 
 register_simple_exam = RegisterSimpleExam.as_view()
@@ -475,7 +496,7 @@ class RegisterEmployAntecedent(CheckDoctor, LoginRequiredMixin, FormsetPostManag
     form_class = AntLaboralesForm
     model = AntecedentesLaborales
     template_name = 'docapp/register/antecedent.html'
-    success_url = reverse_lazy('docapp:dashboard')
+    success_url = reverse_lazy('docapp:doctor_own_examinations')
     model_to_filter = PacienteEmpresa
     context_object_2_name = 'person'
     extra_context = {'exam_name': 'Antecedente',
@@ -510,7 +531,7 @@ class UpdateEmployAntecedent(CheckDoctor, LoginRequiredMixin, FormsetPostManager
     model = AntecedentesLaborales
     form_class = AntLaboralesForm
     template_name = 'docapp/register/antecedent.html'
-    success_url = reverse_lazy('docapp:dashboard')
+    success_url = reverse_lazy('docapp:doctor_own_examinations')
     extra_context = {'parent_object_key': 'antecedente_id',
                      'formsets': [
                          {'section_name': 'riesgos',

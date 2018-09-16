@@ -13,39 +13,11 @@
     </style>
 {% endblock %}
 
-{% block content_header %}
-    <div class="header-icon">
-        <i class="pe-7s-box1"></i>
-    </div>
-    <div class="header-title">
-        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
-            <div class="input-group">
-                <input name="q" class="form-control" placeholder="Search..." type="text">
-                <span class="input-group-btn">
-                                    <button type="submit" name="search" id="search-btn" class="btn"><i
-                                            class="fa fa-search"></i></button>
-                                </span>
-            </div>
-        </form>
-        <h1>Registro Examen {{ exam_name|capfirst }}</h1>
-        <small>Ingrese Resultados del proceso #{{ exam.id }}</small>
-        <ol class="breadcrumb hidden-xs">
-            <li>
-                <a href="{% url 'docapp:list_examination' %}" class="active">
-                    <i class="pe-7s-home"></i>
-                    Lista Examenes</a>
-            </li>
-        </ol>
-    </div>
-{% endblock %}
-
 {% block page_title %} Registro Resumen Examinacion {% endblock %}
-{% block small_message %} Ingrese Resultados del proceso #{{ exam.id }} {% endblock %}
 
 
 
 {% block form_body %}
-    <!-- form general -->
 
     <div class="row">
         <div class="col-sm-12">
@@ -53,7 +25,7 @@
         </div>
     </div>
 
-    <!-- Antecedentes Familiares - Personales -->
+    {# Antecedentes Familiares - Personales #}
     <section class="{{ formsets.0.section_name }}">
         {{ formsets.0.form.management_form }}
         <div class="panel panel-bd lobidisable">
@@ -65,9 +37,9 @@
             </div>
         </div>
     </section>
-    <!-- End Antecedentes Personales - Familiares -->
+
+    {# Antecedentes Gineco-Obstetricos #}
     {% if formsets.1 %}
-        <!-- Antecedentes Gineco-Obstetricos -->
         <section class="{{ formsets.1.section_name }}">
             {{ formsets.1.form.management_form }}
             <div class="panel panel-bd lobidisable">
@@ -75,113 +47,17 @@
                     <div class="btn-group"><h2>{{ formsets.1.title }}</h2></div>
                 </div>
                 <div class="panel-body">
-                    <!-- Body -->
-                    <!-- Number options -->
                     <div class="row">
-                        {% for field in formsets.1.form.forms.0 %}
-                            {% if field.field.widget.input_type == 'number' %}
-                                <div class="col-sm-2 form-group">
-                                    <div class="form-group">
-                                        <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                               for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                        <input type="number" class="form-check-input"
-                                               name="{{ field.html_name }}"
-                                               id="{{ field.auto_id }}"
-                                               placeholder="Ingrese {{ field.label }}"
-                                                {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                                {% if field.field.widget.is_required %}
-                                               required="" {% endif %}/>
-                                    </div>
-                                    <!-- Display errors -->
-                                    {% if field.errors %}
-                                        <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                             role="alert">
-                                            <button type="button" class="close" data-dismiss="alert"
-                                                    aria-label="Close"><span
-                                                    aria-hidden="true">×</span></button>
-                                            {% for error in field.errors %}
-                                                <i class="fa fa-exclamation-circle"></i>
-                                                <strong>Error!</strong>
-                                                {{ error|escape }}
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
+                        <div class="col-sm-12">
+                            {% include 'includes/examination_sort_form.html' with form=formsets.1.form.forms.0 %}
+                        </div>
                     </div>
-                    <!-- Date options -->
-                    <div class="row">
-                        {% for field in formsets.1.form.forms.0 %}
-                            {% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %}
-                                <div class="col-sm-2 form-group">
-                                    <div class="form-group">
-                                        <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                               for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                        <input type="date"
-                                               class="form-control {% if field.errors %} label-danger-outline {% endif %}"
-                                               name="{{ field.html_name }}"
-                                               id="{{ field.auto_id }}"
-                                                {% if field.value %}  value="{{ field.value|date:"Y-m-d" }}" {% endif %}
-                                                {% if field.field.widget.is_required %} required="" {% endif %}/>
-                                    </div>
-                                    <!-- Display errors -->
-                                    {% if field.errors %}
-                                        <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                             role="alert">
-                                            <button type="button" class="close" data-dismiss="alert"
-                                                    aria-label="Close"><span
-                                                    aria-hidden="true">×</span></button>
-                                            {% for error in field.errors %}
-                                                <i class="fa fa-exclamation-circle"></i>
-                                                <strong>Error!</strong>
-                                                {{ error|escape }}
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    <hr>
-                    <!-- TextArea -->
-                    <div class="row">
-                        {% for field in formsets.1.form.forms.0 %}
-                            {% if not field.field.widget.input_type %}
-                                <div class="form-group col-sm-4">
-                                    <label class="label {% if field.errors %} label-danger {% else %} label-custom {% endif %}"
-                                           for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    <textarea class="form-control" name="{{ field.html_name }}" rows="5"
-                                              id="{{ field.auto_id }}">{% if field.value %}
-                                        {{ field.value }} {% endif %}</textarea>
-                                </div>
-                                <!-- Display errors -->
-                                {% if field.errors %}
-                                    <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
-                                         role="alert">
-                                        <button type="button" class="close" data-dismiss="alert"
-                                                aria-label="Close"><span
-                                                aria-hidden="true">×</span></button>
-                                        {% for error in field.errors %}
-                                            <i class="fa fa-exclamation-circle"></i>
-                                            <strong>Error!</strong>
-                                            {{ error|escape }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    {% for field in formsets.1.form.forms.0 %}
-                        {% if field.field.widget.input_type == 'hidden' %} {{ field }} {% endif %}
-                    {% endfor %}
-                    <!-- End body -->
                 </div>
             </div>
         </section>
-        <!-- End Antecedentes Gineco-Obstetricos -->
     {% endif %}
-    <!-- Revision por sistemas -->
+
+    {# Revision por sistemas#}
     <section class="{{ formsets.2.section_name }}">
         {{ formsets.2.form.management_form }}
         <div class="panel panel-bd lobidisable">
@@ -193,8 +69,8 @@
             </div>
         </div>
     </section>
-    <!-- End Revision por sistemas -->
-    <!-- Habitos -->
+
+    {# Habitos #}
     <section class="habitos">
         <div class="panel panel-bd lobidisable">
             <div class="panel-heading">
@@ -239,31 +115,28 @@
             </div>
         </div>
     </section>
-    <!-- End Habitos -->
-    <!-- Examen Fisico -->
+    {# Examen Fisico#}
     <hr>
     <h1>Examen Fisico</h1>
-    <small><b>Nota: Por favor seleccionar los que presenten estado anormal de lo contrario no
-        seleccionar.</b></small>
+    <small><b>Nota: Por favor seleccionar los que presenten estado anormal de lo contrario no  seleccionar.</b></small>
     <hr>
-
-    <!-- Aspecto general -->
+    {# Aspecto general #}
     <section class="panel panel-bd lobidisable" id="{{ formsets.7.section_name }}">
+        {{ formsets.7.form.management_form }}
         <div class="panel-heading">
             <div class="btn-group"><h3 class="text-center">{{ formsets.7.title }}</h3></div>
         </div>
         <div class="panel-body">
-            {{ formsets.7.form.management_form }}
             {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 form=formsets.7.form.forms.0 %}
         </div>
     </section>
-    <!-- biometria -->
+    {# biometria #}
     <section class="panel panel-bd lobidisable" id="{{ formsets.8.section_name }}">
+    {{ formsets.8.form.management_form }}
         <div class="panel-heading">
             <div class="btn-group"><h3 class="text-center">{{ formsets.8.title }}</h3></div>
         </div>
         <div class="panel-body">
-            {{ formsets.8.form.management_form }}
             {% include 'includes/simple_register_form.html' with form=formsets.8.form.forms.0 %}
         </div>
     </section>
@@ -372,8 +245,8 @@
             </div>
         </div>
     </section>
-    <!-- End body -->
-    <!-- End Examen Fisico -->
+
+    {# Conclution #}
     {% if formsets.21 %}
         <section class="{{ formsets.21.section_name }}">
             {{ formsets.21.form.management_form }}

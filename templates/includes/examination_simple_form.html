@@ -1,27 +1,27 @@
 {% for field in form %}
 
     {% if field.field.widget.input_type == 'select' %}
-        <div class="col-sm-4 form-group">
+        <div class="{% if very_small %} col-sm-2 {% else %} col-sm-4 {% endif %}form-group">
             {% include 'includes/fields/select.html' with field=field %}
         </div>
     {% elif field.field.widget.format_key == 'DATE_INPUT_FORMATS' %}
-        <div class="col-sm-4 form-group">
+        <div class="{% if very_small %} col-sm-2 {% else %} col-sm-4 {% endif %}form-group">
             {% include 'includes/fields/datetime.html' with field=field %}
         </div>
     {% elif field.field.widget.input_type == 'number' or field.field.widget.input_type == 'text' or field.field.widget.input_type == 'password' or field.field.widget.input_type == 'email' %}
-        <div class="col-sm-3 form-group">
+        <div class="{% if very_small %} col-sm-2 {% else %} col-sm-3 {% endif %}form-group">
             {% include 'includes/fields/input_text_number.html' with field=field %}
         </div>
     {% elif field.field.widget.input_type == 'checkbox' %}
-        <div class="col-sm-2 form-group m-t-20">
+        <div class="{% if very_small %} col-sm-2 {% else %} col-sm-2 {% endif %}form-group m-t-20">
             {% include 'includes/fields/input_checkbox.html' with field=field %}
         </div>
     {% elif field.field.widget.input_type == 'file' %}
-        <div class="col-sm-4 form-group">
+        <div class="{% if very_small %} col-sm-2 {% else %} col-sm-4 {% endif %}form-group">
             {% include 'includes/fields/input_file.html' with field=field %}
         </div>
     {% elif not field.field.widget.input_type %}
-        <div class="col-sm-4 form-group">
+        <div class="{% if very_small %} col-sm-2 {% else %} col-sm-4 {% endif %}form-group">
             {% include 'includes/fields/textarea.html' with field=field area_row=3 non_resize=non_resize %}
         </div>
     {% endif %}

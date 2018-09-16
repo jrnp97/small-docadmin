@@ -2,47 +2,6 @@
 
 {% block title %} Examinacion | Resumen {% endblock %}
 
-{% block styles %}
-    {{ block.super }}
-    <style>
-        .colored {
-            background-color: #f7f7f9 !important;
-            border: 1px solid #9bbcd8 !important;
-            border-radius: 0.8% !important;
-        }
-    </style>
-{% endblock %}
-
-{% block content_header %}
-    <div class="header-icon">
-        <i class="pe-7s-box1"></i>
-    </div>
-    <div class="header-title">
-        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
-            <div class="input-group">
-                <input name="q" class="form-control" placeholder="Search..." type="text">
-                <span class="input-group-btn">
-                                    <button type="submit" name="search" id="search-btn" class="btn"><i
-                                            class="fa fa-search"></i></button>
-                                </span>
-            </div>
-        </form>
-        <h1>Registro Examen {{ exam_name|capfirst }}</h1>
-        <small>Ingrese Resultados del proceso #{{ exam.id }}</small>
-        <ol class="breadcrumb hidden-xs">
-            <li>
-                <a href="{% url 'docapp:list_examination' %}" class="active">
-                    <i class="pe-7s-home"></i>
-                    Lista Examenes</a>
-            </li>
-        </ol>
-    </div>
-{% endblock %}
-
-{% block page_title %} Registro Altura {% endblock %}
-{% block small_message %} Ingrese Resultados del proceso #{{ exam.id }} {% endblock %}
-
-
 
 {% block form_body %}
     <!-- Antecedentes Preguntas -->
@@ -59,9 +18,6 @@
 
         </div>
     </section>
-    {#    End Antecedentes #}
-    <!-- form general -->
-
     <div class="row">
         <div class="col-sm-12">
             {% include 'includes/simple_register_form.html' with form=form %}

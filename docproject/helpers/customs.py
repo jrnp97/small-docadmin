@@ -186,7 +186,7 @@ class BaseRegisterExamBehavior:
     pk_url_kwarg = 'exam_id'
     model_to_filter = Examinacion
     context_object_2_name = 'exam'
-    success_url = reverse_lazy('docapp:list_examination')
+    success_url = reverse_lazy('docapp:doctor_own_examinations')
 
     def _custom_save(self, form):
         exam_type = self.get_object()
@@ -219,7 +219,7 @@ class BaseRegisterExamBehavior:
 
 # Update exams
 class BaseExamUpdateBehavior:
-    success_url = reverse_lazy('docapp:list_examination')
+    success_url = reverse_lazy('docapp:doctor_own_examinations')
 
     def form_valid(self, form):
         """ Overwrite form_valid to add missing information"""

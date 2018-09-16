@@ -10,6 +10,7 @@
 {% block datatable_body %}
     <thead>
     <tr>
+        <th>ID</th>
         <th>Tipo de examen</th>
         <th>Paciente</th>
         <th>Creador</th>
@@ -21,6 +22,7 @@
     <tbody>
     {% for exam in exam_list %}
         <tr>
+            <td>{{ exam.id }}</td>
             <td> {{ exam.tipo }} </td>
             <td> {{ exam.paciente_id }}
                 <br>
@@ -97,11 +99,10 @@
 {% block scripts %}
     {{ block.super }}
     <script>
-        $(document).ready(function () {
-            $('.btn_modal').on('click', function (event) {
-                event.preventDefault();
-                $('#examination_modal').modal('show').find('.modal-body').load($(this).attr('href'));
-            });
+        $('.btn_modal').on('click', function (event) {
+            event.preventDefault();
+            console.log("Clicked");
+            $('#examination_modal').modal('show').find('.modal-body').load($(this).attr('href'));
         });
     </script>
 {% endblock %}
