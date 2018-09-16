@@ -3,7 +3,7 @@ from django.db import IntegrityError
 
 from accounts.forms import BaseUserForm
 
-from labapp.models import Laboratorio, LaboratoryProfile
+from labapp.models import Laboratorio, LaboratoryProfile, LabExam, ExamResults
 
 
 class BaseLabUserCreateForm(BaseUserForm):
@@ -27,3 +27,7 @@ class BaseLabUserCreateForm(BaseUserForm):
                 instance.delete(destroy=True)
                 raise forms.ValidationError(message="Unable to save profile, check information", code='invalid')
         return instance
+
+
+lab_exam_result = forms.inlineformset_factory(parent_model=LabExam, model=ExamResults, extra=1, can_delete=True,
+                                              fields='__all__', exclude=('examen', ))

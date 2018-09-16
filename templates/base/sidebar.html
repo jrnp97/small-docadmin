@@ -20,9 +20,26 @@
             <li class="active">
                 <a href="{% url 'docapp:dashboard' %}"><i class="fa fa-hospital-o"></i><span>Dashboard</span>
                 </a>
-                <a href="#" data-toggle="modal" data-target="#myModal3"><i class="fa fa-search"></i><span>Consultar</span>
+                <a href="#" data-toggle="modal" data-target="#myModal3"><i
+                        class="fa fa-search"></i><span>Consultar</span>
                 </a>
             </li>
+            {% if request.user.profile_type == 'p_laboratorio' %}
+                {% if request.user.laboratory_profile.is_admin %}
+                    <!-- Personal options -->
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-user-circle-o"></i><span>Recursos Humanos</span>
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="#">Añadir Empleado</a></li>
+                            <li><a href="#">Lista Empleados</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+            {% endif %}
+
             {% if request.user.is_superuser %}
                 <!-- Personal options -->
                 <li class="treeview">
@@ -88,15 +105,17 @@
                             {% if request.user.profile_type == 'p_laboratorio' %}
                                 <a href="{% url 'labapp:list_examination_todo' %}">Disponibles</a>
                             {% elif request.user.profile_type == 'doctor' %}
-                                <a href="{% url 'docapp:list_examination' %}">Sin Asignar</a>
+                                <a href="{% url 'docapp:list_examination' %}">Disponibles</a>
                             {% elif request.user.profile_type == 'receptionista' %}
                                 <a href="{% url 'docapp:list_examination' %}">Lista</a>
                             {% endif %}
                         </li>
                         {% if request.user.profile_type == 'p_laboratorio' %}
                             <li><a href="{% url 'labapp:lab_own_examinations' %}">Pendientes</a></li>
+{#                            <li><a href="#">Finalizadas</a></li>#}
                         {% elif request.user.profile_type == 'doctor' %}
                             <li><a href="{% url 'docapp:doctor_own_examinations' %}">Pendientes</a></li>
+{#                            <li><a href="#">Finalizadas</a></li>#}
                         {% endif %}
                     </ul>
                 </li>

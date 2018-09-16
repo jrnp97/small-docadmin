@@ -7,56 +7,42 @@
         <i class="pe-7s-box1"></i>
     </div>
     <div class="header-title">
-        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
-            <div class="input-group">
-                <input name="q" class="form-control" placeholder="Search..." type="text">
-                <span class="input-group-btn">
-                                    <button type="submit" name="search" id="search-btn" class="btn"><i
-                                            class="fa fa-search"></i></button>
-                                </span>
-            </div>
-        </form>
-        <h1>Registrando antecedente a {{ antecedent.persona }}</h1>
+        <h1>Registrando antecedente a {% if antecedent.persona %} {{ antecedent.persona }} {% else %} {{ person }} {% endif %}</h1>
         <small>Ingrese informacion correspondiente</small>
-        <ol class="breadcrumb hidden-xs">
-            <li><a href="{% url 'docapp:dashboard' %}"><i class="pe-7s-home"></i> Home</a></li>
-            <li class="active">Dashboard</li>
-        </ol>
     </div>
 {% endblock %}
 
 {% block content_main %}
     <div class="row">
-        <!-- Form controls -->
         <div class="col-sm-12">
             <div class="panel panel-bd">
                 <div class="panel-heading">
-                    <div class="btn-group"><!-- Empty --></div>
+                    <div class="btn-group"><h1>Registro</h1></div>
                 </div>
                 <div class="panel-body">
 
                     <form class="col-sm-12" method="POST">
                         {% csrf_token %}
-                        <!-- General -->
+                        {# General #}
                         {% include 'includes/simple_register_form.html' with form=form %}
-                        <hr>
-                        <!-- Section riesgos -->
-                        <section class="{{ formsets.0.section_name }}">
-                        <span class="pull-left">
-                            <small><b>Seleccione los riesgos presentados</b></small>
-                        </span><br>
-                            {{ formsets.0.form.management_form }}
-                            {% include 'includes/ordered_checkbox_with_textarea.html' with form=formsets.0.form.forms.0 %}
+                        {# Riesgos #}
+                        <section class="{{ formsets.0.section_name }} row">
+                            <div class="col-sm-12">
+                                {{ formsets.0.form.management_form }}
+                                <h2>Riesgos</h2>
+                                <span class="pull-left"><small><b>Seleccione los riesgos presentados</b></small></span>
+                                <hr>
+                                {% include 'includes/examination_simple_form.html' with form=formsets.0.form.forms.0 %}
+                            </div>
                         </section>
-                        <!-- Future -->
-
-                        <section class="{{ formsets.1.section_name }}">
-                            <h2>Accidentes</h2>
-                            <span class="pull-left">
-                            <small><b>Registre Accidentes del trabajo</b></small>
-                        </span>
-                            <hr>
-                            {% include 'includes/formset_structure.html' with formset=formsets.1 %}
+                        {# Accidentes #}
+                        <section class="{{ formsets.1.section_name }} row">
+                            <div class="col-sm-12">
+                                <h2>Accidentes</h2>
+                                <span class="pull-left"><small><b>Registre Accidentes del trabajo</b></small></span>
+                                <hr>
+                                {% include 'includes/formset_structure.html' with formset=formsets.1 %}
+                            </div>
                         </section>
                         <div class="col-sm-12 reset-button">
                             <hr>

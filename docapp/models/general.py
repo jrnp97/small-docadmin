@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from accounts.models import ReceptionProfile, DoctorProfile
-from labapp.models import Laboratorio
+# from labapp.models import Laboratorio
 
 User = get_user_model()
 
@@ -137,7 +137,7 @@ class Examinacion(models.Model):
     do_exam_audiologia = models.BooleanField(default=False, null=False, blank=True)
     do_exam_visiometria = models.BooleanField(default=False, null=False, blank=True)
 
-    laboratorio_id = models.ForeignKey(Laboratorio, on_delete=models.CASCADE, related_name='examinaciones')
+    # laboratorio_id = models.ForeignKey(Laboratorio, on_delete=models.CASCADE, related_name='examinaciones')
     paciente_id = models.ForeignKey(PacienteEmpresa, on_delete=models.CASCADE, related_name='examinaciones')
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
@@ -148,21 +148,44 @@ class Examinacion(models.Model):
     def __str__(self):
         return self.tipo
 
-    def get_process(self):
-        # TODO CHANGE
-        examenes_done = [hasattr(self, 'visiometria'), hasattr(self, 'audiologia'),
-                         hasattr(self, 'ocupacional'), hasattr(self, 'laboratorio')]
-        return examenes_done.count(True) * 25
+    def get_doctor_process(self):
+        normal_exams = [hasattr(self, 'ocupacional')]
+        if self.do_exam_altura:
+            normal_exams.append(hasattr(self, 'altura'))
+        if self.do_exam_audiologia:
+            normal_exams.append(hasattr(self, 'audiologia'))
+        if self.do_exam_visiometria:
+            normal_exams.append(hasattr(self, 'visiometria'))
+
+        inter_exams = []
+        for inter in self.examenes_internos.all():
+            if inter.resultados != '':
+                inter_exams.append(True)
+
+        percentage = float(100)/(len(self.examenes_internos.all()) + len(normal_exams))
+
+        return float("{:.2f}".format((len(inter_exams) + normal_exams.count(True)) * percentage))
+
+    def get_lab_process(self):
+        exams = self.examenes_laboratorios.all()
+        if exams:
+            lab_exams = []
+            for exam in exams:
+                if exam.resultados.all():
+                    lab_exams.append(True)
+
+            percentage = float(100) / len(exams)
+
+            return float("{:.2f}".format(len(lab_exams) * percentage))
+        else:
+            return 0.0
 
     def finished(self):
-        # TODO CHANGE
-        examenes_done = [hasattr(self, 'visiometria'), hasattr(self, 'audiologia'),
-                         hasattr(self, 'ocupacional'), hasattr(self, 'laboratorio')]
-        return all(examenes_done)
+        return self.get_doctor_process() == 100.0 and self.get_lab_process() == 100.0
 
     def update_state(self):
         # TODO CHANGE
-        process = self.get_process()
+        process = self.get_doctor_process() or self.get_lab_process()
         change = False
         if self.estado == 'pendiente' and 0 < process < 100:
             self.estado = 'iniciado'

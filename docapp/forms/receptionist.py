@@ -54,6 +54,8 @@ class PacienteParticularForm(forms.ModelForm):
 
 # Examination Forms
 class ExaminacionCreateForm(forms.ModelForm):
+    laboratorio_id = forms.ModelMultipleChoiceField(queryset=Laboratorio.objects.all())
+
     class Meta:
         model = Examinacion
         fields = ('tipo', 'laboratorio_id', 'do_exam_altura', 'do_exam_audiologia', 'do_exam_visiometria',)
@@ -79,9 +81,9 @@ simple_exam_inlineformset = forms.inlineformset_factory(parent_model=Examinacion
                                                         can_delete=True, fields='__all__',
                                                         exclude=('registrado_por', 'resultados'))
 
-lab_exam_inlineformset = forms.inlineformset_factory(parent_model=Laboratorio, model=LabExam,
-                                                     can_delete=True, fields='__all__', extra=1,
-                                                     exclude=('registrado_por', 'manejado_por', 'laboratorio_id  '))
+lab_exam_inlineformset = forms.inlineformset_factory(parent_model=Examinacion, model=LabExam, can_delete=True,
+                                                     fields='__all__', extra=1,
+                                                     exclude=('registrado_por', 'manejado_por', 'laboratorio_id', ))
 
 
 # Appointment Forms (Receptionist only send a request and a register must be create)

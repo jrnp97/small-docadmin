@@ -1,6 +1,6 @@
 <div class="modal-body">
     {% if object %}
-        <form method="POST" action="{% url 'docapp:doctor_take_a_exam' exam_id=object.id %}">
+        <form method="POST" action="{% url 'labapp:lab_take_a_exam' exam_id=object.id %}">
             {% csrf_token %}
             <h2>¿Realmente Quieres Tomar el proceso #{{ object.id }}?</h2>
             <hr>
