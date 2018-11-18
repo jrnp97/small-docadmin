@@ -1,0 +1,14 @@
+<div class="modal-body">
+    {% if object %}
+        <form method="POST" action="{% url 'labapp:lab_end_exam' exam_id=object.id %}">
+            {% csrf_token %}
+            <h2>¿Realmente Quieres Terminar el proceso #{{ object.id }}?</h2>
+            <hr>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">Terminar Proceso <i class="fa fa-send"></i></button>
+            </div>
+        </form>
+    {% else %}
+        <h1>You don't must be here</h1>
+    {% endif %}
+</div>

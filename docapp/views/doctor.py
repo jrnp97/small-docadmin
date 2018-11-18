@@ -1,12 +1,15 @@
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import UpdateView, DetailView
+from django.db import IntegrityError
+from django.shortcuts import redirect
+from django.views.generic import UpdateView, DetailView, TemplateView
 from django.core.exceptions import ObjectDoesNotExist, SuspiciousOperation
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
+from django.views.generic.detail import SingleObjectMixin
 
 from docapp.models import (PacienteEmpresa, Occupational, Audiology, Visiometry, Altura, AntecedentesLaborales, Riesgos,
-                           Accidentes, SimpleExam)
+                           Accidentes, SimpleExam, Examinacion)
 from docapp.forms import (OcupaForm,
                           ant_familiares_section,
                           ant_gineco_section,
@@ -44,6 +47,7 @@ from docapp.forms import AlturaForm, question_section, SimpleExamForm
 from docproject.helpers.chekers import CheckDoctor
 from docproject.helpers.customs import (FormViewPutExtra, FormsetPostManager, BaseRegisterExamBehavior,
                                         BaseExamUpdateBehavior)
+from docapp.choices import ExamStates
 
 
 class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
@@ -614,3 +618,91 @@ class DetailEmployAntecedent(CheckDoctor, LoginRequiredMixin, DetailView):
 
 detail_employ_antecedent = DetailEmployAntecedent.as_view()
 # End employ antecedent
+
+
+# Examination process
+class ListOwnExams(LoginRequiredMixin, CheckDoctor, TemplateView):
+    template_name = 'docapp/lists/exam_list.html'
+
+    def get_context_data(self, **kwargs):
+        exams = None
+        if hasattr(self.request.user.doctor_profile, 'examinaciones'):
+            exams = self.request.user.doctor_profile.examinaciones.exclude(doctor_estado=ExamStates.FINALIZADO)
+        kwargs.update({'exam_list': exams})
+        return super(ListOwnExams, self).get_context_data(**kwargs)
+
+
+own_examinations = ListOwnExams.as_view()
+
+
+class DoctorTakeAExam(LoginRequiredMixin, CheckDoctor, SingleObjectMixin, TemplateView):
+    object = None
+    pk_url_kwarg = 'exam_id'
+    model = Examinacion
+    template_name = 'docapp/take_object.html'
+    redirect_url = reverse_lazy('docapp:doctor_own_examinations')
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        kwargs.update({'redirect_url': self.redirect_url})
+        return super(DoctorTakeAExam, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        exam = self.get_object()
+        exam.manejador_por = request.user.doctor_profile
+        exam.estado = ExamStates.INICIADO
+        exam.doctor_estado = ExamStates.ASIGNADO
+        try:
+            exam.save()
+        except IntegrityError:
+            messages.error(message='Examinacion NO Asignada', request=request)
+        else:
+            messages.success(message='Examinacion Asignada Exitosamente', request=request)
+        return redirect('docapp:doctor_own_examinations')
+
+
+take_a_exam = DoctorTakeAExam.as_view()
+
+
+class ListEndExams(LoginRequiredMixin, CheckDoctor, TemplateView):
+    template_name = 'docapp/lists/exam_list.html'
+
+    def get_context_data(self, **kwargs):
+        exams = None
+        if hasattr(self.request.user.doctor_profile, 'examinaciones'):
+            exams = self.request.user.doctor_profile.examinaciones.filter(doctor_estado=ExamStates.FINALIZADO)
+        kwargs.update({'exam_list': exams})
+        return super(ListEndExams, self).get_context_data(**kwargs)
+
+
+end_examinations = ListOwnExams.as_view()
+
+
+class DoctorEndExam(LoginRequiredMixin, CheckDoctor, SingleObjectMixin, TemplateView):
+    object = None
+    pk_url_kwarg = 'exam_id'
+    model = Examinacion
+    template_name = 'docapp/end_process.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(DoctorEndExam, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        exam = self.get_object()
+        if exam.get_doctor_process() == 100:
+            exam.doctor_estado = ExamStates.FINALIZADO
+            try:
+                exam.save()
+            except IntegrityError:
+                messages.error(message='Examinacion NO Terminada', request=request)
+            else:
+                messages.success(message='Examinacion Asignada Exitosamente', request=request)
+            return redirect('docapp:doctor_end_examinations')
+        else:
+            messages.warning(request, "No ha terminado todos los examenes")
+            return redirect(request.path)
+
+
+doctor_end_exam = DoctorEndExam.as_view()
+# End examination process

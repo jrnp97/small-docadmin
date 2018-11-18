@@ -20,7 +20,7 @@ class Altura(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         response = super(Altura, self).save(force_insert, force_update, using, update_fields)
-        self.examinacion_id.update_state()
+        self.examinacion_id.update_doctor()
         return response
 
     class Meta:

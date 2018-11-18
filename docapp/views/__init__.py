@@ -11,7 +11,7 @@ from .receptionist import (dashboard,
 from .doctor import (register_occupational, register_audiology, register_visiometry,
                      update_ocupacional, update_audiologia, update_visiometria,
                      register_employ_antecedent, update_employ_antecedent, list_employ_antecedents,
-                     detail_employ_antecedent, register_simple_exam, register_altura, update_altura
-                     )
+                     detail_employ_antecedent, register_simple_exam, register_altura, update_altura,
+                     own_examinations, take_a_exam, end_examinations, doctor_end_exam)
 
-from .general import detail_examination, own_examinations, take_a_exam
+from .general import detail_examination

@@ -108,10 +108,10 @@
                         </li>
                         {% if request.user.profile_type == 'p_laboratorio' %}
                             <li><a href="{% url 'labapp:lab_own_examinations' %}">Pendientes</a></li>
-{#                            <li><a href="#">Finalizadas</a></li>#}
+                            <li><a href="{% url 'labapp:lab_end_examinations' %}">Finalizadas</a></li>
                         {% elif request.user.profile_type == 'doctor' %}
                             <li><a href="{% url 'docapp:doctor_own_examinations' %}">Pendientes</a></li>
-{#                            <li><a href="#">Finalizadas</a></li>#}
+                            <li><a href="{% url 'docapp:doctor_end_examinations' %}">Finalizadas</a></li>
                         {% endif %}
                     </ul>
                 </li>
@@ -120,5 +120,4 @@
         </ul>
     </div>
 </aside>
-{% include 'docapp/../modals/search.html' %}
 
