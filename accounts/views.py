@@ -57,7 +57,7 @@ class DeletePersonal(LoginRequiredMixin, CheckSuperUser, DeleteView):
     context_object_name = 'instance'
     model = User
     template_name = 'accounts/delete_profile.html'
-    success_url = reverse_lazy('accounts:login')
+    success_url = reverse_lazy('accounts:user_list')
 
 
 delete_personal = DeletePersonal.as_view()

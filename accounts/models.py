@@ -24,7 +24,7 @@ class User(AbstractUser):
         destroy = kwargs.pop('destroy', False)
         if not destroy:
             self.is_active = False
-            self.user.save()
+            self.save()
             return 1, dict({'message': 'delete successfully'})
         else:
             return super(User, self).delete(using=using, keep_parents=keep_parents)
