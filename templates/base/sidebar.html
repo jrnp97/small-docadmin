@@ -18,11 +18,7 @@
         <!-- sidebar menu -->
         <ul class="sidebar-menu">
             <li class="active">
-                <a href="{% url 'docapp:dashboard' %}"><i class="fa fa-hospital-o"></i><span>Dashboard</span>
-                </a>
-                <a href="#" data-toggle="modal" data-target="#myModal3"><i
-                        class="fa fa-search"></i><span>Consultar</span>
-                </a>
+                <a href="{% url 'docapp:dashboard' %}"><i class="fa fa-hospital-o"></i><span>Dashboard</span></a>
             </li>
             {% if request.user.profile_type == 'p_laboratorio' %}
                 {% if request.user.laboratory_profile.is_admin %}
