@@ -1,7 +1,7 @@
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.utils import IntegrityError
 from django.shortcuts import redirect
-from django.views.generic import FormView, ListView, UpdateView, DetailView, TemplateView, CreateView, View
+from django.views.generic import FormView, ListView, UpdateView, DetailView, TemplateView, CreateView, View, DeleteView
 from django.views.generic.detail import SingleObjectMixin
 from django.core.urlresolvers import reverse_lazy
 from django.urls import reverse
@@ -225,6 +225,14 @@ class RegisterEmployExamination(CheckReceptionist, LoginRequiredMixin, FormsetPo
                      ]
                      }
 
+    def get(self, request, *args, **kwargs):
+        labs = Laboratorio.objects.filter(is_active=True).count()
+        if labs > 0:
+            return super(RegisterEmployExamination, self).get(request, *args, **kwargs)
+        else:
+            messages.error(request, 'Por favor registre un laboratorio para poder iniciar procesos de examinacion')
+            return redirect('docapp:dashboard')
+
     def _custom_save(self, form):
         person = self.get_object()
         form.create_by = self.request.user.reception_profile
@@ -283,6 +291,16 @@ class UpdateLab(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, Upda
 
 
 update_lab = UpdateLab.as_view()
+
+
+class DetailLab(LoginRequiredMixin, CheckReceptionist, DetailView):
+    pk_url_kwarg = 'lab_id'
+    model = Laboratorio
+    context_object_name = 'lab'
+    template_name = 'labapp/details/lab.html'
+
+
+detail_laboratory = DetailLab.as_view()
 
 
 class ListLab(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, ListView):
@@ -354,6 +372,26 @@ class UpdateLabAdmin(LoginRequiredMixin, CheckReceptionist, ValidateCorrectProfi
 update_lab_admin = UpdateLabAdmin.as_view()
 
 
+class DeactivateLabAdmin(LoginRequiredMixin, CheckReceptionist, DeleteView):
+    """ View to 'delete' doctor profile """
+    context_object_name = 'instance'
+    model = User
+    template_name = 'accounts/delete_profile.html'
+    success_url = reverse_lazy('docapp:list_lab')
+
+
+deactivate_lab_admin = DeactivateLabAdmin.as_view()
+
+
+class DetailLabAdmin(LoginRequiredMixin, CheckReceptionist, DetailView):
+    context_object_name = 'instance'
+    model = User
+    template_name = 'accounts/show_profile.html'
+
+
+detail_lab_admin = DetailLabAdmin.as_view()
+
+
 class ListLabAdmin(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, DetailView):
     model = Laboratorio
     template_name = 'labapp/list/admins.html'
@@ -364,7 +402,9 @@ class ListLabAdmin(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, D
         kwargs.update({'admin_lab_list': lab.personal_lab.all().filter(is_admin=True)})
         return super(ListLabAdmin, self).get_context_data(**kwargs)
 
+
 list_admin_lab = ListLabAdmin.as_view()
+
 
 # End process laboratory
 

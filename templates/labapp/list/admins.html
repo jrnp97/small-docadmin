@@ -22,33 +22,48 @@
             <td>{{ object }}</td>
             <td>
                 <!-- Detail Link -->
-                <a href="#">  {% comment %} TODO view and template to show personal lab profile {% endcomment %}
-                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                            data-placement="left" title="" data-original-title="Ver">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-                </a>
+                <button class="btn btn-primary btn-xs btn_modal" data-modal-title="Detalle Lab Admin"
+                        href="{% url 'docapp:detail_lab_admin' pk=object.user_id.id %}">
+                    Ver <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
                 <!-- Update Link -->
                 <a href="{% url 'docapp:update_lab_admin' pk=object.user_id.id %}">
                     <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                             data-placement="left" title="" data-original-title="Editar">
-                        <i class="fa fa-edit" aria-hidden="true"></i>
+                        <i class="fa fa-edit" aria-hidden="true"></i> Editar
                     </button>
                 </a>
-                <!-- Deactivate Link -->
-                <a href="#"> {% comment %} TODO view and template to show deactivate lab profile {% endcomment %}
-                    <button class="btn btn-danger btn-xs" data-toggle="tooltip"
-                            data-placement="right" title="" data-original-title="Borrar">
+                {% if object.user_id.is_active %}
+                    <!-- Deactivate Link -->
+                    <button class="btn btn-danger btn-xs btn_modal" data-toggle="tooltip"
+                            data-modal-title="Desactivar Admin"
+                            data-placement="right" title="" data-original-title="Desactivar"
+                            href="{% url 'docapp:deactivate_lab_admin' pk=object.user_id.id %}">
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
-
                     </button>
-                </a>
+                {% endif %}
             </td>
-            <td>{% if object.user_id.is_active %} <span class="label label-success">Activo</span> {% else %}<span class="label label-danger">Desactivado</span> {% endif %}</td>
+            <td>{% if object.user_id.is_active %}
+                <span class="label label-success">Activo</span>
+            {% else %}
+                <span class="label label-danger">Desactivado</span>
+            {% endif %}</td>
 
         </tr>
     {% empty %}
         <h1>No se encuentra ningun laboratorio registrado</h1>
     {% endfor %}
     </tbody>
+{% endblock %}
+{% block extra_content %}
+    {% include 'base/base_modal.html' %}
+{% endblock %}
+{% block extra_scripts %}
+    <script>
+        $('.btn_modal').on('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
+        });
+    </script>
 {% endblock %}

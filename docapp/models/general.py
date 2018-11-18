@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from accounts.models import ReceptionProfile, DoctorProfile
-# from labapp.models import Laboratorio
+from docapp.choices import ExamStates, ExamTipes, CivilState, Sex, ESTRATOS
 
 User = get_user_model()
 
@@ -49,26 +49,6 @@ class Empresa(models.Model):
 
 class PacienteEmpresa(models.Model):
     """ Model to save company employ information """
-    SEXOS = (
-        ('masculino', 'Masculino'),
-        ('femenino', 'Femenino')
-    )
-
-    ESTADOS_CIVILES = (
-        ('soltero', 'Soltero'),
-        ('casado', 'Casado'),
-        ('viudo', 'Viudo'),
-        ('union libre', 'Union Libre')
-    )
-
-    ESTRATOS = (
-        ('1', '1'),
-        ('2', '2'),
-        ('3', '3'),
-        ('4', '4'),
-        ('5', '5'),
-    )
-
     nombres = models.CharField(max_length=300, null=False, blank=False)
     apellidos = models.CharField(max_length=300, null=False, blank=False)
     identificacion = models.PositiveIntegerField(unique=True)
@@ -80,8 +60,8 @@ class PacienteEmpresa(models.Model):
     eps = models.CharField(max_length=100)
     arl = models.CharField(max_length=100)
     fondo_pensiones = models.CharField(max_length=100, null=True, blank=True)
-    sexo = models.CharField(max_length=15, choices=SEXOS, null=False, blank=False)
-    estado_civil = models.CharField(max_length=20, choices=ESTADOS_CIVILES, null=False, blank=False)
+    sexo = models.CharField(max_length=15, choices=Sex.ALL, null=False, blank=False)
+    estado_civil = models.CharField(max_length=20, choices=CivilState.ALL, null=False, blank=False)
     numero_de_hijos = models.PositiveIntegerField(default=0)
     direccion = models.CharField(max_length=500, null=False, blank=False)
     telefono = models.PositiveIntegerField(default=0)
@@ -120,18 +100,10 @@ class PacienteEmpresa(models.Model):
 
 class Examinacion(models.Model):
     """ Model to register a process over a employ company """
-    TIPOS = (('ingreso', 'Ingreso'),
-             ('periodico', 'Periodico'),
-             ('retiro', 'Retiro'),
-             ('reubicacion', 'Re-Ubicacion'),
-             ('post-incapacidad', 'Post-Incapacidad'))
-    tipo = models.CharField(max_length=20, choices=TIPOS, null=False, blank=False)
-
-    ESTADOS = (('pendiente', 'Pendiente'),
-               ('iniciado', 'Iniciado'),
-               ('en problemas', 'En Problema'),
-               ('finalizado', 'Finalizado'),)
-    estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente', null=False, blank=False)
+    tipo = models.CharField(max_length=20, choices=ExamTipes.ALL, null=False, blank=False)
+    estado = models.CharField(max_length=20, choices=ExamStates.ALL, default=ExamStates.PENDIENTE)
+    doctor_estado = models.CharField(max_length=20, choices=ExamStates.PROCESS, default=ExamStates.NO_ASIG)
+    lab_estado = models.CharField(max_length=20, choices=ExamStates.PROCESS, default=ExamStates.NO_ASIG)
 
     do_exam_altura = models.BooleanField(default=False, null=False, blank=True)
     do_exam_audiologia = models.BooleanField(default=False, null=False, blank=True)
@@ -162,7 +134,7 @@ class Examinacion(models.Model):
             if inter.resultados != '':
                 inter_exams.append(True)
 
-        percentage = float(100)/(len(self.examenes_internos.all()) + len(normal_exams))
+        percentage = float(100) / (len(self.examenes_internos.all()) + len(normal_exams))
 
         return float("{:.2f}".format((len(inter_exams) + normal_exams.count(True)) * percentage))
 
@@ -180,20 +152,15 @@ class Examinacion(models.Model):
         else:
             return 0.0
 
-    def finished(self):
-        return self.get_doctor_process() == 100.0 and self.get_lab_process() == 100.0
+    def update_doctor(self):
+        if self.doctor_estado == ExamStates.ASIGNADO:
+            self.doctor_estado = ExamStates.INICIADO
+            self.save()
 
-    def update_state(self):
-        # TODO CHANGE
-        process = self.get_doctor_process() or self.get_lab_process()
+    def update_lab(self):
         change = False
-        if self.estado == 'pendiente' and 0 < process < 100:
-            self.estado = 'iniciado'
-            change = True
-        elif self.estado == 'iniciado' and process == 100:
-            self.estado = 'finalizado'
-            change = True
-        if change:
+        if self.lab_estado == ExamStates.ASIGNADO:
+            self.lab_estado = ExamStates.INICIADO
             self.save()
 
 
@@ -267,21 +234,16 @@ class SimpleExam(models.Model):
                                        related_name='examenes_internos')
     resultados = models.TextField(default='', null=False, blank=True)
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        response = super(SimpleExam, self).save(force_insert, force_update, using, update_fields)
+        self.examinacion_id.update_doctor()
+        return response
+
 
 # Models to manage simple person information
 class PacienteParticular(models.Model):
     """ Model to save simple person information """
-    SEXOS = (
-        ('masculino', 'Masculino'),
-        ('femenino', 'Femenino')
-    )
-
-    ESTADOS_CIVILES = (
-        ('soltero', 'Soltero'),
-        ('casado', 'Casado'),
-        ('viudo', 'Viudo'),
-        ('union libre', 'Union Libre')
-    )
     nombres = models.CharField(max_length=300, null=False, blank=False)
     apellidos = models.CharField(max_length=300, null=False, blank=False)
     identificacion = models.PositiveIntegerField(unique=True)
@@ -290,14 +252,14 @@ class PacienteParticular(models.Model):
     eps = models.CharField(verbose_name='EPS', max_length=50, null=False, blank=False)
     arl = models.CharField(verbose_name='ARL', max_length=50, null=False, blank=False)
     fondo_pensiones = models.CharField(max_length=50, null=False, blank=False)
-    sexo = models.CharField(max_length=15, choices=SEXOS, null=False, blank=False)
+    sexo = models.CharField(max_length=15, choices=Sex.ALL, null=False, blank=False)
     direccion = models.CharField(max_length=500, null=False, blank=False)
     telefono = models.PositiveIntegerField(default=0)
     celular = models.PositiveIntegerField(null=False, blank=False)
     ocupacion = models.CharField(max_length=500, null=False, blank=False)
     estrato = models.PositiveIntegerField(null=False)
     nombre_del_responsable = models.CharField(max_length=50, null=True, blank=True)
-    estado_civil = models.CharField(max_length=20, choices=ESTADOS_CIVILES, null=False, blank=False)
+    estado_civil = models.CharField(max_length=20, choices=CivilState.ALL, null=False, blank=False)
     numero_de_hijos = models.PositiveIntegerField(default=0)
 
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
@@ -312,12 +274,7 @@ class PacienteParticular(models.Model):
 
 class Consulta(models.Model):
     """ Model to save appointment description """
-    ESTADOS = (
-        ('pendiente', 'Pendiente'),
-        ('iniciado', 'Iniciado'),
-        ('finalizado', 'Finalizado'),
-    )
-    estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente', null=False, blank=False)
+    estado = models.CharField(max_length=20, choices=ExamStates.ALL, default=ExamStates.PENDIENTE)
     razon = models.TextField(default='', null=False, blank=False)
     paciente_id = models.ForeignKey(PacienteParticular, null=False, blank=True, on_delete=models.CASCADE,
                                     related_name='consultas')

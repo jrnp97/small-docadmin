@@ -18,8 +18,7 @@
         <th>Sexo</th>
         <th>Empresa</th>
         <th>Examinacion</th>
-        {% if request.user.doctor_profile %}
-            <th>Antecedentes</th>{% endif %}
+        {% if request.user.doctor_profile %}<th>Antecedentes</th>{% endif %}
         <th>Opciones</th>
     </tr>
     </thead>
@@ -38,7 +37,7 @@
                 <a href="{% url 'docapp:register_employ_examination' person_id=person.id %}">
                     <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                             data-placement="left" title="" data-original-title="Iniciar">
-                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                        Registro <i class="fa fa-pencil" aria-hidden="true"></i>
                     </button>
                 </a>
             </td>
@@ -48,35 +47,45 @@
                     <a href="{% url 'docapp:register_employ_antecedent' person_id=person.id %}">
                         <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                                 data-placement="left" title="" data-original-title="Registrar">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            Registro <i class="fa fa-pencil" aria-hidden="true"></i>
                         </button>
                     </a>
                     <!-- List Link -->
                     <a href="{% url 'docapp:list_employ_antecedents' person_id=person.id %}">
                         <button class="btn btn-primary btn-xs" data-toggle="tooltip"
                                 data-placement="left" title="" data-original-title="Ver lista">
-                            <i class="fa fa-list-alt" aria-hidden="true"></i>
+                            <i class="fa fa-list-alt" aria-hidden="true"></i> Lista
                         </button>
                     </a>
                 </td>
             {% endif %}
             <td>
                 <!-- Detail Link -->
-                <a href="{% url 'docapp:detail_employ' person_id=person.id %}">
-                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                            data-placement="left" title="" data-original-title="Ver">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-                </a>
+                <button class="btn btn-primary btn-xs btn_modal" data-toggle="tooltip"
+                        data-placement="left" data-modal-title="Detalle Empleado" data-original-title="Ver"
+                        href="{% url 'docapp:detail_employ' person_id=person.id %}">
+                    Ver <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
                 <!-- Update Link -->
                 <a href="{% url 'docapp:update_employ' person_id=person.id %}">
                     <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                             data-placement="left" title="" data-original-title="Editar">
-                        <i class="fa fa-edit" aria-hidden="true"></i>
+                        <i class="fa fa-edit" aria-hidden="true"></i> Editar
                     </button>
                 </a>
             </td>
         </tr>
     {% endfor %}
     </tbody>
+{% endblock %}
+{% block extra_content %}
+    {% include 'base/base_modal.html' %}
+{% endblock %}
+{% block extra_scripts %}
+    <script>
+        $('.btn_modal').on('click', function (event) {
+            event.preventDefault();
+            load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
+        });
+    </script>
 {% endblock %}

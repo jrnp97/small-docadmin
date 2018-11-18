@@ -3,11 +3,12 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.detail import SingleObjectMixin
+from django.db.models import Q
 
 from docproject.helpers import CheckSuperUser
 from accounts.forms import (BaseUserForm, BaseUserUpdateForm)
 from accounts.models import User
+from accounts.choices import RECP, DOCTOR
 
 
 # Create your views here.
@@ -57,7 +58,7 @@ class DeletePersonal(LoginRequiredMixin, CheckSuperUser, DeleteView):
     context_object_name = 'instance'
     model = User
     template_name = 'accounts/delete_profile.html'
-    success_url = reverse_lazy('accounts:login')
+    success_url = reverse_lazy('accounts:user_list')
 
 
 delete_personal = DeletePersonal.as_view()
@@ -107,7 +108,7 @@ class UserList(LoginRequiredMixin, ListView):
     context_object_name = 'user_list'
     model = User
     template_name = 'accounts/list_user.html'
-    queryset = User.objects.filter(is_superuser=False)
+    queryset = User.objects.filter(Q(is_superuser=False) & Q(profile_type__in=[DOCTOR, RECP]))
 
     def get_queryset(self):
         user = self.request.user

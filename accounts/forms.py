@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 
 from accounts.models import DoctorProfile, ReceptionProfile
-from labapp.models import Laboratorio, LaboratoryProfile
+from accounts.choices import RECP, DOCTOR
 
 User = get_user_model()
 
@@ -45,11 +45,11 @@ class BaseUserForm(forms.ModelForm):
             instance.save()
             # Save profile now
             try:
-                if instance.profile_type == 'recepcionista':
+                if instance.profile_type == RECP:
                     info = {'user_id': instance}
                     reception = ReceptionProfile(**info)
                     reception.save()
-                elif instance.profile_type == 'doctor':
+                elif instance.profile_type == DOCTOR:
                     info = {'user_id': instance}
                     doctor = DoctorProfile(**info)
                     doctor.save()

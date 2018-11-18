@@ -1,18 +1,11 @@
 """ Models general, only manage user roles and similar models to performance and manage dashboard """
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from accounts.choices import PROFILE_TYPE
 
 
 class User(AbstractUser):
     """ Base User Class on SM-Laboral only can have 3 roles """
-    DOCTOR = 'doctor'
-    RECP = 'receptionista'
-    LAB = 'p_laboratorio'
-    PROFILE_TYPE = (
-        (DOCTOR, 'Doctor'),
-        (RECP, 'Receptionista'),
-        (LAB, 'Personal de Laboratorio'),
-    )
     first_name = models.CharField(max_length=30, null=False, blank=False)
     last_name = models.CharField(max_length=30, null=False, blank=False)
     profile_type = models.CharField(max_length=20, choices=PROFILE_TYPE, null=True, blank=True)
@@ -31,7 +24,7 @@ class User(AbstractUser):
         destroy = kwargs.pop('destroy', False)
         if not destroy:
             self.is_active = False
-            self.user.save()
+            self.save()
             return 1, dict({'message': 'delete successfully'})
         else:
             return super(User, self).delete(using=using, keep_parents=keep_parents)

@@ -7,14 +7,15 @@ from django.views.generic.detail import SingleObjectMixin
 from django.db import IntegrityError
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import reverse
+from django.shortcuts import reverse, redirect
 from django import forms
 
+from docapp.choices import ExamStates
 from docproject.helpers.chekers import CheckLaboratory
 
 from labapp.forms import BaseLabUserCreateForm, lab_exam_result
 from docapp.models import Examinacion
-from labapp.models import LabExam, ExamResults
+from labapp.models import LabExam, ExamResults, Laboratorio
 from labapp.mixins import PostResultManager
 
 
@@ -54,7 +55,7 @@ class ListOwnExams(LoginRequiredMixin, CheckLaboratory, ListView):
         user = self.request.user.laboratory_profile
         queryset = Examinacion.objects.filter(
             Q(examenes_laboratorios__laboratorio_id=user_lab) & Q(examenes_laboratorios__manejado_por=user)
-        ).annotate(dcount=Count('tipo'))
+        ).annotate(dcount=Count('tipo')).exclude(lab_estado=ExamStates.FINALIZADO)
         # Simulate group by clause -- https://stackoverflow.com/questions/629551/how-to-query-as-group-by-in-django
         # https://docs.djangoproject.com/en/dev/topics/db/aggregation/#topics-db-aggregation
         return queryset
@@ -79,6 +80,7 @@ class LabTakeAExam(LoginRequiredMixin, CheckLaboratory, SingleObjectMixin, Templ
         exam = self.get_object()
         for lab_exam in exam.examenes_laboratorios.all():
             lab_exam.manejado_por = request.user.laboratory_profile
+            lab_exam.lab_estado = ExamStates.ASIGNADO
             try:
                 lab_exam.save()
             except IntegrityError as e:
@@ -137,3 +139,52 @@ class UpdateLabExamResult(LoginRequiredMixin, CheckLaboratory, PostResultManager
 
 
 update_lab_exam_result = UpdateLabExamResult.as_view()
+
+
+class LabEndExam(LoginRequiredMixin, CheckLaboratory, SingleObjectMixin, TemplateView):
+    object = None
+    pk_url_kwarg = 'exam_id'
+    model = Examinacion
+    template_name = 'docapp/end_process.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(LabEndExam, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        exam = self.get_object()
+        if exam.get_lab_process() == 100:
+            exam.lab_estado = ExamStates.FINALIZADO
+            try:
+                exam.save()
+            except IntegrityError:
+                messages.error(message='Examinacion NO Terminada', request=request)
+            else:
+                messages.success(message='Examinacion Asignada Exitosamente', request=request)
+            return redirect('labapp:lab_end_examinations')
+        else:
+            messages.warning(request, "No ha terminado todos los examenes")
+            return redirect(request.path)
+
+
+lab_end_exam = LabEndExam.as_view()
+
+
+class ListEndExams(LoginRequiredMixin, CheckLaboratory, ListView):
+    model = Examinacion
+    context_object_name = 'exam_list'
+    template_name = 'docapp/lists/exam_list.html'
+
+    def get_queryset(self):
+        user_lab = self.request.user.laboratory_profile.laboratorio_id
+        user = self.request.user.laboratory_profile
+        queryset = Examinacion.objects.filter(
+            Q(examenes_laboratorios__laboratorio_id=user_lab) & Q(examenes_laboratorios__manejado_por=user) &
+            Q(lab_estado='finalizado')
+        ).annotate(dcount=Count('tipo'))
+        # Simulate group by clause -- https://stackoverflow.com/questions/629551/how-to-query-as-group-by-in-django
+        # https://docs.djangoproject.com/en/dev/topics/db/aggregation/#topics-db-aggregation
+        return queryset
+
+
+lab_end_examinations = ListEndExams.as_view()

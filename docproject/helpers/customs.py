@@ -47,8 +47,11 @@ class FormViewPutExtra(FormView, SingleObjectMixin):
             kwargs['form'] = self.get_form()
         if 'view' not in kwargs:
             kwargs['view'] = self
-        if self.extra_context:
+        if self.extra_context and kwargs.get('extra_context') is None:
             kwargs.update(self.extra_context)
+        else:
+            extra = kwargs.pop('extra_context')
+            kwargs.update(extra)
 
         return kwargs
 
@@ -58,47 +61,39 @@ class FormsetPostManager(object):
         """ Overwrite post method to manage formset """
         parent_form = self.get_form()
         formsets_simple = {}
-        formsets_with_files = {}
-
-        for formset in self.extra_context.get('formsets'):
-            """ Validating if value is a InlineFormSet and don't have initial data """
-            if formset:
-                value = formset.get('form')
-                if formset.get('has_files'):
-                    formsets_with_files.update({formset.get('section_name'): value(self.request.POST, self.request.FILES)})
-                else:
-                    formsets_simple.update({formset.get('section_name'): value(self.request.POST)})
-
+        formsets = self.extra_context.copy()
         temp = []
         # Check parent form
         val = not parent_form.is_valid()
         temp.append(val)
-
-        # Check simple formset
-        for key, formset in formsets_simple.items():
-            val = not formset.is_valid()
-            if val:
-                messages.error(self.request, message=f"Error, Guardando {key} datos mal ingresados")
-            temp.append(val)
-
-        # Check formset with files
-        for key, formset in formsets_with_files.items():
-            val = not formset.is_valid()
-            if val:
-                messages.error(self.request, message=f"Error, Guardando {key} datos mal ingresados")
-            temp.append(val)
+        for element in formsets.get('formsets'):
+            """ Validating formsets """
+            if element:
+                formset = element.get('form')
+                section_name = element.get('title')
+                if element.get('has_files'):
+                    formset = formset(self.request.POST,
+                                      self.request.FILES) if formset.__class__ is type else formset.__class__(
+                        self.request.POST, self.request.FILES)
+                else:
+                    formset = formset(self.request.POST) if formset.__class__ is type else formset.__class__(
+                        self.request.POST)
+                formsets_simple.update({section_name: formset})
+                val = not formset.is_valid()
+                temp.append(val)
+                if val:
+                    messages.error(self.request, message=f"Error, Guardando {section_name} datos mal ingresados")
+                element.update({'form': formset})
 
         if any(temp):
-            # TODO Put inside request formsets information (append errors and data)
-            return self.form_invalid(form=parent_form)
+            return self.render_to_response(self.get_context_data(form=parent_form, extra_context=formsets))
 
         object_parent = None
         if hasattr(self, '_custom_save'):
             """ Used only on Register Case """
             object_parent = self._custom_save(form=parent_form)
             if not object_parent:
-                # TODO Put inside request formsets information (append errors and data)
-                return self.form_invalid(form=parent_form)
+                return self.form_invalid(form=parent_form, extra_context=formsets)
 
         response = super(FormsetPostManager, self).post(request, *args, **kwargs)
 
@@ -111,7 +106,7 @@ class FormsetPostManager(object):
             temp = []
             delete_parent_name = None
             for form in formset:
-                if len(form.cleaned_data) > 0:
+                if form.cleaned_data:
                     if not form.cleaned_data.pop('DELETE', None):
                         data = form.cleaned_data.copy()
                         if data.get(parent_name):
@@ -142,38 +137,15 @@ class FormsetPostManager(object):
                                 # Set value of field and insert to data suppose that field is a relationship
                                 data.update({field: parent_form.cleaned_data.get(field).first()})
                         temp.append(formset.model(**data))
-            try:
-                with transaction.atomic():
-                    if delete_parent_name:
-                        formset.model.objects.filter(**{delete_parent_name: object_parent}).delete()
-                    formset.model.objects.bulk_create(temp)
-            except IntegrityError:
-                messages.error(self.request, message="Error guardando informacion, revise")
-                raise SuspiciousOperation(
-                    "Error informacion Malformada"
-                )
 
-        """ Managins formsets with files """
-        for formset in formsets_with_files.values():
-            temp = []
-            for form in formset:
-                if len(form.cleaned_data) > 0:
-                    data = form.cleaned_data.copy()
-                    data.update({parent_name: object_parent})
-                    if hasattr(formset.model, 'registrado_por'):
-                        # Extract related name from relationship
-                        alias = formset.model.create_by.field.related_model.user.field.cached_col.alias
-                        data.update({'registrado_por': getattr(self.request.user, alias)})
-                    temp.append(formset.model(**data))
-                elif hasattr(form, 'instance'):
-                    pass
-            if len(temp) > 0:
+            if temp:
                 try:
                     with transaction.atomic():
-                        formset.model.objects.filter(**{parent_name: object_parent}).delete()
+                        if delete_parent_name:
+                            formset.model.objects.filter(**{delete_parent_name: object_parent}).delete()
                         formset.model.objects.bulk_create(temp)
-                except IndentationError:
-                    messages.error(self.request, message="Error guardando informacion")
+                except IntegrityError:
+                    messages.error(self.request, message="Error guardando informacion, revise")
                     raise SuspiciousOperation(
                         "Error informacion Malformada"
                     )

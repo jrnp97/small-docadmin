@@ -4,6 +4,19 @@
         <p><b>Proceso:</b> {{ exam.id }}</p>
         <p><b>Identificacion: </b>{{ exam.paciente_id.identificacion }}</p>
         <p><b>Tipo de examinacion:</b> {{ exam.tipo }} </p>
+        {% if request.user.reception_profile %}
+            <p><b>Doctor:</b> {% if exam.manejador_por %} {{ exam.manejador_por.user_id }} {% else %} No
+                asignado {% endif %}</p>
+            {% if exam.examenes_laboratorios.all %}
+                {% with p_lab=exam.examenes_laboratorios.all.0 %}
+                    <p><b>Laboratorio:</b> {{ p_lab.laboratorio_id }}</p>
+                    <p><b>Personal de laboratorio:</b>
+                        {% if p_lab.manejado_por %}{{ p_lab.manejado_por }}{% else %} No asignado {% endif %}</p>
+                {% endwith %}
+            {% else %}
+                <p><b>No presenta examenes de laboratorio</b></p>
+            {% endif %}
+        {% endif %}
         <small><span class="label label-warning-outline">No registrado</span> <span
                 class="label label-success-outline">Registrado</span></small>
     </div>

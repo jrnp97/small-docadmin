@@ -1,20 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Delete Profile</title>
-</head>
-<body>
-<form method="POST">
+<form method="POST" action="{% url 'accounts:delete_personal' user_id=instance.id %}">
     {% csrf_token %}
-    <h1>¿Realmente desea borrar el perfil de {{ instance.user.get_full_name }}?</h1>
+    <h4>¿Realmente desea borrar el perfil de {{ instance.get_full_name }}?</h4>
     <hr>
-    <button type="submit">Si</button>
-    {% if request.META.HTTP_REFERER %}
-        <a href="{{ request.META.HTTP_REFERER }}">Cancelar</a>
-    {% else %}
-        <a href="{% url 'accounts:user_list' user_id=instance.user.id %}">Cancelar</a>
-    {% endif %}
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit">Desactivar</button>
+    </div>
 </form>
-</body>
-</html>

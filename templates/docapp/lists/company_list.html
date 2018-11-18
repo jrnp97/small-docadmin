@@ -24,26 +24,38 @@
             <td>{{ company.empleados.all|length }}</td>
             <td> {# Employees option #}
                 <a href="{% url 'docapp:register_employ_from_company' company_id=company.id %}">
-                    <button class="btn btn-warning btn-xs" data-toggle="tooltip">
+                    <button class="btn btn-warning btn-xs">
                         Registro <i class="fa fa-pencil" aria-hidden="true"></i></button>
                 </a>
                 <a href="{% url 'docapp:list_employ_company' company_id=company.id %}">
-                    <button class="btn btn-primary btn-xs" data-toggle="tooltip">
-                        <i class="fa fa-list-alt" aria-hidden="true"></i> Lista</button>
+                    <button class="btn btn-primary btn-xs" >
+                        <i class="fa fa-list-alt" aria-hidden="true"></i> Lista
+                    </button>
                 </a>
             </td>
             <td> {# Company option #}
-                <a href="{% url 'docapp:detail_company' company_id=company.id %}">
-                    <button class="btn btn-primary btn-xs" data-toggle="tooltip">
-                        Ver <i class="fa fa-eye" aria-hidden="true"></i></button>
-                </a>
+                <button class="btn btn-primary btn-xs btn_modal" data-modal-title="Detalle Empresa"
+                        href="{% url 'docapp:detail_company' company_id=company.id %}">
+                    Ver <i class="fa fa-eye" aria-hidden="true"></i></button>
                 <a href="{% url 'docapp:update_company' company_id=company.id %}">
                     <button class="btn btn-warning btn-xs" data-toggle="tooltip">
-                        <i class="fa fa-edit" aria-hidden="true"></i> Editar</button>
+                        <i class="fa fa-edit" aria-hidden="true"></i> Editar
+                    </button>
                 </a>
             </td>
         </tr>
     {% endfor %}
     </tbody>
 {% endblock %}
-
+{% block extra_content %}
+    {% include 'base/base_modal.html' %}
+{% endblock %}
+{% block extra_scripts %}
+    <script>
+        $('.btn_modal').on('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
+        });
+    </script>
+{% endblock %}

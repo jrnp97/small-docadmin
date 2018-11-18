@@ -3,6 +3,7 @@ from django.shortcuts import reverse
 from django.db import IntegrityError, transaction
 from django.contrib import messages
 
+from docapp.choices import ExamStates
 from labapp.models import ExamResults
 
 
@@ -14,6 +15,7 @@ class PostResultManager(object):
 
     def post(self, request, *args, **kwargs):
         lab_exam = self.get_object()
+        lab_exam.examinacion_id.update_lab()
         result_formset = self.result_formset(request.POST)
 
         if result_formset.is_valid():
