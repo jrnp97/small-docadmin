@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import UpdateView, DetailView, TemplateView, CreateView
+from django.views.generic import UpdateView, DetailView
 from django.core.exceptions import ObjectDoesNotExist, SuspiciousOperation
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
@@ -128,26 +128,26 @@ class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBeha
     def get_context_data(self, **kwargs):
         examination = self.get_object()
         examination_patient = examination.paciente_id
-        if examination_patient.sexo == 'femenino':
+        if examination_patient.sexo == 'femenino' and self.extra_context['formsets'][1] is None:
             self.extra_context['formsets'][1] = {'section_name': 'ant_gineco',
                                                  'title': 'Antecedentes Gineco-Obstricos',
                                                  'form': ant_gineco_section}
-        conclusion_section = {'section_name': 'conclusion',
-                              'title': 'Conclusion',
-                              'form': None}
-        if examination.tipo == 'ingreso':
-            conclusion_section.update({'form': conclusion_ingreso_section})
-        elif examination.tipo == 'periodico':
-            conclusion_section.update({'form': conclusion_periodico_section})
-        elif examination.tipo == 'retiro' or examination.tipo == 'reubicacion':
-            conclusion_section.update({'form': conclusion_retiro_section})
-        elif examination.tipo == 'post-incapacidad':
-            conclusion_section.update({'form': conclusion_post_incapacidad_section})
-        else:
-            raise SuspiciousOperation("Contact Admin")
+        if self.extra_context['formsets'][21] is None:
+            conclusion_section = {'section_name': 'conclusion',
+                                  'title': 'Conclusion',
+                                  'form': None}
+            if examination.tipo == 'ingreso':
+                conclusion_section.update({'form': conclusion_ingreso_section})
+            elif examination.tipo == 'periodico':
+                conclusion_section.update({'form': conclusion_periodico_section})
+            elif examination.tipo == 'retiro' or examination.tipo == 'reubicacion':
+                conclusion_section.update({'form': conclusion_retiro_section})
+            elif examination.tipo == 'post-incapacidad':
+                conclusion_section.update({'form': conclusion_post_incapacidad_section})
+            else:
+                raise SuspiciousOperation("Contact Admin")
 
-        self.extra_context['formsets'][21] = conclusion_section
-
+            self.extra_context['formsets'][21] = conclusion_section
         return super(RegisterOccupational, self).get_context_data(**kwargs)
 
 
