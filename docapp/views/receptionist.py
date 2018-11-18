@@ -225,6 +225,14 @@ class RegisterEmployExamination(CheckReceptionist, LoginRequiredMixin, FormsetPo
                      ]
                      }
 
+    def get(self, request, *args, **kwargs):
+        labs = Laboratorio.objects.filter(is_active=True).count()
+        if labs > 0:
+            return super(RegisterEmployExamination, self).get(request, *args, **kwargs)
+        else:
+            messages.error(request, 'Por favor registre un laboratorio para poder iniciar procesos de examinacion')
+            return redirect('docapp:dashboard')
+
     def _custom_save(self, form):
         person = self.get_object()
         form.create_by = self.request.user.reception_profile
