@@ -14,7 +14,7 @@ from docproject.helpers.chekers import CheckLaboratory
 
 from labapp.forms import BaseLabUserCreateForm, lab_exam_result
 from docapp.models import Examinacion
-from labapp.models import LabExam, ExamResults
+from labapp.models import LabExam, ExamResults, Laboratorio
 from labapp.mixins import PostResultManager
 
 

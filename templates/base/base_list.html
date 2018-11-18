@@ -58,6 +58,7 @@
             </div>
 
         </div>
+    {% block extra_content %}{% endblock %}
 
     </div>
 {% endblock %}
@@ -68,5 +69,6 @@
             $('#TableMain').DataTable({})
         });
     </script>
+    {% block extra_scripts %}{% endblock %}
 {% endblock %}
 

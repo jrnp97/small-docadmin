@@ -26,12 +26,11 @@
             <td> {{ exam.tipo }} </td>
             <td> {{ exam.paciente_id }}
                 <br>
-                <a href="{% url 'docapp:detail_employ' person_id=exam.paciente_id_id %}">
-                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                            data-placement="left" title="" data-original-title="Ver">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-                </a>
+                <button class="btn btn-primary btn-xs btn_modal" data-toggle="tooltip"
+                        data-placement="left" data-modal-title="Detalle Empleado" data-original-title="Ver"
+                        href="{% url 'docapp:detail_employ' person_id=exam.paciente_id_id %}">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
                 {% if request.user.doctor_profile %}
                     <a href="{% url 'docapp:register_employ_antecedent' person_id=exam.paciente_id_id %}">
                         <button class="btn btn-warning btn-xs" data-toggle="tooltip"
@@ -42,13 +41,13 @@
                 {% endif %}
             </td>
             <td> {{ exam.registrado_por.user_id }}
+                <br>
                 {% if request.user.is_superuser %}
-                    <a href="{% url 'accounts:detail_personal' user_id=exam.registrado_por.user_id_id %}">
-                        <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                                data-placement="left" title="" data-original-title="Ver">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
-                        </button>
-                    </a>
+                    <button class="btn btn-primary btn-xs btn_modal" data-toggle="tooltip"
+                            data-placement="left" data-modal-title="Detalle Usuario" data-original-title="Ver"
+                            href="{% url 'accounts:detail_personal' user_id=exam.registrado_por.user_id_id %}">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
                 {% endif %}
             </td>
             <td> {{ exam.fecha_de_creacion }} </td>
@@ -80,7 +79,7 @@
                             </button>
                         {% endif %}
                     {% elif request.user.reception_profile %}
-                        <button type="button" class="btn btn-success btn_modal"
+                        <button type="button" class="btn btn-success btn_modal" data-modal-title="Resumen"
                                 href="{% url 'docapp:detail_examination' exam_id=exam.id %}">
                             Detalles
                         </button>
@@ -91,18 +90,16 @@
 
     {% endfor %}
     </tbody>
-
-    {% include 'docapp/modals/examination.html' %}
-
 {% endblock %}
-
+{% block extra_content %}
+    {% include 'base/base_modal.html' %}
+{% endblock %}
 {% block scripts %}
     {{ block.super }}
     <script>
         $('.btn_modal').on('click', function (event) {
             event.preventDefault();
-            console.log("Clicked");
-            $('#examination_modal').modal('show').find('.modal-body').load($(this).attr('href'));
+            load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
         });
     </script>
 {% endblock %}

@@ -20,21 +20,30 @@
             <td>{{ antecedent.nombre_empresa }}</td>
             <td>
                 <!-- Detail Link -->
-                <a href="{% url 'docapp:detail_employ_antecedent' antecedent_id=antecedent.id %}">
-                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                            data-placement="left" title="" data-original-title="Ver">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-                </a>
+                <button class="btn btn-primary btn-xs btn_modal" data-moda-title="Antecedente Empleado"
+                        href="{% url 'docapp:detail_employ_antecedent' antecedent_id=antecedent.id %}">
+                    Ver <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
                 <!-- Update Link -->
                 <a href="{% url 'docapp:update_employ_antecedent' antecedent_id=antecedent.id %}">
-                    <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                            data-placement="left" title="" data-original-title="Editar">
-                        <i class="fa fa-edit" aria-hidden="true"></i>
+                    <button class="btn btn-warning btn-xs">
+                        <i class="fa fa-edit" aria-hidden="true"></i> Editar
                     </button>
                 </a>
             </td>
         </tr>
     {% endfor %}
     </tbody>
+{% endblock %}
+{% block extra_content %}
+    {% include 'base/base_modal.html' %}
+{% endblock %}
+{% block extra_scripts %}
+    <script>
+        $('.btn_modal').on('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
+        });
+    </script>
 {% endblock %}

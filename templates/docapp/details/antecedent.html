@@ -1,43 +1,9 @@
-{% extends 'base/base_dashboard.html' %}
-{% load static %}
-{% block title %} Detalles | Antecedente {% endblock %}
-
-{% block content_header %}
-    <div class="header-icon">
-        <i class="pe-7s-box1"></i>
-    </div>
-    <div class="header-title">
-        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
-            <div class="input-group">
-                <input name="q" class="form-control" placeholder="Search..." type="text">
-                <span class="input-group-btn">
-                                    <button type="submit" name="search" id="search-btn" class="btn"><i
-                                            class="fa fa-search"></i></button>
-                                </span>
-            </div>
-        </form>
-        <h1>Antecedentes de {{ antecedent.person }}</h1>
-        <small>Detalles del antecedente</small>
-        <ol class="breadcrumb hidden-xs">
-            <li>
-                <a href="{% url 'docapp:list_employ_antecedents' person_id=antecedent.persona.id %}" class="active">
-                    <i class="pe-7s-home"></i>
-                    Lista Antecedentes</a>
-            </li>
-        </ol>
-    </div>
-{% endblock %}
-
-{% block content_main %}
+<div class="panel-body">
+    <!-- Title -->
     <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-bd">
-                <div class="panel-body">
-                    <!-- Title -->
-                    <div class="row">
-                        <div class="col-sm-12 text-center">
-                            {% if request.user.doctor_profile %}
-                                <span class="pull-right">
+        <div class="col-sm-12 text-center">
+            {% if request.user.doctor_profile %}
+                <span class="pull-right">
                                 <a href="{% url 'docapp:update_employ_antecedent' antecedent_id=antecedent.id %}">
                                                 <button class="btn btn-warning btn-xs" data-toggle="tooltip"
                                                         data-placement="left" title="" data-original-title="Editar">
@@ -45,47 +11,41 @@
                                                 </button>
                                             </a>
                             </span>
-                            {% endif %}
-                            <h1>Antecedentes de {{ antecedent.persona }}</h1>
-                        </div>
-                    </div>
-                    <hr>
-                    <!-- Information -->
-                    <div class="row">
-                        <div class="col-sm-12 text-left">
-                            <p><b>Empresa donde laboro:</b> {{ antecedent.nombre_empresa }}</p>
-                            <p><b>Cargo que tuvo:</b> {{ antecedent.ocupacion }}</p>
-                            <p><b>Tiempo de duracion:</b> {{ antecedent.tiempo }}</p>
-                            <p><b>Uso EPP:</b> {{ antecedent.uso_epp }}</p>
-                            <p><b>Numero de riesgos:</b> {{ antecedent.riesgos.get_number_hazard }}</p>
-                            <p><b>Riesgos:</b> {{ antecedent.riesgos.get_label_hazards }} </p>
-                            <p><b>Registrado por:</b> {{ antecedent.registrado_por.user_id.username }}</p>
-                            <p><b>Ultima vez modificado:</b> {{ antecedent.ultima_vez_modificado }}</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            {% for accident in antecedent.accidentes.all %}
-                                <h4>Accidente #{{ forloop.counter }}</h4>
-                                <hr>
-                                <p><b>Tipo:</b> {{ accident.tipo }}</p>
-                                <p><b>Secuelas:</b> {{ accident.secuelas }}</p>
-                                <p><b>Atendido:</b> {{ accident.atendido }}</p>
-                                <p><b>Calificado:</b> {{ accident.calificado }}</p>
-                                <p><b>Fecha:</b> {{ accident.fecha }}</p>
-                                <p><b>Descripcion:</b> {{ accident.descripcion }}</p>
-                                <hr>
-                            {% empty %}
-                                <h2>No se registran accidentes</h2>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-footer text-left">
-                    <p style="color: gainsboro">Registrado por: {{ antecedent.registrado_por.user_id.username }}</p>
-                </div>
-            </div>
+            {% endif %}
+            <h1>Antecedentes de {{ antecedent.persona }}</h1>
+            <small style="color: gainsboro">Registrado por: {{ antecedent.registrado_por.user_id.username }}</small>
         </div>
     </div>
-{% endblock %}
+    <hr>
+    <!-- Information -->
+    <div class="row">
+        <div class="col-sm-12 text-left">
+            <p><b>Empresa donde laboro:</b> {{ antecedent.nombre_empresa }}</p>
+            <p><b>Cargo que tuvo:</b> {{ antecedent.ocupacion }}</p>
+            <p><b>Tiempo de duracion:</b> {{ antecedent.tiempo }}</p>
+            <p><b>Uso EPP:</b> {{ antecedent.uso_epp }}</p>
+            <p><b>Numero de riesgos:</b> {{ antecedent.riesgos.get_number_hazard }}</p>
+            <p><b>Riesgos:</b> {{ antecedent.riesgos.get_label_hazards }} </p>
+            <p><b>Registrado por:</b> {{ antecedent.registrado_por.user_id.username }}</p>
+            <p><b>Ultima vez modificado:</b> {{ antecedent.ultima_vez_modificado }}</p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-12">
+            {% for accident in antecedent.accidentes.all %}
+                <h4>Accidente #{{ forloop.counter }}</h4>
+                <hr>
+                <p><b>Tipo:</b> {{ accident.tipo }}</p>
+                <p><b>Secuelas:</b> {{ accident.secuelas }}</p>
+                <p><b>Atendido:</b> {{ accident.atendido }}</p>
+                <p><b>Calificado:</b> {{ accident.calificado }}</p>
+                <p><b>Fecha:</b> {{ accident.fecha }}</p>
+                <p><b>Descripcion:</b> {{ accident.descripcion }}</p>
+                <hr>
+            {% empty %}
+                <h2>No se registran accidentes</h2>
+            {% endfor %}
+        </div>
+    </div>
+</div>

@@ -11,8 +11,7 @@
     <thead>
     <tr>
         <th>Nombre de usuario</th>
-        <th>Nombres</th>
-        <th>Apellidos</th>
+        <th>Nombre</th>
         <th>Correo Electronico</th>
         <th>Rol</th>
         <th>Estado</th>
@@ -23,8 +22,7 @@
     {% for user in user_list %}
         <tr>
             <td>{{ user.username }}</td>
-            <td>{{ user.first_name }}</td>
-            <td>{{ user.last_name }}</td>
+            <td>{{ user.last_name }} {{ user.first_name }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.profile_type }}</td>
             <td>
@@ -36,32 +34,39 @@
             </td>
             <td>
                 <!-- Detail Link -->
-                <a href="{% url 'accounts:detail_personal' user_id=user.id %}">
-                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                            data-placement="left" title="" data-original-title="Ver">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-                </a>
+                <button class="btn btn-primary btn-xs btn_modal" data-toggle="tooltip"
+                        data-modal-title="Detalle Usuario"  href="{% url 'accounts:detail_personal' user_id=user.id %}">
+                    Ver <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
                 <!-- Update Link -->
                 <a href="{% url 'accounts:update_personal' user_id=user.id %}">
-                    <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                            data-placement="left" title="" data-original-title="Editar">
-                        <i class="fa fa-pencil" aria-hidden="true"></i>
-
+                    <button class="btn btn-warning btn-xs" data-toggle="tooltip">
+                        <i class="fa fa-edit" aria-hidden="true"></i> Editar
                     </button>
                 </a>
+                {% if user.is_active %}
                 <!-- Delete Link -->
-                <a href="{% url 'accounts:delete_personal' user_id=user.id %}">
-                    <button class="btn btn-danger btn-xs" data-toggle="tooltip"
-                            data-placement="right" title="" data-original-title="Borrar">
-                        <i class="fa fa-trash-o" aria-hidden="true"></i>
-
-                    </button>
-                </a>
+                <button class="btn btn-danger btn-xs btn_modal" data-toggle="tooltip"
+                        data-modal-title="Eliminar Usuario" data-original-title="Desactivar"
+                        href="{% url 'accounts:delete_personal' user_id=user.id %}">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </button>
+                {% endif %}
             </td>
 
         </tr>
     {% endfor %}
     </tbody>
 
+{% endblock %}
+{% block extra_content %}
+    {% include 'base/base_modal.html' %}
+{% endblock %}
+{% block extra_scripts %}
+    <script>
+        $('.btn_modal').on('click', function (event) {
+            event.preventDefault();
+            load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
+        });
+    </script>
 {% endblock %}

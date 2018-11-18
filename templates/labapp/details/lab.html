@@ -1,0 +1,27 @@
+<div class="panel-body">
+    <!-- Title -->
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            {% if request.user.reception_profile %}
+                <span class="pull-right">
+                    <a href="{% url 'docapp:update_lab' lab_id=lab.id %}">
+                                    <button class="btn btn-warning btn-xs">
+                                        <i class="fa fa-edit" aria-hidden="true"></i> Editar
+                                    </button>
+                                </a>
+                </span>
+            {% endif %}
+            <h1>{{ lab.nombre|upper }}</h1>
+            {% if lab.is_active %}
+                <span class="label-success label label-default">Activo</span>
+            {% else %}
+                <span class="label-danger label label-default">Desactivado</span>
+            {% endif %}
+        </div>
+        <div class="col-sm-12">
+            <p><b>Direccion:</b> {{ lab.direccion }}</p>
+            <p><b>Email:</b> {% if lab.email_contacto %} {{ lab.email_contacto }} {% else %} No presenta {% endif %}</p>
+            <p><b>Cantidad Empleados:</b> {{ lab.personal_lab.all.count }}</p>
+        </div>
+    </div>
+</div>

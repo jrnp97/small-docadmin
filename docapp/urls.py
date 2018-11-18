@@ -62,5 +62,7 @@ urlpatterns = [
     url(r'^deactivate/lab/(?P<lab_id>[0-9])/$', views.deactivate_lab, name='deactivate_lab'),
     url(r'^register/lab/(?P<lab_id>[0-9]+)/admin/$', views.register_lab_admin, name='register_lab_admin'),
     url(r'^update/lab/admin/(?P<pk>[0-9]+)/$', views.update_lab_admin, name='update_lab_admin'),
-
+    url(r'^delete/lab/admin/(?P<pk>[0-9]+)/$', views.deactivate_lab_admin, name='deactivate_lab_admin'),
+    url(r'^lab/admin/(?P<pk>[0-9]+)/$', views.detail_lab_admin, name='detail_lab_admin'),
+    url('^laboratory/(?P<lab_id>[0-9]+)/$', views.detail_laboratory, name='detail_laboratory')
 ]
