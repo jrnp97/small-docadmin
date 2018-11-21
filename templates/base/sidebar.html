@@ -114,7 +114,7 @@
                             {% if request.user.profile_type == 'doctor' %}
                                 <a href="{% url 'docapp:list_consults' %}">Disponibles</a>
                             {% elif request.user.profile_type == 'receptionista' %}
-                                <a href="{% url 'docapp:list_own_consults' %}">Lista</a>
+                                <a href="{% url 'docapp:list_consults' %}">Lista</a>
                             {% endif %}
                         </li>
                         {% if request.user.profile_type == 'p_laboratorio' %}
