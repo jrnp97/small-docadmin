@@ -1,10 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="panel-body">
+    <!-- Title -->
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            {% if request.user.reception_profile %}
+                <span class="pull-right">
+                                <a href="{% url 'docapp:update_simple_patient' pk=patient.id %}">
+                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                                        data-placement="left" title="" data-original-title="Editar">
+                                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                                </button>
+                                            </a>
+                            </span>
+            {% endif %}
+            <h1>{{ person|upper }}</h1>
+            <small style="color: gainsboro">Registrado por: {{ person.create_by.user.username }}</small>
+        </div>
+    </div>
+    <hr>
+    <!-- Information -->
+    <div class="row">
+        <div class="col-sm-6 text-left">
+            <p><b>Identificacion:</b> {{ person.identificacion }}</p>
+            <p><b>Lugar de naciemiento:</b> {{ person.lugar_de_nacimiento }}</p>
+            <p><b>Fecha de nacimiento:</b> {{ person.fecha_de_nacimiento }}</p>
+            <p><b>Sexo:</b> {{ person.sexo }}</p>
+            <p><b>Estado Civil:</b> {{ person.estado_civil }}</p>
+            <p><b>Numero de hijos:</b> {{ person.numero_de_hijos }}</p>
+            <p><b>Direccion:</b> {{ person.direccion }}</p>
+            <p><b>Estrato:</b> {{ person.estrato }}</p>
+        </div>
+        <div class="col-sm-6 text-left">
+            <p><b>Telefono:</b> {{ person.telefono }}</p>
+            <p><b>Celular:</b> {{ person.celular }}</p>
+            <p><b>Ocupación:</b> {{ person.ocupacion }}</p>
+            <p><b>Cargo:</b> {{ person.posicion }}</p>
+            <p><b>Empresa donde labora:</b> {{ person.empresa }}</p>
 
-</body>
-</html>
+            <p><b>Estudiante en entramiento:</b> {{ person.estudiante_en_entrenamiento }}</p>
+            <p><b>Aprendiz Sena:</b> {{ person.aprendiz_sena }}</p>
+            <address>
+                <p><b>Ultima vez modificado: </b> {{ person.ultima_vez_modificado }}</p>
+            </address>
+        </div>
+    </div>
+    <hr>
+    <h2>Antecedentes</h2>
+    <div class="table-responsive m-b-20 text-center">
+        {% if person.antecedentes.all %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Compañia</th>
+                    <th>Numero Accidentes</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for ant in person.antecedentes.all %}
+                    <tr>
+                        <td>{{ ant.nombre_empresa }}</td>
+                        <td>{{ ant.accidentes.all.count }}</td>
+                    </tr>
+                    {% if forloop.counter == 5 %}
+                        {{ break }}
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <a class="btn btn-success pull-right"
+               href="{% url 'docapp:list_employ_antecedents' person_id=person.id %}"><i
+                    class="fa fa-plus"></i>
+                Ver más
+            </a>
+        {% else %}
+            <h3>No Registra</h3>
+        {% endif %}
+    </div>
+    <h2>Examenes</h2>
+    <div class="table-responsive m-b-20">
+        {% if person.exams.all %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Fecha de Registro</th>
+                    <th>Finalizado</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for exam in person.exams.all %}
+                    <tr>
+                        <td>{{ exam.name }}</td>
+                        <td>{{ exam.create_date }}</td>
+                        <td> {{ exam.finished }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <hr>
+        {% else %}
+            <h3>No Registra </h3>
+        {% endif %}
+    </div>
+</div>
+

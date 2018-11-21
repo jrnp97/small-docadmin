@@ -23,6 +23,12 @@ urlpatterns = [
     url(r'^patient/(?P<pk>[0-9]+)/$', views.detail_patient, name='detail_patient'),
     url(r'^register/patient/$', views.register_simple_patient, name='register_simple_patient'),
     url(r'^update/patient/(?P<pk>[0-9]+)/$', views.update_simple_patient, name='update_simple_patient'),
+    url(r'^consult/$', views.make_consulta, name='make_consult'),
+
+    # Consults urls
+    url(r'^consults/$', views.list_consults, name='list_consults'),
+    url(r'^own_consults/$', views.lab_own_consults, name='list_own_consults'),
+
 
     # Antecedent urls
     url(r'^antecedent/(?P<person_id>[0-9])/$', views.list_employ_antecedents, name='list_employ_antecedents'),

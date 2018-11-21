@@ -1,10 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base/base_list.html' %}
+{% load static %}
+{% block title %} Lista paciente {% endblock %}
 
-</body>
-</html>
+{% block page_title %}Pacientes Registrados{% endblock %}
+{% block small_message %} Lista de Pacientes {% endblock %}
+{% block add_link %} {% url 'docapp:register_simple_patient' %} {% endblock %}
+{% block add_link_label %} Pacientes {% endblock %}
+
+{% block datatable_body %}
+    <thead>
+    <tr>
+        <th>Identificacion</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Telefono</th>
+        <th>Celular</th>
+        <th>Sexo</th>
+        <th>Consulta</th>
+        {% if request.user.doctor_profile %}
+            <th>Antecedentes</th>{% endif %}
+        <th>Opciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for person in patient_list %}
+        <tr>
+            <td>{{ person.identificacion }}</td>
+            <td>{{ person.nombres }}</td>
+            <td>{{ person.apellidos }}</td>
+            <td>{{ person.telefono }}</td>
+            <td>{{ person.celular }}</td>
+            <td>{{ person.sexo }}</td>
+            <td>
+                <button class="btn btn-warning btn-xs" onclick="make_consult({{ person.id }})">
+                    Registro <i class="fa fa-pencil" aria-hidden="true"></i>
+                </button>
+            </td>
+            {% if request.user.doctor_profile %}
+                <td>
+                    <!-- Register Link -->
+                    <a href="{% url 'docapp:register_employ_antecedent' person_id=person.id %}">
+                        <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                data-placement="left" title="" data-original-title="Registrar">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                    <!-- List Link -->
+                    <a href="{% url 'docapp:list_employ_antecedents' person_id=person.id %}">
+                        <button class="btn btn-primary btn-xs" data-original-title="Ver lista">
+                            <i class="fa fa-list-alt" aria-hidden="true"></i> Lista
+                        </button>
+                    </a>
+                </td>{% endif %}
+            <td>
+                <!-- Detail Link -->
+                <button class="btn btn-primary btn-xs btn_modal" data-modal-title="Detalle Empleado"
+                        href="{% url 'docapp:detail_patient' pk=person.id %}">
+                    Ver <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
+                <!-- Update Link -->
+                <a href="{% url 'docapp:update_simple_patient' pk=person.id %}">
+                    <button class="btn btn-warning btn-xs">
+                        <i class="fa fa-edit" aria-hidden="true"></i> Editar
+                    </button>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <h1 id="name"></h1>
+{% endblock %}
+{% block extra_content %}
+    {% include 'base/base_modal.html' %}
+{% endblock %}
+{% block extra_scripts %}
+    <script>
+        $('.btn_modal').on('click', function (event) {
+            event.preventDefault();
+            load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
+        });
+    </script>
+
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        };
+
+        function make_consult(id) {
+
+            $.ajax({
+                method: "POST",
+                url: "/consult/",
+                data: {
+                    'patiend_id': id,
+                    'csrfmiddlewaretoken': getCookie('csrftoken')
+                },
+                success: (resp) => {
+                    console.log(resp)
+                },
+                error: (error) => {
+                    console.log(error)
+                }
+            })
+        };
+
+
+    </script>
+
+
+
+{% endblock %}

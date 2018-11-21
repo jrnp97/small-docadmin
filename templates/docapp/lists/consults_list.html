@@ -1,0 +1,98 @@
+{% extends 'base/base_list.html' %}
+
+{% block title %} Procesos | Consultas {% endblock %}
+
+
+{% block page_title %}Lista de Consultas {% endblock %}
+{% block small_message %} Lista de consultas en proceso {% endblock %}
+{% block add_btn %} {% endblock %}
+
+{% block datatable_body %}
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Paciente</th>
+        <th>Activated</th>
+        <th>Fecha de Creación</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for exam in consults_list %}
+        <tr>
+            <td>{{ exam.id }}</td>
+            <td> {{ exam.paciente_id }}
+                <br>
+                {% if request.user.doctor_profile %}
+                    <button class="btn btn-primary btn-xs btn_modal" data-toggle="tooltip"
+                            data-placement="left" data-modal-title="Detalle Empleado" data-original-title="Ver"
+                            href="{% url 'docapp:detail_employ' person_id=exam.paciente_id_id %}">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                    <a href="{% url 'docapp:register_employ_antecedent' person_id=exam.paciente_id_id %}">
+                        <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                data-placement="left" title="" data-original-title="Registrar Antecedentes">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                {% endif %}
+            </td>
+            <td> {{ exam.activated_by.user_id }}
+                <br>
+                {% if request.user.is_superuser %}
+                    <button class="btn btn-primary btn-xs btn_modal" data-toggle="tooltip"
+                            data-placement="left" data-modal-title="Detalle Usuario" data-original-title="Ver"
+                            href="{% url 'accounts:detail_personal' user_id=exam.registrado_por.user_id_id %}">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                {% endif %}
+            </td>
+            <td> {{ exam.fecha_de_creacion }} </td>
+            <td>
+                {% if request.user.doctor_profile %}
+                    {{ exam.estado }}
+                    {% if exam.get_doctor_process == 100 and request.path == '/my/examinations/' %}
+                        <button class="btn btn-primary btn-xs btn_modal" data-modal-title="Terminar Examinacion"
+                                href="{% url 'docapp:doctor_end_exam' exam_id=exam.id %}">
+                            <i class="fa fa-send" aria-hidden="true"></i>
+                        </button>
+                    {% endif %}
+                {% elif request.user.laboratory_profile %}
+                    {{ exam.lab_estado }}
+                    {% if exam.get_lab_process == 100 and request.path == '/labapp/my/examinations/' %}
+                        <button class="btn btn-primary btn-xs btn_modal" data-modal-title="Terminar Examinacion"
+                                href="{% url 'labapp:lab_end_exam' exam_id=exam.id %}">
+                            <i class="fa fa-send" aria-hidden="true"></i>
+                        </button>
+                    {% endif %}
+                {% else %}
+                    {{ exam.estado }}
+                {% endif %}
+            </td>
+            {% if request.user.is_authenticated %}
+                <td>
+                    <a href="">
+                        <button class="btn btn-primary btn-xs" data-original-title="Ver lista">
+                            <i class="fa fa-list-alt" aria-hidden="true">Realizar</i>
+                        </button>
+                    </a>
+                </td>
+            {% endif %}
+        </tr>
+
+    {% endfor %}
+    </tbody>
+{% endblock %}
+{% block extra_content %}
+    {% include 'base/base_modal.html' %}
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $('.btn_modal').on('click', function (event) {
+            event.preventDefault();
+            load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
+        });
+    </script>
+{% endblock %}
