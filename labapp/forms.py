@@ -1,25 +1,33 @@
-"""
 from django import forms
+from django.db import IntegrityError
 
-from docapp.models import Laboratory, ExamenSangre, Examenes
+from accounts.forms import BaseUserForm
+
+from labapp.models import Laboratorio, LaboratoryProfile, LabExam, ExamResults
 
 
-class LabForm(forms.ModelForm):
-    class Meta:
-        model = Laboratory
-        exclude = ('ultima_vez_modificado', 'tipo_examen', 'registrado_por',)
+class BaseLabUserCreateForm(BaseUserForm):
 
-    def save(self, commit=True):
-        instance = super(LabForm, self).save(commit=False)
-        instance.tipo_examen = self.exam_type
-        instance.registrado_por = self.create_by
+    class Meta(BaseUserForm.Meta):
+        exclude = ('profile_type', )
+
+    def save(self, commit=True, **info):
+        instance = super(BaseUserForm, self).save(commit=False)
+        # Set clean password to user to save
+        instance.password = self.cleaned_data.get('password2')
+        instance.profile_type = 'p_laboratorio'  # Set laboratory profile
         if commit:
             instance.save()
+            # Save profile now
+            try:
+                info.update({'user_id': instance})
+                laboratory = LaboratoryProfile(**info)
+                laboratory.save()
+            except IntegrityError:
+                instance.delete(destroy=True)
+                raise forms.ValidationError(message="Unable to save profile, check information", code='invalid')
         return instance
 
 
-blood_section = forms.inlineformset_factory(parent_model=Laboratory, model=ExamenSangre, extra=1, max_num=1,
-                                            can_delete=False, fields='__all__')
-
-exams_section = forms.inlineformset_factory(parent_model=Laboratory, model=Examenes, can_delete=True, fields='__all__')
-"""
+lab_exam_result = forms.inlineformset_factory(parent_model=LabExam, model=ExamResults, extra=1, can_delete=True,
+                                              fields='__all__', exclude=('examen', ))

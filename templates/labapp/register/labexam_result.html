@@ -1,0 +1,61 @@
+{% extends 'base/base_dashboard.html' %}
+{% load static %}
+
+{% block title %} Registro Resultados {% endblock %}
+
+{% block content_header %}
+    <div class="header-icon">
+        <i class="pe-7s-box1"></i>
+    </div>
+    <div class="header-title">
+        <h1>Registro Resultados de {{ exam.nombre }}</h1>
+        <small>Ingrese informacion correspondiente</small>
+    </div>
+{% endblock %}
+
+{% block content_main %}
+
+    <div class="row">
+
+        <div class="col-sm-12">
+
+            <div class="panel panel-bd">
+
+                <div class="panel-heading">
+                    <div class="btn-group">
+                        <a class="btn btn-primary" href="{% url 'labapp:lab_own_examinations' %}">
+                            <i class="fa fa-list"></i> Listado examinaciones pendietes</a>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <h2>Examen de laboratorio: {{ exam }}</h2>
+                    <p><b>Nombre paciente:</b> {{ exam.examinacion_id.paciente_id }}</p>
+                    <p><b>Identificacion paciente:</b> {{ exam.examinacion_id.paciente_id.identificacion }}</p>
+{#                    <p>Edad: {{ exam.examinacion_id.paciente_id.e }}</p>#}
+
+                    <h2>Registro Resultados</h2>
+                    <hr>
+                    <form class="col-sm-12" method="POST">
+                        {% csrf_token %}
+                        {% include 'includes/formset_simple_structure.html' with formset=result_formset %}
+
+                        <div class="col-sm-12 reset-button">
+                            <hr>
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'js/formsetManager.js' %}"></script>
+    <script>
+        $('div#{{ result_formset.prefix }}').formsetManager();
+    </script>
+{% endblock %}

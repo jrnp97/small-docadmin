@@ -1,0 +1,15 @@
+{% extends 'base/base_examination.html' %}
+
+{% block title %} Examinacion | Interno {% endblock %}
+
+
+{% block page_title %} Registro Examen Interno {% endblock %}
+{% block small_message %} Ingrese Resultados del proceso #{{ exam.id }} {% endblock %}
+
+{% block form_body %}
+    <div class="row">
+        <div class="col-sm-12">
+            {% include 'includes/simple_register_form.html' with form=form %}
+        </div>
+    </div>
+{% endblock %}

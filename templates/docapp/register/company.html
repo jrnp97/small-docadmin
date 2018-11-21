@@ -6,15 +6,6 @@
         <i class="pe-7s-box1"></i>
     </div>
     <div class="header-title">
-        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
-            <div class="input-group">
-                <input name="q" class="form-control" placeholder="Search..." type="text">
-                <span class="input-group-btn">
-                                    <button type="submit" name="search" id="search-btn" class="btn"><i
-                                            class="fa fa-search"></i></button>
-                                </span>
-            </div>
-        </form>
         <h1>Registro Empresas</h1>
         <small>Ingrese informacion correspondiente</small>
     </div>
@@ -23,73 +14,28 @@
 {% block content_main %}
 
     <div class="row">
-        <!-- Form controls -->
         <div class="col-sm-12">
+
             <div class="panel panel-bd">
+
                 <div class="panel-heading">
                     <div class="btn-group">
-                        <a class="btn btn-primary" href="{% url 'docapp:list_company' %}"> <i class="fa fa-list"></i>
-                            Lista Empresas</a>
+                        <a class="btn btn-primary" href="{% url 'docapp:list_company' %}">
+                            <i class="fa fa-list"></i> Lista Empresas</a>
                     </div>
                 </div>
+
                 <div class="panel-body">
                     <form class="col-sm-12" method="POST">
                         {% csrf_token %}
-                        {% for field in form %}
-                            {% if not forloop.counter|divisibleby:"2" %}
-                                <div class="row">
-                            {% endif %}
-
-                        <div class="col-sm-6 form-group">
-                            <label class="label {% if field.errors %} label-danger {% else %} label-primary {% endif %}"
-                                   for="{{ field.name }}">{{ field.label }}</label>
-
-                            {% if field.field.widget.input_type == 'select' %}
-                                <!-- Select input -->
-                                <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                        name="{{ field.name }}"
-                                        id="{{ field.name }}"
-                                        size="1">
-                                    {% for option in field.field.choices %}
-                                        <option value="{{ option.0 }}" {% if field.value == option.0 %}
-                                                selected {% endif %}>{{ option.1 }}</option>
-                                    {% endfor %}
-                                </select>
-                            {% elif field.field.widget.input_type == 'checkbox' %}
-                                {{ field }}
-                            {% else %}
-                                <input type="{{ field.field.widget.input_type }}"
-                                       class="{% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %} datepicker {% endif %}
-                                           form-control {% if field.errors %} label-danger-outline {% endif %}"
-                                       name="{{ field.name }}"
-                                       id="{{ field.name }}" placeholder="Ingrese {{ field.label }}"
-                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                        {% if field.field.widget.is_required %}  required="" {% endif %}/>
-                            {% endif %}
-
-                            {% if field.errors %}
-                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
-                                    <button type="button" class="close" data-dismiss="alert"
-                                            aria-label="Close"><span
-                                            aria-hidden="true">×</span></button>
-                                    {% for error in field.errors %}
-                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                        {{ error|escape }}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-
-                            {% if forloop.counter|divisibleby:"2" %}
-                                </div>
-                            {% endif %}
-                        </div>
-                        {% endfor %}
+                        {% include 'includes/simple_register_form.html' with form=form %}
                         <div class="col-sm-12 reset-button">
                             <hr>
                             <button type="submit" class="btn btn-success">Guardar</button>
                         </div>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>

@@ -12,11 +12,11 @@ from docapp.models import (Visiometry,
 class VisioForm(forms.ModelForm):
     class Meta:
         model = Visiometry
-        exclude = ('ultima_vez_modificaco', 'tipo_examen',)
+        exclude = ('ultima_vez_modificaco', 'examinacion_id',)
 
     def save(self, commit=True):
         instance = super(VisioForm, self).save(commit=False)
-        instance.tipo_examen = self.exam_type
+        instance.examinacion_id = self.exam_type
         if commit:
             instance.save()
         return instance

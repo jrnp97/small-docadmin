@@ -29,7 +29,8 @@ class CheckLaboratory(CheckerBase):
 
 class CheckDoctor(CheckerBase):
     def test_func(self):
-        return hasattr(self.request.user, 'doctor_profile') or self.request.user.is_superuser
+        user = self.request.user
+        return hasattr(user, 'doctor_profile') or (user.is_superuser and not hasattr(user, 'reception_profile'))
 
 
 class CheckUser(CheckerBase):

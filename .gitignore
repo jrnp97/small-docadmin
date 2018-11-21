@@ -5,6 +5,7 @@ __pycache__
 *.pyc
 *.png
 *.jpg
+db.sqlite3
 # Created by https://www.gitignore.io/api/python,pycharm
 
 ### PyCharm ###

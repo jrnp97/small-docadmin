@@ -3,7 +3,7 @@ from django import forms
 
 from docapp.models import (Empresa, PacienteEmpresa, PacienteParticular, Examinacion, SimpleExam, AntecedentesLaborales,
                            Riesgos, Accidentes)
-from labapp.models import LabExam
+from labapp.models import LabExam, Laboratorio
 
 
 # Company Forms
@@ -54,28 +54,36 @@ class PacienteParticularForm(forms.ModelForm):
 
 # Examination Forms
 class ExaminacionCreateForm(forms.ModelForm):
-    altura = forms.CheckboxInput()  # Select if altura exam will do
-    audiologia = forms.CheckboxInput()  # Select if audiologia exam will do
-    visiometria = forms.CheckboxInput()  # Select if audiology exam will do
+    laboratorio_id = forms.ModelMultipleChoiceField(queryset=Laboratorio.objects.all())
 
     class Meta:
         model = Examinacion
-        fields = '__all__'
-        exclude = ('registrado_por', 'paciente', 'estado')
+        fields = ('tipo', 'laboratorio_id', 'do_exam_altura', 'do_exam_audiologia', 'do_exam_visiometria',)
+        exclude = ('registrado_por', 'paciente_id', 'estado', 'manejador_por')
+        labels = {
+            'tipo': 'Tipo de Examinación',
+            'laboratorio_id': 'Seleccione Laboratorio',
+            'do_exam_altura': 'Examen de Altura',
+            'do_exam_audiologia': 'Examen de Audiologia',
+            'do_exam_visiometria': 'Examen de Visiometria'
+        }
 
-    def save(self, commit=True, **kwargs):
+    def save(self, commit=True):
         instance = super(ExaminacionCreateForm, self).save(commit=False)
         instance.registrado_por = self.create_by
-        instance.paciente = self.person
+        instance.paciente_id = self.person
         if commit:
             instance.save()
         return instance
 
 
-simple_exam_inlineformset = forms.inlineformset_factory(parent_model=Examinacion, model=SimpleExam, can_delete=True,
-                                                        fields='__all__')
+simple_exam_inlineformset = forms.inlineformset_factory(parent_model=Examinacion, model=SimpleExam, extra=1,
+                                                        can_delete=True, fields='__all__',
+                                                        exclude=('registrado_por', 'resultados'))
 
-lab_exam_inlineformset = forms.modelformset_factory(model=LabExam, can_delete=True, fields='__all__')
+lab_exam_inlineformset = forms.inlineformset_factory(parent_model=Examinacion, model=LabExam, can_delete=True,
+                                                     fields='__all__', extra=1,
+                                                     exclude=('registrado_por', 'manejado_por', 'laboratorio_id', ))
 
 
 # Appointment Forms (Receptionist only send a request and a register must be create)
@@ -98,7 +106,5 @@ class AntLaboralesForm(forms.ModelForm):
 hazards_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLaborales, model=Riesgos, extra=1,
                                                     max_num=1, can_delete=False, fields='__all__')
 
-accident_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLaborales, model=Accidentes,
-                                                     can_delete=True, fields='__all__')
-
-
+accident_inlineformset = forms.inlineformset_factory(parent_model=AntecedentesLaborales, model=Accidentes, extra=1,
+                                                     can_delete=True, fields='__all__', exclude=('registrado_por',))

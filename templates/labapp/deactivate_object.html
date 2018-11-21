@@ -1,0 +1,12 @@
+{% if object %}
+    <form method="POST" action="{% url 'docapp:deactivate_lab' lab_id=object.id %}">
+    {%  csrf_token %}
+        <h1>Realmente Quieres Eliminar {{ object }}?</h1>
+        <hr>
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Desactivar</button>
+        </div>
+    </form>
+{% else %}
+    <h1>You don't must be here</h1>
+{% endif %}

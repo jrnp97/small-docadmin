@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 
 from accounts.models import ReceptionProfile
+from docapp.models import Examinacion
 
 User = get_user_model()
 
@@ -14,13 +15,17 @@ class Laboratorio(models.Model):
     direccion = models.CharField(max_length=100, null=False, blank=False)
     email_contacto = models.EmailField()
 
+    is_active = models.BooleanField(default=True, null=False, blank=True)
+
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(ReceptionProfile, null=False, blank=False,
-                                       related_name='laboratorios')
+    registrado_por = models.ForeignKey(ReceptionProfile, null=False, blank=False, related_name='laboratorios')
 
     class Meta:
         db_table = "laboratorios"
+
+    def __str__(self):
+        return self.nombre
 
 
 class LaboratoryProfile(models.Model):
@@ -34,17 +39,26 @@ class LaboratoryProfile(models.Model):
     class Meta:
         db_table = 'personal_labs'
 
+    def __str__(self):
+        return self.user_id.__str__()
+
 
 class LabExam(models.Model):
     """ Model to register laboratory exam to do on a patient """
-    nombre = models.CharField(max_length=50, null=False, blank=False)
+    nombre = models.CharField(max_length=100, null=False, blank=False)
 
-    laboratorio_id = models.ForeignKey(Laboratorio, null=False, blank=False, on_delete=models.CASCADE,
-                                       related_name='procesos')
+    laboratorio_id = models.ForeignKey(Laboratorio, on_delete=models.CASCADE, related_name='procesos')
+
+    examinacion_id = models.ForeignKey(Examinacion, on_delete=models.CASCADE, related_name='examenes_laboratorios')
+
     registrado_por = models.ForeignKey(ReceptionProfile, null=False, blank=False, on_delete=models.CASCADE,
                                        related_name='examenes_de_labs')
-    manejado_por = models.OneToOneField(LaboratoryProfile, null=True, blank=True, on_delete=models.CASCADE,
-                                        related_name='examenes')
+
+    manejado_por = models.ForeignKey(LaboratoryProfile, null=True, blank=True, on_delete=models.CASCADE,
+                                     related_name='examenes')
+
+    def __str__(self):
+        return self.nombre
 
 
 class ExamResults(models.Model):

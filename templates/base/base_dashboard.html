@@ -10,45 +10,36 @@
     {% block styles %}
         <!-- Favicon and touch icons -->
         <link rel="shortcut icon" href="{% static 'assets/dist/img/ico/favicon.png' %}" type="image/x-icon">
-        <!-- Start Global Mandatory Style
-        =====================================================================-->
+        <!-- Start Global Mandatory Style -->
         <!-- jquery-ui css -->
         <link href="{% static 'assets/plugins/jquery-ui-1.12.1/jquery-ui.min.css' %}" rel="stylesheet" type="text/css"/>
         <!-- Bootstrap -->
         <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>
-        <link href="{% static 'assets/dist/' %}" rel="stylesheet" type="text/css"/>
-        <!-- Bootstrap rtl -->
-        <!--<link href="assets/bootstrap-rtl/bootstrap-rtl.min.css" rel="stylesheet" type="text/css"/>-->
         <!-- Lobipanel css -->
         <link href="{% static 'assets/plugins/lobipanel/lobipanel.min.css' %}" rel="stylesheet" type="text/css"/>
         <!-- Pace css -->
         <link href="{% static 'assets/plugins/pace/flash.css' %}" rel="stylesheet" type="text/css"/>
+        <!--Modal css -->
+        <link href="{% static 'assets/plugins/modals/component.css' %}" rel="stylesheet" type="text/css"/>
         <!-- Font Awesome -->
         <link href="{% static 'assets/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css"/>
         <!-- Pe-icon -->
         <link href="{% static 'assets/pe-icon-7-stroke/css/pe-icon-7-stroke.css' %}" rel="stylesheet" type="text/css"/>
         <!-- Themify icons -->
         <link href="{% static 'assets/themify-icons/themify-icons.css' %}" rel="stylesheet" type="text/css"/>
-        <!-- End Global Mandatory Style
-        =====================================================================-->
-
-        <!-- Start page Label Plugins
-        =====================================================================-->
-        <!-- Toastr css -->
-        <link href="{% static 'assets/plugins/toastr/toastr.css' %}" rel="stylesheet" type="text/css"/>
-        <!-- Emojionearea -->
-        <link href="{% static 'assets/plugins/emojionearea/emojionearea.min.css' %}" rel="stylesheet" type="text/css"/>
-        <!-- Monthly css -->
-        <link href="{% static 'assets/plugins/monthly/monthly.css' %}" rel="stylesheet" type="text/css"/>
-        <!-- End page Label Plugins
-        =====================================================================-->
-        <!-- Start Theme Layout Style
-        =====================================================================-->
+        <!-- Datatable style -->
+        <link rel="stylesheet" type="text/css" href="{% static 'assets/plugins/DataTables/datatables.min.css' %}"/>
+        <!-- End Global Mandatory Style -->
+        <link rel="stylesheet" href="{% static 'assets/plugins/bootstrap-select/bootstrap-select.min.css' %}">
         <!-- Theme style -->
         <link href="{% static 'assets/dist/css/stylehealth.min.css' %}" rel="stylesheet" type="text/css"/>
-        <!--<link href="assets/dist/css/stylehealth-rtl.css" rel="stylesheet" type="text/css"/>-->
-        <!-- End Theme Layout Style
-        =====================================================================-->
+        <!-- End Theme Layout Style -->
+        <style type="text/css">
+            .label-custom {
+                background-color: #009688;
+                border: 2px solid #3a95e4a6;
+            }
+        </style>
     {% endblock %}
 </head>
 <body class="sidebar-mini  pace-done">
@@ -58,11 +49,9 @@
         <header class="main-header">
             <a href="#" class="logo"> <!-- Logo -->
                 <span class="logo-mini">
-                        <!--<b>A</b>H-admin-->
                         <img src="{% static 'assets/dist/img/mini-logo.png' %}" alt="">
                     </span>
                 <span class="logo-lg">
-                        <!--<b>Admin</b>H-admin-->
                         <img src="{% static 'assets/dist/img/logo.png' %}" alt="">
                     </span>
             </a>
@@ -73,6 +62,7 @@
     {% include 'base/sidebar.html' %}
 
     <div class="content-wrapper" style="min-height: 869px;">
+
 
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -93,7 +83,7 @@
         {% block footer %}
 
             <div class="pull-right hidden-xs"><b>Version</b> 1.0</div>
-            <strong>Copyright © 2016-2017 <a href="#">Thememinister</a>.</strong> All rights reserved.
+            <strong>SM Laboral, Cartagena de Indias</strong> All rights reserved.
 
         {% endblock %}
     </footer>
@@ -101,58 +91,37 @@
 </div>
 
 {% block scripts %}
-    <!-- Start Core Plugins
-=====================================================================-->
+    <!-- Start Core Plugins -->
     <!-- jQuery -->
-    <script src="{% static 'assets/plugins/jQuery/jquery-1.12.4.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'assets/plugins/jQuery/jquery-1.12.4.min.js' %}"></script>
     <!-- jquery-ui -->
-    <script src="{% static 'assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
     <!-- Bootstrap -->
-    <script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
     <!-- lobipanel -->
-    <script src="{% static 'assets/plugins/lobipanel/lobipanel.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'assets/plugins/lobipanel/lobipanel.min.js' %}"></script>
     <!-- Pace js -->
-    <script src="{% static 'assets/plugins/pace/pace.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'assets/plugins/pace/pace.min.js' %}"></script>
+
+    <!-- Modal js -->
+    <script src="{% static 'assets/plugins/modals/classie.js' %}"></script>
+    <script src="{% static 'assets/plugins/modals/modalEffects.js' %}"></script>
+    <!-- End Page Lavel Plugins -->
     <!-- SlimScroll -->
-    <script src="{% static 'assets/plugins/slimScroll/jquery.slimscroll.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'assets/plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
     <!-- FastClick -->
-    <script src="{% static 'assets/plugins/fastclick/fastclick.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'assets/plugins/fastclick/fastclick.min.js' %}"></script>
     <!-- Hadmin frame -->
-    <script src="{% static 'assets/dist/js/custom1.js' %}" type="text/javascript"></script>
-    <!-- End Core Plugins
-    =====================================================================-->
-    <!-- Start Theme label Script
-    =====================================================================-->
-
-    <!-- Start Page Lavel Plugins
-    =====================================================================-->
-    <!-- Toastr js  -->
-    <script src="{% static 'assets/plugins/toastr/toastr.min.js' %}" type="text/javascript"></script>
-    <!-- Sparkline js  -->
-    <script src="{% static 'assets/plugins/sparkline/sparkline.min.js' %}" type="text/javascript"></script>
-    <!-- Data maps js  -->
-    <script src="{% static 'assets/plugins/datamaps/d3.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'assets/plugins/datamaps/topojson.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'assets/plugins/datamaps/datamaps.all.min.js' %}" type="text/javascript"></script>
-    <!-- Counter js  -->
-    <script src="{% static 'assets/plugins/counterup/waypoints.js' %}" type="text/javascript"></script>
-    <script src="{% static 'assets/plugins/counterup/jquery.counterup.min.js' %}" type="text/javascript"></script>
-    <!-- ChartJs JavaScript -->
-    <script src="{% static 'assets/plugins/chartJs/Chart.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'assets/plugins/emojionearea/emojionearea.min.js' %}" type="text/javascript"></script>
-    <!-- Monthly js  -->
-    <script src="{% static 'assets/plugins/monthly/monthly.js' %}" type="text/javascript"></script>
-    <!-- Data maps  -->
-    <script src="{% static 'assets/plugins/datamaps/d3.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'assets/plugins/datamaps/topojson.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'assets/plugins/datamaps/datamaps.all.min.js' %}" type="text/javascript"></script>
-
-    <!-- End Page Lavel Plugins
-    ===================================================================== -->
-
-
+    <script src="{% static 'assets/dist/js/custom1.js' %}"></script>
+    <!-- Datatable plugin -->
+    <script src="{% static 'assets/plugins/DataTables/datatables.min.js' %}"></script>
+    <!-- Bootstrap Select -->
+    <script src="{% static 'assets/plugins/bootstrap-select/bootstrap-select.min.js' %}"></script>
+    <!-- End Core Plugins -->
     <!-- Dashboard js -->
-    <script src="{% static 'assets/dist/js/custom.js' %}" type="text/javascript"></script>
+    <script src="{% static 'assets/dist/js/custom.js' %}"></script>
+    <script src="{% static 'js/utils.js' %}"></script>
 {% endblock %}
 </body>
+
 </html>

@@ -1,0 +1,25 @@
+{# {% if field.field.widget.input_type == 'select' %} #}
+{# Args: #}
+{# - field #}
+<label class="label {% if field.errors %}label-danger{% else %}label-custom{% endif %}"
+       for="{{ field.id_for_label }}">{{ field.label }}</label>
+<select class="selectpicker form-control {% if field.errors %}label-danger-outline{% endif %}" data-show-subtext="true" data-live-search="true" name="{{ field.html_name }}"
+        id="{{ field.auto_id }}" size="1">
+    {% for option in field.field.choices %}
+        <option value="{{ option.0 }}" {% if field.value == option.0 %} selected {% endif %}>
+            {{ option.1 }}</option>
+    {% endfor %}
+</select>
+{% if field.errors %}
+    <div class="alert alert-sm alert-danger alert-dismissible m-t-20"
+         role="alert">
+        <button type="button" class="close" data-dismiss="alert"
+                aria-label="Close"><span
+                aria-hidden="true">×</span></button>
+        {% for error in field.errors %}
+            <i class="fa fa-exclamation-circle"></i>
+            <strong>Error!</strong>
+            {{ error|escape }}
+        {% endfor %}
+    </div>
+{% endif %}

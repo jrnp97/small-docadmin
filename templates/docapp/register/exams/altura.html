@@ -1,0 +1,26 @@
+{% extends 'base/base_examination.html' %}
+
+{% block title %} Examinacion | Resumen {% endblock %}
+
+
+{% block form_body %}
+    <!-- Antecedentes Preguntas -->
+    <section class="{{ formsets.0.section_name }}">
+        {{ formsets.0.form.management_form }}
+        <div class="panel panel-bd lobidisable">
+            <div class="panel-heading">
+                <div class="btn-group"><h2>{{ formsets.0.title }}</h2></div>
+            </div>
+            <div class="panel-body">
+                {% include 'includes/ordered_checkbox_with_textarea.html' with col_size=1 form=formsets.0.form.forms.0 %}
+                <small><b>Nota: Selecciones si presenta alguno de los casos listados.</b></small>
+            </div>
+
+        </div>
+    </section>
+    <div class="row">
+        <div class="col-sm-12">
+            {% include 'includes/simple_register_form.html' with form=form %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base/base_list.html' %}
+{% load static %}
+{% block title %} Lista Empleados {% endblock %}
+
+{% block page_title %}Empresas {% endblock %}
+{% block small_message %} Lista de Empresas {% endblock %}
+{% block add_link %} {% url 'docapp:register_lab' %} {% endblock %}
+{% block add_link_label %} Laboratorio {% endblock %}
+
+
+{% block datatable_body %}
+    <thead>
+    <tr>
+        <th>Nombre</th>
+        <th>Administradores</th>
+        <th>Opciones</th>
+        <th>Estado</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for object in object_list %}
+        <tr>
+            <td>{{ object }}</td>
+            <td>
+                <!-- Register Link -->
+                <a href="{% url 'docapp:register_lab_admin' lab_id=object.id %}">
+                    <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                            data-placement="left" title="" data-original-title="Registrar">
+                        Registro <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                </a>
+                <!-- List Link -->
+                <a href="{% url 'docapp:list_admin_lab' pk=object.id %}">
+                    <button class="btn btn-primary btn-xs">
+                        <i class="fa fa-list-alt" aria-hidden="true"></i> Lista
+                    </button>
+                </a>
+            </td>
+            <td>
+                <!-- Detail Link -->
+                <button class="btn btn-primary btn-xs btn_modal" data-modal-title="Detalle Laboratorio"
+                        href="{% url 'docapp:detail_laboratory' lab_id=object.id %}">
+                    Ver <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
+                <!-- Update Link -->
+                <a href="{% url 'docapp:update_lab' lab_id=object.id %}">
+                    <button class="btn btn-warning btn-xs">
+                        <i class="fa fa-edit" aria-hidden="true"></i> Editar
+                    </button>
+                </a>
+                {% if object.is_active %}
+                    <!-- Deactivate Link -->
+                    <button class="btn btn-danger btn-xs btn_modal" data-toggle="tooltip"
+                            data-placement="right" data-modal-title="Desactivar Usuario"
+                            data-original-title="Desactivar"
+                            href="{% url 'docapp:deactivate_lab' lab_id=object.id %}">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </button>
+                {% endif %}
+            </td>
+            <td>{% if object.is_active %}
+                <span class="label label-success">Activo</span>
+            {% else %}
+                <span class="label label-danger">Desactivado</span>
+            {% endif %}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+{% endblock %}
+{% block extra_content %}
+    {% include 'base/base_modal.html' %}
+{% endblock %}
+{% block extra_scripts %}
+    <script>
+        $('.btn_modal').on('click', function (event) {
+            event.preventDefault();
+            load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
+        });
+    </script>
+{% endblock %}

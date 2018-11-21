@@ -1,207 +1,125 @@
-{% extends 'base/base_dashboard.html' %}
+{% extends 'base/base_list.html' %}
 
-{% block title %} Procesos | Examenes {% endblock %}
+{% block title %} Procesos | Examinaciones {% endblock %}
 
-{% block content_header %}
-    <div class="header-icon">
-        <i class="pe-7s-box1"></i>
-    </div>
-    <div class="header-title">
-        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
-            <div class="input-group">
-                <input name="q" class="form-control" placeholder="Search..." type="text">
-                <span class="input-group-btn">
-                                    <button type="submit" name="search" id="search-btn" class="btn"><i
-                                            class="fa fa-search"></i></button>
-                                </span>
-            </div>
-        </form>
-        <h1>Examenes</h1>
-        <small>Lista de examenes</small>
-    </div>
-{% endblock %}
 
-{% block content_main %}
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-bd lobidisable">
-                <div class="panel-heading">
-                    <div class="btn-group"> <!-- Empty --></div>
-                </div>
-                {% if messages %}
-                    <div class="text-center">
-                        {% for message in messages %}
-                            <div class="alert alert-sm alert-{{ message.level_tag }} alert-dismissible m-t-20"
-                                 role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                        aria-hidden="true">×</span></button>
-                                <i class="fa fa-exclamation-circle"></i>
-                                <strong>{{ message.level_tag|capfirst }}!</strong> {{ message|escape }}
-                            </div>
-                        {% endfor %}
-                    </div>
+{% block page_title %}Lista de Examinaciones {% endblock %}
+{% block small_message %} Lista de examinaciones en proceso {% endblock %}
+{% block add_btn %} {% endblock %}
+
+{% block datatable_body %}
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Tipo de examen</th>
+        <th>Paciente</th>
+        <th>Creador</th>
+        <th>Fecha de Creación</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for exam in exam_list %}
+        <tr>
+            <td>{{ exam.id }}</td>
+            <td> {{ exam.tipo }} </td>
+            <td> {{ exam.paciente_id }}
+                <br>
+                {% if request.user.doctor_profile %}
+                    <button class="btn btn-primary btn-xs btn_modal" data-toggle="tooltip"
+                            data-placement="left" data-modal-title="Detalle Empleado" data-original-title="Ver"
+                            href="{% url 'docapp:detail_employ' person_id=exam.paciente_id_id %}">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                    <a href="{% url 'docapp:register_employ_antecedent' person_id=exam.paciente_id_id %}">
+                        <button class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                data-placement="left" title="" data-original-title="Registrar Antecedentes">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </button>
+                    </a>
                 {% endif %}
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="panel-header">
-                            <div class="col-sm-4 col-xs-12">
-                                <div class="dataTables_length">
-                                    <label>Mostrar
-                                        <select name="example_length">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select> Examenes por pagina</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 col-xs-12">
-                                <!--div class="dataTables_length">
-                                    <a class="btn btn-default buttons-copy btn-sm" tabindex="0">
-                                        <span>Copy</span></a>
-                                    <a class="btn btn-default buttons-csv buttons-html5 btn-sm"
-                                       tabindex="0"><span>CSV</span></a>
-                                    <a class="btn btn-default buttons-excel buttons-html5 btn-sm" tabindex="0"><span>Excel</span></a>
-                                    <a class="btn btn-default buttons-pdf buttons-html5 btn-sm"
-                                       tabindex="0"><span>PDF</span></a>
-                                    <a class="btn btn-default buttons-print btn-sm" tabindex="0"><span>Print</span></a>
-                                </div-->
-                            </div>
-                            <div class="col-sm-4 col-xs-12">
-                                <div class="dataTables_length">
-                                    <div class="input-group custom-search-form">
-                                        <input type="search" class="form-control" placeholder="search..">
-                                        <span class="input-group-btn">
-                                                                  <button class="btn btn-primary" type="button">
-                                                                      <span class="glyphicon glyphicon-search"></span>
-                                                                  </button>
-                                                              </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    {% if exam_list %}
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover text-center">
-                                <thead>
-                                <tr>
-                                    <th>Tipo de examan</th>
-                                    <th>Paciente</th>
-                                    <th>Creador</th>
-                                    <th>Fecha de Creación</th>
-                                    <th>Estado</th>
-                                    <th>Progreso</th>
-                                    {% if request.user.doctor_profile %}
-                                        <th>Examenes</th>
-                                    {% endif %}
-                                    {% if request.user.laboratory_profile %}
-                                        <th>Laboratorio</th>
-                                    {% endif %}
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                {% for exam in exam_list %}
-                                    <tr>
-                                        <td> {{ exam.tipo }} </td>
-                                        <td> {{ exam.paciente }}
-                                            <a href="{% url 'docapp:detail_employ' person_id=exam.paciente.id %}">
-                                                <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                                                        data-placement="left" title="" data-original-title="Ver">
-                                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                                </button>
-                                            </a>
-                                        </td>
-                                        <td> {{ exam.registrado_por.user }}
-                                            {% if request.user.is_superuser %}
-                                                <a href="{% url 'accounts:detail_personal' user_id=exam.create_by.user.id %}">
-                                                    <button class="btn btn-primary btn-xs" data-toggle="tooltip"
-                                                            data-placement="left" title="" data-original-title="Ver">
-                                                        <i class="fa fa-eye" aria-hidden="true"></i>
-                                                    </button>
-                                                </a>
-                                            {% endif %}
-                                        </td>
-                                        <td> {{ exam.fecha_de_creacion }} </td>
-                                        <td> {{ exam.estado }}
-                                            <!--{% if request.user.doctor_profile %}
-                                            <a href="">
-                                                <button class="btn btn-warning btn-xs" data-toggle="tooltip"
-                                                        data-placement="left" title="" data-original-title="Editar">
-                                                    <i class="fa fa-edit" aria-hidden="true"></i>
-                                                </button>
-                                            </a>
-                                            {% endif %} -->
-                                        </td>
-                                        <td>
-                                            <div class="progress progress-lg">
-                                                <div class="progress-bar
-{% if exam.get_process > 0 %} progress-bar-success {% else %} progress-bar-danger {% endif %}
-                                                progress-bar-striped active"
-                                                     role="progressbar" aria-valuenow="80" aria-valuemin="0"
-                                                     aria-valuemax="100"
-                                                     style="width: {% if exam.get_process > 0 %}
-                                                         {{ exam.get_process }}% {% else %} 100% {% endif %}">
-                                                    {{ exam.get_process }}%
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        {% if request.user.doctor_profile %}
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <a href="{% url 'docapp:register_occupational' exam_id=exam.id %}">
-                                                            Ocupacional
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{% url 'docapp:register_audiology' exam_id=exam.id %}">
-                                                            Audilogia
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{% url 'docapp:register_visiometry' exam_id=exam.id %}">
-                                                            Visiometria
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        {% endif %}
-
-                                        {% if request.user.laboratory_profile %}
-                                            <!-- TODO put urls from labapp -->
-                                            <td>
-                                                <a href="#">
-                                                    <button class="btn btn-primary label-success-outline">
-                                                        Registrar Datos
-                                                    </button>
-                                                </a>
-                                            </td>
-                                        {% endif %}
-
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="page-nation text-right">
-                            <ul class="pagination pagination-large">
-                                <li class="disabled"><span>«</span></li>
-                                <li class="active"><span>1</span></li>
-                                <li><a href="#">2</a></li>
-                                <li class="disabled"><span>...</span></li>
-                                <li>
-                                <li><a rel="next" href="#">Next</a></li>
-                            </ul>
-                        </div>
-                    {% else %}
-                        <h2>No se registran examenes</h2>
+            </td>
+            <td> {{ exam.registrado_por.user_id }}
+                <br>
+                {% if request.user.is_superuser %}
+                    <button class="btn btn-primary btn-xs btn_modal" data-toggle="tooltip"
+                            data-placement="left" data-modal-title="Detalle Usuario" data-original-title="Ver"
+                            href="{% url 'accounts:detail_personal' user_id=exam.registrado_por.user_id_id %}">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                {% endif %}
+            </td>
+            <td> {{ exam.fecha_de_creacion }} </td>
+            <td>
+                {% if request.user.doctor_profile %}
+                    {{ exam.doctor_estado }}
+                    {% if exam.doctor_estado == 'finalizado' and request.path == '/my/examinations/' %}
+                        <button class="btn btn-primary btn-xs btn_modal" data-modal-title="Terminar Examinacion"
+                                href="{% url 'docapp:doctor_end_exam' exam_id=exam.id %}">
+                            <i class="fa fa-send" aria-hidden="true"></i>
+                        </button>
                     {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
+                {% elif request.user.laboratory_profile %}
+                    {{ exam.lab_estado }}
+                    {% if exam.lab_estado == 'finalizado' and request.path == '/labapp/my/examinations/' %}
+                        <button class="btn btn-primary btn-xs btn_modal" data-modal-title="Terminar Examinacion"
+                                href="{% url 'labapp:lab_end_exam' exam_id=exam.id %}">
+                            <i class="fa fa-send" aria-hidden="true"></i>
+                        </button>
+                    {% endif %}
+                {% else %}
+                    {{ exam.estado }}
+                {% endif %}
+            </td>
+            {% if request.user.is_authenticated %}
+                <td>
+                    {% if request.user.doctor_profile %}
+                        {% if request.path == '/examination/' %}
+                            <button type="button" class="btn btn-success btn_modal"
+                                    href="{% url 'docapp:doctor_take_a_exam' exam_id=exam.id %}">
+                                Tomar Examinacion
+                            </button>
+                        {% elif request.path == '/my/examinations/' %}
+                            <button type="button" class="btn btn-success btn_modal"
+                                    href="{% url 'docapp:detail_examination' exam_id=exam.id %}">
+                                Registar Resultados
+                            </button>
+                        {% endif %}
+                    {% elif request.user.laboratory_profile %}
+                        {% if request.path == '/labapp/list/examinations/' %}
+                            <button type="button" class="btn btn-success btn_modal"
+                                    href="{% url 'labapp:lab_take_a_exam' exam_id=exam.id %}">
+                                Tomar Examinacion
+                            </button>
+                        {% elif request.path == '/labapp/my/examinations/' %}
+                            <button type="button" class="btn btn-success btn_modal"
+                                    href="{% url 'docapp:detail_examination' exam_id=exam.id %}">
+                                Registar Resultados
+                            </button>
+                        {% endif %}
+                    {% elif request.user.reception_profile %}
+                        <button type="button" class="btn btn-success btn_modal" data-modal-title="Resumen"
+                                href="{% url 'docapp:detail_examination' exam_id=exam.id %}">
+                            Detalles
+                        </button>
+                    {% endif %}
+                </td>
+            {% endif %}
+        </tr>
+
+    {% endfor %}
+    </tbody>
+{% endblock %}
+{% block extra_content %}
+    {% include 'base/base_modal.html' %}
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $('.btn_modal').on('click', function (event) {
+            event.preventDefault();
+            load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
+        });
+    </script>
 {% endblock %}

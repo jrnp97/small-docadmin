@@ -37,13 +37,35 @@ urlpatterns = [
     url(r'^register/exam/(?P<person_id>[0-9]+)/$', views.register_employ_examination,
         name='register_employ_examination'),
     url(r'^examination/$', views.list_examination, name='list_examination'),
+    url(r'^examination/(?P<exam_id>[0-9]+)/$', views.detail_examination, name='detail_examination'),
+    url(r'^take/examination/(?P<exam_id>[0-9]+)/$', views.take_a_exam, name='doctor_take_a_exam'),
+    url(r'^my/examinations/$', views.own_examinations, name='doctor_own_examinations'),
+    url(r'^end/examination/(?P<exam_id>[0-9]+)/$', views.doctor_end_exam, name='doctor_end_exam'),
+    url(r'^end/examinations/$', views.end_examinations, name='doctor_end_examinations'),
+
 
     # Registro de examanes
     url(r'^register/(?P<exam_id>[0-9]+)/occupational/$', views.register_occupational, name='register_occupational'),
     url(r'^register/(?P<exam_id>[0-9]+)/audiology/$', views.register_audiology, name='register_audiology'),
     url(r'^register/(?P<exam_id>[0-9]+)/visiometry/$', views.register_visiometry, name='register_visiometry'),
+    url(r'^register/(?P<exam_id>[0-9]+)/altura/$', views.register_altura, name='register_altura'),
+
     # Update exams
     url(r'^occupational/(?P<pk>[0-9]+)/$', views.update_ocupacional, name='update_ocupacional'),
     url(r'^audiology/(?P<pk>[0-9]+)/$', views.update_audiologia, name='update_audiologia'),
     url(r'^visiometry/(?P<pk>[0-9]+)/$', views.update_visiometria, name='update_visiometria'),
+    url(r'^altura/(?P<pk>[0-9]+)/$', views.update_altura, name='update_altura'),
+    url(r'^simple_exam/(?P<pk>[0-9]+)/$', views.register_simple_exam, name='register_simple_exam'),
+
+    # Lab urls
+    url(r'^labs/$', views.list_lab, name='list_lab'),
+    url(r'^lab/(?P<pk>[0-9]+)/admin/$', views.list_admin_lab, name='list_admin_lab'),
+    url(r'^register/lab/$', views.register_lab, name='register_lab'),
+    url(r'^update/lab/(?P<lab_id>[0-9])/$', views.update_lab, name='update_lab'),
+    url(r'^deactivate/lab/(?P<lab_id>[0-9])/$', views.deactivate_lab, name='deactivate_lab'),
+    url(r'^register/lab/(?P<lab_id>[0-9]+)/admin/$', views.register_lab_admin, name='register_lab_admin'),
+    url(r'^update/lab/admin/(?P<pk>[0-9]+)/$', views.update_lab_admin, name='update_lab_admin'),
+    url(r'^delete/lab/admin/(?P<pk>[0-9]+)/$', views.deactivate_lab_admin, name='deactivate_lab_admin'),
+    url(r'^lab/admin/(?P<pk>[0-9]+)/$', views.detail_lab_admin, name='detail_lab_admin'),
+    url('^laboratory/(?P<lab_id>[0-9]+)/$', views.detail_laboratory, name='detail_laboratory')
 ]

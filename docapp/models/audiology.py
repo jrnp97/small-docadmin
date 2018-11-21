@@ -18,7 +18,7 @@ class Audiology(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         response = super(Audiology, self).save(force_insert, force_update, using, update_fields)
-        self.examinacion_id.update_state()
+        self.examinacion_id.update_doctor()
         return response
 
     class Meta:
@@ -181,7 +181,7 @@ class Audiometria(models.Model):
     otoscopia_ojo_derecho = models.CharField(max_length=10, choices=ESTADO, default='normal', null=False, blank=False)
     observaciones_otoscopia = models.TextField()
 
-    resultados_oidos = models.ImageField(upload_to='otoscopia/%Y/%m/%d/')
+    resultados_oidos = models.ImageField(upload_to='otoscopia/%Y/%m/%d/', null=True, blank=True)
 
     interpretaciones_oido_derecho = models.TextField(null=False, blank=False)
     interpretaciones_oido_izquierdo = models.TextField(null=False, blank=False)

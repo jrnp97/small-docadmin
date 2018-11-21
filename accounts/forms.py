@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 
 from accounts.models import DoctorProfile, ReceptionProfile
-from labapp.models import Laboratorio, LaboratoryProfile
+from accounts.choices import RECP, DOCTOR
 
 User = get_user_model()
 
@@ -13,10 +13,14 @@ class BaseUserForm(forms.ModelForm):
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirme Contraseña', widget=forms.PasswordInput)
 
+    def __init__(self, **kwargs):
+        super(BaseUserForm, self).__init__(**kwargs)
+        if self.fields.get('profile_type'):
+            self.fields['profile_type'].choices.remove(('p_laboratorio', 'Personal de Laboratorio'))  # Delete p_lab option
+
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name')
-        exclude = ('profile_type', )
+        fields = ('username', 'email', 'first_name', 'last_name', 'profile_type',)
 
     def clean_password2(self):
         # Check if both password match
@@ -26,6 +30,13 @@ class BaseUserForm(forms.ModelForm):
             raise forms.ValidationError("Las Constraseñas no coinciden")
         return password2
 
+    def clean_profile_type(self):
+        """ If some expert action send p_laboratorio key across http params invalid it"""
+        p_profile = self.cleaned_data.get('profile_type')
+        if p_profile == 'p_laboratorio':
+            raise forms.ValidationError("Opcion Seleccionada no valida")
+        return p_profile
+
     def save(self, commit=True):
         instance = super(BaseUserForm, self).save(commit=False)
         # Set clean password to user to save
@@ -34,15 +45,11 @@ class BaseUserForm(forms.ModelForm):
             instance.save()
             # Save profile now
             try:
-                if instance.profile_type == 'recepcionista':
+                if instance.profile_type == RECP:
                     info = {'user_id': instance}
                     reception = ReceptionProfile(**info)
                     reception.save()
-                elif instance.profile_type == 'laboratorio':  # TODO Fix Laboratory user register with inline
-                    info = {'user_id': instance}
-                    laboratory = LaboratoryProfile(**info)
-                    laboratory.save()
-                elif instance.profile_type == 'doctor':
+                elif instance.profile_type == DOCTOR:
                     info = {'user_id': instance}
                     doctor = DoctorProfile(**info)
                     doctor.save()
@@ -57,7 +64,7 @@ class BaseUserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'avatar', 'password')
+        fields = ('username', 'email', 'first_name', 'last_name', 'avatar', 'password', 'is_active', )
         exclude = ('profile_type',)
 
     def clean_password(self):
@@ -78,7 +85,6 @@ class BaseUserUpdateForm(forms.ModelForm):
 
 # Create Forms
 class DoctorCreateForm(BaseUserForm):
-
     def save(self, commit=True):
         instance = super(DoctorCreateForm, self).save(commit=False)
         instance.profile_type = 'doctor'  # Set doctor profile
@@ -94,15 +100,6 @@ class RecCreateForm(BaseUserForm):
         super(RecCreateForm, self).save()  # Now save user
 
 
-class LabCreateForm(BaseUserForm):
-    """ Form to register Laboratory profile """
-
-    def save(self, commit=True):
-        instance = super(LabCreateForm, self).save(commit=False)
-        instance.profile_type = 'laboratorio' # Set laboratory profile
-        super(LabCreateForm, self).save()  # Now save user
-
-
 # Profile update forms
 class DoctorUpdateForm(BaseUserUpdateForm):
     """ Form to update doctor profile if required modify something """
@@ -110,22 +107,3 @@ class DoctorUpdateForm(BaseUserUpdateForm):
 
 class RecUpdateForm(BaseUserUpdateForm):
     """ Form to update receptionist profile if required modify something """
-
-
-class LabUpdateForm(BaseUserUpdateForm):
-    """ Form to update laboratory profile if required modify something """
-
-
-class LaboratoryCreateForm(forms.ModelForm):
-
-    class Meta:
-        model = Laboratorio
-        fields = ('nombre', 'direccion', 'email_contacto',)
-        exclude = ('registrado_por', 'ultima_vez_modificado')
-
-    def save(self, commit=True):
-        instance = super(LaboratoryCreateForm, self).save(commit=False)
-        instance.registrado_por = self.create_by
-        if commit:
-            instance.save()
-        return instance

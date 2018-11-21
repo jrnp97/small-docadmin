@@ -7,21 +7,8 @@
         <i class="pe-7s-box1"></i>
     </div>
     <div class="header-title">
-        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
-            <div class="input-group">
-                <input name="q" class="form-control" placeholder="Search..." type="text">
-                <span class="input-group-btn">
-                                    <button type="submit" name="search" id="search-btn" class="btn"><i
-                                            class="fa fa-search"></i></button>
-                                </span>
-            </div>
-        </form>
-        <h1>Inicio Examinacion de {{ parent_object }} </h1>
+        <h1>Inicio Examinacion de {{ person }} </h1>
         <small>Ingrese informacion correspondiente</small>
-        <ol class="breadcrumb hidden-xs">
-            <li><a href="{% url 'docapp:dashboard' %}"><i class="pe-7s-home"></i> Home</a></li>
-            <li class="active">Dashboard</li>
-        </ol>
     </div>
 {% endblock %}
 
@@ -33,69 +20,31 @@
                 <div class="panel-heading">
                     <div class="btn-group">
                         <h1>Registro examen</h1>
-                    </div></div>
+                    </div>
+                </div>
                 <div class="panel-body">
 
                     <form class="col-sm-12" method="POST">
                         {% csrf_token %}
-                    {% if form.non_field_errors %}
-                        <ul>
-                        {% for error in form.non_field_errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                        </ul>
-                    {% endif %}
+                        {# Main form #}
+                        {% include 'includes/simple_register_form.html' with form=form %}
+                        {# Exams intern formset #}
+                        <section class="row">
+                            <h2>Examenes internos</h2>
+                            <small>ejemplo: electrocardiograma</small>
+                            <div class="m-t-20">
+                                {% include 'includes/formset_structure.html' with formset=formsets.0 %}
+                            </div>
+                        </section>
 
-                        {% for field in form %}
-                            {% if not forloop.counter|divisibleby:"2" %}
-                                <div class="row">
-                            {% endif %}
+                        {# Lab exams formsets #}
+                        <section class="row">
+                            <h2>Examenes de laboratorio</h2>
+                            <div class="m-t-20">
+                                {% include 'includes/formset_structure.html' with formset=formsets.1 %}
+                            </div>
+                        </section>
 
-                        <div class="col-sm-6 form-group">
-                            <label class="label {% if field.errors %} label-danger {% else %} label-primary {% endif %}"
-                                   for="{{ field.id_for_label }}">{{ field.label }}</label>
-
-                            {% if field.field.widget.input_type == 'select' %}
-                                <!-- Select input -->
-                                <select class="form-control {% if field.errors %}  label-danger-outline {% endif %}"
-                                        name="{{ field.html_name }}"
-                                        id="{{ field.auto_id }}"
-                                        size="1">
-                                    {% for option in field.field.choices %}
-                                        <option value="{{ option.0 }}" {% if field.value == option.0 %}
-                                                selected {% endif %}>{{ option.1 }}</option>
-                                    {% endfor %}
-                                </select>
-                            {% elif field.field.widget.input_type == 'checkbox' %}
-                                {{ field }}
-                            {% else %}
-                                <input type="{{ field.field.widget.input_type }}"
-                                       class="{% if field.field.widget.format_key == 'DATE_INPUT_FORMATS' %} datepicker {% endif %}
-                                           form-control {% if field.errors %} label-danger-outline {% endif %}"
-                                       name="{{ field.html_name }}"
-                                       id="{{ field.auto_id }}" placeholder="Ingrese {{ field.label }}"
-                                        {% if field.value %}  value="{{ field.value }}" {% endif %}
-                                        {% if field.field.widget.is_required %}  required="" {% endif %}/>
-                            {% endif %}
-
-                            {% if field.errors %}
-                                <div class="alert alert-sm alert-danger alert-dismissible m-t-20" role="alert">
-                                    <button type="button" class="close" data-dismiss="alert"
-                                            aria-label="Close"><span
-                                            aria-hidden="true">×</span></button>
-                                    {% for error in field.errors %}
-                                        <i class="fa fa-exclamation-circle"></i><strong>Error!</strong>
-                                        {{ error|escape }}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-
-                            {% if forloop.counter|divisibleby:"2" %}
-                                </div>
-                            {% endif %}
-                        </div>
-                        {% endfor %}
-                        <!-- TODO add lab exams and intern exams formsets -->
                         <div class="col-sm-12 reset-button">
                             <hr>
                             <button type="submit" class="btn btn-success">Guardar</button>
@@ -106,4 +55,67 @@
         </div>
     </div>
 
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+    <script type="application/javascript">
+
+        function clean_formset(prefix) {
+
+            let parent = $('div#' + prefix);
+            $("input[name='" + prefix + "-TOTAL_FORMS']").val($(parent).children('div').length);  // Update total forms
+
+        }
+
+        function add_one_more(prefix) {
+            let parent_div = $('div#' + prefix);
+            let total_forms_selector = "input[name='" + prefix + "-TOTAL_FORMS']";
+            let prev_value = parseInt(parent_div.children(total_forms_selector).val());
+            let new_text = prefix + '-' + prev_value.toString();
+            let prev_text_regex = new RegExp(prefix + '-\\d+', 'g');
+            let last_normal_form_reference = parent_div.children('div.last_form');  // Get last formset load normally
+
+            let new_id = last_normal_form_reference.attr('id').replace(prev_text_regex, new_text);  // Make new id
+            $("<br id='br_" + new_id + "'/><div id='" + new_id + "' class='form_insert'></div>").insertAfter(parent_div.children('div').last());
+
+            // Update total forms
+            parent_div.children(total_forms_selector).val(prev_value + 1);
+
+            let new_element = parent_div.children('div#' + new_id);
+            // Create del buttom
+            let del_id = 'del_' + new_id;
+            new_element.append("<button class='btn btn-xs btn-danger pull-right' id='" + del_id + "'>Borrar</button>");
+            $('button#' + del_id).click(function () {
+                $('div#' + new_id).remove();
+                $('br#br_' + new_id).remove();
+                clean_formset(prefix);
+            });
+            // End create del buttom
+
+            // Fill new element (inputs, labels)
+            last_normal_form_reference.children().each(function () {
+                let element = $(this).prop('outerHTML');
+                new_element.append(element.replace(prev_text_regex, new_text));
+            });
+        }
+
+        function add_more_btn(formsets_selectors) {
+            formsets_selectors.forEach(function (item) {
+                let item_id = $(item).attr('id')
+                let id = 'add_' + item_id;
+                $(item).append(
+                    "<span id='" + id + "'class='pull-right'><i class='hvr-buzz-out fa fa-plus-square fa-2x'></i></span><br />"
+                );
+                // Handle Click Event
+                $('span#' + id).click(function () {
+                    add_one_more(item_id);
+                });
+            });
+        }
+
+        // Script to manage formset
+        $(document).ready(function () {
+            add_more_btn(['div#{{ formsets.0.form.prefix }}', 'div#{{ formsets.1.form.prefix }}']);  // Add + buttons
+        });
+    </script>
 {% endblock %}
