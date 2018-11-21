@@ -675,7 +675,7 @@ class ListEndExams(LoginRequiredMixin, CheckDoctor, TemplateView):
         return super(ListEndExams, self).get_context_data(**kwargs)
 
 
-end_examinations = ListOwnExams.as_view()
+end_examinations = ListEndExams.as_view()
 
 
 class DoctorEndExam(LoginRequiredMixin, CheckDoctor, SingleObjectMixin, TemplateView):
