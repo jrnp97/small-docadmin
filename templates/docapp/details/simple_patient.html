@@ -12,41 +12,41 @@
                                             </a>
                             </span>
             {% endif %}
-            <h1>{{ person|upper }}</h1>
-            <small style="color: gainsboro">Registrado por: {{ person.create_by.user.username }}</small>
+            <h1>{{ patient|upper }}</h1>
+            <small style="color: gainsboro">Registrado por: {{ patient.create_by.user.username }}</small>
         </div>
     </div>
     <hr>
     <!-- Information -->
     <div class="row">
         <div class="col-sm-6 text-left">
-            <p><b>Identificacion:</b> {{ person.identificacion }}</p>
-            <p><b>Lugar de naciemiento:</b> {{ person.lugar_de_nacimiento }}</p>
-            <p><b>Fecha de nacimiento:</b> {{ person.fecha_de_nacimiento }}</p>
-            <p><b>Sexo:</b> {{ person.sexo }}</p>
-            <p><b>Estado Civil:</b> {{ person.estado_civil }}</p>
-            <p><b>Numero de hijos:</b> {{ person.numero_de_hijos }}</p>
-            <p><b>Direccion:</b> {{ person.direccion }}</p>
-            <p><b>Estrato:</b> {{ person.estrato }}</p>
+            <p><b>Identificacion:</b> {{ patient.identificacion }}</p>
+            <p><b>Lugar de naciemiento:</b> {{ patient.lugar_de_nacimiento }}</p>
+            <p><b>Fecha de nacimiento:</b> {{ patient.fecha_de_nacimiento }}</p>
+            <p><b>Sexo:</b> {{ patient.sexo }}</p>
+            <p><b>Estado Civil:</b> {{ patient.estado_civil }}</p>
+            <p><b>Numero de hijos:</b> {{ patient.numero_de_hijos }}</p>
+            <p><b>Direccion:</b> {{ patient.direccion }}</p>
+            <p><b>Estrato:</b> {{ patient.estrato }}</p>
         </div>
         <div class="col-sm-6 text-left">
-            <p><b>Telefono:</b> {{ person.telefono }}</p>
-            <p><b>Celular:</b> {{ person.celular }}</p>
-            <p><b>Ocupación:</b> {{ person.ocupacion }}</p>
-            <p><b>Cargo:</b> {{ person.posicion }}</p>
-            <p><b>Empresa donde labora:</b> {{ person.empresa }}</p>
+            <p><b>Telefono:</b> {{ patient.telefono }}</p>
+            <p><b>Celular:</b> {{ patient.celular }}</p>
+            <p><b>Ocupación:</b> {{ patient.ocupacion }}</p>
+            <p><b>Cargo:</b> {{ patient.posicion }}</p>
+            <p><b>Empresa donde labora:</b> {{ patient.empresa }}</p>
 
-            <p><b>Estudiante en entramiento:</b> {{ person.estudiante_en_entrenamiento }}</p>
-            <p><b>Aprendiz Sena:</b> {{ person.aprendiz_sena }}</p>
+            <p><b>Estudiante en entramiento:</b> {{ patient.estudiante_en_entrenamiento }}</p>
+            <p><b>Aprendiz Sena:</b> {{ patient.aprendiz_sena }}</p>
             <address>
-                <p><b>Ultima vez modificado: </b> {{ person.ultima_vez_modificado }}</p>
+                <p><b>Ultima vez modificado: </b> {{ patient.ultima_vez_modificado }}</p>
             </address>
         </div>
     </div>
     <hr>
     <h2>Antecedentes</h2>
     <div class="table-responsive m-b-20 text-center">
-        {% if person.antecedentes.all %}
+        {% if patient.antecedentes.all %}
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -56,7 +56,7 @@
                 </thead>
 
                 <tbody>
-                {% for ant in person.antecedentes.all %}
+                {% for ant in patient.antecedentes.all %}
                     <tr>
                         <td>{{ ant.nombre_empresa }}</td>
                         <td>{{ ant.accidentes.all.count }}</td>
@@ -69,7 +69,7 @@
             </table>
             <br>
             <a class="btn btn-success pull-right"
-               href="{% url 'docapp:list_employ_antecedents' person_id=person.id %}"><i
+               href="{% url 'docapp:list_employ_antecedents' patient_id=patient.id %}"><i
                     class="fa fa-plus"></i>
                 Ver más
             </a>
@@ -79,7 +79,7 @@
     </div>
     <h2>Examenes</h2>
     <div class="table-responsive m-b-20">
-        {% if person.exams.all %}
+        {% if patient.exams.all %}
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -90,7 +90,7 @@
                 </thead>
 
                 <tbody>
-                {% for exam in person.exams.all %}
+                {% for exam in patient.exams.all %}
                     <tr>
                         <td>{{ exam.name }}</td>
                         <td>{{ exam.create_date }}</td>
