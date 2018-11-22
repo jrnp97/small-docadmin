@@ -471,6 +471,7 @@ detail_patient = DetailParticular.as_view()
 @user_passes_test(test_func=(lambda u: hasattr(u, 'reception_profile') or u.is_superuser),
                   login_url=reverse_lazy('docapp:dashboard'))
 def make_consulta(request):
+    from accounts.models import ReceptionProfile,DoctorProfile
     try:
         if request.is_ajax():
             patient = PacienteParticular.objects.get(pk=int(request.POST.get('patiend_id')))

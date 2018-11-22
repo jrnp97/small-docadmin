@@ -1,13 +1,15 @@
 {% extends 'base/base_list.html' %}
-
+{% load static %}
 {% block title %} Procesos | Consultas {% endblock %}
-
 
 {% block page_title %}Lista de Consultas {% endblock %}
 {% block small_message %} Lista de consultas en proceso {% endblock %}
 {% block add_btn %} {% endblock %}
 
+
 {% block datatable_body %}
+    {% include 'docapp/details/alert_secure.html' %}
+
     <thead>
     <tr>
         <th>ID</th>
@@ -26,7 +28,9 @@
                 <br>
                 {% if request.user.doctor_profile %}
                     <button class="btn btn-primary btn-xs btn_modal" data-toggle="tooltip"
-                            data-placement="left" data-modal-title="Detalle Empleado" data-original-title="Ver"
+                            data-placement="left"
+                            data-modal-title="Detalle Empleado"
+                            data-original-title="Ver"
                             href="{% url 'docapp:detail_employ' person_id=exam.paciente_id_id %}">
                         <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
@@ -72,11 +76,13 @@
             </td>
             {% if request.user.is_authenticated %}
                 <td>
-                    <a href="">
-                        <button class="btn btn-primary btn-xs" data-original-title="Ver lista">
-                            <i class="fa fa-list-alt" aria-hidden="true">Realizar</i>
-                        </button>
-                    </a>
+                    <button type="button"
+                            class="btn btn-primary btnRealizar"
+                            data-toggle="modal"
+                            data-target="#exampleModal"
+                            data-id_paciente= {{ exam.id }}>
+                        <i class="fa fa-list-alt" aria-hidden="true">Realizar</i>
+                    </button>
                 </td>
             {% endif %}
         </tr>
@@ -84,15 +90,34 @@
     {% endfor %}
     </tbody>
 {% endblock %}
+
 {% block extra_content %}
-    {% include 'base/base_modal.html' %}
+    {% include  'base/base_modal.html' %}
 {% endblock %}
+
 {% block scripts %}
     {{ block.super }}
+
     <script>
+        var consult_id = null;
         $('.btn_modal').on('click', function (event) {
             event.preventDefault();
             load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
+        });
+        document.body.addEventListener('click', evt => {
+            const target = evt.target;
+            const parent = target.parentElement;
+            if (!parent.classList.contains('btnRealizar')) {
+                if (target.classList.contains('btnRealizar')) {
+                    consult_id = evt.target.dataset.id_paciente;
+                    console.log(consult_id)
+                }
+            } else {
+                consult_id = parent.dataset.id_paciente;
+                console.log(consult_id)
+            }
+
+
         });
     </script>
 {% endblock %}

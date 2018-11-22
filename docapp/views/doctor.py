@@ -1,8 +1,11 @@
 from django import forms
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
-from django.db.models import Count, Q
+from django.db.models import Count, Q, F
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from django.views.decorators.http import require_POST
 from django.views.generic import UpdateView, DetailView, TemplateView, ListView
 from django.core.exceptions import ObjectDoesNotExist, SuspiciousOperation
 from django.core.urlresolvers import reverse_lazy
@@ -49,8 +52,10 @@ from docproject.helpers.chekers import CheckDoctor, CheckLaboratory, CheckUser
 from docproject.helpers.customs import (FormViewPutExtra, FormsetPostManager, BaseRegisterExamBehavior,
                                         BaseExamUpdateBehavior)
 from docapp.choices import ExamStates
+from django.shortcuts import get_object_or_404
 
 
+from accounts.models import DoctorProfile, ReceptionProfile
 class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
                            FormViewPutExtra):
     model = Occupational
@@ -618,6 +623,8 @@ class DetailEmployAntecedent(CheckDoctor, LoginRequiredMixin, DetailView):
 
 
 detail_employ_antecedent = DetailEmployAntecedent.as_view()
+
+
 # End employ antecedent
 
 
@@ -706,6 +713,8 @@ class DoctorEndExam(LoginRequiredMixin, CheckDoctor, SingleObjectMixin, Template
 
 
 doctor_end_exam = DoctorEndExam.as_view()
+
+
 # End examination process
 
 
@@ -725,6 +734,7 @@ class ListOwnConsults(LoginRequiredMixin, CheckLaboratory, ListView):
         # https://docs.djangoproject.com/en/dev/topics/db/aggregation/#topics-db-aggregation
         return queryset
 
+
 lab_own_consults = ListOwnConsults.as_view()
 
 
@@ -734,6 +744,22 @@ class ListConsultas(CheckUser, LoginRequiredMixin, ListView):
     template_name = 'docapp/lists/consults_list.html'
 
 
-
 list_consults = ListConsultas.as_view()
+
+@login_required
+@require_POST
+
+def assign_consult(request):
+    id = request.POST.get('consult_id', False)
+    consult = get_object_or_404(Consulta, id=int(id))
+
+    if consult.estado != ExamStates.INICIADO:
+        consult.registrado_por = request.user.doctor_profile
+        consult.estado = ExamStates.INICIADO
+        consult.save(update_fields=['registrado_por', 'estado'])
+
+    return HttpResponseRedirect(reverse_lazy('docapp:list_consults'), status=200)
+
+
+
 # End process consult

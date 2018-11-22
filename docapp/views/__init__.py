@@ -10,6 +10,7 @@ from .doctor import (register_occupational, register_audiology, register_visiome
                      update_ocupacional, update_audiologia, update_visiometria,
                      register_employ_antecedent, update_employ_antecedent, list_employ_antecedents,
                      detail_employ_antecedent, register_simple_exam, register_altura, update_altura,
-                     own_examinations, take_a_exam, end_examinations, doctor_end_exam, lab_own_consults, list_consults)
+                     own_examinations, take_a_exam, end_examinations, doctor_end_exam, lab_own_consults,
+                     list_consults, assign_consult)
 
 from .general import detail_examination
