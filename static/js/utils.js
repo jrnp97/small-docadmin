@@ -72,4 +72,23 @@ function assing_consult(id) {
     })
 }
 
+function finish_consult(id) {
+
+    $.ajax({
+        method: "POST",
+        url: "/end_consult/",
+        data: {
+            'consult_id': id,
+            'csrfmiddlewaretoken': getCookie('csrftoken')
+        },
+        success: (resp) => {
+            console.log(resp)
+            $('#exampleModal').modal('hide')
+        },
+        error: (error) => {
+            console.log(error)
+            $('#exampleModal').modal('hide')
+        }
+    })
+}
 

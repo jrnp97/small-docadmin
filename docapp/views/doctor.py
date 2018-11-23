@@ -54,8 +54,9 @@ from docproject.helpers.customs import (FormViewPutExtra, FormsetPostManager, Ba
 from docapp.choices import ExamStates
 from django.shortcuts import get_object_or_404
 
-
 from accounts.models import DoctorProfile, ReceptionProfile
+
+
 class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
                            FormViewPutExtra):
     model = Occupational
@@ -719,17 +720,14 @@ doctor_end_exam = DoctorEndExam.as_view()
 
 
 # Views to process a consults process
-class ListOwnConsults(LoginRequiredMixin, CheckLaboratory, ListView):
+class ListOwnConsults(LoginRequiredMixin, CheckDoctor, ListView):
     model = Consulta
     context_object_name = 'consults_list'
     template_name = 'docapp/lists/consults_list.html'
 
     def get_queryset(self):
-        user_lab = self.request.user.laboratory_profile.laboratorio_id
-        user = self.request.user.laboratory_profile
-        queryset = Examinacion.objects.filter(
-            Q(examenes_laboratorios__laboratorio_id=user_lab) & Q(examenes_laboratorios__manejado_por=user)
-        ).annotate(dcount=Count('tipo')).exclude(lab_estado=ExamStates.FINALIZADO)
+        user = self.request.user.doctor_profile
+        queryset = Consulta.objects.filter(Q(registrado_por=user.pk) & Q(estado=ExamStates.INICIADO))
         # Simulate group by clause -- https://stackoverflow.com/questions/629551/how-to-query-as-group-by-in-django
         # https://docs.djangoproject.com/en/dev/topics/db/aggregation/#topics-db-aggregation
         return queryset
@@ -746,12 +744,56 @@ class ListConsultas(CheckUser, LoginRequiredMixin, ListView):
 
 list_consults = ListConsultas.as_view()
 
+
+class ListEnableConsultas(CheckUser, LoginRequiredMixin, ListView):
+    model = Consulta
+    context_object_name = 'consults_list'
+    template_name = 'docapp/lists/consults_list.html'
+    queryset = Consulta.objects.filter(estado=ExamStates.PENDIENTE)
+
+
+list_consults_enable = ListEnableConsultas.as_view()
+
+
+class ListEndConsultas(CheckUser, LoginRequiredMixin, ListView):
+    model = Consulta
+    context_object_name = 'consults_list'
+    template_name = 'docapp/lists/consults_list.html'
+
+    def get_queryset(self):
+        queryset = Consulta.objects.filter(Q(registrado_por=self.user.pk) & Q(estado=ExamStates.FINALIZADO))
+        return queryset
+
+
+list_end_consults = ListEndConsultas.as_view()
+
+
 @login_required
 @require_POST
+def end_consult(request):
+    consult_id = request.POST.get('consult_id', False)
+    try:
+        if consult_id:
+            consult = Consulta.objects.select_for_update().get(id=int(consult_id))
+    except ObjectDoesNotExist as e:
+        return HttpResponseRedirect(reverse_lazy('docapp:list_consults'), status=404)
 
+    if consult.estado != ExamStates.FINALIZADO:
+        consult_id.estado = ExamStates.FINALIZADO
+        consult.save(update_fields=['estado'])
+    return HttpResponseRedirect(reverse_lazy('docapp:list_consults'), status=200)
+
+
+@login_required
+@require_POST
 def assign_consult(request):
-    id = request.POST.get('consult_id', False)
-    consult = get_object_or_404(Consulta, id=int(id))
+    consult_id = request.POST.get('consult_id', False)
+
+    try:
+        if consult_id:
+            consult = Consulta.objects.select_for_update().get(id=int(consult_id))
+    except ObjectDoesNotExist as e:
+        return HttpResponseRedirect(reverse_lazy('docapp:list_consults'), status=404)
 
     if consult.estado != ExamStates.INICIADO:
         consult.registrado_por = request.user.doctor_profile
@@ -759,7 +801,5 @@ def assign_consult(request):
         consult.save(update_fields=['registrado_por', 'estado'])
 
     return HttpResponseRedirect(reverse_lazy('docapp:list_consults'), status=200)
-
-
 
 # End process consult

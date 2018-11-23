@@ -110,18 +110,15 @@
                     </a>
                     <ul class="treeview-menu">
                         <li>
-
                             {% if request.user.profile_type == 'doctor' %}
-                                <a href="{% url 'docapp:list_consults' %}">Disponibles</a>
+                                <a href="{% url 'docapp:enable_consults' %}">Disponibles</a>
                             {% elif request.user.profile_type == 'receptionista' %}
                                 <a href="{% url 'docapp:list_consults' %}">Lista</a>
                             {% endif %}
                         </li>
-                        {% if request.user.profile_type == 'p_laboratorio' %}
-                            <li><a href="">Pendientes</a></li>
-                            <li><a href="">Finalizadas</a></li>
-                        {% elif request.user.profile_type == 'doctor' %}
-                            <li><a href="">Pendientes</a></li>
+
+                        {% if request.user.profile_type == 'doctor' %}
+                            <li><a href="{% url 'docapp:list_own_consults' %}">Pendientes</a></li>
                             <li><a href="">Finalizadas</a></li>
                         {% endif %}
                     </ul>

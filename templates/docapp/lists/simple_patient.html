@@ -7,7 +7,10 @@
 {% block add_link %} {% url 'docapp:register_simple_patient' %} {% endblock %}
 {% block add_link_label %} Pacientes {% endblock %}
 
+
+
 {% block datatable_body %}
+    {% include 'docapp/details/alert_secure.html' %}
     <thead>
     <tr>
         <th>Identificacion</th>
@@ -32,10 +35,15 @@
             <td>{{ person.celular }}</td>
             <td>{{ person.sexo }}</td>
             <td>
-                <button class="btn btn-warning btn-xs" onclick="make_consult({{ person.id }})">
-                    Registro <i class="fa fa-pencil" aria-hidden="true"></i>
+                <button type="button"
+                        class="btn btn-primary btnActivar"
+                        data-toggle="modal"
+                        data-target="#exampleModal"
+                        data-id_paciente= {{ person.id }}>
+                    <i class="fa fa-list-alt" id="message_button" aria-hidden="true">Activar</i>
                 </button>
             </td>
+
             {% if request.user.doctor_profile %}
                 <td>
                     <!-- Register Link -->
@@ -80,5 +88,34 @@
             load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
         });
     </script>
-    <script src="{% static 'js/utils.js' %}"></script>
+    <script>
+        var patiend_id = null;
+        $('.btn_modal').on('click', function (event) {
+            event.preventDefault();
+            load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
+        });
+        document.body.addEventListener('click', evt => {
+            const target = evt.target;
+            const parent = target.parentElement;
+
+            document.querySelector('#message_title').innerText= "¿Esta seguro que desea activarlo?";
+
+            if (!parent.classList.contains('btnActivar')) {
+                if (target.classList.contains('btnActivar')) {
+                    patiend_id = evt.target.dataset.id_paciente;
+                    $('#modal_process').on('click', e =>  make_consult(patiend_id));
+
+                }
+            } else {
+                patiend_id = parent.dataset.id_paciente;
+                if (patiend_id) {
+                    $('#modal_process').on('click', e => make_consult(patiend_id));
+
+                }
+                console.log(patiend_id)
+            }
+        });
+
+
+    </script>
 {% endblock %}
