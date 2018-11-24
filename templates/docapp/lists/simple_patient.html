@@ -40,7 +40,7 @@
                         data-toggle="modal"
                         data-target="#exampleModal"
                         data-id_paciente= {{ person.id }}>
-                    <i class="fa fa-list-alt" id="message_button" aria-hidden="true">Activar</i>
+                        Activar
                 </button>
             </td>
 
@@ -94,27 +94,16 @@
             event.preventDefault();
             load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
         });
-        document.body.addEventListener('click', evt => {
+        $('.btnActivar').on('click', evt => {
             const target = evt.target;
-            const parent = target.parentElement;
 
             document.querySelector('#message_title').innerText= "¿Esta seguro que desea activarlo?";
+            patiend_id = evt.target.dataset.id_paciente;
+            $('#modal_process').on('click', e =>  make_consult(patiend_id));
+            console.log(patiend_id)
 
-            if (!parent.classList.contains('btnActivar')) {
-                if (target.classList.contains('btnActivar')) {
-                    patiend_id = evt.target.dataset.id_paciente;
-                    $('#modal_process').on('click', e =>  make_consult(patiend_id));
-
-                }
-            } else {
-                patiend_id = parent.dataset.id_paciente;
-                if (patiend_id) {
-                    $('#modal_process').on('click', e => make_consult(patiend_id));
-
-                }
-                console.log(patiend_id)
-            }
         });
+
         $('#modal_process').on('click', function () {
          location.reload();
         })

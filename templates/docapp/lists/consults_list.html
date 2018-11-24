@@ -70,14 +70,14 @@
                 {% endif %}
             </td>
             {% if request.user.is_authenticated %}
-                <td class="btnRealizar">
+                <td>
                     <button type="button"
                             class="btn btn-primary btnRealizar"
                             data-toggle="modal"
                             data-target="#exampleModal"
                             data-id_consult= "{{ exam.id }}"
                             data-status = "{{ exam.estado }}">
-                        <i class="fa fa-list-alt btnRealizar" aria-hidden="true">Realizar</i>
+                        Realizar
                     </button>
                 </td>
             {% endif %}
@@ -101,40 +101,21 @@
             load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
         });
 
-       document.body.addEventListener('click', evt => {
+       $('.btnRealizar').on('click', evt => {
             const target = evt.target;
-            const parent = target.parentElement;
+            consult_id = evt.target.dataset.id_consult;
+            status = evt.target.dataset.status;
+            console.log(consult_id)
 
-            if (parent.classList.contains('btnRealizar')) {
-                if (target.classList.contains('btnRealizar')) {
-                    consult_id = evt.target.dataset.id_consult;
-                    status = evt.target.dataset.status;
-                    console.log(consult_id)
-
-                    if(status === "pendiente") {
-                        document.querySelector('#message_title').innerText = "¿Esta seguro que desea asignarlo?";
-                        $('#modal_process').on('click', e =>  assing_consult(consult_id));
-                    }else{
-                        document.querySelector('#message_title').innerText= "¿Esta seguro que desea finalizarlo?";
-                        $('#modal_process').on('click', e =>  finish_consult(consult_id));
-                    };
-            } else {
-                    consult_id = parent.dataset.id_consult;
-
-                    if(status === "pendiente"){
-                        console.log(consult_id)
-                        document.querySelector('#message_title').innerText= "¿Esta seguro que desea asignarlo?";
-                        $('#modal_process').on('click', e => assing_consult(consult_id));
-
-                    } else{
-                        document.querySelector('#message_title').innerText= "¿Esta seguro que desea finalizarlo?";
-                        $('#modal_process').on('click', e =>  finish_consult(consult_id));
-                    }
-
-
+            if(status === "pendiente") {
+                document.querySelector('#message_title').innerText = "¿Esta seguro que desea asignarlo?";
+                $('#modal_process').on('click', e =>  assing_consult(consult_id));
+            }else{
+                document.querySelector('#message_title').innerText= "¿Esta seguro que desea finalizarlo?";
+                $('#modal_process').on('click', e =>  finish_consult(consult_id));
             }
             }
-        });
+        );
 
         $('#modal_process').on('click', function () {
          location.reload();

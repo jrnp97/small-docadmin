@@ -782,8 +782,8 @@ def end_consult(request):
                 consult.estado = ExamStates.FINALIZADO
                 consult.save(update_fields=['estado'])
     except ObjectDoesNotExist as e:
-        return HttpResponseRedirect(reverse_lazy('docapp:list_consults'), status=404)
-    return HttpResponseRedirect(reverse_lazy('docapp:list_consults'), status=302)
+        return HttpResponseRedirect(reverse_lazy('docapp:list_own_consults'), status=404)
+    return HttpResponseRedirect(reverse_lazy('docapp:list_own_consults'), status=302)
 
 
 
