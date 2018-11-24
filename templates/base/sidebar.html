@@ -119,7 +119,7 @@
 
                         {% if request.user.profile_type == 'doctor' %}
                             <li><a href="{% url 'docapp:list_own_consults' %}">Pendientes</a></li>
-                            <li><a href="">Finalizadas</a></li>
+                            <li><a href="{%  url 'docapp:list_end_consults' %}">Finalizadas</a></li>
                         {% endif %}
                     </ul>
                 </li>

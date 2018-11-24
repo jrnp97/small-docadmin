@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^consults/$', views.list_consults, name='list_consults'),
     url(r'^own_consults/$', views.lab_own_consults, name='list_own_consults'),
     url(r'^end_consult/$', views.end_consult, name='end_consult'),
+    url(r'^list_end_consult/$', views.list_end_consults, name='list_end_consults'),
 
 
     # Antecedent urls

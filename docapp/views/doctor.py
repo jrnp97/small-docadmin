@@ -761,7 +761,7 @@ class ListEndConsultas(CheckUser, LoginRequiredMixin, ListView):
     template_name = 'docapp/lists/consults_list.html'
 
     def get_queryset(self):
-        queryset = Consulta.objects.filter(Q(registrado_por=self.user.pk) & Q(estado=ExamStates.FINALIZADO))
+        queryset = Consulta.objects.filter(Q(registrado_por=self.request.user.pk) & Q(estado=ExamStates.FINALIZADO))
         return queryset
 
 
@@ -770,22 +770,28 @@ list_end_consults = ListEndConsultas.as_view()
 
 @login_required
 @require_POST
+@user_passes_test(test_func=(lambda u: hasattr(u, 'doctor_profile') or u.is_superuser),
+                  login_url=reverse_lazy('docapp:dashboard'))
 def end_consult(request):
     consult_id = request.POST.get('consult_id', False)
+
     try:
         if consult_id:
             consult = Consulta.objects.select_for_update().get(id=int(consult_id))
+            if consult.estado != ExamStates.FINALIZADO:
+                consult.estado = ExamStates.FINALIZADO
+                consult.save(update_fields=['estado'])
     except ObjectDoesNotExist as e:
         return HttpResponseRedirect(reverse_lazy('docapp:list_consults'), status=404)
+    return HttpResponseRedirect(reverse_lazy('docapp:list_consults'), status=302)
 
-    if consult.estado != ExamStates.FINALIZADO:
-        consult_id.estado = ExamStates.FINALIZADO
-        consult.save(update_fields=['estado'])
-    return HttpResponseRedirect(reverse_lazy('docapp:list_consults'), status=200)
+
 
 
 @login_required
 @require_POST
+@user_passes_test(test_func=(lambda u: hasattr(u, 'doctor_profile') or u.is_superuser),
+                  login_url=reverse_lazy('docapp:dashboard'))
 def assign_consult(request):
     consult_id = request.POST.get('consult_id', False)
 
