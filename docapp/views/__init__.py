@@ -13,4 +13,4 @@ from .doctor import (register_occupational, register_audiology, register_visiome
                      detail_employ_antecedent, register_simple_exam, register_altura, update_altura,
                      own_examinations, take_a_exam, end_examinations, doctor_end_exam)
 
-from .general import detail_examination, dashboard_eadmin, person_filter
+from .general import detail_examination, dashboard, person_filter

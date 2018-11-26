@@ -24,12 +24,7 @@
     {% if messages %}
         <div class="row">
             {% for message in messages %}
-                <div class="alert alert-sm alert-
-
-
-
-
-                        {% if message.level_tag != 'error' %}{{ message.level_tag }}{% else %}danger{% endif %} alert-dismissible col-sm-12 m-t-20"
+                <div class="alert alert-sm alert-{% if message.level_tag != 'error' %}{{ message.level_tag }}{% else %}danger{% endif %} alert-dismissible col-sm-12 m-t-20"
                      role="alert">
                     <div class="text-center">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
