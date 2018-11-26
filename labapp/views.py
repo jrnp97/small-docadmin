@@ -14,7 +14,7 @@ from docapp.choices import ExamStates
 from docproject.helpers.chekers import CheckLaboratory
 
 from labapp.forms import BaseLabUserCreateForm, lab_exam_result
-from docapp.models import Examinacion
+from docapp.models import Examinacion, Consulta
 from labapp.models import LabExam, ExamResults, Laboratorio
 from labapp.mixins import PostResultManager
 
@@ -43,8 +43,7 @@ class ListExaminationWithouLab(LoginRequiredMixin, CheckLaboratory, ListView):
 
 list_examination_todo = ListExaminationWithouLab.as_view()
 
-
-# Viws to process a examination process
+# Views to process a examination process
 class ListOwnExams(LoginRequiredMixin, CheckLaboratory, ListView):
     model = Examinacion
     context_object_name = 'exam_list'

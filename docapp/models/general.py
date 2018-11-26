@@ -280,4 +280,8 @@ class Consulta(models.Model):
                                     related_name='consultas')
     fecha_de_creacion = models.DateTimeField(auto_now_add=True, editable=False, null=False, blank=False)
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
-    registrado_por = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE, related_name='consultas')
+    activated_by =  models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='consultas')
+    registrado_por = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE, related_name='consultass', null=True)
+
+    def __str__(self):
+        return 'Paciente {}'.format(self.paciente_id)

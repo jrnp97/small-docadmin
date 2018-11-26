@@ -1,15 +1,19 @@
 from django import forms
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
+from django.db.models import Count, Q, F
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.views.generic import UpdateView, DetailView, TemplateView
+from django.views.decorators.http import require_POST
+from django.views.generic import UpdateView, DetailView, TemplateView, ListView
 from django.core.exceptions import ObjectDoesNotExist, SuspiciousOperation
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 from django.views.generic.detail import SingleObjectMixin
 
 from docapp.models import (PacienteEmpresa, Occupational, Audiology, Visiometry, Altura, AntecedentesLaborales, Riesgos,
-                           Accidentes, SimpleExam, Examinacion)
+                           Accidentes, SimpleExam, Examinacion, Consulta)
 from docapp.forms import (OcupaForm,
                           ant_familiares_section,
                           ant_gineco_section,
@@ -44,10 +48,13 @@ from docapp.forms import (VisioForm, sintomas_section, ant_enfermedad_section, a
 
 from docapp.forms import AlturaForm, question_section, SimpleExamForm
 
-from docproject.helpers.chekers import CheckDoctor
+from docproject.helpers.chekers import CheckDoctor, CheckLaboratory, CheckUser
 from docproject.helpers.customs import (FormViewPutExtra, FormsetPostManager, BaseRegisterExamBehavior,
                                         BaseExamUpdateBehavior)
 from docapp.choices import ExamStates
+from django.shortcuts import get_object_or_404
+
+from accounts.models import DoctorProfile, ReceptionProfile
 
 
 class RegisterOccupational(LoginRequiredMixin, CheckDoctor, BaseRegisterExamBehavior, FormsetPostManager,
@@ -617,6 +624,8 @@ class DetailEmployAntecedent(CheckDoctor, LoginRequiredMixin, DetailView):
 
 
 detail_employ_antecedent = DetailEmployAntecedent.as_view()
+
+
 # End employ antecedent
 
 
@@ -705,4 +714,98 @@ class DoctorEndExam(LoginRequiredMixin, CheckDoctor, SingleObjectMixin, Template
 
 
 doctor_end_exam = DoctorEndExam.as_view()
+
+
 # End examination process
+
+
+# Views to process a consults process
+class ListOwnConsults(LoginRequiredMixin, CheckDoctor, ListView):
+    model = Consulta
+    context_object_name = 'consults_list'
+    template_name = 'docapp/lists/consults_list.html'
+
+    def get_queryset(self):
+        user = self.request.user.doctor_profile
+        queryset = Consulta.objects.filter(Q(registrado_por=user.pk) & Q(estado=ExamStates.INICIADO))
+        # Simulate group by clause -- https://stackoverflow.com/questions/629551/how-to-query-as-group-by-in-django
+        # https://docs.djangoproject.com/en/dev/topics/db/aggregation/#topics-db-aggregation
+        return queryset
+
+
+lab_own_consults = ListOwnConsults.as_view()
+
+
+class ListConsultas(CheckUser, LoginRequiredMixin, ListView):
+    model = Consulta
+    context_object_name = 'consults_list'
+    template_name = 'docapp/lists/consults_list.html'
+
+
+list_consults = ListConsultas.as_view()
+
+
+class ListEnableConsultas(CheckUser, LoginRequiredMixin, ListView):
+    model = Consulta
+    context_object_name = 'consults_list'
+    template_name = 'docapp/lists/consults_list.html'
+    queryset = Consulta.objects.filter(estado=ExamStates.PENDIENTE)
+
+
+list_consults_enable = ListEnableConsultas.as_view()
+
+
+class ListEndConsultas(CheckUser, LoginRequiredMixin, ListView):
+    model = Consulta
+    context_object_name = 'consults_list'
+    template_name = 'docapp/lists/consults_list.html'
+
+    def get_queryset(self):
+        queryset = Consulta.objects.filter(Q(registrado_por=self.request.user.pk) & Q(estado=ExamStates.FINALIZADO))
+        return queryset
+
+
+list_end_consults = ListEndConsultas.as_view()
+
+
+@login_required
+@require_POST
+@user_passes_test(test_func=(lambda u: hasattr(u, 'doctor_profile') or u.is_superuser),
+                  login_url=reverse_lazy('docapp:dashboard'))
+def end_consult(request):
+    consult_id = request.POST.get('consult_id', False)
+
+    try:
+        if consult_id:
+            consult = Consulta.objects.select_for_update().get(id=int(consult_id))
+            if consult.estado != ExamStates.FINALIZADO:
+                consult.estado = ExamStates.FINALIZADO
+                consult.save(update_fields=['estado'])
+    except ObjectDoesNotExist as e:
+        return HttpResponseRedirect(reverse_lazy('docapp:list_own_consults'), status=404)
+    return HttpResponseRedirect(reverse_lazy('docapp:list_own_consults'), status=302)
+
+
+
+
+@login_required
+@require_POST
+@user_passes_test(test_func=(lambda u: hasattr(u, 'doctor_profile') or u.is_superuser),
+                  login_url=reverse_lazy('docapp:dashboard'))
+def assign_consult(request):
+    consult_id = request.POST.get('consult_id', False)
+
+    try:
+        if consult_id:
+            consult = Consulta.objects.select_for_update().get(id=int(consult_id))
+    except ObjectDoesNotExist as e:
+        return HttpResponseRedirect(reverse_lazy('docapp:list_consults'), status=404)
+
+    if consult.estado != ExamStates.INICIADO:
+        consult.registrado_por = request.user.doctor_profile
+        consult.estado = ExamStates.INICIADO
+        consult.save(update_fields=['registrado_por', 'estado'])
+
+    return HttpResponseRedirect(reverse_lazy('docapp:list_consults'), status=200)
+
+# End process consult

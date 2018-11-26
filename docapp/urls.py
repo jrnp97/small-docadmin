@@ -24,6 +24,16 @@ urlpatterns = [
     url(r'^register/patient/$', views.register_simple_patient, name='register_simple_patient'),
     url(r'^update/patient/(?P<pk>[0-9]+)/$', views.update_simple_patient, name='update_simple_patient'),
 
+    # Consults urls
+    url(r'^consult/$', views.make_consulta, name='make_consult'),
+    url(r'^assign_consult/$', views.assign_consult, name='assign_consult'),
+    url(r'^enable_consults/$', views.list_consults_enable, name='enable_consults'),
+    url(r'^consults/$', views.list_consults, name='list_consults'),
+    url(r'^own_consults/$', views.lab_own_consults, name='list_own_consults'),
+    url(r'^end_consult/$', views.end_consult, name='end_consult'),
+    url(r'^list_end_consult/$', views.list_end_consults, name='list_end_consults'),
+
+
     # Antecedent urls
     url(r'^antecedent/(?P<person_id>[0-9])/$', views.list_employ_antecedents, name='list_employ_antecedents'),
     url(r'^antecedent/detail/(?P<antecedent_id>[0-9]+)/$', views.detail_employ_antecedent,

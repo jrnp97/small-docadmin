@@ -86,12 +86,45 @@
                         <li><a href="{% url 'docapp:register_employ_without_company' %}">Registrar</a></li>
                     </ul>
                 </li>
+
+                <!-- Particular Employees options -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-user"></i><span>Particular</span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{% url 'docapp:list_simple_patient' %}">Lista</a></li>
+                        <li><a href="{% url 'docapp:register_simple_patient' %}">Registrar</a></li>
+                    </ul>
+                </li>
             {% endif %}
 
 
             {% if request.user.profile_type %}
                 <!-- Examinations-->
                 <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-flask"></i><span>Consultas</span>
+                        <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            {% if request.user.profile_type == 'doctor' %}
+                                <a href="{% url 'docapp:enable_consults' %}">Disponibles</a>
+                            {% elif request.user.profile_type == 'receptionista' %}
+                                <a href="{% url 'docapp:list_consults' %}">Lista</a>
+                            {% endif %}
+                        </li>
+
+                        {% if request.user.profile_type == 'doctor' %}
+                            <li><a href="{% url 'docapp:list_own_consults' %}">Pendientes</a></li>
+                            <li><a href="{%  url 'docapp:list_end_consults' %}">Finalizadas</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-flask"></i><span>Examinaciones</span>
                         <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
@@ -116,6 +149,7 @@
                     </ul>
                 </li>
             {% endif %}
+
 
         </ul>
     </div>

@@ -11,7 +11,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_POST
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse, JsonResponse
 
 from docapp.forms import (CompanyForm, PacienteEmpresaForm, PacienteParticularForm,
                           ExaminacionCreateForm, lab_exam_inlineformset, simple_exam_inlineformset)
@@ -191,6 +191,9 @@ class DetailEmploy(CheckRecOrDoc, LoginRequiredMixin, DetailView):
 detail_employ = DetailEmploy.as_view()
 # End views general to employs (with company or without company)
 
+# Process employ examination without company
+def RegisterEmployExaminationWitoutExamination(request):
+    pass
 
 # Process Employ Examinations
 class RegisterEmployExamination(CheckReceptionist, LoginRequiredMixin, FormsetPostManager, FormViewPutExtra):
@@ -250,7 +253,6 @@ list_examination = ListExamination.as_view()
 
 
 # End process examinations
-
 
 # Process Laboratory
 class RegisterLab(LoginRequiredMixin, CheckReceptionist, SuccessMessageMixin, CreateView):
@@ -448,31 +450,22 @@ class DetailParticular(CheckRecOrDoc, LoginRequiredMixin, DetailView):
 
 
 detail_patient = DetailParticular.as_view()
-
-
 # End process particular
-
 
 # Process consult
 @login_required
 @require_POST
 @user_passes_test(test_func=(lambda u: hasattr(u, 'reception_profile') or u.is_superuser),
                   login_url=reverse_lazy('docapp:dashboard'))
-def make_consulta(request, patient_id):
+def make_consulta(request):
+    from accounts.models import ReceptionProfile,DoctorProfile
     try:
-        patient = PacienteParticular.objects.get(pk=patient_id)
+        if request.is_ajax():
+            patient = PacienteParticular.objects.get(pk=int(request.POST.get('patiend_id')))
     except ObjectDoesNotExist:
         return Http404("El paciente no se encuentra registrado")
     else:
-        Consulta(registrado_por=request.user.reception_profile, paciente_id=patient).save()
+        Consulta(activated_by=request.user.reception_profile, paciente_id=patient).save()
         return HttpResponseRedirect(reverse_lazy('docapp:list_simple_patient'), status=200)
 
 
-class ListConsultas(CheckUser, LoginRequiredMixin, ListView):
-    model = Consulta
-    context_object_name = 'consult_list'
-    template_name = 'docapp/lists/consult_list.html'
-
-
-list_consults = ListConsultas.as_view()
-# End process consult
