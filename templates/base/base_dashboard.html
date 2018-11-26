@@ -39,6 +39,26 @@
                 background-color: #009688;
                 border: 2px solid #3a95e4a6;
             }
+            {# List striped from  https://markheath.net/post/css-striped-list #}
+
+            ul.striped-list {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            ul.striped-list > li:nth-of-type(odd) {
+                background-color: #e9e9f9;
+            }
+
+            ul.striped-list > li {
+                border-bottom: 1px solid rgb(221, 221, 221);
+                padding: 6px;
+            }
+
+            ul.striped-list > li:last-child {
+                border-bottom: none;
+            }
         </style>
     {% endblock %}
 </head>

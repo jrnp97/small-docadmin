@@ -78,11 +78,12 @@ class LabTakeAExam(LoginRequiredMixin, CheckLaboratory, SingleObjectMixin, Templ
 
     def post(self, request, *args, **kwargs):
         exam = self.get_object()
+        exam.lab_estado = ExamStates.ASIGNADO
+        exam.save()
         for lab_exam in exam.examenes_laboratorios.all():
             lab_exam.manejado_por = request.user.laboratory_profile
-            lab_exam.lab_estado = ExamStates.ASIGNADO
             try:
-                lab_exam.save()
+                lab_exam.save(update_state=False)
             except IntegrityError as e:
                 print("Error save infor -> {}".format(e))
                 messages.error(message='Examinacion NO Asignada', request=request)

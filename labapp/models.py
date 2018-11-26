@@ -60,6 +60,13 @@ class LabExam(models.Model):
     def __str__(self):
         return self.nombre
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None, update_state=True):
+        response = super(LabExam, self).save(force_insert, force_update, using, update_fields)
+        if update_state:
+            self.examinacion_id.update_lab()
+        return response
+
 
 class ExamResults(models.Model):
     prueba = models.CharField(max_length=200, null=False, blank=False)
@@ -68,3 +75,7 @@ class ExamResults(models.Model):
 
     examen = models.ForeignKey(LabExam, null=False, blank=False, on_delete=models.CASCADE, related_name='resultados')
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
+
+    def __str__(self):
+        return self.prueba
+

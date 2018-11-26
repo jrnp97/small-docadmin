@@ -47,11 +47,12 @@ class FormViewPutExtra(FormView, SingleObjectMixin):
             kwargs['form'] = self.get_form()
         if 'view' not in kwargs:
             kwargs['view'] = self
-        if self.extra_context and kwargs.get('extra_context') is None:
-            kwargs.update(self.extra_context)
-        else:
-            extra = kwargs.pop('extra_context')
-            kwargs.update(extra)
+        if self.extra_context:
+            if kwargs.get('extra_context') is None:
+                kwargs.update(self.extra_context)
+            else:
+                extra = kwargs.pop('extra_context')
+                kwargs.update(extra)
 
         return kwargs
 
