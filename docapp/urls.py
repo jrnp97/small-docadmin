@@ -2,7 +2,7 @@ from django.conf.urls import url
 from docapp import views
 
 urlpatterns = [
-    url(r'^dashboard/$', views.dashboard, name='dashboard'),
+    url(r'^dashboard/$', views.dashboard_eadmin, name='dashboard'),
     # Company urls
     url(r'^company/$', views.list_company, name='list_company'),
     url(r'^company/(?P<company_id>[0-9]+)/$', views.detail_company, name='detail_company'),
@@ -67,5 +67,8 @@ urlpatterns = [
     url(r'^update/lab/admin/(?P<pk>[0-9]+)/$', views.update_lab_admin, name='update_lab_admin'),
     url(r'^delete/lab/admin/(?P<pk>[0-9]+)/$', views.deactivate_lab_admin, name='deactivate_lab_admin'),
     url(r'^lab/admin/(?P<pk>[0-9]+)/$', views.detail_lab_admin, name='detail_lab_admin'),
-    url('^laboratory/(?P<lab_id>[0-9]+)/$', views.detail_laboratory, name='detail_laboratory')
+    url('^laboratory/(?P<lab_id>[0-9]+)/$', views.detail_laboratory, name='detail_laboratory'),
+
+    # Other
+    url('^filter/$', views.person_filter, name='person_filter')
 ]

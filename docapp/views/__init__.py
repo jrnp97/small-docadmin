@@ -1,5 +1,4 @@
-from .receptionist import (dashboard,
-                           register_company, update_company, detail_company, list_company,
+from .receptionist import (register_company, update_company, detail_company, list_company,
                            register_employ_from_company, register_employ_without_company, update_employ, detail_employ,
                            list_independent_employ, list_employ_company,
                            register_employ_examination, list_examination,
@@ -14,4 +13,4 @@ from .doctor import (register_occupational, register_audiology, register_visiome
                      detail_employ_antecedent, register_simple_exam, register_altura, update_altura,
                      own_examinations, take_a_exam, end_examinations, doctor_end_exam)
 
-from .general import detail_examination
+from .general import detail_examination, dashboard_eadmin, person_filter

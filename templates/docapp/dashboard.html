@@ -2,18 +2,151 @@
 {% load static %}
 {% block title %} Dashboard {% endblock %}
 
+{% block content_header %}
+    <div class="header-icon">
+        <i class="fa fa-tachometer"></i>
+    </div>
+    <div class="header-title">
+        <form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
+            <div class="input-group">
+                <input name="q" class="form-control" placeholder="Search..." type="text">
+                <span class="input-group-btn">
+                    <button type="submit" name="search" id="search-btn" class="btn"><i
+                            class="fa fa-search"></i></button>
+                                </span>
+            </div>
+        </form>
+        <h1>Dashboard</h1>
+        <small>Bienvido a <b>SM Laboral</b></small>
+    </div>
+{% endblock %}
 {% block content_main %}
     {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-sm alert-{% if message.level_tag != 'error' %}{{ message.level_tag }}{% else %}danger{% endif %} alert-dismissible col-sm-12 m-t-20"
-                 role="alert">
-                <div class="text-center">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                            aria-hidden="true">×</span></button>
-                    <i class="fa fa-exclamation-circle"></i>
-                    <strong>{{ message.level_tag|capfirst }}!</strong> {{ message|escape }}
+        <div class="row">
+            {% for message in messages %}
+                <div class="alert alert-sm alert-
+
+
+
+
+                        {% if message.level_tag != 'error' %}{{ message.level_tag }}{% else %}danger{% endif %} alert-dismissible col-sm-12 m-t-20"
+                     role="alert">
+                    <div class="text-center">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                aria-hidden="true">×</span></button>
+                        <i class="fa fa-exclamation-circle"></i>
+                        <strong>{{ message.level_tag|capfirst }}!</strong> {{ message|escape }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="row">
+        {% for box in boxes %}
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
+                <div class="panel panel-bd cardbox">
+                    <div class="panel-body">
+                        <div class="statistic-box">
+                            <h2><span class="count-number">{{ box.number }}</span>
+                            </h2>
+                        </div>
+                        <div class="items pull-left">
+                            <i class="fa {{ box.icon }} fa-2x"></i>
+                            <h4>{{ box.label }}</h4>
+                        </div>
+                    </div>
                 </div>
             </div>
         {% endfor %}
-    {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="text-center">Buscador</h1>
+            <hr>
+            <div class="form-row">
+                <div class="col-md-8">
+                    <input type="number" class="form-control" name="search_input" placeholder="Ingrese identificación"
+                           required/>
+                </div>
+                <div class="col-md-4">
+                    <button class="form-control btn-info" id="search"><span class="fa fa-search"></span></button>
+                </div>
+                <div class="text-center">
+                    <small><b>Nota:</b> Puede buscar pacientes de consultas particulares o empleados todo por numero de
+                        cedula
+                    </small>
+                </div>
+            </div>
+            <div id="search_results" class="text-center p-20">
+                <h2>No se ha realizado ninguna busqueda</h2>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h1 class="text-center">Ultimos 5 Registros</h1>
+            <hr>
+            {% for table in tables %}
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="panel panel-bd lobidisable">
+                        <div class="panel-heading">
+                            <div class="btn-group"><h2>{{ table.title }}</h2></div>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="striped-list">
+                                {% for record  in table.data %}
+                                    <li>
+                                        <b>{{ record }}</b>
+                                        <span class="btn_modal color-green" href="" data-modal-title="Detalles"><i
+                                                class="pull-right fa fa-eye-slash"></i></span>
+                                    </li>
+                                {% empty %}
+                                    <h2>No se encuentran registros</h2>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% include 'base/base_modal.html' %}
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $('#search').on('click', function (e) {
+            e.preventDefault();
+            const result_box = $('#search_results');
+            result_box.html('<span class="fa fa-spinner fa-spin fa-5x"></span><h3>Espere por favor</h3>');
+            $.ajax({
+                url: "{% url 'docapp:person_filter' %}",
+                type: 'POST',
+                data: {'identification': $('input[name="search_input"]').val()},
+                dataType: 'json',
+                success: function (r) {
+                    const f_line = `<b>Pacientes:</b> ${r.patient_count} - <b>Empleados:</b> ${r.employ_count} <br><small style="text-align: right">Click para ver detalles</small><hr>`;
+                    result_box.empty();
+                    result_box.append(f_line);
+                    if (r.result.length >= 1) {
+                        const list = $('<ul class="striped-list"></ul>');
+                        r.result.forEach(function (e, i) {
+                            const li = $(`<li class="btn_modal" href="${e.detail_url}" data-modal-title="Detalles"><b>${e.name}</b><span class="color-green" ><i class="pull-right fa fa-eye"></i></span>`);
+                            li.on('click', function (event) {
+                                event.preventDefault();
+                                load_modal(this.dataset.modalTitle, "success", this.getAttribute('href'));
+                            });
+                            list.append(li);
+                        });
+                        result_box.append(list);
+                    } else {
+                        result_box.append('<b>No se encontraron registros.</b>')
+                    }
+
+                },
+                error: function () {
+                    result_box.html('<h2>Por favor verifique que la identificacion mostrada sea valida<h2>')
+                }
+            })
+        });
+
+    </script>
 {% endblock %}
