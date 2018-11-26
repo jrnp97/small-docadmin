@@ -282,3 +282,6 @@ class Consulta(models.Model):
     ultima_vez_modificado = models.DateTimeField(default=timezone.now, null=False, blank=False, editable=False)
     activated_by =  models.ForeignKey(ReceptionProfile, on_delete=models.CASCADE, related_name='consultas')
     registrado_por = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE, related_name='consultass', null=True)
+
+    def __str__(self):
+        return 'Paciente {}'.format(self.paciente_id)

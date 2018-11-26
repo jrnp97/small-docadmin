@@ -32,6 +32,14 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+    def get_profile(self):
+        if hasattr(self, 'doctor_profile'):
+            return 'doctor_profile'
+        elif hasattr(self, 'reception_profile'):
+            return 'reception_profile'
+        elif hasattr(self, 'laboratory_profile'):
+            return 'laboratory_profile'
+
 
 # Define user roles
 class DoctorProfile(models.Model):
@@ -42,6 +50,9 @@ class DoctorProfile(models.Model):
     class Meta:
         db_table = 'sm_doctores'
 
+    def __str__(self):
+        return self.user_id.get_full_name()
+
 
 class ReceptionProfile(models.Model):
     """ Model to save receptionist personal """
@@ -50,3 +61,6 @@ class ReceptionProfile(models.Model):
 
     class Meta:
         db_table = 'sm_recepcionistas'
+
+    def __str__(self):
+        return self.user_id.get_full_name()

@@ -27,19 +27,6 @@ from docproject.helpers.customs import FormViewPutExtra, FormsetPostManager, Val
 
 
 # Create your views here.
-class Dashboard(LoginRequiredMixin, TemplateView):
-    template_name = 'docapp/dashboard.html'
-
-    def get(self, request, *args, **kwargs):
-        if request.user.is_staff and request.user.is_superuser:
-            return redirect('admin:login')
-        else:
-            return super(Dashboard, self).get(request, *args, **kwargs)
-
-
-dashboard = Dashboard.as_view()
-
-
 # Process Companies
 class RegisterCompany(CheckReceptionist, LoginRequiredMixin, FormView):
     form_class = CompanyForm

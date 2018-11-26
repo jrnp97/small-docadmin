@@ -17,7 +17,9 @@
         <th>Activado por </th>
         <th>Fecha de Creación</th>
         <th>Estado</th>
+        {% if request.user.profile_type != 'receptionista' %}
         <th>Acciones</th>
+        {% endif %}
     </tr>
     </thead>
     <tbody>
@@ -69,7 +71,7 @@
                     {{ exam.estado }}
                 {% endif %}
             </td>
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_authenticated and request.user.profile_type != 'receptionista' %}
                 <td>
                     <button type="button"
                             class="btn btn-primary btnRealizar"
